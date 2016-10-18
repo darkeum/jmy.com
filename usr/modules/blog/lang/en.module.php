@@ -1,0 +1,126 @@
+<?php
+
+/**
+* @name        JMY CMS
+* @link        http://jmy.su/
+* @copyright   Copyright (C) 2012-2016 JMY LTD
+* @license     LICENSE.txt (see attached file)
+* @version     VERSION.txt (see attached file)
+* @author      Komarov Ivan
+*/
+
+define('_BLOGS', 'Blogs');
+define('_BLOG_POSTS', 'Records');
+define('_BLOG_TITLE', 'Blog heading');
+define('_BLOG_URL_TITLE', 'The name of a blog for an address line');
+define('_BLOG_URL_TITLE2', 'It is entered by a Latin! For example: http://yoursite/blog/view/<strong>new_blog</strong> (at not filling, it is generated automatically)');
+define('_BLOG_DESCRIPTION', 'The blog description short');
+define('_BLOG_IMG_FORMAT', 'Admissible formats: jpg, gif, png. The picture will be compressed till the sizes 50х50px.');
+define('_BLOG_POST_TITLE', 'Record heading');
+define('_BLOG_POST_MINI', 'Shortly about a record essence');
+define('_BLOG_TEXT', 'Text');
+define('_BLOG_TAGS', 'Tags');
+define('_BLOG_TOPICS', 'Themes mentioned in record through a comma');
+define('_BLOG_SELECT_BLOG', 'Choose a blog for the publication');
+define('_BLOG_AVATAR', 'Blog avatar');
+define('_BLOG_INDEX', 'Index');
+define('_BLOGS_LAST', 'Last records from blogs');
+define('_BLOG_LAST_POSTS', 'Last records');
+define('_BLOG_LAST_POST', 'Last record is left');
+define('_BLOG_WRITE', 'To leave record in a blog');
+define('_BLOG_WRITE2', 'To leave record');
+define('_BLOG_CREATE', 'Blog creation');
+define('_BLOG_CREATE_OK', 'The blog is successfully created!');
+define('_BLOG_SAVE_OK', 'The blog is successfully kept!');
+define('_BLOG_CREATE2', 'Create blog');
+define('_BLOG_LIST', 'List blogs');
+define('_BLOG_ALL', 'All');
+define('_BLOG_SHOW', 'Show all blogs');
+define('_BLOG_MY', 'My personal blog');
+define('_BLOG_EDIT', 'Blog editing');
+define('_BLOG_PERSONAL', 'Personal blog');
+define('_BLOG_EDIT_POST', 'Record editing');
+define('_BLOG_ADD_POST', 'Add record');
+define('_BLOG_ADD_BLOG', 'Add blog');
+define('_BLOG_ALL_POSTS', 'All records');
+define('_BLOG_DELETE_POST', 'Delete record');
+define('_BLOG_EMPTY', 'The blog of the user is empty.');
+define('_BLOG_MOVE_TO_BLOG_VIEW', 'To pass to blog viewing');
+define('_BLOG_MOVE_TO_BLOG', 'To pass in a blog');
+define('_BLOG_READ_POST', 'Read record');
+define('_BLOG_POST_VOTE', 'Voice for record');
+define('_BLOG_VIEW_COMMENTS', 'Viewing of comments');
+define('_BLOG_VIEW_PROFILE', 'Profile viewing');
+define('_BLOG_VIEW_POST', 'Record viewing');
+define('_BLOG_VIEW_POST2', 'To see record');
+define('_BLOG_VIEW_BLOG', 'Blog viewing');
+define('_BLOG_VIEW_BLOG2', 'To see a blog');
+define('_BLOG_SUBSCRIBE', 'Subscription to a blog');
+define('_BLOG_SUBSCRIBE_OK', 'You are successfully signed on a blog');
+define('_BLOG_UNSUBSCRIBE_OK', 'You it is successful writes from a blog');
+define('_BLOG_UNSUBSCRIBE', 'Writes from blog reading');
+define('_BLOG_ON_SMODERATE', 'On a moderation');
+define('_BLOG_DRAFT', 'Draught copy');
+define('_BLOG_SDRAFT', 'Draught copy');
+define('_BLOG_DRAFT2', 'Draught copy? (Record will be accessible only to you)');
+define('_BLOG_POST_STATUS', 'The record status');
+define('_BLOG_ACTIVE', 'It is active');
+define('_BLOG_ON_MODERATE', 'On a moderation');
+define('_BLOG_NO_DESCRIPTION', 'There is no description');
+define('_BLOG_NO_POSTS_IN_BLOGS', 'In blogs there is no record.');
+define('_BLOG_THEME_POSTS', 'Thematic records');
+define('_BLOG_POSTS_FROM_PERSONAL_BLOGS', 'Records from personal blogs');
+define('_BLOG_NO_POSTS_IN_THEME_BLOGS', 'In thematic blogs there are no accessible records');
+define('_BLOG_NO_POSTS_IN_PERSONAL_BLOGS', 'In personal blogs there are no accessible records');
+define('_BLOG_DELETE_AVATAR', 'To remove an avatar?');
+define('_BLOG_NO_AVATAR', 'The avatar of a blog is not present');
+define('_BLOG_SHOW_THEME_BLOGS', 'To show thematic blogs');
+define('_BLOG_THEME_BLOG', 'The thematic');
+define('_BLOG_SHOW_PERSONAL_BLOGS', 'To show personal blogs');
+define('_BLOG_PERSONAL_BLOG', 'The personal');
+define('_BLOG_POST_OK', 'Record is successfully left!');
+define('_BLOG_POST_DELETED', 'Record is successfully removed');
+define('_BLOG_POST_REFRESHED', 'Record is successfully updated');
+define('_BLOG_POST_CREATE_ERROR', 'There was an error at record creation');
+define('_BLOG_POST_ADD_OK', 'Thanks! Your record is successfully added in');
+define('_BLOG_SSELECTED_BLOG', 'chosen blog');
+define('_BLOG_WANT_ADD_MORE', 'Want to add still?');
+define('_BLOG_POST_DELETE_OK', 'Your record is successfully removed.');
+define('_BLOG_TO_HOME', 'On main a blog');
+define('_BLOG_POST_REFRESH_OK', 'Thanks! Your record is successfully updated.');
+define('_BLOG_BLOG_CREATE_OK', 'Thanks! Your blog is successfully created!');
+define('_BLOG_BLOG_SAVE_OK', 'Thanks! The blog is successfully kept!');
+define('_BLOG_FROM', 'Blog of the user: ');
+define('_BLOG_ALREADY_VOTED', 'You already voted for the given record!');
+define('_BLOG_YOURSELF_VOTED', 'You cannot vote for own record!');
+define('_BLOG_AUTHORIZED_VOTING_ONLY', 'You should be registered and enter to vote for record in a blog!');
+define('_BLOG_S_OR_NOW', 'Or');
+define('_BLOG_SLEAVE_POST', 'To leave record');
+define('_BLOG_IN_THIS', 'In it?');
+define('_BLOG_CREATE_ERROR', 'There was an error at blog creation');
+define('_BLOG_SNEVER', 'Never');
+define('_BLOG_TO_ADMIN_PAGE', 'On page of the manager');
+define('_BLOG_TO_READER_PAGE', 'On page of the reader');
+define('_BLOG_NO_READERS', 'Meanwhile nobody reads a blog');
+define('_BLOG_TO_BE_READER', 'To become the reader of a blog');
+define('_BLOG_ADD_MYSELF_POST', 'To add the record in the given blog');
+define('_BLOG_SDELETE', 'Delete');
+define('_BLOG_SHOW_PARTICIPANTS', 'To show participants');
+define('_BLOG_READERS', 'Readers');
+define('_BLOG_READERS2', 'Readers');
+define('_BLOG_ADMINS', 'Managers');
+define('_BLOG_SEDIT', 'Edit');
+define('_BLOG_NOTIFY1', 'There was an error! For record creation in a blog it is necessary to be the registered user of a portal!');
+define('_BLOG_NOTIFY2', 'There was an error! One of obligatory fields is not filled. Please return back and fill ALL fields of the form.');
+define('_BLOG_NOTIFY3', 'The given record already is present at the given blog!');
+define('_BLOG_NOTIFY4', 'There was an error! For blog creation it is necessary to be the registered user of a portal!');
+define('_BLOG_NOTIFY5', 'The blog with such name already exists, please choose other name for your blog.');
+define('_BLOG_NOTIFY6', 'There was an error! One of obligatory fields is not filled. Please return back and fill ALL fields of the form.');
+define('_BLOG_NOTIFY7', '<br/><strong>Attention!</strong><br/> After record editing, it приобритёт the status "On a moderation". It means that it will be considered in the near future by managers of a portal and the decision on approval and the post publication will be accepted.');
+define('_BLOG_NOTIFY8', 'The manager of a blog cannot be its reader!');
+define('_BLOG_TPL_ALERT1', 'You have not filled blog heading!');
+define('_BLOG_TPL_ALERT2', 'You have not filled the blog description!');
+define('_BLOG_TPL_ALERT3', 'One of obligatory fields is not filled, check up correctness of data input!');
+define('_BLOG_TPL_ALERT4', 'You have not filled record heading!');
+define('_BLOG_TPL_ALERT5', 'You have not filled the record text!');
+define('_BLOG_TPL_ALERT6', 'You have not filled tags!');

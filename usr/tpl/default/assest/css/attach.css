@@ -1,0 +1,71 @@
+﻿.mknop{
+    display: inline-block;
+    margin: 10px 0px;
+    height: 30px;
+    border: 1px solid #419DB8;
+    border-radius: 5px;
+    box-shadow: inset 0px 1px 0px #7ACBE3, 0px 1px 0px 0px #fff, 0px 2px 4px 0px #90C9D8;
+    background: #58bedc;
+    background: -moz-linear-gradient(top,  #58bedc 11%, #3097b5 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(11%,#58bedc), color-stop(100%,#3097b5));
+    background: -webkit-linear-gradient(top,  #58bedc 11%,#3097b5 100%);
+    background: -o-linear-gradient(top,  #58bedc 11%,#3097b5 100%);
+    background: -ms-linear-gradient(top,  #58bedc 11%,#3097b5 100%);
+    background: linear-gradient(to bottom,  #58bedc 11%,#3097b5 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#58bedc', endColorstr='#3097b5',GradientType=0 );
+}
+
+
+.mknoplink {
+        padding: 2px 8px;
+        display: inline-block;
+        background: #efefef;
+        background: -moz-linear-gradient(top,  #efefef 0%, #dbdbdb 100%);
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#efefef), color-stop(100%,#dbdbdb));
+        background: -webkit-linear-gradient(top,  #efefef 0%,#dbdbdb 100%);
+        background: -o-linear-gradient(top,  #efefef 0%,#dbdbdb 100%);
+        background: -ms-linear-gradient(top,  #efefef 0%,#dbdbdb 100%);
+        background: linear-gradient(to bottom,  #efefef 0%,#dbdbdb 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#efefef', endColorstr='#dbdbdb',GradientType=0 );
+        box-shadow: inset 0px 1px 0px #fff,0px 1px 0px #E5E5E5;
+        border-radius: 3px;
+
+        text-shadow: 0px 1px 0px #fff;
+        margin: 4px 10px 0px 5px;
+        color: #15586A;
+        font: 14px Arial;
+    }
+
+.mknopsize {
+    margin: 0px 10px 0px 7px;
+    display: inline-block;
+    padding: 2px 5px;
+    background: #1A6479;
+    box-shadow: inset 0px 1px 2px #0A4352, 0px 1px 0px #48C1E3;
+    border-radius: 3px;
+    color: #C9F5FF;
+    text-shadow: 0px -1px 0px #0D3E4B;
+    
+}
+    
+.mknopdownload {
+    display: inline-block;
+    color: #D6F7FF;
+    text-shadow: 0px -1px 0px #1A6479;
+}
+
+.mknopcifr {
+    margin: 0px 5px 0px 5px;
+    display: inline-block;
+    padding: 2px 5px;
+    background: #1A6479;
+    box-shadow: inset 0px 1px 2px #0A4352, 0px 1px 0px #48C1E3;
+    border-radius: 3px;
+    color: #C9F5FF;
+    text-shadow: 0px -1px 0px #0D3E4B;
+}
+.mknorazt {
+    display: inline-block;
+    color: #D6F7FF;
+    text-shadow: 0px -1px 0px #1A6479;
+}

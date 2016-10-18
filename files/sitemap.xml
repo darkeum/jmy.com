@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+		<urlset xmlns="http://www.google.com/schemas/sitemap/0.84"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.google.com/schemas/sitemap/0.84 http://www.google.com/schemas/sitemap/0.84/sitemap.xsd">
+		<!-- Last update of sitemap 2016-09-27 19:22:29+06:00 -->
+<url><loc>http://jmy.com/</loc><changefreq>weekly</changefreq><priority>0.5</priority></url>
+<url><loc>http://jmy.com/blog</loc><changefreq>weekly</changefreq><priority>0.5</priority></url>
+<url><loc>http://jmy.com/board</loc><changefreq>weekly</changefreq><priority>0.5</priority></url>
+<url><loc>http://jmy.com/content</loc><changefreq>weekly</changefreq><priority>0.5</priority></url>
+<url><loc>http://jmy.com/feedback</loc><changefreq>weekly</changefreq><priority>0.5</priority></url>
+<url><loc>http://jmy.com/gallery</loc><changefreq>weekly</changefreq><priority>0.5</priority></url>
+<url><loc>http://jmy.com/guestbook</loc><changefreq>weekly</changefreq><priority>0.5</priority></url>
+<url><loc>http://jmy.com/news</loc><changefreq>weekly</changefreq><priority>0.5</priority></url>
+<url><loc>http://jmy.com/news/dfvdfv.html</loc><changefreq>weekly</changefreq><priority>0.5</priority></url>
+<url><loc>http://jmy.com/news/jetapy_stroitelstva.html</loc><changefreq>weekly</changefreq><priority>0.5</priority></url>
+<url><loc>http://jmy.com/sitemap</loc><changefreq>weekly</changefreq><priority>0.5</priority></url>
+</urlset>

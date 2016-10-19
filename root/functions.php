@@ -178,7 +178,22 @@ if (!defined('ACCESS'))
 	}
 }
 
-
+function exceMods($type = NULL) 
+{
+	global $db;
+	if (!empty($type))
+	{
+		$query = $db->query("SELECT * FROM ".DB_PREFIX."_plugins WHERE ".$db->safesql($type)."='1'");
+		if($db->numRows($query) > 0) 
+		{	
+			while($mod = $db->getRow($query)) 
+			{
+				$modules[] = $mod['title'];
+			}
+		}
+		return $modules;
+	}	
+}
 
 
 /*
@@ -189,7 +204,10 @@ if (!defined('ACCESS'))
 function checkbox($name, $val) 
 {
 	$checked = !empty($val) ? 'checked ' : false;
-	return "<label class=\"checkbox checkbox-custom\"><input name=\"" . $name . "\" type=\"checkbox\" " . $checked . "><i class=\"checkbox\"></i></label>";
+	return '<div class="checkbox-custom mt10">
+				<input type="checkbox" name="' . $name . '" ' . $checked . '>
+				<label for="all"></label>
+			</div>';
 }
 
 

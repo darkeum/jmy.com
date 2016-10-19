@@ -245,10 +245,9 @@ global $adminTpl, $config, $core, $admin_conf, $db;
 						<div class="col-lg-3">							
 								<label class="field select">
 									<select name="module" id="module" onchange="updateCatList(this.value, \'category\');" >';
-										$exceMods = array('blog', 'board', 'feed', 'sitemap', 'feedback', 'gallery', 'pm', 'profile', 'search', 'poll','mainpage','guestbook');
 										foreach ($core->getModList() as $module) 
 										{
-											if(!in_array($module, $exceMods))
+											if(in_array($module, exceMods('categories')))
 											{
 												$selected = ($module == $mod) ? "selected" : "";
 												echo '<option value="' . $module . '" ' . $selected . '>' . _mName($module) . '</option>';
@@ -326,11 +325,10 @@ function scan($cat = null) {
 						<label for="category"  class="col-lg-3 control-label">'. _CAT_MODULE .'</label>
 						<div class="col-lg-3">							
 								<label class="field select">
-									<select name="module" id="module">';
-										$exceMods = array('blog', 'board', 'feed', 'sitemap', 'feedback', 'gallery', 'pm', 'profile', 'search', 'poll','mainpage','guestbook');
+									<select name="module" id="module">';										
 										foreach ($core->getModList() as $module) 
 										{
-											if(!in_array($module, $exceMods))
+											if(in_array($module, exceMods('categories')))
 											{
 												$selected = ($module == $mod) ? "selected" : "";
 												echo '<option value="' . $module . '" ' . $selected . '>' . _mName($module) . '</option>';

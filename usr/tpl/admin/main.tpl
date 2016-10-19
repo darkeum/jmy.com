@@ -26,6 +26,7 @@
     <script src="/{ADM_THEME}/assets/js/demo.js"></script>
     <script src="http://livedemo00.template-help.com/wt_58708/assets/js/main.js"></script>
   <script src="http://livedemo00.template-help.com/wt_58708/assets/js/demo/widgets.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.4.0/clipboard.min.js"></script>
 
    <script type="text/javascript">
    
@@ -197,25 +198,22 @@
 					<div class="pull-right mr10">
 						<div class="btn-group">
 							<button type="button" class="multiselect dropdown-toggle btn btn-default btn-sm" data-toggle="dropdown" style="max-width: 100px;" aria-expanded="false">[alang:_PANEL_SUNMENU_VIEW] <b class="caret-right"></b></button></div>
-                </div>
+					</div>
+				</li>				
+				<li class="list-group-item"><a href="#" class="animated animated-short fadeInUp"><span class="fa fa-envelope"></span> Messages<span class="label label-warning">2</span></a></li>
+				<li class="list-group-item"><a href="#" class="animated animated-short fadeInUp"><span class="fa fa-user"></span> Friends<span class="label label-warning">6</span></a></li>
+				<li class="list-group-item"><a href="#" class="animated animated-short fadeInUp"><span class="fa fa-bell"></span> 	Notifications</a></li>
+				<li class="list-group-item"><a href="#" class="animated animated-short fadeInUp"><span class="fa fa-gear"></span> Settings</a></li>
+				<li class="dropdown-footer">
+					<a href="/profile/logout"><span class="fa fa-power-off pr5"></span> [alang:_PANEL_SUNMENU_EXIT]</a>
 				</li>
-				
-              <li class="list-group-item"><a href="#" class="animated animated-short fadeInUp"><span class="fa fa-envelope"></span> Messages<span class="label label-warning">2</span></a></li>
-              <li class="list-group-item"><a href="#" class="animated animated-short fadeInUp"><span class="fa fa-user"></span> Friends<span class="label label-warning">6</span></a></li>
-              <li class="list-group-item"><a href="#" class="animated animated-short fadeInUp"><span class="fa fa-bell"></span> Notifications</a></li>
-              <li class="list-group-item"><a href="#" class="animated animated-short fadeInUp"><span class="fa fa-gear"></span> Settings</a></li>
-              <li class="dropdown-footer"><a href="pages_login.html"><span class="fa fa-power-off pr5"></span> [alang:_PANEL_SUNMENU_EXIT]</a></li>
             </ul>
           </li>
         </ul>
       </header>
-      <!-- Start: Sidebar-->
       <aside id="sidebar_left" class="nano nano-light affix has-scrollbar sidebar-light">
-        <!-- Start: Sidebar Left Content-->
         <div class="sidebar-left-content nano-content">
-          <!-- Start: Sidebar Header-->
           <header class="sidebar-header">
-            <!-- Sidebar Widget - Search (hidden)-->
             <div class="sidebar-widget search-widget hidden">
               <div class="input-group"><span class="input-group-addon"><i class="fa fa-search"></i></span>
                 <input id="sidebar-search" type="text" placeholder="Search..." class="form-control"/>
@@ -252,8 +250,7 @@
 					</li>
 				</ul>
             </li>
-			[/ACTIVE_MODULE]
-			[ACTIVE_MODULE:user]
+			[/ACTIVE_MODULE]		
             <li>
 				<a href="#" class="accordion-toggle {MENU_OPEN:user,groups,comments,voting}">
 					<span class="glyphicon glyphicon-user"></span>
@@ -275,7 +272,6 @@
 					</li>                
 				</ul>
             </li>
-			[/ACTIVE_MODULE]
             <li>
 				<a href="#" class="accordion-toggle {MENU_OPEN:board,blog,gallery,guestbook,content}">
 					<span class="glyphicon glyphicon-th-large"></span>
@@ -336,26 +332,26 @@
             </li>
 			{MENU_MODULES}
 			<li>
-				<a href="#" class="accordion-toggle">
+				<a href="#" class="accordion-toggle {MENU_OPEN:sitemap,smiles,db,log,update}">
 					<span class="glyphicon glyphicon-question-sign"></span>
 					<span class="sidebar-title">[alang:_PANEL_MENU_OTHER]</span>
 					<span class="caret"></span>
 				</a>
 				<ul class="nav sub-nav">
-					<li {MENU_CHOOSE:user}>
+					<li {MENU_CHOOSE:sitemap}>
 						<a href="/{ADMIN}/module/sitemap"><span class="glyphicon glyphicon-list-alt"></span>[alang:_PANEL_MENU_OTHER_MAP]</a>
 					</li>
 					<li {MENU_CHOOSE:smiles}>
-						<a href="/{ADMIN}/smiles"><span class="glyphicon glyphicon-tag"></span>[alang:_PANEL_MENU_OTHER_SMILES]</a>
+						<a href="/{ADMIN}/smiles"><span class="fa fa-smile-o"></span>[alang:_PANEL_MENU_OTHER_SMILES]</a>
 					</li>
 					<li {MENU_CHOOSE:db}>
-						<a href="/{ADMIN}/db"><span class="glyphicon glyphicon-comment"></span>[alang:_PANEL_MENU_OTHER_BD]</a>
+						<a href="/{ADMIN}/db"><span class="glyphicon glyphicon-tasks"></span>[alang:_PANEL_MENU_OTHER_BD]</a>
 					</li>
 					<li {MENU_CHOOSE:log}>
-						<a href="/{ADMIN}/log"><span class="glyphicon glyphicon-plus-sign"></span>[alang:_PANEL_MENU_OTHER_LOG]</a>
+						<a href="/{ADMIN}/log"><span class="glyphicon glyphicon-info-sign"></span>[alang:_PANEL_MENU_OTHER_LOG]</a>
 					</li>   
 					<li {MENU_CHOOSE:update}>
-						<a href="/{ADMIN}/update"><span class="glyphicon glyphicon-plus-sign"></span>[alang:_PANEL_MENU_OTHER_UPDATE]</a>
+						<a href="/{ADMIN}/update"><span class="glyphicon glyphicon-refresh"></span>[alang:_PANEL_MENU_OTHER_UPDATE]</a>
 					</li>   
               </ul>
             </li>
@@ -368,123 +364,85 @@
         </div>
       </aside>
       <section id="content_wrapper">
-        <!-- Start: Topbar-Dropdown-->
         <div id="topbar-dropmenu" class="alt">
           <div class="topbar-menu row">
 			[ACTIVE_MODULE:news]
 			<div class="col-xs-4 col-sm-2">
 				<a href="/{ADMIN}/module/news" class="metro-tile bg-primary light">
 					<span class="glyphicon glyphicon-fire text-muted"></span>
-					<span class="metro-title">[alang:_PANEL_MENU_NEWS_MANAGER]</span>
+					<span class="metro-title">[alang:_PANEL_MENU_NEWS]</span>
 				</a>
 			</div>
 			[/ACTIVE_MODULE]
-			[ACTIVE_MODULE:user]
 			<div class="col-xs-4 col-sm-2">
-				<a href="/{ADMIN}/module/user" class="metro-tile bg-info light">
+				<a href="/{ADMIN}/user" class="metro-tile bg-info light">
 					<span class="glyphicon glyphicon-user text-muted"></span>
-					<span class="metro-title">Пользователи</span>
+					<span class="metro-title">[alang:_PANEL_MENU_USER]</span>
 				</a>
 			</div>
-			[/ACTIVE_MODULE]
-         
-            <div class="col-xs-4 col-sm-2"><a href="#" class="metro-tile bg-success light"><span class="glyphicon glyphicon-edit text-muted"></span><span class="metro-title">Статические страницы</span></a></div>
-            <div class="col-xs-4 col-sm-2"><a href="#" class="metro-tile bg-system light"><span class="glyphicon glyphicon-comment text-muted"></span><span class="metro-title">Форум</span></a></div>
-			<div class="col-xs-4 col-sm-2"><a href="#" class="metro-tile bg-alert light"><span class="glyphicon glyphicon-picture text-muted"></span><span class="metro-title">Галлерея</span></a></div>
-            <div class="col-xs-4 col-sm-2"><a href="#" class="metro-tile bg-warning light"><span class="fa fa-gears text-muted"></span><span class="metro-title">Настройки</span></a></div>            
+			[ACTIVE_MODULE:content]
+			<div class="col-xs-4 col-sm-2">
+				<a href="/{ADMIN}/module/content" class="metro-tile bg-success light">
+					<span class="glyphicon glyphicon-edit text-muted"></span>
+					<span class="metro-title">[alang:_PANEL_MENU_COM_STATIC]</span>
+				</a>
+			</div>
+			[/ACTIVE_MODULE]   
+			[ACTIVE_MODULE:board]
+			<div class="col-xs-4 col-sm-2">
+				<a href="/{ADMIN}/module/board" class="metro-tile bg-system light">
+					<span class="glyphicon glyphicon-comment text-muted"></span>
+					<span class="metro-title">[alang:_PANEL_MENU_COM_FORUM]</span>
+				</a>
+			</div>
+			[/ACTIVE_MODULE]  
+			[ACTIVE_MODULE:gallery]
+			<div class="col-xs-4 col-sm-2">
+				<a href="/{ADMIN}/module/gallery" class="metro-tile bg-alert light">
+					<span class="glyphicon glyphicon-picture text-muted"></span>
+					<span class="metro-title">[alang:_PANEL_MENU_COM_GALLERY]</span>
+				</a>
+			</div>
+			[/ACTIVE_MODULE] 				
+            <div class="col-xs-4 col-sm-2">
+				<a href="/{ADMIN}/config" class="metro-tile bg-warning light">
+					<span class="fa fa-gears text-muted"></span>
+					<span class="metro-title">[alang:_PANEL_MENU_CONFIG]</span>
+				</a>
+			</div>            
           </div>
         </div>
-        <!-- Start: Topbar-->
 		[CHECK_ACTIVE]
-		 <header id="topbar" class="text-center bg-white alt ph10 br-b-ddd">			
+		<header id="topbar" class="text-center bg-white alt ph10 br-b-ddd">			
 			<div>		
 				{SUBNAV}  				
 			</div>
 			{TOPBAR}  			       
         </header>
 		[/CHECK_ACTIVE]      
-        <!-- Begin: Content-->
 		{MODULE}       
-      </section>
-      <!-- Start: Right Sidebar-->
-      <aside id="sidebar_right" class="nano affix">
-        <!-- Start: Sidebar Right Content-->
-        <div class="sidebar-right-content nano-content">
-          <div class="tab-block sidebar-block br-n">
-            <ul class="nav nav-tabs tabs-border nav-justified hidden">
-              <li class="active"><a href="#sidebar-right-tab1" data-toggle="tab">Tab 1</a></li>
-              <li><a href="#sidebar-right-tab2" data-toggle="tab">Tab 2</a></li>
-              <li><a href="#sidebar-right-tab3" data-toggle="tab">Tab 3</a></li>
-            </ul>
-            <div class="tab-content br-n">
-              <div id="sidebar-right-tab1" class="tab-pane active">
-                <h5 class="title-divider text-muted mb20">Server Statistics<span class="pull-right">2013<i class="fa fa-caret-down ml5"></i></span></h5>
-                <div class="progress mh5">
-                  <div role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 44%" class="progress-bar progress-bar-primary"><span class="fs11">DB Request</span></div>
-                </div>
-                <div class="progress mh5">
-                  <div role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 84%" class="progress-bar progress-bar-info"><span class="fs11 text-left">Server Load</span></div>
-                </div>
-                <div class="progress mh5">
-                  <div role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 61%" class="progress-bar progress-bar-warning"><span class="fs11 text-left">Server Connections</span></div>
-                </div>
-                <h5 class="title-divider text-muted mt30 mb10">Traffic Margins</h5>
-                <div class="row">
-                  <div class="col-xs-5">
-                    <h3 class="text-primary mn pl5">132</h3>
-                  </div>
-                  <div class="col-xs-7 text-right">
-                    <h3 class="text-success-dark mn"><i class="fa fa-caret-up"></i> 13.2%</h3>
-                  </div>
-                </div>
-                <h5 class="title-divider text-muted mt25 mb10">Database Request</h5>
-                <div class="row">
-                  <div class="col-xs-5">
-                    <h3 class="text-primary mn pl5">212</h3>
-                  </div>
-                  <div class="col-xs-7 text-right">
-                    <h3 class="text-success-dark mn"><i class="fa fa-caret-up"></i> 25.6%</h3>
-                  </div>
-                </div>
-                <h5 class="title-divider text-muted mt25 mb10">Server Response</h5>
-                <div class="row">
-                  <div class="col-xs-5">
-                    <h3 class="text-primary mn pl5">82.5</h3>
-                  </div>
-                  <div class="col-xs-7 text-right">
-                    <h3 class="text-danger mn"><i class="fa fa-caret-down"></i> 17.9%</h3>
-                  </div>
-                </div>
-                <h5 class="title-divider text-muted mt40 mb20">Server Statistics<span class="pull-right text-primary fw600">USA</span></h5>
-              </div>
-              <div id="sidebar-right-tab2" class="tab-pane"></div>
-              <div id="sidebar-right-tab3" class="tab-pane"></div>
-            </div>
-          </div>
-        </div>
-      </aside>
+      </section>     
     </div>
-	   <style>
-      /* demo styles -summernote */
+	<style>
       .btn-toolbar > .btn-group.note-fontname {
         display: none;
       }
     </style>
   {FOOT}
-        <script type="text/javascript">
+    <script type="text/javascript">
       jQuery(document).ready(function () {
         "use strict";
         // Init Theme Core
         Core.init();
         // Init Demo JS
-        Demo.init();
-    
-     
-         {JS_CODE}
-         
+        Demo.init();     
+        {JS_CODE}         
       });
     </script>
-
+<script type="text/javascript">
+						(function(){
+							new Clipboard('#copy-button');})();
+					</script>
 	
   </body>
 </html>

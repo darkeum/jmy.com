@@ -12,7 +12,6 @@
 class admin extends template
 {
 	var $page_nav = '';
-	var $js_code = '';
 	
 	function __construct()
 	{
@@ -79,13 +78,25 @@ class admin extends template
 		$foot = '';
 		if (isset($this->footIncludes))
 		{
-		foreach($this->footIncludes as $metas)
-		{
-			if($metas)
+			foreach($this->footIncludes as $metas)
 			{
-				$foot .= $metas;
-			}		
+				if($metas)
+				{
+					$foot .= $metas;
+				}		
+			}
 		}
+		
+		$js = '';
+		if (isset($this->js_code))
+		{
+			foreach($this->js_code as $jss)
+			{
+				if($jss)
+				{
+					$js .= $jss;
+				}		
+			}
 		}
 		
 		if(isset($url[1]))
@@ -111,9 +122,8 @@ class admin extends template
 			
 			}
 			elseif(isset($url[2]) && isset($module_array[$url[2]]))			
-			{			
-			//$subNav = '<div class="row mg-b"><div class="col-xs-12"><h3 class="no-margin"></h3><small>'.$module_array[$url[2]]['desc'].'</small></div></div>';
-			$subNav = '<p class="lead">'.$module_array[$url[2]]['name'].'</p>';
+			{		
+				$subNav = '<p class="lead">'.$module_array[$url[2]]['name'].'</p>';
 				if(isset($module_array[$url[2]]['subAct']))
 				{				
 					$subNav .= '<ul class="nav nav-list nav-list-topbar">';
@@ -125,23 +135,25 @@ class admin extends template
 					}
 					$subNav .= '</ul>';
 					
-				}
-				
+				}				
 				$noSub = '<span class="navMainActive"><a href="' . ADMIN . '/module/' . $url[2] . '">' . $module_array[$url[2]]['name'] . '</a></span>';
 			}
 			elseif(isset($services_array[$url[1]]))			
 			{
-				$subNav = '<div class="row mg-b"><div class="col-xs-12"><h3 class="no-margin">'.$services_array[$url[1]]['name'].'</h3><small>'.$services_array[$url[1]]['desc'].'</small></div></div>';				
+				$subNav = '<p class="lead">'.$services_array[$url[1]]['name'].'</p>';
 				if(isset($services_array[$url[1]]['subAct']))
-				{					
-					$subNav .= '<div class="row"><div class="col-lg-12"><div class="btn-group">';
+				{				
+					$subNav .= '<ul class="nav nav-list nav-list-topbar">';
+					          
+				
 					foreach($services_array[$url[1]]['subAct'] as $comAct => $comActLink)
 					{
-						$subNav .= '<button type="button" class="btn btn-white ' . ((isset($url[2]) && $url[2] == $comActLink OR !isset($url[2]) && $comActLink == '') ? 'active' : '') . '" onclick="location.href=\'' . ADMIN . '/' . $url[1] . '/' . $comActLink . '\';">' . $comAct . '</button>';
+						$subNav .= ' <li class=" ' . ((isset($url[2]) && $url[2] == $comActLink OR !isset($url[2]) && $comActLink == '') ? 'active' : '') . '"><a href="' . ADMIN .'/'. $url[1] . '/' . $comActLink . '">' . $comAct . '</a> </li>';
 					}
-					$subNav .= '</div></div></div><br>';
+					$subNav .= '</ul>';
+					
 				}				
-				$noSub = '<span class="navMainActive"><a href="' . ADMIN . '/' . $url[1] . '">' . $services_array[$url[1]]['name'] . '</a></span>';
+				$noSub = '<span class="navMainActive"><a href="' . ADMIN . '/' . $url[1] . '">' . $services_array[$url[1]]['name'] . '</a></span>';			
 			}
 		}
 		
@@ -312,7 +324,7 @@ class admin extends template
 		$this->setVar('GZIP', $config['gzip'] ? 'GZIP Включён' : '');
 		$this->setVar('TIMEQUERIES', mb_substr($db->timeQueries, 0, 5));
 		$this->setVar('QUERIES', $db->numQueries);
-		$this->setVar('JS_CODE', isset($this->js_code) ? $this->js_code : '');
+		$this->setVar('JS_CODE', $js);
 		$this->setVar('pages', $this->page_nav);
 		$this->setVar('HIDE_STATUS_1', ($config['hide'] == 1) ? 'selected="selected"' : '');
 		$this->setVar('HIDE_STATUS_2', ($config['hide'] == 2) ? 'selected="selected"' : '');

@@ -81,7 +81,7 @@ function admin_main()
 		}
 	}	
 	$adminTpl->admin_head(_MAIN_PAGE);
-	$adminTpl->js_code = "      
+	$adminTpl->js_code [] = "      
         var highColors = [bgSystem, bgSuccess, bgWarning, bgPrimary];
         // Chart data
         var seriesData = [{

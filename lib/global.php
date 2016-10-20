@@ -780,7 +780,7 @@ function validationInit($type)
 	$adminTpl->footIncludes['validation'] = '
 	<script src="'.$config['url'].'/usr/plugins/js/jquery.validate.min.js"></script>
 	<script src="'.$config['url'].'/usr/plugins/js/additional-methods.min.js"></script>';		
-	$adminTpl->js_code =$script;
+	$adminTpl->js_code[] = $script;
 	$adminTpl->body_class = 'admin-validation-page';
 	
 }

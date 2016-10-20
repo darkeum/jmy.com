@@ -16,10 +16,11 @@ if (!defined('ACCESS')) {
 } 
 
 loadConfig('sitemap');
+global $lang;
 switch(isset($url[3]) ? $url[3] : null) 
 {
 	default:
-		$adminTpl->admin_head(_MODULES .' | '. _SM_SITEMAP);
+		$adminTpl->admin_head(_MODULES .' | '. $lang['sitemap']);
 		echo '<section id="content" class="table-layout">         
           <div class="tray tray-center">
             <div class="panel">              

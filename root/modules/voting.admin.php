@@ -15,19 +15,22 @@ if (!defined('ADMIN_ACCESS')) {
     exit;
 }
 
+global $lang;
 switch(isset($url[2]) ? $url[2] : null) {
 	default:
-		$adminTpl->admin_head(_POLL_POLLS);
+		$adminTpl->admin_head($lang['polls']);
+		echo '<div id="content" class="animated fadeIn">';
 		$query = $db->query("SELECT id as ppid, title, votes, max, (SELECT COUNT(id) FROM ".DB_PREFIX."_poll_questions WHERE ppid = pid) as variants FROM ".DB_PREFIX."_polls ORDER BY title");	
-		echo '
+		
+		if($db->numRows($query) > 0) 
+		{
+			echo '
 		<div class="row">
 			<div class="col-lg-12">
 				<section class="panel">
 					<div class="panel-heading">
-						<b>'._POLL_LIST.'</b>						
+						<b>'.$lang['polls_list'].'</b>						
 					</div>';
-		if($db->numRows($query) > 0) 
-		{
 					echo '<div class="panel-body no-padding">
 					<form id="tablesForm" style="margin:0; padding:0" method="POST" action="{ADMIN}/voting/action">
 						<table class="table no-margin">
@@ -77,66 +80,18 @@ switch(isset($url[2]) ? $url[2] : null) {
 		<br>	
 		</div>
 		</form></div>';
-			
+		echo'</section></div></div>';	
 		} 
 		else 
 		{
-		echo '<div class="panel-heading">'  . _POLL_EMPTY . '</div>';		
+			$adminTpl->info($lang['polls_empty'], 'empty', null, $lang['polls_list'], $lang['polls_add'], ADMIN.'/voting/add');	
 		}
-		echo'</section></div></div>';		
+		echo'</div>';		
 		$adminTpl->admin_foot();
 		break;	
 		
 	case 'add':
-		$adminTpl->admin_head(_POLL_ADD);		
-		echo '<div class="row">
-			<div class="col-lg-12">
-				<section class="panel">
-					<div class="panel-heading">
-						<b>'._POLL_ADD.'</b>						
-					</div>
-					<div class="panel-body">
-						<form class="form-horizontal parsley-form" role="form" action="{ADMIN}/voting/save" method="post"  data-parsley-validate>
-												<div class="form-group">
-													<label class="col-sm-3 control-label">'._POLL_NAME.'</label>
-													<div class="col-sm-4">
-														<input value="" type="text" name="title" id="title" class="form-control" data-parsley-required="true" data-parsley-trigger="change">
-													</div>
-												</div>
-												<div class="form-group">
-													<label class="col-sm-3 control-label">'._POLL_VARS.'</label>
-													<div class="col-sm-4">
-														<textarea cols="30" rows="10" name="vars" class="form-control" id="vars" data-parsley-required="true" data-parsley-trigger="change"></textarea>
-														<p class="help-block">'._POLL_VARS_DESC.'</p>
-													</div>
-												</div>
-												<div class="form-group">
-													<label class="col-sm-3 control-label">'._POLL_MAXS.'</label>
-													<div class="col-sm-4">
-														<div id="ex-spinner" class="spinner input-group">
-															<input type="text" value="0" name="max" class="form-control spinner-input">
-															<div class="spinner-buttons input-group-btn  btn-group btn-group-vertical">
-																<button type="button" class="btn btn-default spinner-up">
-																<i class="fa fa-angle-up"></i></button>
-																<button type="button" class="btn btn-default spinner-down">
-																<i class="fa fa-angle-down"></i></button>
-															</div>
-														</div>
-														<p class="help-block">'._POLL_MAXS_DESC.'</p>
-													</div>
-												</div>
-												<div class="form-group">
-														<label class="col-sm-3 control-label"></label>
-														<div class="col-sm-4">
-															<input name="submit" type="submit" class="btn btn-primary btn-parsley" id="sub" value="'._ADD.'">						
-														</div>
-												</div>
-											</form>
-										</div>
-									</section>
-								</div>
-							</div>';		
-		$adminTpl->admin_foot();
+		add();
 		break;
 		
 	case 'save':
@@ -169,65 +124,7 @@ switch(isset($url[2]) ? $url[2] : null) {
 	
 	case 'edit':
 		$id = intval($url[3]);
-		$rows = $db->getRow($db->query("SELECT * FROM `" . DB_PREFIX . "_polls` WHERE id = '" . $id . "'"));
-		$query = $db->query("SELECT * FROM `" . DB_PREFIX . "_poll_questions` WHERE pid = '" . $id . "'");
-		$adminTpl->admin_head(_POLL_EDIT);
-		echo '<div class="row">
-			<div class="col-lg-12">
-				<section class="panel">
-					<div class="panel-heading">
-						<b>'._POLL_EDIT.'</b>						
-					</div>
-					<div class="panel-body">
-						<form class="form-horizontal parsley-form" role="form" action="{ADMIN}/voting/save_edit" method="post"  data-parsley-validate>
-												<div class="form-group">
-													<label class="col-sm-3 control-label">'._POLL_NAME.'</label>
-													<div class="col-sm-4">
-														<input value="'. prepareTitle($rows['title']) .'" type="text" name="title" id="title" class="form-control" data-parsley-required="true" data-parsley-trigger="change">
-													</div>
-												</div>
-												<div class="form-group">
-													<label class="col-sm-3 control-label">'._POLL_VARS.'</label>
-													<div class="col-sm-4">
-														<textarea rows="10" name="vars" class="form-control" id="vars">';
-														while($rowsq = $db->getRow($query))
-														{	
-															$text = $rowsq['variant'];															
-															$text=rtrim($text,"\n\r");
-															echo $text . "|" . $rowsq['vote'] . "\n";		
-														}
-												echo'	</textarea>
-														<p class="help-block">'._POLL_VARS_DESC_E.'</p>
-													</div>
-												</div>
-												<div class="form-group">
-													<label class="col-sm-3 control-label">'._POLL_MAXS.'</label>
-													<div class="col-sm-4">
-														<div id="ex-spinner" class="spinner input-group">
-															<input type="text" value="'.$rows['max'].'" name="max" class="form-control spinner-input">
-															<div class="spinner-buttons input-group-btn  btn-group btn-group-vertical">
-																<button type="button" class="btn btn-default spinner-up">
-																<i class="fa fa-angle-up"></i></button>
-																<button type="button" class="btn btn-default spinner-down">
-																<i class="fa fa-angle-down"></i></button>
-															</div>
-															<p class="help-block">'._POLL_MAXS_DESC.'</p>
-														</div>
-													</div>
-												</div>
-												<input name="id" type="hidden" id="sub" value="' . $rows['id'] . '" />
-												<input name="votes" type="hidden" id="sub" value="' . $rows['votes'] . '" />
-												<div class="form-group">
-														<label class="col-sm-3 control-label"></label>
-														<div class="col-sm-4">
-															<input name="submit" type="submit" class="btn btn-primary btn-parsley" id="sub" value="'._UPDATE.'">						
-														</div>
-												</div>';
-												echo '</form>';
-											echo '</div>';
-										echo'</section></div></div>';			
-		$adminTpl->admin_foot();
-		
+		add($id);		
 		break;
 		
 	case 'save_edit':
@@ -278,6 +175,94 @@ switch(isset($url[2]) ? $url[2] : null) {
 		}
 		location(ADMIN . '/voting/del');
 		break;
+}
+
+function add($id = null) 
+{	
+		global $adminTpl, $config, $core, $lang, $db;
+		if(isset($id)) 
+		{
+			$rows = $db->getRow($db->query("SELECT * FROM `" . DB_PREFIX . "_polls` WHERE id = '" . $id . "'"));
+			$query = $db->query("SELECT * FROM `" . DB_PREFIX . "_poll_questions` WHERE pid = '" . $id . "'");
+			$title = prepareTitle($rows['title']);
+			$max = $rows['max'];
+			$admhead = $lang['polls_edit'];
+			$btn = $lang['update'];
+			$variant = '';
+			$action = ADMIN.'/voting/save_edit';
+			while($rowsq = $db->getRow($query))
+			{	
+				$text = $rowsq['variant'];															
+				$text=rtrim($text,"\n\r");
+				$variant .= $text . "|" . $rowsq['vote'] . "\n";		
+			}
+			
+		} 
+		else 
+		{
+			$title = isset($_POST['title']) ? filter($_POST['title']) : '';	
+			$variant = isset($_POST['vars']) ? filter($_POST['vars']) : '';	
+			$max = isset($_POST['max']) ? filter($_POST['max']) : '0';
+			$admhead = $lang['polls_add'];
+			$btn = $lang['add'];
+			$action = ADMIN.'/voting/save';
+		}
+		$adminTpl->admin_head($admhead);	
+		$validation_array = array(		
+			'title' => array(
+				'required' =>  array('true', $lang['polls_name_err'])			
+			),
+			'vars' => array(
+				'required' =>  array('true',  $lang['polls_variant_err'])					
+			),
+			'max' => array(
+				'required' =>  array('true',  $lang['polls_max_err'])			
+			)
+		);
+		$adminTpl->js_code[] = '$("#max").spinner();';
+		validationInit($validation_array);	
+		echo '<div id="content" class="animated fadeIn">
+				<div class="panel panel-dark panel-border top">
+					<div class="panel-heading"><span class="panel-title">'. $admhead .'</span>					
+				</div>
+				<div class="panel-body admin-form">
+					<form id="admin-form" class="form-horizontal parsley-form" role="form" action="'.$action.'" method="post">
+						<div class="form-group">
+							<label for="title"  class="col-lg-3 control-label">'. $lang['polls_name'] .'</label>
+							<div class="col-lg-4">
+								<label for="title" class="field prepend-icon">
+									<input id="title" type="text" name="title" value="'. $title .'" placeholder="'.$lang['polls_name_pre'].'" class="gui-input">
+									<label for="title" class="field-icon"><i class="fa fa-pencil"></i></label>
+								</label>						
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label">'. $lang['polls_variant'] .'</label>
+							<div class="col-sm-4">
+								<label for="vars" class="field prepend-icon">
+									<textarea name="vars" id="vars" placeholder="'.$lang['polls_variant_pre'].'" class="gui-textarea">'.$variant.'</textarea>
+									<label for="vars" class="field-icon"><i class="fa fa-comments"></i></label><span class="input-footer">'.$lang['polls_variant_tt'].'</span>
+								</label>
+							</div>
+						</div>	
+						<div class="form-group">
+							<label for="max"  class="col-lg-3 control-label">'. $lang['polls_max'] .'</label>
+							<div class="col-lg-4">
+								<div class="input-group">									
+									<input id="max" name="max" value="'.$max.'" class="form-control ui-spinner-input">									
+								</div>
+								<span class="help-block mt5"><i class="fa fa-bell"></i> '.$lang['polls_max_tt'].'</span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label"></label>
+							<div class="col-sm-4">
+								<input name="submit" type="submit" class="btn btn-primary btn-parsley" id="sub" value="'.$btn.'">						
+							</div>
+						</div>
+					</form>
+				</div>';		
+		$adminTpl->admin_foot();
 }
 
 function deleteVot($id)

@@ -1,0 +1,21 @@
+<?php
+
+$lang = array_merge($lang, array (
+
+	/* Блок кто онлайн */
+
+	'block_online'								=> 'Блок кто онлайн',
+	'block_online_guest'						=> 'Гости',
+	'block_online_guest_desc'					=> 'Выводить количество гостей онлайн?',
+	'block_online_user'							=> 'Пользователи',
+	'block_online_user_desc'					=> 'Выводить ники пользователей кторые сейчас онлайн?',
+	'block_online_bot'							=> 'Поисковые машины',
+	'block_online_bot_desc'						=> 'Выводить поисковые машины которые сейчас сканируют ваш сайт?',
+	'block_online_top'							=> 'Топ лучших',
+	'block_online_top_desc'						=> 'Выводить топ лучших пользователей?',
+	'block_online_top_num'						=> 'Количество в топе',
+	'block_online_top_num_desc'					=> 'Количество пользователей в топе',
+
+));
+
+?>

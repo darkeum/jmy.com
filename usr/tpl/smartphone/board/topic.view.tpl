@@ -19,12 +19,12 @@
 					<br />
 					<input type="hidden" name="tid" value="{%ID%}" class="b" />
 					<input type="hidden" name="type" value="quick" class="b" />
-					<div align="right"><input type="submit" value="[lang:_FORUM_ANSWER]" /></div>
+					<div align="right"><input type="submit" value="[lang_old:_FORUM_ANSWER]" /></div>
 					</form>
 					</div>
 						</article>
 					</div>
 [/close]
 [guest]
-<article class="hentry"> <font color="red">[lang:_FORUM_REGISTER_OR_LOGIN_TO_ANSWER]</font></article>
+<article class="hentry"> <font color="red">[lang_old:_FORUM_REGISTER_OR_LOGIN_TO_ANSWER]</font></article>
 [/guest]

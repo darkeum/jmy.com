@@ -9,14 +9,14 @@
 			<b class="fn">{%BLOG_NAME%}</b>		
 		</div>
 		<div class="comment-metadata smallPart">
-			<a href="javascript:void(0)" onclick="showhide('usr')">[lang:_BLOG_SHOW_PARTICIPANTS]</a> - [user]<a href="blog/becomeReader/{%ID%}">{%BECOME_READER%}</a>[/user] 
+			<a href="javascript:void(0)" onclick="showhide('usr')">[lang_old:_BLOG_SHOW_PARTICIPANTS]</a> - [user]<a href="blog/becomeReader/{%ID%}">{%BECOME_READER%}</a>[/user] 
 		
 		</div>
-		<p class="comment-awaiting">[lang:_BLOG_POSTS]: {%POSTS%}</p>
+		<p class="comment-awaiting">[lang_old:_BLOG_POSTS]: {%POSTS%}</p>
 	</footer>
 	<p>	{%DESCRIPTION%} </p>
 	<div class="reply">
-		<a href="javascript:void(0)" onclick="reply_comment('{%ID%}');"><span class="smallPart">[lang:_BLOG_INDEX]: {%RATING%}<i class="fa fa-star spaceLeft"></i></span></a>
+		<a href="javascript:void(0)" onclick="reply_comment('{%ID%}');"><span class="smallPart">[lang_old:_BLOG_INDEX]: {%RATING%}<i class="fa fa-star spaceLeft"></i></span></a>
 	</div>	
 </article_b>
 </li>
@@ -30,7 +30,7 @@
 <article_b class="comment-body">
 <footer class="comment-meta">
 	</footer>
-	<p><h3>[lang:_BLOG_ADMINS]</h3>{%ADMINS%}<h3>[lang:_BLOG_READERS2]</h3>{%READERS%}</p>
+	<p><h3>[lang_old:_BLOG_ADMINS]</h3>{%ADMINS%}<h3>[lang_old:_BLOG_READERS2]</h3>{%READERS%}</p>
 </article_b>
 </li>
 </ol>

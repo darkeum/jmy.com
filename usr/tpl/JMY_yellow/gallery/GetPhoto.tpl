@@ -5,7 +5,7 @@
 
 <link rel="stylesheet" href="{%THEME%}/css/style.css" type="text/css">
 </head>
-<div align="center"><a href="javascript:history.go(-1)" >[lang:_BACK]...</a><br />
+<div align="center"><a href="javascript:history.go(-1)" >[lang_old:_BACK]...</a><br />
 <br />
 <br />
 <br />
@@ -14,4 +14,4 @@
 <div align="center">
     <br />
     <br />
-    <br /><a href="javascript:history.go(-1)" >[lang:_BACK]... </a></div>
+    <br /><a href="javascript:history.go(-1)" >[lang_old:_BACK]... </a></div>

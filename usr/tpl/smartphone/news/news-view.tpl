@@ -13,7 +13,7 @@
 			<span class="byline">
 				<i class="fa fa-user spaceRight" aria-hidden="true"></i>
 				<span class="author vcard">
-					[lang:_AUTHOR]: <strong>{%AUTHOR%}</strong>
+					[lang_old:_AUTHOR]: <strong>{%AUTHOR%}</strong>
 				</span>
 			</span>
 			[category]
@@ -24,7 +24,7 @@
 			[/category]
 			<span class="comments-link">
 				<i class="fa fa-comments-o spaceRight" aria-hidden="true"></i>
-				 [lang:_COMMENTS]: {%COMMENTS%}
+				 [lang_old:_COMMENTS]: {%COMMENTS%}
 			</span>
 		</div>	
 

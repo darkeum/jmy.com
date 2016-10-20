@@ -20,7 +20,7 @@
 			<span class="byline">
 				<i class="fa fa-user spaceRight" aria-hidden="true"></i>
 				<span class="author vcard">
-					[lang:_AUTHOR]: <strong>{%AUTHOR%}</strong>
+					[lang_old:_AUTHOR]: <strong>{%AUTHOR%}</strong>
 				</span>
 			</span>
 			[category]
@@ -31,7 +31,7 @@
 			[/category]
 			<span class="comments-link">
 				<i class="fa fa-comments-o spaceRight" aria-hidden="true"></i>
-				 [lang:_COMMENTS]: {%COMMENTS%}
+				 [lang_old:_COMMENTS]: {%COMMENTS%}
 			</span>
 		</div>
 	</header>		
@@ -40,6 +40,6 @@
 	</div>
 	<footer class="entry-footer smallPart">
 		[tags]<span class="tags-links"><i class="fa fa-tags spaceRight" aria-hidden="true"></i> {%TAGS%} </span><br /><br />[/tags]
-		[related]<span class="tags-links"><i class="fa fa-tags spaceRight" aria-hidden="true"></i>[open]<b>[lang:_RELATED_NEWS]:</b><ul class="related">{%RELATED%}</ul>[/open]</span><br />[/related]		
+		[related]<span class="tags-links"><i class="fa fa-tags spaceRight" aria-hidden="true"></i>[open]<b>[lang_old:_RELATED_NEWS]:</b><ul class="related">{%RELATED%}</ul>[/open]</span><br />[/related]		
 	</footer>	
 </article>		

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
 	<meta name="author" content="JMY CMS" />
-	<title>[alang:_APANEL] | [alang:_LOGIN]</title>
+	<title>[alang_old:_APANEL] | [alang_old:_LOGIN]</title>
 	<base href="{URL}">
 	<!-- FAVICON -->
 	<link rel="shortcut icon" href="{ADM_THEME}/assets/images/favicon.ico" />	
@@ -46,34 +46,34 @@
                         <div class="col-md-4"><a href="#" class="button btn-social googleplus span-left btn-block"><span><i class="fa fa-google-plus"></i></span>Google+</a></div>
                       </div>
                       <div class="section">
-                        <label for="username" class="field-label text-muted fs18 mb10">[alang:_USERNAME]</label>
+                        <label for="username" class="field-label text-muted fs18 mb10">[alang_old:_USERNAME]</label>
                         <label for="username" class="field prepend-icon">
-                          <input id="username" type="text" name="nick" placeholder="[alang:_PRE_USERNAME]" class="gui-input">
+                          <input id="username" type="text" name="nick" placeholder="[alang_old:_PRE_USERNAME]" class="gui-input">
                           <label for="username" class="field-icon"><i class="fa fa-user"></i></label>
                         </label>
                       </div>
                       <div class="section">
-                        <label for="username" class="field-label text-muted fs18 mb10">[alang:_PASSWORD]</label>
+                        <label for="username" class="field-label text-muted fs18 mb10">[alang_old:_PASSWORD]</label>
                         <label for="password" class="field prepend-icon">
-                          <input id="password" type="password" name="password" placeholder="[alang:_PRE_PASSWORD]" class="gui-input">
+                          <input id="password" type="password" name="password" placeholder="[alang_old:_PRE_PASSWORD]" class="gui-input">
                           <label for="password" class="field-icon"><i class="fa fa-lock"></i></label>
                         </label>
                       </div>
                     </div>
                     <div class="col-sm-5 br-l br-grey pl30">
-                      <h3 class="mb25">[alang:_APANEL]</h3>
-                      <p class="mb15"><span class="fa fa-check text-success pr5"></span> [alang:_APLOGIN_LINE_1]</p>
-                      <p class="mb15"><span class="fa fa-check text-success pr5"></span> [alang:_APLOGIN_LINE_2]</p>
-                      <p class="mb15"><span class="fa fa-check text-success pr5"></span> [alang:_APLOGIN_LINE_3]</p>
-                      <p class="mb15"><span class="fa fa-check text-success pr5"></span> [alang:_APLOGIN_LINE_4]</p>
+                      <h3 class="mb25">[alang_old:_APANEL]</h3>
+                      <p class="mb15"><span class="fa fa-check text-success pr5"></span> [alang_old:_APLOGIN_LINE_1]</p>
+                      <p class="mb15"><span class="fa fa-check text-success pr5"></span> [alang_old:_APLOGIN_LINE_2]</p>
+                      <p class="mb15"><span class="fa fa-check text-success pr5"></span> [alang_old:_APLOGIN_LINE_3]</p>
+                      <p class="mb15"><span class="fa fa-check text-success pr5"></span> [alang_old:_APLOGIN_LINE_4]</p>
                     </div>
                   </div>
                 </div>
                 <div class="panel-footer clearfix p10 ph15">
-                  <button type="submit" class="button btn-primary mr10 pull-right">[alang:_SIGNIN]</button>
+                  <button type="submit" class="button btn-primary mr10 pull-right">[alang_old:_SIGNIN]</button>
                   <label class="switch ib switch-primary pull-left input-align mt10">
                     <input id="remember" type="checkbox" name="remember" checked="">
-                    <label onClick="notif('primary', '_AJAX_INFO', '_AJAX_COMPL');" for="remember" data-on="[alang:_YES]" data-off="[alang:_NO]"></label> <span onClick="notif('primary', '_AJAX_INFO', '_AJAX_COMPL');">[alang:_REMEMBER]</span>
+                    <label onClick="notif('primary', '_AJAX_INFO', '_AJAX_COMPL');" for="remember" data-on="[alang_old:_YES]" data-off="[alang_old:_NO]"></label> <span onClick="notif('primary', '_AJAX_INFO', '_AJAX_COMPL');">[alang_old:_REMEMBER]</span>
                   </label>
                 </div>
               </form>

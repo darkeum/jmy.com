@@ -62,9 +62,20 @@ class core
 	
 	function LoadLang($module = true, $system = false, $admin = false)
 	{
-	global $url;
+	global $url, $lang;
 		if($module == true && $admin == false)
 		{
+			
+			if(file_exists(ROOT . 'langs/'.$this->lang.'/modules/'.$url[0].'/'.$this->lang.'.site.lng'))
+			{
+				include(ROOT . 'langs/'.$this->lang.'/modules/'.$url[0].'/'.$this->lang.'.site.lng');
+			}
+			elseif(file_exists(ROOT . 'langs/ru/modules/'.$url[0].'/ru.site.lng'))
+			{
+				include(ROOT . 'langs/ru/modules/'.$url[0].'/ru.site.lng');
+			}
+			
+			//подключение старых языковых файлов
 			if(file_exists(ROOT . 'usr/modules/' . $url[0] . '/lang/'. $this->lang . '.module.php'))
 			{
 				include(ROOT . 'usr/modules/' . $url[0] . '/lang/'. $this->lang . '.module.php');
@@ -73,9 +84,21 @@ class core
 			{
 				include(ROOT . 'usr/modules/' . $url[0] . '/lang/ru.module.php');
 			}
+			
 		}
 		elseif($system == true)
 		{
+			
+			if(file_exists(ROOT . 'langs/'.$this->lang.'/'.$this->lang.'.site.lng'))
+			{
+				include(ROOT . 'langs/'.$this->lang.'/'.$this->lang.'.site.lng');
+			}
+			elseif(file_exists(ROOT . 'langs/ru/ru.site.lng'))
+			{
+				include(ROOT . 'langs/ru/ru.site.lng');
+			}
+			
+			//подключение старых языковых файлов
 			if(file_exists(ROOT . 'usr/langs/' . $this->lang . '.system.php'))
 			{
 				include(ROOT . 'usr/langs/' . $this->lang . '.system.php');
@@ -87,6 +110,16 @@ class core
 		}
 		elseif($admin == true && $module == false)
 		{
+			if(file_exists(ROOT.'langs/'.$this->lang.'/'.$this->lang.'.admin.lng'))
+			{
+				include(ROOT.'langs/'.$this->lang.'/'.$this->lang.'.admin.lng');
+			}
+			else
+			{
+				include(ROOT.'langs/ru/ru.admin.lng');
+			}
+			
+			//подключение старых языковых файлов
 			if(file_exists(ROOT . 'root/langs/' . $this->lang . '.root.php'))
 			{
 				include(ROOT . 'root/langs/' . $this->lang . '.root.php');
@@ -98,6 +131,16 @@ class core
 		}
 		elseif($module == true && $admin == true)
 		{
+			
+			if(isset($url[1]) && $url[1] == 'module' && isset($url[2]))
+			{
+				if(file_exists(ROOT . 'langs/'.$this->lang.'/modules/'.$url[2].'/'.$this->lang.'.admin.lng'))
+				{
+					include(ROOT . 'langs/'.$this->lang.'/modules/'.$url[2].'/'.$this->lang.'.admin.lng');
+				}
+			}
+			
+			//подключение старых языковых файлов
 			if(isset($url[1]) && $url[1] == 'module' && isset($url[2]))
 			{
 				if(file_exists(ROOT . 'usr/modules/' . $url[2] . '/admin/lang/'. $this->lang . '.admin.php'))
@@ -126,6 +169,13 @@ class core
 	
 	function loadModLang($mod)
 	{
+		global $lang;
+		if(!isset($this->loadedLangs[$mod]) && file_exists(ROOT . 'langs/'.$this->lang.'/modules/'.$mod.'/'.$this->lang.'.site.lng'))
+		{
+			$this->loadedLangs[$mod] = true;
+			require_once(ROOT . 'langs/'.$this->lang.'/modules/'.$mod.'/'.$this->lang.'.site.lng');
+		}
+		//подключение старых языковых файлов
 		if(!isset($this->loadedLangs[$mod]) && file_exists(ROOT . 'usr/modules/' . $mod . '/lang/'. $this->lang . '.module.php'))
 		{
 			$this->loadedLangs[$mod] = true;
@@ -135,10 +185,27 @@ class core
 	
 	function loadModLangADM($mod)
 	{
+		global $lang;
+		if(!isset($this->loadedLangs[$mod]) && file_exists(ROOT . 'language/'.$this->lang.'/modules/'.$mod.'/'.$this->lang.'.admin.lng'))
+		{
+			$this->loadedLangs[$mod] = true;
+			require_once(ROOT . 'language/'.$this->lang.'/modules/'.$mod.'/'.$this->lang.'.admin.lng');
+		}
+		//подключение старых языковых файлов
 		if(!isset($this->loadedLangs[$mod]) && file_exists(ROOT . 'usr/modules/' . $mod . '/admin/lang/'. $this->lang . '.admin.php'))
 		{
 			$this->loadedLangs[$mod] = true;
 			require_once(ROOT . 'usr/modules/' . $mod . '/admin/lang/'. $this->lang . '.admin.php');
+		}
+	}
+	
+	function loadblockLangADM($block)
+	{
+		global $lang;
+		if(!isset($this->loadedLangs[$block]) && file_exists(ROOT.'language/'.$this->lang.'/blocks/'.$this->lang.'.'.$block.'.lng'))
+		{
+			$this->loadedLangs[$block] = true;
+			require_once(ROOT.'language/'.$this->lang.'/blocks/'.$this->lang.'.'.$block.'.lng');
 		}
 	}
 	

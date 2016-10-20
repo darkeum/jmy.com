@@ -146,7 +146,7 @@
         <form role="search" action="/{ADMIN}/search" class="navbar-form navbar-left navbar-search alt">
 			<span class="hide visible-md-inline-block visible-lg-inline-block fa fa-search fs18"></span>
 			<div class="form-group">
-				<input type="text"  name="search" placeholder="[alang:_PANEL_SEARCH]" class="form-control">
+				<input type="text"  name="search" placeholder="[alang_old:_PANEL_SEARCH]" class="form-control">
 			</div>
         </form>
         <ul class="nav navbar-nav navbar-right">		  
@@ -168,7 +168,7 @@
 				</button>
 				<div role="menu" class="dropdown-menu dropdown-persist w350 animated animated-shorter fadeIn">
 					<div class="panel mbn">
-					  <div class="panel-menu"><span class="panel-icon"><i class="fa fa-clock-o"></i></span><span class="panel-title fw600"> [alang:_PANEL_SUNMENU_NOTIF]</span></div>
+					  <div class="panel-menu"><span class="panel-icon"><i class="fa fa-clock-o"></i></span><span class="panel-title fw600"> [alang_old:_PANEL_SUNMENU_NOTIF]</span></div>
 					  <div class="w100p panel-body panel-scroller scroller-navbar scroller-overlay scroller-pn pn">
 						<ol class="timeline-list">
 						  {NOTIF}
@@ -188,16 +188,16 @@
 				<li class="dropdown-header clearfix">
 					<div class="pull-left ml10">
 						<select id="user-status">
-							<optgroup label="[alang:_PANEL_SUNMENU_STATUS]">
-								<option value="3" {HIDE_STATUS_3}>[alang:_PANEL_SUNMENU_ALWAYS]</option>
-								<option value="2" {HIDE_STATUS_2}>[alang:_OFFLINE]</option>
-								<option value="1" {HIDE_STATUS_1}>[alang:_ONLINE]</option>
+							<optgroup label="[alang_old:_PANEL_SUNMENU_STATUS]">
+								<option value="3" {HIDE_STATUS_3}>[alang_old:_PANEL_SUNMENU_ALWAYS]</option>
+								<option value="2" {HIDE_STATUS_2}>[alang_old:_OFFLINE]</option>
+								<option value="1" {HIDE_STATUS_1}>[alang_old:_ONLINE]</option>
 							</optgroup>
 						</select>
 					</div>
 					<div class="pull-right mr10">
 						<div class="btn-group">
-							<button type="button" class="multiselect dropdown-toggle btn btn-default btn-sm" data-toggle="dropdown" style="max-width: 100px;" aria-expanded="false">[alang:_PANEL_SUNMENU_VIEW] <b class="caret-right"></b></button></div>
+							<button type="button" class="multiselect dropdown-toggle btn btn-default btn-sm" data-toggle="dropdown" style="max-width: 100px;" aria-expanded="false">[alang_old:_PANEL_SUNMENU_VIEW] <b class="caret-right"></b></button></div>
 					</div>
 				</li>				
 				<li class="list-group-item"><a href="#" class="animated animated-short fadeInUp"><span class="fa fa-envelope"></span> Messages<span class="label label-warning">2</span></a></li>
@@ -205,7 +205,7 @@
 				<li class="list-group-item"><a href="#" class="animated animated-short fadeInUp"><span class="fa fa-bell"></span> 	Notifications</a></li>
 				<li class="list-group-item"><a href="#" class="animated animated-short fadeInUp"><span class="fa fa-gear"></span> Settings</a></li>
 				<li class="dropdown-footer">
-					<a href="/profile/logout"><span class="fa fa-power-off pr5"></span> [alang:_PANEL_SUNMENU_EXIT]</a>
+					<a href="/profile/logout"><span class="fa fa-power-off pr5"></span> [alang_old:_PANEL_SUNMENU_EXIT]</a>
 				</li>
             </ul>
           </li>
@@ -222,30 +222,30 @@
           </header>
           <ul class="nav sidebar-menu">           
             <li {MENU_CHOOSE:main}> 
-				<a href="/{ADMIN}"><span class="glyphicon glyphicon-home"></span><span class="sidebar-title">[alang:_PANEL_MENU_MAIN]</span></a>
+				<a href="/{ADMIN}"><span class="glyphicon glyphicon-home"></span><span class="sidebar-title">[alang_old:_PANEL_MENU_MAIN]</span></a>
             </li> 
 			[ACTIVE_MODULE:news]
             <li>				
-				<a href="#" class="accordion-toggle {MENU_OPEN:news,cats,fm,xfields}"><span class="glyphicon glyphicon-fire"></span><span class="sidebar-title">[alang:_PANEL_MENU_NEWS]</span><span class="caret"></span></a>
+				<a href="#" class="accordion-toggle {MENU_OPEN:news,cats,fm,xfields}"><span class="glyphicon glyphicon-fire"></span><span class="sidebar-title">[alang_old:_PANEL_MENU_NEWS]</span><span class="caret"></span></a>
 				<ul class="nav sub-nav">
 					<li {MENU_CHOOSE:news}>
 						<a href="/{ADMIN}/module/news">
-							<span class="glyphicon glyphicon-modal-window"></span>[alang:_PANEL_MENU_NEWS_MANAGER]
+							<span class="glyphicon glyphicon-modal-window"></span>[alang_old:_PANEL_MENU_NEWS_MANAGER]
 						</a>
 					</li>
 					<li {MENU_CHOOSE:cats}>
 						<a href="/{ADMIN}/cats">
-							<span class="glyphicon glyphicon-list"></span>[alang:_PANEL_MENU_NEWS_CAT]
+							<span class="glyphicon glyphicon-list"></span>[alang_old:_PANEL_MENU_NEWS_CAT]
 						</a>
 					</li>
 					<li {MENU_CHOOSE:xfields}>
 						<a href="/{ADMIN}/xfields">
-							<span class="glyphicon glyphicon-star"></span>[alang:_PANEL_MENU_NEWS_XFIELDS]
+							<span class="glyphicon glyphicon-star"></span>[alang_old:_PANEL_MENU_NEWS_XFIELDS]
 						</a>
 					</li>
 					<li {MENU_CHOOSE:fm}>
 						<a href="/{ADMIN}/fm">
-							<span class="glyphicon glyphicon-folder-open"></span>[alang:_PANEL_MENU_NEWS_FM]
+							<span class="glyphicon glyphicon-folder-open"></span>[alang_old:_PANEL_MENU_NEWS_FM]
 						</a>
 					</li>
 				</ul>
@@ -254,54 +254,54 @@
             <li>
 				<a href="#" class="accordion-toggle {MENU_OPEN:user,groups,comments,voting}">
 					<span class="glyphicon glyphicon-user"></span>
-					<span class="sidebar-title">[alang:_PANEL_MENU_USER]</span>
+					<span class="sidebar-title">[alang_old:_PANEL_MENU_USER]</span>
 					<span class="caret"></span>
 				</a>
 				<ul class="nav sub-nav">
 					<li {MENU_CHOOSE:user}>
-						<a href="/{ADMIN}/user"><span class="glyphicon glyphicon-list-alt"></span>[alang:_PANEL_MENU_USER_MANAGER]</a>
+						<a href="/{ADMIN}/user"><span class="glyphicon glyphicon-list-alt"></span>[alang_old:_PANEL_MENU_USER_MANAGER]</a>
 					</li>
 					<li {MENU_CHOOSE:groups}>
-						<a href="/{ADMIN}/groups"><span class="glyphicon glyphicon-tag"></span>[alang:_PANEL_MENU_USER_GROUP]</a>
+						<a href="/{ADMIN}/groups"><span class="glyphicon glyphicon-tag"></span>[alang_old:_PANEL_MENU_USER_GROUP]</a>
 					</li>
 					<li {MENU_CHOOSE:comments}>
-						<a href="/{ADMIN}/comments"><span class="glyphicon glyphicon-comment"></span>[alang:_PANEL_MENU_USER_COMMENT]</a>
+						<a href="/{ADMIN}/comments"><span class="glyphicon glyphicon-comment"></span>[alang_old:_PANEL_MENU_USER_COMMENT]</a>
 					</li>
 					<li {MENU_CHOOSE:voting}>
-						<a href="/{ADMIN}/voting"><span class="glyphicon glyphicon-plus-sign"></span>[alang:_PANEL_MENU_USER_POLL]</a>
+						<a href="/{ADMIN}/voting"><span class="glyphicon glyphicon-plus-sign"></span>[alang_old:_PANEL_MENU_USER_POLL]</a>
 					</li>                
 				</ul>
             </li>
             <li>
 				<a href="#" class="accordion-toggle {MENU_OPEN:board,blog,gallery,guestbook,content}">
 					<span class="glyphicon glyphicon-th-large"></span>
-					<span class="sidebar-title">[alang:_PANEL_MENU_COM]</span>
+					<span class="sidebar-title">[alang_old:_PANEL_MENU_COM]</span>
 					<span class="caret"></span>
 				</a>
 				<ul class="nav sub-nav">
 					[ACTIVE_MODULE:board]
 					<li {MENU_CHOOSE:board}>
-						<a href="/{ADMIN}/module/board"><span class="fa fa-bullhorn"></span>[alang:_PANEL_MENU_COM_FORUM]</a>
+						<a href="/{ADMIN}/module/board"><span class="fa fa-bullhorn"></span>[alang_old:_PANEL_MENU_COM_FORUM]</a>
 					</li>
 					[/ACTIVE_MODULE]
 					[ACTIVE_MODULE:blog]
 					<li {MENU_CHOOSE:blog}>
-						<a href="/{ADMIN}/module/blog"><span class="fa fa-stack-exchange"></span>[alang:_PANEL_MENU_COM_BLOG]</a>
+						<a href="/{ADMIN}/module/blog"><span class="fa fa-stack-exchange"></span>[alang_old:_PANEL_MENU_COM_BLOG]</a>
 					</li>
 					[/ACTIVE_MODULE]
 					[ACTIVE_MODULE:gallery]
 					<li {MENU_CHOOSE:gallery}>
-						<a href="/{ADMIN}/module/gallery"><span class="fa fa-picture-o"></span>[alang:_PANEL_MENU_COM_GALLERY]</a>
+						<a href="/{ADMIN}/module/gallery"><span class="fa fa-picture-o"></span>[alang_old:_PANEL_MENU_COM_GALLERY]</a>
 					</li>
 					[/ACTIVE_MODULE]
 					[ACTIVE_MODULE:guestbook]
 					<li {MENU_CHOOSE:guestbook}>
-						<a href="/{ADMIN}/module/guestbook"><span class="fa fa-comments-o"></span>[alang:_PANEL_MENU_COM_GUESTBOOK]</a>
+						<a href="/{ADMIN}/module/guestbook"><span class="fa fa-comments-o"></span>[alang_old:_PANEL_MENU_COM_GUESTBOOK]</a>
 					</li> 
 					[/ACTIVE_MODULE]
 					[ACTIVE_MODULE:content]
 					<li {MENU_CHOOSE:content}>
-						<a href="/{ADMIN}/module/content"><span class="fa fa-square-o"></span>[alang:_PANEL_MENU_COM_STATIC]</a>
+						<a href="/{ADMIN}/module/content"><span class="fa fa-square-o"></span>[alang_old:_PANEL_MENU_COM_STATIC]</a>
 					</li>  
 					[/ACTIVE_MODULE]
               </ul>
@@ -309,24 +309,24 @@
 			<li {MENU_CHOOSE:config}> 
 				<a href="/{ADMIN}/config">
 					<span class="glyphicon glyphicon-cog"></span>
-					<span class="sidebar-title">[alang:_PANEL_MENU_CONFIG]  </span>
+					<span class="sidebar-title">[alang_old:_PANEL_MENU_CONFIG]  </span>
 				</a>
             </li> 
 			<li>
 				<a href="#" class="accordion-toggle {MENU_OPEN:modules,blocks,templates}">
 					<span class="glyphicon glyphicon-send"></span>
-					<span class="sidebar-title">[alang:_PANEL_MENU_EXP]</span>
+					<span class="sidebar-title">[alang_old:_PANEL_MENU_EXP]</span>
 					<span class="caret"></span>
 				</a>
 				<ul class="nav sub-nav">
 					<li {MENU_CHOOSE:modules}>
-						<a href="/{ADMIN}/modules"><span class="fa fa-cloud"></span>[alang:_PANEL_MENU_EXP_MODULES]</a>
+						<a href="/{ADMIN}/modules"><span class="fa fa-cloud"></span>[alang_old:_PANEL_MENU_EXP_MODULES]</a>
 					</li>
 					<li {MENU_CHOOSE:blocks}>
-						<a href="/{ADMIN}/blocks"><span class="fa fa-code"></span>[alang:_PANEL_MENU_EXP_BLOCKS]</a>
+						<a href="/{ADMIN}/blocks"><span class="fa fa-code"></span>[alang_old:_PANEL_MENU_EXP_BLOCKS]</a>
 					</li>
 					<li {MENU_CHOOSE:templates}>
-						<a href="/{ADMIN}/templates"><span class="fa fa-pencil-square-o"></span>[alang:_PANEL_MENU_EXP_TPL]</a>
+						<a href="/{ADMIN}/templates"><span class="fa fa-pencil-square-o"></span>[alang_old:_PANEL_MENU_EXP_TPL]</a>
 					</li>					
               </ul>
             </li>
@@ -334,24 +334,24 @@
 			<li>
 				<a href="#" class="accordion-toggle {MENU_OPEN:sitemap,smiles,db,log,update}">
 					<span class="glyphicon glyphicon-question-sign"></span>
-					<span class="sidebar-title">[alang:_PANEL_MENU_OTHER]</span>
+					<span class="sidebar-title">[alang_old:_PANEL_MENU_OTHER]</span>
 					<span class="caret"></span>
 				</a>
 				<ul class="nav sub-nav">
 					<li {MENU_CHOOSE:sitemap}>
-						<a href="/{ADMIN}/module/sitemap"><span class="glyphicon glyphicon-list-alt"></span>[alang:_PANEL_MENU_OTHER_MAP]</a>
+						<a href="/{ADMIN}/module/sitemap"><span class="glyphicon glyphicon-list-alt"></span>[alang_old:_PANEL_MENU_OTHER_MAP]</a>
 					</li>
 					<li {MENU_CHOOSE:smiles}>
-						<a href="/{ADMIN}/smiles"><span class="fa fa-smile-o"></span>[alang:_PANEL_MENU_OTHER_SMILES]</a>
+						<a href="/{ADMIN}/smiles"><span class="fa fa-smile-o"></span>[alang_old:_PANEL_MENU_OTHER_SMILES]</a>
 					</li>
 					<li {MENU_CHOOSE:db}>
-						<a href="/{ADMIN}/db"><span class="glyphicon glyphicon-tasks"></span>[alang:_PANEL_MENU_OTHER_BD]</a>
+						<a href="/{ADMIN}/db"><span class="glyphicon glyphicon-tasks"></span>[alang_old:_PANEL_MENU_OTHER_BD]</a>
 					</li>
 					<li {MENU_CHOOSE:log}>
-						<a href="/{ADMIN}/log"><span class="glyphicon glyphicon-info-sign"></span>[alang:_PANEL_MENU_OTHER_LOG]</a>
+						<a href="/{ADMIN}/log"><span class="glyphicon glyphicon-info-sign"></span>[alang_old:_PANEL_MENU_OTHER_LOG]</a>
 					</li>   
 					<li {MENU_CHOOSE:update}>
-						<a href="/{ADMIN}/update"><span class="glyphicon glyphicon-refresh"></span>[alang:_PANEL_MENU_OTHER_UPDATE]</a>
+						<a href="/{ADMIN}/update"><span class="glyphicon glyphicon-refresh"></span>[alang_old:_PANEL_MENU_OTHER_UPDATE]</a>
 					</li>   
               </ul>
             </li>
@@ -370,21 +370,21 @@
 			<div class="col-xs-4 col-sm-2">
 				<a href="/{ADMIN}/module/news" class="metro-tile bg-primary light">
 					<span class="glyphicon glyphicon-fire text-muted"></span>
-					<span class="metro-title">[alang:_PANEL_MENU_NEWS]</span>
+					<span class="metro-title">[alang_old:_PANEL_MENU_NEWS]</span>
 				</a>
 			</div>
 			[/ACTIVE_MODULE]
 			<div class="col-xs-4 col-sm-2">
 				<a href="/{ADMIN}/user" class="metro-tile bg-info light">
 					<span class="glyphicon glyphicon-user text-muted"></span>
-					<span class="metro-title">[alang:_PANEL_MENU_USER]</span>
+					<span class="metro-title">[alang_old:_PANEL_MENU_USER]</span>
 				</a>
 			</div>
 			[ACTIVE_MODULE:content]
 			<div class="col-xs-4 col-sm-2">
 				<a href="/{ADMIN}/module/content" class="metro-tile bg-success light">
 					<span class="glyphicon glyphicon-edit text-muted"></span>
-					<span class="metro-title">[alang:_PANEL_MENU_COM_STATIC]</span>
+					<span class="metro-title">[alang_old:_PANEL_MENU_COM_STATIC]</span>
 				</a>
 			</div>
 			[/ACTIVE_MODULE]   
@@ -392,7 +392,7 @@
 			<div class="col-xs-4 col-sm-2">
 				<a href="/{ADMIN}/module/board" class="metro-tile bg-system light">
 					<span class="glyphicon glyphicon-comment text-muted"></span>
-					<span class="metro-title">[alang:_PANEL_MENU_COM_FORUM]</span>
+					<span class="metro-title">[alang_old:_PANEL_MENU_COM_FORUM]</span>
 				</a>
 			</div>
 			[/ACTIVE_MODULE]  
@@ -400,14 +400,14 @@
 			<div class="col-xs-4 col-sm-2">
 				<a href="/{ADMIN}/module/gallery" class="metro-tile bg-alert light">
 					<span class="glyphicon glyphicon-picture text-muted"></span>
-					<span class="metro-title">[alang:_PANEL_MENU_COM_GALLERY]</span>
+					<span class="metro-title">[alang_old:_PANEL_MENU_COM_GALLERY]</span>
 				</a>
 			</div>
 			[/ACTIVE_MODULE] 				
             <div class="col-xs-4 col-sm-2">
 				<a href="/{ADMIN}/config" class="metro-tile bg-warning light">
 					<span class="fa fa-gears text-muted"></span>
-					<span class="metro-title">[alang:_PANEL_MENU_CONFIG]</span>
+					<span class="metro-title">[alang_old:_PANEL_MENU_CONFIG]</span>
 				</a>
 			</div>            
           </div>

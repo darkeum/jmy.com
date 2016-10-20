@@ -294,9 +294,11 @@ class template
 		$this->vars_tpl[$k] = $v;
 	}
 
+
+
 	public function parse() 
 	{ 
-	global $config, $url, $core;
+		global $config, $url, $core;
 		if($url[0] != ADMIN)
 		{	
 			$in["#\\{%NOWDATE:(.*?)%\\}#ies"] = "date('\\1', '" . time() . "')";
@@ -309,7 +311,8 @@ class template
 			$in["#\\[addnews:(.+?)\\](.*?)\\[/addnews\\]#ies"] = "addnewsShow('\\1', '\\2')";
 			$in["#\\[full:(.+?)\\](.*?)\\[/full\\]#ies"] = "fullnewsShow('\\1', '\\2')";
 			$in["#\\[content:(.+?):(.+?)](.*?)\\[/content]#ies"] = "contentShow('\\1', '\\2', '\\3')";
-			$in["#\\[lang:(.+?)]#ies"] =  "constant('\\1')";
+			$in["#\\[lang_old:(.+?)]#ies"] =  "constant('\\1')";
+			$in["#\\[lang_old:(.+?)]#ies"] =  "constant('\\1')";
 			$in["#\\[guest](.*?)\\[/guest]#ies"] =  "checkGuest('\\1')";
 			$in["#\\[user](.*?)\\[/user]#ies"] =  "checkUser('\\1')";
 			$in["#\\[admin](.*?)\\[/admin]#ies"] =  "checkAdmin('\\1')";
@@ -320,12 +323,17 @@ class template
 			$in["#\\[open](.*?)\\[/open]#ies"] =  "\$this->preOpen('\\1');";
 			$in["#\\[userinfo:(.*?)]#ies"] =  "\$this->ustinf('\\1')";
 			$in["#\\[custom category=\"(.*?)\" template=\"(.*?)\" aviable=\"(.*?)\" limit=\"(.*?)\" module=\"(.*?)\" order=\"(.*?)\" short=\"(.*?)\" notin=\"(.*?)\"]#ieus"] =  "buildCustom('\\1', '\\2', '\\3', '\\4', '\\5', '\\6', '\\7', '\\8')";
-			$in["#\\[custom category=\"(.*?)\" template=\"(.*?)\" aviable=\"(.*?)\" limit=\"(.*?)\" module=\"(.*?)\" order=\"(.*?)\" short=\"(.*?)\"]#ieus"] =  "buildCustom('\\1', '\\2', '\\3', '\\4', '\\5', '\\6', '\\7')";			
+			$in["#\\[custom category=\"(.*?)\" template=\"(.*?)\" aviable=\"(.*?)\" limit=\"(.*?)\" module=\"(.*?)\" order=\"(.*?)\" short=\"(.*?)\"]#ieus"] =  "buildCustom('\\1', '\\2', '\\3', '\\4', '\\5', '\\6', '\\7')";	
+			$this->sources = preg_replace_callback( "#\\[lang:(.+?)\\]#i", array( &$this, 'lang_include'), $this->sources );
 		}
 		else
 		{
-			$this->sources = preg_replace( "#\\[alang:(.+?)]#ies", "constant('\\1')", $this->sources);
+			$this->sources = preg_replace( "#\\[alang_old:(.+?)]#ies", "constant('\\1')", $this->sources);
+			$this->sources = preg_replace_callback ( "#\\[(lang)=(.+?)\\](.*?)\\[/lang\\]#is", array( &$this, 'check_lang'), $this->sources ); 
+			$this->sources = preg_replace_callback( "#\\[alang:(.+?)\\]#i", array( &$this, 'lang_include'), $this->sources );
 		}
+		
+		
 		
 		
 		foreach ($this->vars as $k => $v) 
@@ -355,6 +363,21 @@ class template
 		}
 		
 		
+	}
+	
+	function check_lang($matches=array()) 
+	{ 
+		global $config; 
+		if ($config['lang']==$matches[2]) 
+			return $matches[3]; 
+		else 
+			return false; 
+	} 
+	
+	function lang_include($matches=array()) 
+	{ 
+		global $lang; 
+		return $lang[$matches[1]]; 
 	}
 	
 	function preOpen($content)

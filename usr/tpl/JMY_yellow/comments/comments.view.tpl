@@ -8,7 +8,7 @@
 		<div class="comment-metadata smallPart">
 			<time datetime="{%DATE%}">{%DATE%}</time>
 		</div>
-		<p class="comment-awaiting"><a href="javascript:void(0)" onclick="javascript:insertCode('b', '', '{%NAME%}');">Вставить ник</a> [moder][writeGuest]| [lang:_EMAIL]: <a href="mailto:{%E-MAIL%}">{%E-MAIL%}</a>[/writeGuest] | [edit][lang:_EDIT][/edit] | [delete][lang:_DELETE][/delete][/moder]</p>
+		<p class="comment-awaiting"><a href="javascript:void(0)" onclick="javascript:insertCode('b', '', '{%NAME%}');">Вставить ник</a> [moder][writeGuest]| [lang_old:_EMAIL]: <a href="mailto:{%E-MAIL%}">{%E-MAIL%}</a>[/writeGuest] | [edit][lang_old:_EDIT][/edit] | [delete][lang_old:_DELETE][/delete][/moder]</p>
 	</footer>
 	<div class="comment-content">
 		<p>{%BODY%}</p>

@@ -1,0 +1,15 @@
+<?php
+
+$lang = array_merge($lang, array (
+
+	'gallery'									=> 'Галерея',
+	'gallery_desc'								=> 'Модуль в котором вы и ваши пользователи могут организовывать галереи с фотографиями.',
+	'gallery_albums'							=> 'Альбомы',
+	'gallery_photos'							=> 'Фотографии',
+	'gallery_photos_new'						=> 'Новые',
+	'gallery_album_add'							=> 'Добавить альбом',
+	'gallery_photo_add'							=> 'Добавить фото',
+
+));
+
+?>

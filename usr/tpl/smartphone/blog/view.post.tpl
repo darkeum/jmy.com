@@ -15,7 +15,7 @@
 				</span>
 				<span class="comments-link">
 					<i class="fa fa-comments-o spaceRight" aria-hidden="true"></i>
-					[lang:_COMMENTS]: {%COMMENTS%}
+					[lang_old:_COMMENTS]: {%COMMENTS%}
 				</span>	
 				<span class="posted-on"> 
 					<i class="fa fa-star spaceRight" aria-hidden="true"></i>

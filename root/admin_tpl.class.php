@@ -65,38 +65,7 @@ class admin extends template
 	
 		if (isset($this->headerIncludes))
 		{
-			foreach($this->headerIncludes as $metas)
-			{
-				if($metas)
-				{
-					$meta .= $metas;
-				}		
-			}
-		}
-		
-
-		$foot = '';
-		if (isset($this->footIncludes))
-		{
-			foreach($this->footIncludes as $metas)
-			{
-				if($metas)
-				{
-					$foot .= $metas;
-				}		
-			}
-		}
-		
-		$js = '';
-		if (isset($this->js_code))
-		{
-			foreach($this->js_code as $jss)
-			{
-				if($jss)
-				{
-					$js .= $jss;
-				}		
-			}
+			$meta .=ArrayToStr($this->headerIncludes);
 		}
 		
 		if(isset($url[1]))
@@ -297,13 +266,12 @@ class admin extends template
 			$i_n='';
 			$notifications='<div class="panel-footer no-border">'._NOT_NOTIF.'</div>';		
 		}
-		//$topbar = 
-			
+				
 		$avatar = avatar($core->auth->user_info['id']);
 		$this->loadFile('main');
 		$this->setVar('META', $meta);
-		$this->setVar('FOOT', $foot);
-		$this->setVar('BODY_CLASS', isset($this->body_class) ? $this->body_class : '');
+		$this->setVar('FOOT', isset($this->footIncludes) ? ArrayToStr($this->footIncludes) : '');
+		$this->setVar('BODY_CLASS', isset($this->body_class) ? ArrayToStr($this->body_class) : '');
 		$this->setVar('LANG', $core->InitLang());
 		$this->setVar('AVATAR', $avatar);
 		$this->setVar('ADM_THEME', 'usr/tpl/admin');
@@ -324,7 +292,7 @@ class admin extends template
 		$this->setVar('GZIP', $config['gzip'] ? 'GZIP Включён' : '');
 		$this->setVar('TIMEQUERIES', mb_substr($db->timeQueries, 0, 5));
 		$this->setVar('QUERIES', $db->numQueries);
-		$this->setVar('JS_CODE', $js);
+		$this->setVar('JS_CODE', isset($this->js_code) ? ArrayToStr($this->js_code) : '');
 		$this->setVar('pages', $this->page_nav);
 		$this->setVar('HIDE_STATUS_1', ($config['hide'] == 1) ? 'selected="selected"' : '');
 		$this->setVar('HIDE_STATUS_2', ($config['hide'] == 2) ? 'selected="selected"' : '');

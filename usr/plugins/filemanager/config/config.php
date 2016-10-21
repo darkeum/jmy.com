@@ -1,14 +1,19 @@
 <?php
 session_start();
 
+require_once '../../../define.php';
 
+
+if (!defined('ACCESS')) 
+{
+    header('Location: /');
+    exit;
+}
 
 require ROOT . 'etc/global.config.php';
 require ROOT . 'etc/files.config.php';
- cv
 
-mb_internal_encoding('UTF-8');
-date_default_timezone_set('Europe/Rome');
+
 
 /*
 |--------------------------------------------------------------------------
@@ -118,7 +123,7 @@ $config = array(
 	|
 	*/
 
-	'access_keys' => array(),
+	'access_keys' => array('myPrivateKey'),
 
 	//--------------------------------------------------------------------------------------------------------
 	// YOU CAN COPY AND CHANGE THESE VARIABLES INTO FOLDERS config.php FILES TO CUSTOMIZE EACH FOLDER OPTIONS

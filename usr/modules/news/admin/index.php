@@ -159,7 +159,7 @@ function news_main()
 
 function news_add($nid = null) 
 {
-global $adminTpl, $core, $db, $core, $config;
+global $adminTpl, $core, $db, $core, $config, $lang;
 	if(isset($nid)) 
 	{	
 		$bb = new bb;
@@ -226,7 +226,6 @@ global $adminTpl, $core, $db, $core, $config;
 		$fields = false; 
 		$fix = ''; 
 		$active = 1;
-		$lang = '';
 		$edit = false;
 		$catttt = array();
 		$grroups = array();
@@ -235,8 +234,7 @@ global $adminTpl, $core, $db, $core, $config;
 		$dosave = _ADD;
 	}
 	$adminTpl->admin_head(_MODULES . ' | ' . $lln);
-	$adminTpl->js_code = '
-	// select dropdowns - placeholder like creation
+	$adminTpl->js_code[] = '	
         var selectList = $(\'.admin-form select\');
         selectList.each(function (i, e) {
           $(e).on(\'change\', function () {
@@ -247,1136 +245,291 @@ global $adminTpl, $core, $db, $core, $config;
         selectList.each(function (i, e) {
           $(e).change();
         });
-        // Init tagsinput plugin
         $("input#tagsinput").tagsinput({
           tagClass: function (item) {
             return \'label label-default\';
           }
-        });
-';
+        });		
+        $(".select2-single").select2();
+		$("#date").datetimepicker({
+          showOn: \'both\',
+          buttonText: \'<i class="fa fa-calendar-o"></i>\',
+          prevText: \'<i class="fa fa-chevron-left"></i>\',
+          nextText: \'<i class="fa fa-chevron-right"></i>\',
+          beforeShow: function (input, inst) {
+            var newclass = \'admin-form\';
+            var themeClass = $(this).parents(\'.admin-form\').attr(\'class\');
+            var smartpikr = inst.dpDiv.parent();
+            if (!smartpikr.hasClass(themeClass)) {
+              inst.dpDiv.wrap(\'<div class="admin-form mw1000 center-block theme-primary" style="top: 100px !important;"></div>\');
+            }
+			var offset = $(input).offset();
+			var height = $(input).height();
+			window.setTimeout(function () {
+				inst.dpDiv.css({ top: (offset.top + height +19) + \'px\', left: (offset.left - 50) + \'px\' })
+			}, 1);
+          }
+        });';		
 	ajaxInit();
+	$adminTpl->footIncludes[''] =  '<script src="'.ADMIN_TPL.'assets/js/jquery-ui-monthpicker.min.js"></script>
+									<script src="'.ADMIN_TPL.'assets/js/jquery-ui-datepicker.min.js"></script>
+									<script src="/langs/'.$core->InitLang().'/js/datepicker.js"></script>
+									<script src="/langs/'.$core->InitLang().'/js/timepicker.js"></script>';
+	$validation_array = array(		
+		'title' => array(
+			'required' =>  array('true', _DOP_ADD_TITLE_ERR)			
+		),	/*	
+		'description' => array(
+			'required' =>  array('true', _DOP_ADD_DESC_ERR_1),	
+			'maxlength' =>  array(200,  _DOP_ADD_DESC_ERR_2)				
+		),		
+		'type' => array(
+			'required' =>  array('true', _DOP_ADD_TYPE_ERR)				
+		)		*/
+	);
+	validationInit($validation_array);
 	$cats_arr = $core->aCatList('news');
-
-echo '<section id="content" class="table-layout animated fadeIn">
-          <!-- begin: .tray-center-->
-          <div class="tray tray-center">
-            <!-- create new order panel-->
-            <div class="panel mb25 mt5">
-              <div class="panel-heading br-b-ddd"><span class="panel-title hidden-xs"> Add New Customer</span>
-                <ul class="nav panel-tabs-border panel-tabs">
-                  <li class="active"><a href="#tab1_1" data-toggle="tab">General</a></li>
-                  <li><a href="#tab1_2" data-toggle="tab">Settings</a></li>
-                  <li><a href="#tab1_3" data-toggle="tab">Billing</a></li>
-                </ul>
-              </div>
-              <div class="panel-body p20 pb10">
-                <div class="tab-content pn br-n admin-form">
-                  <div id="tab1_1" class="tab-pane active">
-                    <div class="section row mbn">
-                      <div class="col-md-9 pl15">
-                        <div class="section row mb15">
-                          <div class="col-xs-6">
-                            <label for="name1" class="field prepend-icon">
-                              <input id="name1" type="text" name="name1" placeholder="First Name" class="event-name gui-input br-light light">
-                              <label for="name1" class="field-icon"><i class="fa fa-user"></i></label>
-                            </label>
-                          </div>
-                          <div class="col-xs-6">
-                            <label for="name2" class="field prepend-icon">
-                              <input id="name2" type="text" name="name2" placeholder="Last Name" class="event-name gui-input br-light light">
-                              <label for="name2" class="field-icon"><i class="fa fa-user"></i></label>
-                            </label>
-                          </div>
-                        </div>
-                        <div class="section row mb15">
-                          <div class="col-xs-6">
-                            <label for="password" class="field prepend-icon">
-                              <input id="password" type="password" name="password" placeholder="Password" class="event-name gui-input br-light light">
-                              <label for="name2" class="field-icon"><i class="fa fa-lock"></i></label>
-                            </label>
-                          </div>
-                          <div class="col-xs-6">
-                            <label for="password2" class="field prepend-icon">
-                              <input id="password2" type="password2" name="password2" placeholder="Confirm Password" class="event-name gui-input br-light light">
-                              <label for="password2" class="field-icon"><i class="fa fa-unlock"></i></label>
-                            </label>
-                          </div>
-                        </div>
-                        <div class="section mb15">
-                          <label for="email" class="field prepend-icon">
-                            <input id="email" type="text" name="email" placeholder="Customer Email Address" class="event-name gui-input br-light bg-light">
-                            <label for="email" class="field-icon"><i class="fa fa-envelope-o"></i></label>
-                          </label>
-                        </div>
-                        <div class="section mb10">
-                          <input id="tagsinput" type="text" value="IBM, Software, Friend" class="bg-light">
-                        </div>
-                      </div>
-                      <div class="col-md-3">
-                        <div data-provides="fileupload" class="fileupload fileupload-new admin-form">
-                          <div class="fileupload-preview thumbnail mb15"><img data-src="holder.js/100%x147" alt="holder"></div><span class="button btn-system btn-file btn-block ph5"><span class="fileupload-new">Change</span><span class="fileupload-exists">Change</span>
-                            <input type="file"></span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div id="tab1_2" class="tab-pane">
-                    <div class="section row mbn">
-                      <div class="col-xs-6 pr15">
-                        <div class="section mb10">
-                          <label for="cust-phone" class="field prepend-icon">
-                            <input id="cust-phone" type="text" name="cust-phone" placeholder="Customer Phone Number..." class="event-name gui-input bg-light br-light">
-                            <label for="cust-phone" class="field-icon"><i class="fa fa-phone"></i></label>
-                          </label>
-                        </div>
-                        <div class="section mb10">
-                          <label for="customer-group" class="field select">
-                            <select id="customer-group" name="customer-group">
-                              <option value="0" selected="selected">Customer Group...</option>
-                              <option value="1">Vendor</option>
-                              <option value="2">Supplier</option>
-                              <option value="3">Distributor</option>
-                            </select><i class="arrow double"></i>
-                          </label>
-                        </div>
-                        <div class="section">
-                          <label for="customer-language" class="field select">
-                            <select id="customer-language" name="customer-language">
-                              <option value="0" selected="selected">Customer Language...</option>
-                              <option value="1">English</option>
-                              <option value="2">Spanish</option>
-                              <option value="3">German</option>
-                            </select><i class="arrow double"></i>
-                          </label>
-                        </div>
-                      </div>
-                      <div class="col-xs-6">
-                        <label class="field option">
-                          <input type="checkbox" name="info"><span class="checkbox mr10"></span> Customer is Tax Exempt
-                        </label><br>
-                        <label class="field option mt15">
-                          <input type="checkbox" name="info"><span class="checkbox mr10"></span> Customer Accepts Marketing
-                        </label><br>
-                        <label class="field option mt15">
-                          <input type="checkbox" name="info"><span class="checkbox mr10"></span> Activate/Enable Account?
-                        </label>
-                        <hr class="alt short mv15">
-                        <p class="text-muted"><span class="fa fa-exclamation-circle text-warning fs15 pr5"></span> Grants the customer limited store access.</p>
-                      </div>
-                    </div>
-                    <hr class="short alt mtn">
-                    <div class="section mb15">
-                      <label class="field prepend-icon">
-                        <textarea id="cust-note" name="cust-note" placeholder="Customer Notes" class="gui-textarea br-light bg-light"></textarea>
-                        <label for="cust-note" class="field-icon"><i class="fa fa-edit"></i></label>
-                      </label>
-                    </div>
-                  </div>
-                  <div id="tab1_3" class="tab-pane">
-                    <div class="section">
-                      <label for="lastaddr" class="field prepend-icon">
-                        <input id="lastaddr" type="text" name="lastaddr" placeholder="Street address" class="gui-input">
-                        <label for="lastaddr" class="field-icon"><i class="fa fa-map-marker"></i></label>
-                      </label>
-                    </div>
-                    <div class="section">
-                      <label class="field select">
-                        <select id="location" name="location">
-                          <option value="">Select country...</option>
-                          <option value="AL">Albania</option>
-                          <option value="DZ">Algeria</option>
-                          <option value="AD">Andorra</option>
-                          <option value="AO">Angola</option>
-                          <option value="AI">Anguilla</option>
-                          <option value="AG">Antigua and Barbuda</option>
-                          <option value="AR">Argentina</option>
-                          <option value="AM">Armenia</option>
-                          <option value="AW">Aruba</option>
-                          <option value="AU">Australia</option>
-                          <option value="AT">Austria</option>
-                          <option value="AZ">Azerbaijan Republic</option>
-                          <option value="BS">Bahamas</option>
-                          <option value="BH">Bahrain</option>
-                          <option value="BB">Barbados</option>
-                          <option value="BE">Belgium</option>
-                          <option value="BZ">Belize</option>
-                          <option value="BJ">Benin</option>
-                          <option value="BM">Bermuda</option>
-                          <option value="BT">Bhutan</option>
-                          <option value="BO">Bolivia</option>
-                          <option value="BA">Bosnia and Herzegovina</option>
-                          <option value="BW">Botswana</option>
-                          <option value="BR">Brazil</option>
-                          <option value="BN">Brunei</option>
-                          <option value="BG">Bulgaria</option>
-                          <option value="BF">Burkina Faso</option>
-                          <option value="BI">Burundi</option>
-                          <option value="KH">Cambodia</option>
-                          <option value="CA">Canada</option>
-                          <option value="CV">Cape Verde</option>
-                          <option value="KY">Cayman Islands</option>
-                          <option value="TD">Chad</option>
-                          <option value="CL">Chile</option>
-                          <option value="C2">China Worldwide</option>
-                          <option value="CO">Colombia</option>
-                          <option value="KM">Comoros</option>
-                          <option value="CK">Cook Islands</option>
-                          <option value="CR">Costa Rica</option>
-                          <option value="HR">Croatia</option>
-                          <option value="CY">Cyprus</option>
-                          <option value="CZ">Czech Republic</option>
-                          <option value="CD">Democratic Republic of the Congo</option>
-                          <option value="DK">Denmark</option>
-                          <option value="DJ">Djibouti</option>
-                          <option value="DM">Dominica</option>
-                          <option value="DO">Dominican Republic</option>
-                          <option value="EC">Ecuador</option>
-                          <option value="EG">Egypt</option>
-                          <option value="SV">El Salvador</option>
-                          <option value="ER">Eritrea</option>
-                          <option value="EE">Estonia</option>
-                          <option value="ET">Ethiopia</option>
-                          <option value="FK">Falkland Islands</option>
-                          <option value="FO">Faroe Islands</option>
-                          <option value="FJ">Fiji</option>
-                          <option value="FI">Finland</option>
-                          <option value="FR">France</option>
-                          <option value="GF">French Guiana</option>
-                          <option value="PF">French Polynesia</option>
-                          <option value="GA">Gabon Republic</option>
-                          <option value="GM">Gambia</option>
-                          <option value="GE">Georgia</option>
-                          <option value="DE">Germany</option>
-                          <option value="GI">Gibraltar</option>
-                          <option value="GR">Greece</option>
-                          <option value="GL">Greenland</option>
-                          <option value="GD">Grenada</option>
-                          <option value="GP">Guadeloupe</option>
-                          <option value="GT">Guatemala</option>
-                          <option value="GN">Guinea</option>
-                          <option value="GW">Guinea Bissau</option>
-                          <option value="GY">Guyana</option>
-                          <option value="HN">Honduras</option>
-                          <option value="HK">Hong Kong</option>
-                          <option value="HU">Hungary</option>
-                          <option value="IS">Iceland</option>
-                          <option value="IN">India</option>
-                          <option value="ID">Indonesia</option>
-                          <option value="IE">Ireland</option>
-                          <option value="IL">Israel</option>
-                          <option value="IT">Italy</option>
-                          <option value="JM">Jamaica</option>
-                          <option value="JP">Japan</option>
-                          <option value="JO">Jordan</option>
-                          <option value="KZ">Kazakhstan</option>
-                          <option value="KE">Kenya</option>
-                          <option value="KI">Kiribati</option>
-                          <option value="KW">Kuwait</option>
-                          <option value="KG">Kyrgyzstan</option>
-                          <option value="LA">Laos</option>
-                          <option value="LV">Latvia</option>
-                          <option value="LS">Lesotho</option>
-                          <option value="LI">Liechtenstein</option>
-                          <option value="LT">Lithuania</option>
-                          <option value="LU">Luxembourg</option>
-                          <option value="MG">Madagascar</option>
-                          <option value="MW">Malawi</option>
-                          <option value="MY">Malaysia</option>
-                          <option value="MV">Maldives</option>
-                          <option value="ML">Mali</option>
-                          <option value="MT">Malta</option>
-                          <option value="MH">Marshall Islands</option>
-                          <option value="MQ">Martinique</option>
-                          <option value="MR">Mauritania</option>
-                          <option value="MU">Mauritius</option>
-                          <option value="YT">Mayotte</option>
-                          <option value="MX">Mexico</option>
-                          <option value="FM">Micronesia</option>
-                          <option value="MN">Mongolia</option>
-                          <option value="MS">Montserrat</option>
-                          <option value="MA">Morocco</option>
-                          <option value="MZ">Mozambique</option>
-                          <option value="NA">Namibia</option>
-                          <option value="NR">Nauru</option>
-                          <option value="NP">Nepal</option>
-                          <option value="NL">Netherlands</option>
-                          <option value="AN">Netherlands Antilles</option>
-                          <option value="NC">New Caledonia</option>
-                          <option value="NZ">New Zealand</option>
-                          <option value="NI">Nicaragua</option>
-                          <option value="NE">Niger</option>
-                          <option value="NU">Niue</option>
-                          <option value="NF">Norfolk Island</option>
-                          <option value="NO">Norway</option>
-                          <option value="OM">Oman</option>
-                          <option value="PW">Palau</option>
-                          <option value="PA">Panama</option>
-                          <option value="PG">Papua New Guinea</option>
-                          <option value="PE">Peru</option>
-                          <option value="PH">Philippines</option>
-                          <option value="PN">Pitcairn Islands</option>
-                          <option value="PL">Poland</option>
-                          <option value="PT">Portugal</option>
-                          <option value="QA">Qatar</option>
-                          <option value="CG">Republic of the Congo</option>
-                          <option value="RE">Reunion</option>
-                          <option value="RO">Romania</option>
-                          <option value="RU">Russia</option>
-                          <option value="RW">Rwanda</option>
-                          <option value="KN">Saint Kitts and Nevis Anguilla</option>
-                          <option value="PM">Saint Pierre and Miquelon</option>
-                          <option value="VC">Saint Vincent and Grenadines</option>
-                          <option value="WS">Samoa</option>
-                          <option value="SM">San Marino</option>
-                          <option value="ST">SГЈo TomГ© and PrГ­ncipe</option>
-                          <option value="SA">Saudi Arabia</option>
-                          <option value="SN">Senegal</option>
-                          <option value="RS">Serbia</option>
-                          <option value="SC">Seychelles</option>
-                          <option value="SL">Sierra Leone</option>
-                          <option value="SG">Singapore</option>
-                          <option value="SK">Slovakia</option>
-                          <option value="SI">Slovenia</option>
-                          <option value="SB">Solomon Islands</option>
-                          <option value="SO">Somalia</option>
-                          <option value="ZA">South Africa</option>
-                          <option value="KR">South Korea</option>
-                          <option value="ES">Spain</option>
-                          <option value="LK">Sri Lanka</option>
-                          <option value="SH">St. Helena</option>
-                          <option value="LC">St. Lucia</option>
-                          <option value="SR">Suriname</option>
-                          <option value="SJ">Svalbard and Jan Mayen Islands</option>
-                          <option value="SZ">Swaziland</option>
-                          <option value="SE">Sweden</option>
-                          <option value="CH">Switzerland</option>
-                          <option value="TW">Taiwan</option>
-                          <option value="TJ">Tajikistan</option>
-                          <option value="TZ">Tanzania</option>
-                          <option value="TH">Thailand</option>
-                          <option value="TG">Togo</option>
-                          <option value="TO">Tonga</option>
-                          <option value="TT">Trinidad and Tobago</option>
-                          <option value="TN">Tunisia</option>
-                          <option value="TR">Turkey</option>
-                          <option value="TM">Turkmenistan</option>
-                          <option value="TC">Turks and Caicos Islands</option>
-                          <option value="TV">Tuvalu</option>
-                          <option value="UG">Uganda</option>
-                          <option value="UA">Ukraine</option>
-                          <option value="AE">United Arab Emirates</option>
-                          <option value="GB">United Kingdom</option>
-                          <option value="US">United States</option>
-                          <option value="UY">Uruguay</option>
-                          <option value="VU">Vanuatu</option>
-                          <option value="VA">Vatican City State</option>
-                          <option value="VE">Venezuela</option>
-                          <option value="VN">Vietnam</option>
-                          <option value="VG">Virgin Islands (British)</option>
-                          <option value="WF">Wallis and Futuna Islands</option>
-                          <option value="YE">Yemen</option>
-                          <option value="ZM">Zambia</option>
-                        </select><i class="arrow double"></i>
-                      </label>
-                    </div>
-                    <div class="section row">
-                      <div class="col-md-3">
-                        <label for="zip" class="field prepend-icon">
-                          <input id="zip" type="text" name="zip" placeholder="Zip" class="gui-input">
-                          <label for="zip" class="field-icon"><i class="fa fa-certificate"></i></label>
-                        </label>
-                      </div>
-                      <div class="col-md-4">
-                        <label for="city" class="field prepend-icon">
-                          <input id="city" type="text" name="city" placeholder="City" class="gui-input">
-                          <label for="city" class="field-icon"><i class="fa fa-building-o"></i></label>
-                        </label>
-                      </div>
-                      <div class="col-md-5">
-                        <label for="states" class="field select">
-                          <select id="states" name="states">
-                            <option value="">Choose state</option>
-                            <option value="AL">Alabama</option>
-                            <option value="AK">Alaska</option>
-                            <option value="AZ">Arizona</option>
-                            <option value="AR">Arkansas</option>
-                            <option value="CA">California</option>
-                            <option value="CO">Colorado</option>
-                            <option value="CT">Connecticut</option>
-                            <option value="DE">Delaware</option>
-                            <option value="DC">District Of Columbia</option>
-                            <option value="FL">Florida</option>
-                            <option value="GA">Georgia</option>
-                            <option value="HI">Hawaii</option>
-                            <option value="ID">Idaho</option>
-                            <option value="IL">Illinois</option>
-                            <option value="IN">Indiana</option>
-                            <option value="IA">Iowa</option>
-                            <option value="KS">Kansas</option>
-                            <option value="KY">Kentucky</option>
-                            <option value="LA">Louisiana</option>
-                            <option value="ME">Maine</option>
-                            <option value="MD">Maryland</option>
-                            <option value="MA">Massachusetts</option>
-                            <option value="MI">Michigan</option>
-                            <option value="MN">Minnesota</option>
-                            <option value="MS">Mississippi</option>
-                            <option value="MO">Missouri</option>
-                            <option value="MT">Montana</option>
-                            <option value="NE">Nebraska</option>
-                            <option value="NV">Nevada</option>
-                            <option value="NH">New Hampshire</option>
-                            <option value="NJ">New Jersey</option>
-                            <option value="NM">New Mexico</option>
-                            <option value="NY">New York</option>
-                            <option value="NC">North Carolina</option>
-                            <option value="ND">North Dakota</option>
-                            <option value="OH">Ohio</option>
-                            <option value="OK">Oklahoma</option>
-                            <option value="OR">Oregon</option>
-                            <option value="PA">Pennsylvania</option>
-                            <option value="RI">Rhode Island</option>
-                            <option value="SC">South Carolina</option>
-                            <option value="SD">South Dakota</option>
-                            <option value="TN">Tennessee</option>
-                            <option value="TX">Texas</option>
-                            <option value="UT">Utah</option>
-                            <option value="VT">Vermont</option>
-                            <option value="VA">Virginia</option>
-                            <option value="WA">Washington</option>
-                            <option value="WV">West Virginia</option>
-                            <option value="WI">Wisconsin</option>
-                            <option value="WY">Wyoming</option>
-                          </select><i class="arrow double"></i>
-                        </label>
-                      </div>
-                    </div>
-                    <div class="section row mbn">
-                      <div class="col-sm-8">
-                        <label class="field option mt10">
-                          <input type="checkbox" name="info" checked=""><span class="checkbox"></span>Save Customer<em class="small-text text-muted">- A Random Unique ID will be generated</em>
-                        </label>
-                      </div>
-                      <div class="col-sm-4">
-                        <p class="text-right">
-                          <button type="button" class="btn btn-primary">Save Order</button>
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- recent orders table-->
-            <div class="panel">
-              <div class="panel-menu admin-form theme-primary">
-                <div class="row">
-                  <div class="col-md-4">
-                    <label class="field select">
-                      <select id="filter-purchases" name="filter-purchases">
-                        <option value="0">Filter by Purchases</option>
-                        <option value="1">1-49</option>
-                        <option value="2">50-499</option>
-                        <option value="1">500-999</option>
-                        <option value="2">1000+</option>
-                      </select><i class="arrow double"></i>
-                    </label>
-                  </div>
-                  <div class="col-md-4">
-                    <label class="field select">
-                      <select id="filter-group" name="filter-group">
-                        <option value="0">Filter by Group</option>
-                        <option value="1">Customers</option>
-                        <option value="2">Vendors</option>
-                        <option value="3">Distributors</option>
-                        <option value="4">Employees</option>
-                      </select><i class="arrow double"></i>
-                    </label>
-                  </div>
-                  <div class="col-md-4">
-                    <label class="field select">
-                      <select id="filter-status" name="filter-status">
-                        <option value="0">Filter by Status</option>
-                        <option value="1">Active</option>
-                        <option value="2">Inactive</option>
-                        <option value="3">Suspended</option>
-                        <option value="4">Online</option>
-                        <option value="5">Offline</option>
-                      </select><i class="arrow double"></i>
-                    </label>
-                  </div>
-                </div>
-              </div>
-              <div class="panel-body pn">
-                <div class="table-responsive of-a">
-                  <table class="table admin-form theme-warning tc-checkbox-1 fs13">
-                    <thead>
-                      <tr class="bg-light">
-                        <th class="text-center">Select</th>
-                        <th>Avatar</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Registered</th>
-                        <th>Purchases</th>
-                        <th>Total Spent</th>
-                        <th class="text-right">Status</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td class="text-center">
-                          <label class="option block mn">
-                            <input type="checkbox" name="mobileos" value="FR"><span class="checkbox mn"></span>
-                          </label>
-                        </td>
-                        <td class="w50"><img title="user" src="assets/img/avatars/1.jpg" class="img-responsive mw30 ib mr10"></td>
-                        <td>Dave Robert</td>
-                        <td>dave@company.com</td>
-                        <td>12/03/2014</td>
-                        <td>222</td>
-                        <td>$3,600</td>
-                        <td class="text-right">
-                          <div class="btn-group text-right">
-                            <button type="button" data-toggle="dropdown" aria-expanded="false" class="btn btn-success br2 btn-xs fs12 dropdown-toggle">Active<span class="caret ml5"></span></button>
-                            <ul role="menu" class="dropdown-menu">
-                              <li><a href="#">Edit</a></li>
-                              <li><a href="#">Contact</a></li>
-                              <li class="divider"></li>
-                              <li class="active"><a href="#">Active</a></li>
-                              <li><a href="#">Suspend</a></li>
-                              <li><a href="#">Remove</a></li>
-                            </ul>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="text-center">
-                          <label class="option block mn">
-                            <input type="checkbox" name="mobileos" value="FR"><span class="checkbox mn"></span>
-                          </label>
-                        </td>
-                        <td class="w50"><img title="user" src="assets/img/avatars/2.jpg" class="img-responsive mw30 ib mr10"></td>
-                        <td>Sara Marshall</td>
-                        <td>sara@company.com</td>
-                        <td>12/03/2014</td>
-                        <td>16</td>
-                        <td>$4,200</td>
-                        <td class="text-right">
-                          <div class="btn-group text-right">
-                            <button type="button" data-toggle="dropdown" aria-expanded="false" class="btn btn-success br2 btn-xs fs12 dropdown-toggle">Active<span class="caret ml5"></span></button>
-                            <ul role="menu" class="dropdown-menu">
-                              <li><a href="#">Edit</a></li>
-                              <li><a href="#">Contact</a></li>
-                              <li class="divider"></li>
-                              <li class="active"><a href="#">Active</a></li>
-                              <li><a href="#">Suspend</a></li>
-                              <li><a href="#">Remove</a></li>
-                            </ul>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="text-center">
-                          <label class="option block mn">
-                            <input type="checkbox" name="mobileos" value="FR"><span class="checkbox mn"></span>
-                          </label>
-                        </td>
-                        <td class="w50"><img title="user" src="assets/img/avatars/3.jpg" class="img-responsive mw30 ib mr10"></td>
-                        <td>Larry Kingster</td>
-                        <td>larry@company.com</td>
-                        <td>12/03/2014</td>
-                        <td>46</td>
-                        <td>$16,200</td>
-                        <td class="text-right">
-                          <div class="btn-group text-right">
-                            <button type="button" data-toggle="dropdown" aria-expanded="false" class="btn btn-success br2 btn-xs fs12 dropdown-toggle">Active<span class="caret ml5"></span></button>
-                            <ul role="menu" class="dropdown-menu">
-                              <li><a href="#">Edit</a></li>
-                              <li><a href="#">Contact</a></li>
-                              <li class="divider"></li>
-                              <li class="active"><a href="#">Active</a></li>
-                              <li><a href="#">Suspend</a></li>
-                              <li><a href="#">Remove</a></li>
-                            </ul>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="text-center">
-                          <label class="option block mn">
-                            <input type="checkbox" name="mobileos" value="FR"><span class="checkbox mn"></span>
-                          </label>
-                        </td>
-                        <td class="w50"><img title="user" src="assets/img/avatars/4.jpg" class="img-responsive mw30 ib mr10"></td>
-                        <td>Emily Roundwheel</td>
-                        <td>emily@company.com</td>
-                        <td>12/03/2014</td>
-                        <td>06</td>
-                        <td>$1,400</td>
-                        <td class="text-right">
-                          <div class="btn-group text-right">
-                            <button type="button" data-toggle="dropdown" aria-expanded="false" class="btn btn-success br2 btn-xs fs12 dropdown-toggle">Active<span class="caret ml5"></span></button>
-                            <ul role="menu" class="dropdown-menu">
-                              <li><a href="#">Edit</a></li>
-                              <li><a href="#">Contact</a></li>
-                              <li class="divider"></li>
-                              <li class="active"><a href="#">Active</a></li>
-                              <li><a href="#">Suspend</a></li>
-                              <li><a href="#">Remove</a></li>
-                            </ul>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="text-center">
-                          <label class="option block mn">
-                            <input type="checkbox" name="mobileos" value="FR"><span class="checkbox mn"></span>
-                          </label>
-                        </td>
-                        <td class="w50"><img title="user" src="assets/img/avatars/5.jpg" class="img-responsive mw30 ib mr10"></td>
-                        <td>Nick Cannoneer</td>
-                        <td>sara@company.com</td>
-                        <td>12/03/2014</td>
-                        <td>43</td>
-                        <td>$13,600</td>
-                        <td class="text-right">
-                          <div class="btn-group text-right">
-                            <button type="button" data-toggle="dropdown" aria-expanded="false" class="btn btn-success br2 btn-xs fs12 dropdown-toggle">Active<span class="caret ml5"></span></button>
-                            <ul role="menu" class="dropdown-menu">
-                              <li><a href="#">Edit</a></li>
-                              <li><a href="#">Contact</a></li>
-                              <li class="divider"></li>
-                              <li class="active"><a href="#">Active</a></li>
-                              <li><a href="#">Suspend</a></li>
-                              <li><a href="#">Remove</a></li>
-                            </ul>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="text-center">
-                          <label class="option block mn">
-                            <input type="checkbox" name="mobileos" value="FR"><span class="checkbox mn"></span>
-                          </label>
-                        </td>
-                        <td class="w50"><img title="user" src="assets/img/avatars/6.jpg" class="img-responsive mw30 ib mr10"></td>
-                        <td>Morgan Lunar</td>
-                        <td>morgan@company.com</td>
-                        <td>12/03/2014</td>
-                        <td>11</td>
-                        <td>$3,200</td>
-                        <td class="text-right">
-                          <div class="btn-group text-right">
-                            <button type="button" data-toggle="dropdown" aria-expanded="false" class="btn btn-success br2 btn-xs fs12 dropdown-toggle">Active<span class="caret ml5"></span></button>
-                            <ul role="menu" class="dropdown-menu">
-                              <li><a href="#">Edit</a></li>
-                              <li><a href="#">Contact</a></li>
-                              <li class="divider"></li>
-                              <li class="active"><a href="#">Active</a></li>
-                              <li><a href="#">Suspend</a></li>
-                              <li><a href="#">Remove</a></li>
-                            </ul>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="text-center">
-                          <label class="option block mn">
-                            <input type="checkbox" name="mobileos" value="FR"><span class="checkbox mn"></span>
-                          </label>
-                        </td>
-                        <td class="w50"><img title="user" src="assets/img/avatars/4.jpg" class="img-responsive mw30 ib mr10"></td>
-                        <td>Emily Roundwheel</td>
-                        <td>emily@company.com</td>
-                        <td>12/03/2014</td>
-                        <td>06</td>
-                        <td>$1,400</td>
-                        <td class="text-right">
-                          <div class="btn-group text-right">
-                            <button type="button" data-toggle="dropdown" aria-expanded="false" class="btn btn-warning br2 btn-xs fs12 dropdown-toggle">In-Active<span class="caret ml5"></span></button>
-                            <ul role="menu" class="dropdown-menu">
-                              <li><a href="#">Edit</a></li>
-                              <li><a href="#">Contact</a></li>
-                              <li class="divider"></li>
-                              <li class="active"><a href="#">Active</a></li>
-                              <li><a href="#">Suspend</a></li>
-                              <li><a href="#">Remove</a></li>
-                            </ul>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="text-center">
-                          <label class="option block mn">
-                            <input type="checkbox" name="mobileos" value="FR"><span class="checkbox mn"></span>
-                          </label>
-                        </td>
-                        <td class="w50"><img title="user" src="assets/img/avatars/2.jpg" class="img-responsive mw30 ib mr10"></td>
-                        <td>Sara Marshall</td>
-                        <td>sara@company.com</td>
-                        <td>12/03/2014</td>
-                        <td>16</td>
-                        <td>$4,200</td>
-                        <td class="text-right">
-                          <div class="btn-group text-right">
-                            <button type="button" data-toggle="dropdown" aria-expanded="false" class="btn btn-warning br2 btn-xs fs12 dropdown-toggle">In-Active<span class="caret ml5"></span></button>
-                            <ul role="menu" class="dropdown-menu">
-                              <li><a href="#">Edit</a></li>
-                              <li><a href="#">Contact</a></li>
-                              <li class="divider"></li>
-                              <li class="active"><a href="#">Active</a></li>
-                              <li><a href="#">Suspend</a></li>
-                              <li><a href="#">Remove</a></li>
-                            </ul>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="text-center">
-                          <label class="option block mn">
-                            <input type="checkbox" name="mobileos" value="FR"><span class="checkbox mn"></span>
-                          </label>
-                        </td>
-                        <td class="w50"><img title="user" src="assets/img/avatars/1.jpg" class="img-responsive mw30 ib mr10"></td>
-                        <td>Roger Rover</td>
-                        <td>roger@company.com</td>
-                        <td>12/03/2014</td>
-                        <td>33</td>
-                        <td>$17,100</td>
-                        <td class="text-right">
-                          <div class="btn-group text-right">
-                            <button type="button" data-toggle="dropdown" aria-expanded="false" class="btn btn-warning br2 btn-xs fs12 dropdown-toggle">In-Active<span class="caret ml5"></span></button>
-                            <ul role="menu" class="dropdown-menu">
-                              <li><a href="#">Edit</a></li>
-                              <li><a href="#">Contact</a></li>
-                              <li class="divider"></li>
-                              <li class="active"><a href="#">Active</a></li>
-                              <li><a href="#">Suspend</a></li>
-                              <li><a href="#">Remove</a></li>
-                            </ul>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="text-center">
-                          <label class="option block mn">
-                            <input type="checkbox" name="mobileos" value="FR"><span class="checkbox mn"></span>
-                          </label>
-                        </td>
-                        <td class="w50"><img title="user" src="assets/img/avatars/2.jpg" class="img-responsive mw30 ib mr10"></td>
-                        <td>Laura Smileton</td>
-                        <td>laura@company.com</td>
-                        <td>12/03/2014</td>
-                        <td>12</td>
-                        <td>$3,100</td>
-                        <td class="text-right">
-                          <div class="btn-group text-right">
-                            <button type="button" data-toggle="dropdown" aria-expanded="false" class="btn btn-danger br2 btn-xs fs12 dropdown-toggle">Suspended<span class="caret ml5"></span></button>
-                            <ul role="menu" class="dropdown-menu">
-                              <li><a href="#">Edit</a></li>
-                              <li><a href="#">Contact</a></li>
-                              <li class="divider"></li>
-                              <li class="active"><a href="#">Active</a></li>
-                              <li><a href="#">Suspend</a></li>
-                              <li><a href="#">Remove</a></li>
-                            </ul>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="text-center">
-                          <label class="option block mn">
-                            <input type="checkbox" name="mobileos" value="FR"><span class="checkbox mn"></span>
-                          </label>
-                        </td>
-                        <td class="w50"><img title="user" src="assets/img/avatars/1.jpg" class="img-responsive mw30 ib mr10"></td>
-                        <td>Dave Robert</td>
-                        <td>dave@company.com</td>
-                        <td>12/03/2014</td>
-                        <td>222</td>
-                        <td>$3,600</td>
-                        <td class="text-right">
-                          <div class="btn-group text-right">
-                            <button type="button" data-toggle="dropdown" aria-expanded="false" class="btn btn-danger br2 btn-xs fs12 dropdown-toggle">Suspended<span class="caret ml5"></span></button>
-                            <ul role="menu" class="dropdown-menu">
-                              <li><a href="#">Edit</a></li>
-                              <li><a href="#">Contact</a></li>
-                              <li class="divider"></li>
-                              <li class="active"><a href="#">Active</a></li>
-                              <li><a href="#">Suspend</a></li>
-                              <li><a href="#">Remove</a></li>
-                            </ul>
-                          </div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- begin: .tray-right-->
-          <aside data-tray-height="match" class="tray tray-right tray290">
-            <!-- menu quick links-->
-            <div class="admin-form">
-              <h4> Find Customer</h4>
-              <hr class="short">
-              <div class="section mb10">
-                <label for="customer-id" class="field prepend-icon">
-                  <input id="customer-id" type="text" name="customer-id" placeholder="Customer ID #" class="gui-input">
-                  <label for="customer-id" class="field-icon"><i class="fa fa-user"></i></label>
-                </label>
-              </div>
-              <div class="section mb10">
-                <label for="customer-name" class="field prepend-icon">
-                  <input id="customer-name" type="text" name="customer-name" placeholder="Customer Name" class="gui-input">
-                  <label for="customer-name" class="field-icon"><i class="fa fa-user"></i></label>
-                </label>
-              </div>
-              <div class="section mb25">
-                <label for="customer-email" class="field prepend-icon">
-                  <input id="customer-email" type="text" name="customer-email" placeholder="Customer Email" class="gui-input">
-                  <label for="customer-email" class="field-icon"><i class="fa fa-envelope-o"></i></label>
-                </label>
-              </div>
-              <h5><small>Search Country</small></h5>
-              <div class="section mb15">
-                <label class="field select">
-                  <select id="customer-location" name="customer-location">
-                    <option value="0" selected="selected">Filter by Location</option>
-                    <option value="1">United States</option>
-                    <option value="2">Europe</option>
-                    <option value="3">Asia</option>
-                    <option value="4">India</option>
-                  </select><i class="arrow double"></i>
-                </label>
-              </div>
-              <h5><small>Search Company</small></h5>
-              <div class="section mb15">
-                <label class="field select">
-                  <select id="customer-company" name="customer-company">
-                    <option value="0" selected="selected">Filter by Company</option>
-                    <option value="1">Apple</option>
-                    <option value="2">Sony</option>
-                    <option value="3">Envato</option>
-                    <option value="4">Microsoft</option>
-                    <option value="5">Google</option>
-                  </select><i class="arrow double"></i>
-                </label>
-              </div>
-              <h5><small>Registration Date</small></h5>
-              <div class="section row">
-                <div class="col-md-6">
-                  <label for="date1" class="field prepend-icon">
-                    <input id="date1" type="text" name="date1" placeholder="01/01/14" class="gui-input">
-                    <label for="date1" class="field-icon"><i class="fa fa-calendar"></i></label>
-                  </label>
-                </div>
-                <div class="col-md-6">
-                  <label for="date2" class="field prepend-icon">
-                    <input id="date2" type="text" name="date2" placeholder="06/01/15" class="gui-input">
-                    <label for="date2" class="field-icon"><i class="fa fa-calendar"></i></label>
-                  </label>
-                </div>
-              </div>
-              <hr class="short">
-              <div class="section">
-                <button type="button" class="btn btn-default btn-sm ph25">Search</button>
-                <label class="field option ml15">
-                  <input type="checkbox" name="info"><span class="checkbox"></span><span class="text-muted">Save Search</span>
-                </label>
-              </div>
-            </div>
-          </aside>
-        </section>
-      </section>
-      <!-- Start: Right Sidebar-->
-      <aside id="sidebar_right" class="nano affix">
-        <!-- Start: Sidebar Right Content-->
-        <div class="sidebar-right-content nano-content">
-          <div class="tab-block sidebar-block br-n">
-            <ul class="nav nav-tabs tabs-border nav-justified hidden">
-              <li class="active"><a href="#sidebar-right-tab1" data-toggle="tab">Tab 1</a></li>
-              <li><a href="#sidebar-right-tab2" data-toggle="tab">Tab 2</a></li>
-              <li><a href="#sidebar-right-tab3" data-toggle="tab">Tab 3</a></li>
-            </ul>
-            <div class="tab-content br-n">
-              <div id="sidebar-right-tab1" class="tab-pane active">
-                <h5 class="title-divider text-muted mb20">Server Statistics<span class="pull-right">2013<i class="fa fa-caret-down ml5"></i></span></h5>
-                <div class="progress mh5">
-                  <div role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 44%" class="progress-bar progress-bar-primary"><span class="fs11">DB Request</span></div>
-                </div>
-                <div class="progress mh5">
-                  <div role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 84%" class="progress-bar progress-bar-info"><span class="fs11 text-left">Server Load</span></div>
-                </div>
-                <div class="progress mh5">
-                  <div role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 61%" class="progress-bar progress-bar-warning"><span class="fs11 text-left">Server Connections</span></div>
-                </div>
-                <h5 class="title-divider text-muted mt30 mb10">Traffic Margins</h5>
-                <div class="row">
-                  <div class="col-xs-5">
-                    <h3 class="text-primary mn pl5">132</h3>
-                  </div>
-                  <div class="col-xs-7 text-right">
-                    <h3 class="text-success-dark mn"><i class="fa fa-caret-up"></i> 13.2%</h3>
-                  </div>
-                </div>
-                <h5 class="title-divider text-muted mt25 mb10">Database Request</h5>
-                <div class="row">
-                  <div class="col-xs-5">
-                    <h3 class="text-primary mn pl5">212</h3>
-                  </div>
-                  <div class="col-xs-7 text-right">
-                    <h3 class="text-success-dark mn"><i class="fa fa-caret-up"></i> 25.6%</h3>
-                  </div>
-                </div>
-                <h5 class="title-divider text-muted mt25 mb10">Server Response</h5>
-                <div class="row">
-                  <div class="col-xs-5">
-                    <h3 class="text-primary mn pl5">82.5</h3>
-                  </div>
-                  <div class="col-xs-7 text-right">
-                    <h3 class="text-danger mn"><i class="fa fa-caret-down"></i> 17.9%</h3>
-                  </div>
-                </div>
-                <h5 class="title-divider text-muted mt40 mb20">Server Statistics<span class="pull-right text-primary fw600">USA</span></h5>
-              </div>
-              <div id="sidebar-right-tab2" class="tab-pane"></div>
-              <div id="sidebar-right-tab3" class="tab-pane"></div>
-            </div>
-          </div>
-        </div>
-      </aside>
-';
-
-
-
-
-	
-	echo '<section>
-			<ul id="myTab2" class="nav nav-tabs">
-				<li class="active">
-					<a href="#home" data-toggle="tab">'. _MAIN .'</a>
-				</li>
-				<li class="">
-					<a href="#addition" data-toggle="tab">'. _ADDITION .'</a>
-				</li>
-				<li class="">
-					<a href="#access" data-toggle="tab">'. _ACCESS .'</a>
-				</li>';
-	$queryXF = $db->query("SELECT * FROM ".DB_PREFIX."_xfields WHERE module='news'");
-	if($db->numRows($queryXF) > 0) 
-	{
-		echo'	<li class="">
-					<a href="#dop" data-toggle="tab">'. _NEWS_DOP .'</a>
-				</li>';
-	}
-	echo'		<li class="">
-					<a href="#file" data-toggle="tab" onclick="uploaderStart();">'. _NEWS_FILE .'</a>
-				</li>
-			</ul>		
-			<section class="panel">
-				<div class="panel-body">
-					<div id="myTabContent2" class="tab-content">				
-						<div class="tab-pane active" id="home">					
-							<div class="panel-heading no-border"><b>'. $lln .'</b></div>
-							<div class="panel-body">
-								<div class="switcher-content">
-									<form action="{MOD_LINK}/save" onsubmit="return caa(false);" method="post" name="content" role="form">
-									<div class="form-horizontal parsley-form" data-parsley-validate>
-										<div class="form-group">
-											<label class="col-sm-3 control-label">'. _NEWS_ADDTITLE .'</label>
-											<div class="col-sm-4">
-												<input type="text" name="title" '.(isset($nid) ? '' : 'onchange="getTranslit(gid(\'title\').value, \'translit\'); caa(this);"').' value="' . (isset($title[$config['lang']]) ? $title[$config['lang']] : '') . '" class="form-control" id="title"  data-parsley-required="true" data-parsley-trigger="change">
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-sm-3 control-label">'. _NEWS_ADDALT .'</label>
-											<div class="col-sm-4">
-												<input type="text" name="translit" value="'.$altname.'" class="form-control" id="translit"  data-parsley-required="true" data-parsley-trigger="change">
-											</div>
-										</div>			
-										<div class="form-group">
-											<label class="col-sm-3 control-label">'. _NEWS_ADDTAG .'</label>
-											<div class="col-sm-4">
-												<input type="text" name="tags"  value="' . $tags . '" class="form-control" id="tags"  data-parsley-trigger="change">
-											</div>
-										</div>										
-										<div class="form-group">
-											<label class="col-sm-3 control-label">'. _NEWS_DATE_PUB .'</label>
-											<div class="col-sm-4">
-												<div class="input-group date" id="datetimepicker1">
-												  <input name="date" type="text" class="form-control" value="'.$date.'"/>
-												  <span class="input-group-addon">
-													<span class="glyphicon-calendar glyphicon"></span>
-												  </span>
-												</div>												
-												<script type="text/javascript">
-													$(function () {
-													  $(\'#datetimepicker1\').datetimepicker({language: \'ru\'});
-													});
-												</script>
-											</div>
-										</div>				
-										<div class="form-group">
-											<label class="col-sm-3 control-label">'. _NEWS_AUTHOR .'</label>
-											<div class="col-sm-4">
-												<input type="text" name="author"  value="' . $author . '" class="form-control" id="author" data-parsley-trigger="change">				
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-sm-3 control-label">'. _NEWS_ADDCAT .'</label>
-											<div class="col-sm-4">
-												<select name="category[]" id="maincat" style="width:auto;" onchange="if(this.value != \'0\') {show(\'catSub\');}" >
-													<option value="0">'._NEWS_ADD_NOCAT.'</option>';	
-	foreach ($cats_arr as $cid => $name) 
-	{
-		$selected = ($cid == $firstCat) ? "selected" : "";
-		echo '<option value="' . $cid . '" ' . $selected . '>' . $name . '</option>';
-	}
-	echo '
-												</select>
-											</div>
-										</div>
-										<div class="form-group" id="catSub" style="' . (isset($nid) ? '' : 'display:none;') . '">
-											<label class="col-sm-3 control-label">'. _NEWS_ADDALTCAT .'</label>
-											<div class="col-sm-4">
-												<select name="category[]" id="category"  style="width:auto;" multiple >';
-	foreach ($cats_arr as $cid => $name) 
-	{
-		if($catttt) $selected = in_array($cid, $catttt) ? "selected" : "";
-		echo '<option value="' . $cid . '" ' . $selected . ' id="cat_' . $cid . '">' . $name . '</option>';
-	}
-	echo '										</select>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
+	echo '<section id="content" class="table-layout animated fadeIn">			
+				<div class="tray tray-center">
+					<div class="panel mb25 mt5">
+						<div class="panel-heading br-b-ddd"><span class="panel-title hidden-xs">'.$lang['news_add'].'</span>
+							<ul class="nav panel-tabs-border panel-tabs">
+								<li class="active"><a href="#tab1_1" data-toggle="tab">'.$lang['news_add_tab_general'].'</a></li>
+								<li><a href="#tab1_2" data-toggle="tab">'.$lang['news_add_tab_settings'].'</a></li>
+								<li><a href="#tab1_3" data-toggle="tab">'.$lang['news_add_tab_access'].'</a></li>
+								'.(($db->numRows($queryXF) > 0) ? '<li><a href="#tab1_4" data-toggle="tab">'.$lang['news_add_tab_xfields'].'</a></li>' : '').'
+							</ul>
 						</div>
-						<div class="tab-pane" id="addition">	
-							<div class="panel-heading no-border">
-								<b>'. _NEWS_ADDITION .'</b>
-							</div>
-							<div class="panel-body">
-								<div class="switcher-content">
-									<div class="form-horizontal parsley-form">
-									
-										<div class="form-group">
-											<label class="col-sm-3 control-label">'. _ACTIVATE_NEWS .'?</label>
-											<div class="col-sm-4">
-												'.checkbox('status', $active).'
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-sm-3 control-label">'. _ACTIVATE_RATING .'?</label>
-											<div class="col-sm-4">
-												'.checkbox('rating', $allow_rating).'
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-sm-3 control-label">'. _ACTIVATE_COMMENTS .'?</label>
-												<div class="col-sm-4">
-													'.checkbox('comments', $allow_comments).'
+						<form action="{MOD_LINK}/save" onsubmit="return caa(false);" method="post" name="content" role="form" class="admin-form">
+						<div class="panel-body p20 pb10">
+							<div class="tab-content pn br-n admin-form">
+								<div id="tab1_1" class="tab-pane active">
+									<div class="section row mbn">
+										<div class="col-md-9 pl15">
+											<div class="section row mb15">
+												<div class="col-xs-6">
+													<label for="title" class="field prepend-icon">
+														<input id="title" type="text" name="title" placeholder="'.$lang['news_add_name'].'" class="event-name gui-input br-light light" '.(isset($nid) ? '' : 'onchange="getTranslit(gid(\'title\').value, \'translit\'); caa(this);"').' value="' . (isset($title[$config['lang']]) ? $title[$config['lang']] : '') . '">				
+														<label for="title" class="field-icon"><i class="fa fa-pencil"></i></label>
+													</label>
 												</div>
-										</div>
-										<div class="form-group">
-											<label class="col-sm-3 control-label">'.  _TOP_SET .'?</label>
-											<div class="col-sm-4">
-												'.checkbox('fix', $fix).'
+												<div class="col-xs-6">
+													<label for="translit" class="field prepend-icon">
+														<input id="translit" type="text" name="translit" placeholder="'.$lang['news_add_url'].'" class="event-name gui-input br-light light" value="'.$altname.'">
+														<label for="translit" class="field-icon"><i class="fa fa-link"></i></label>
+													</label>
+												</div>
 											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-sm-3 control-label">'. _PUBLIC_INDEX .'?</label>
-											<div class="col-sm-4">
-												'.checkbox('index', $allow_index).'
+											<div class="section row mb15">
+												<div class="col-xs-6">
+													<label for="author" class="field prepend-icon">
+														<select name="author" class="select2-single form-control">';
+														$query_users_list = $db->query("SELECT * FROM ".DB_PREFIX."_users");
+														if($db->numRows($query_users_list) > 0) 
+														{
+															while($users_list = $db->getRow($query_users_list)) 
+															{
+																$selected = ($users_list['nick'] == $author) ? "selected" : "";
+																echo '<option value="'.$users_list['nick'].'" '.$selected.'>'.$users_list['nick'].'</option>';
+															}
+														}																
+														echo'	</select>	
+														<label for="translit" class="field-icon"><i class="fa fa-user"></i></label>												
+													</label>
+												</div>
+												<div class="col-xs-6">
+													 <label for="date" class="field prepend-picker-icon">
+														<input id="date" type="text" name="date" placeholder="'.$lang['news_add_date'].'" class="gui-input" value="'.$date.'">
+													</label>
+												</div>
 											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-sm-3 control-label">Keywords:</label>
-											<div class="col-sm-4">
-												<input type="text" name="keywords"  value="' . $keywords . '" class="form-control" id="keywords" data-parsley-trigger="change">	
+											<div class="section mb10">												
+												<label class="field mb15">'.$lang['news_add_tags'].':</label>
+												<input id="tagsinput" name="tags" type="text" value="'.$tags.'" class="bg-light mt10">
 											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-sm-3 control-label">Description:</label>
-											<div class="col-sm-4">
-												<input type="text" name="description"  value="' . $description . '" class="form-control" id="description" data-parsley-trigger="change">	
+											<div class="section row mb15">
+												<div class="col-xs-6">
+													<label for="category" class="field">
+														<select class="form-control" name="category[]" id="maincat" onchange="if(this.value != \'0\') {show(\'catSub\');}" >
+															<option value="0">'.$lang['news_add_nocat'].'</option>';	
+															foreach ($cats_arr as $cid => $name) 
+															{
+																$selected = ($cid == $firstCat) ? "selected" : "";
+																echo '<option value="' . $cid . '" ' . $selected . '>' . $name . '</option>';
+															}
+												  echo '</select>
+													</label>
+												</div>
+												<div class="col-xs-6" id="catSub" style="' . (isset($nid) ? '' : 'display:none;') . '">
+												<label for="category" class="field">
+													<select class="form-control" name="category[]" id="category"  multiple >';
+														foreach ($cats_arr as $cid => $name) 
+														{
+															if($catttt) $selected = in_array($cid, $catttt) ? "selected" : "";
+															echo '<option value="' . $cid . '" ' . $selected . ' id="cat_' . $cid . '">' . $name . '</option>';
+														}
+												echo '</select>
+												</label>
 											</div>
+										</div> 
+									</div>
+									<div class="col-md-3">
+										<div data-provides="fileupload" class="fileupload fileupload-new admin-form">
+											<div class="fileupload-preview thumbnail mb15">
+												<img data-src="holder.js/100%x147/text:'.$lang['news_add_mini'].'" alt="holder">
+											</div>
+											<span class="button btn-system btn-file btn-block ph5">
+												<span class="fileupload-new">Загрузить</span>
+												<span class="fileupload-exists">Удалить</span>
+												<input name="mini_img" type="file">
+											</span>
 										</div>
 									</div>
 								</div>
 							</div>
-						</div>
-						<div class="tab-pane" id="access">
-							<div class="panel-heading no-border">
-								<b>'. _NEWS_ACCESS .'</b>
-							</div>
-							<div class="panel-body">
-								<div class="switcher-content">
-									<div class="form-horizontal parsley-form">
-										<div class="form-group">
-											<label class="col-sm-3 control-label">'. _NEWS_ABOUT .'</label>
-											<div class="col-sm-4">
-												<p class="form-control-static">'. _HOW_GROUPS_WORKS .'</p>
-											</div>
+							<div id="tab1_2" class="tab-pane">
+								<div class="section row mbn">
+									<div class="col-xs-6 pr15">
+										<div class="section mb10">
+											<label class="field mb5">'.$lang['news_add_keywords'].':</label>
+											<label for="keywords" class="field prepend-icon">												
+												<input id="keywords" type="text" name="keywords" placeholder="'.$lang['news_add_keywords_pre'].'" class="event-name gui-input bg-light br-light" value="' . $keywords . '">
+												<label for="keywords" class="field-icon"><i class="fa fa-edit"></i></label>
+											</label>
 										</div>
-										<div class="form-group">
-											<label class="col-sm-3 control-label">'. _GROUP_ACCESS .'?</label>
-											<div class="col-sm-4">
-												<select name="groups[]" id="group" class="cat_select" multiple>
-													<option value="" ' . (empty($grroups) ? 'selected' : '') . '">'. _NEWS_ALL_GROUP .'</option>';
-	$query = $db->query("SELECT * FROM `" . USER_DB . "`.`" . USER_PREFIX . "_groups` ORDER BY admin DESC,moderator DESC,user DESC,guest DESC,banned DESC");
-	while($rows = $db->getRow($query)) 
-	{
-		$selected = in_array($rows['id'], $grroups) ? "selected" : "";
-		echo '<option value="' . $rows['id'] . '" ' . $selected . '>' . $rows['name'] . '</option>';
-	}
-	echo'										</select>		
-											</div>
+										<div class="section mb10">
+											<label class="field mb5">'.$lang['news_add_description'].':</label>
+											<label for="description" class="field prepend-icon">
+												<input id="description" type="text" name="description" placeholder="'.$lang['news_add_description_pre'].'" class="event-name gui-input bg-light br-light" value="' . $description . '">
+												<label for="description" class="field-icon"><i class="fa fa-keyboard-o"></i></label>
+											</label>
 										</div>
-									</div>	
-								</div>		
-							</div>			
-						</div>
-						<div class="tab-pane" id="dop">
-							<div class="panel-heading no-border">
-								<b>'. _NEWS_DOP .'</b>
+										<hr class="alt short mv15">
+										<p class="text-muted"><span class="fa fa-exclamation-circle text-warning fs15 pr5"></span> '.$lang['news_add_seo'].'</p>
+									</div>
+									<div class="col-xs-6">
+										<label class="field option">
+										 '.checkbox('status', $active, $lang['news_add_activate']).'
+										</label><br>
+										<label class="field option mt15">
+										 '.checkbox('rating', $allow_rating, $lang['news_add_raiting']).'
+										</label><br>
+										<label class="field option mt15">
+										 '.checkbox('comments', $allow_comments, $lang['news_add_comments']).'
+										</label><br>
+										  <label class="field option mt15">
+										 '.checkbox('fix', $fix, $lang['news_add_fix']).'
+										</label><br>
+										  <label class="field option mt15">
+										 '.checkbox('index', $allow_index, $lang['news_add_index']).'
+										</label>
+									</div>
+								</div>
+								<br>
 							</div>
-							<div class="panel-body">
-								<div class="switcher-content">
-									<div class="form-horizontal parsley-form">';
-	if($db->numRows($queryXF) > 0) 
-	{		
-		while($xfield = $db->getRow($queryXF)) 
-		{
-			echo '						<div class="form-group">
-											<label class="col-sm-3 control-label">'. $xfield['title'] .'</label>
-											<div class="col-sm-4">';
-			if($xfield['type'] == 3)
-			{
-				$dxfield = array_map('trim', explode("\n", $xfield['content']));
-				$xfieldChange = '<select class="form-control" name="xfield[' . $xfield['id'] . ']"><option value="">Пусто</option>';
+							<div id="tab1_3" class="tab-pane">
+								<div class="section">
+									<b>'.$lang['news_add_accsess_title'].'</b>
+									<p>'.$lang['news_add_accsess'].'</p>
+									<hr class="alt short mv15">
+									<label class="field select-multiple">
+										<select name="groups[]" id="group" class="form-control" multiple>
+											<option value="" ' . (empty($grroups) ? 'selected' : '') . '">'. _NEWS_ALL_GROUP .'</option>';
+											$query = $db->query("SELECT * FROM `" . USER_DB . "`.`" . USER_PREFIX . "_groups` ORDER BY admin DESC,moderator DESC,user DESC,guest DESC,banned DESC");
+											while($rows = $db->getRow($query)) 
+											{
+												$selected = in_array($rows['id'], $grroups) ? "selected" : "";
+												echo '<option value="' . $rows['id'] . '" ' . $selected . '>' . $rows['name'] . '</option>';
+											}
+									echo' </select>
+									</label>
+								</div>
+							</div>';
+							if($db->numRows($queryXF) > 0)
+							{
+								echo '<div id="tab1_4" class="tab-pane">';
+								while($xfield = $db->getRow($queryXF)) 
+								{
+									echo '						<div class="form-group">
+																	<label class="col-sm-3 control-label">'. $xfield['title'] .'</label>
+																	<div class="col-sm-4">';
+									if($xfield['type'] == 3)
+									{
+										$dxfield = array_map('trim', explode("\n", $xfield['content']));
+										$xfieldChange = '<select class="form-control" name="xfield[' . $xfield['id'] . ']"><option value="">Пусто</option>';
 
-				foreach($dxfield as $xfiled_content)
-				{
-					$xfieldChange .= '<option value="' . $xfiled_content . '" ' . (isset($fields[$xfield['id']][1]) && $fields[$xfield['id']][1] == $xfiled_content ? 'selected' : ''). '>' . $xfiled_content . '</option>';
-				}
-				$xfieldChange .= '</select>';
-			}
-			elseif($xfield['type'] == 2)
-			{
-				$xfieldChange = '<textarea class="form-control" name="xfield[' . $xfield['id'] . ']" >' . (!empty($fields[$xfield['id']][1]) ? $fields[$xfield['id']][1] : ($id ? '' : $xfield['content'])) . '</textarea>';
-			}
-			else
-			{
-				$xfieldChange = '<input type="text" class="form-control" name="xfield[' . $xfield['id'] . ']" value="' . (!empty($fields[$xfield['id']][1]) ? $fields[$xfield['id']][1] : ($id ? '' : $xfield['content'])) . '" />';
-			}
-			echo $xfieldChange;
-			echo '</div></div>
-					<input type="hidden" name="xfieldT[' . $xfield['id'] . ']" value="' . $xfield['title'] . '" />';
-		}
-	}
+										foreach($dxfield as $xfiled_content)
+										{
+											$xfieldChange .= '<option value="' . $xfiled_content . '" ' . (isset($fields[$xfield['id']][1]) && $fields[$xfield['id']][1] == $xfiled_content ? 'selected' : ''). '>' . $xfiled_content . '</option>';
+										}
+										$xfieldChange .= '</select>';
+									}
+									elseif($xfield['type'] == 2)
+									{
+										$xfieldChange = '<textarea class="form-control" name="xfield[' . $xfield['id'] . ']" >' . (!empty($fields[$xfield['id']][1]) ? $fields[$xfield['id']][1] : ($id ? '' : $xfield['content'])) . '</textarea>';
+									}
+									else
+									{
+										$xfieldChange = '<input type="text" class="form-control" name="xfield[' . $xfield['id'] . ']" value="' . (!empty($fields[$xfield['id']][1]) ? $fields[$xfield['id']][1] : ($id ? '' : $xfield['content'])) . '" />';
+									}
+									echo $xfieldChange;
+									echo '</div></div>
+											<input type="hidden" name="xfieldT[' . $xfield['id'] . ']" value="' . $xfield['title'] . '" />';
+								}
+								echo '</div>';
+							}
+						echo'	
+						</div>
+					</div>
+				</div>
+				
+				
+				
+			<a data-toggle="modal" href="javascript:;" onclick="modal_o(\'#modal-form-fm\')"  class="btn" type="button">Select</a>
+			
+
+			<div id="modal-form-fm" class="popup-basic bg-none mfp-with-anim mfp-hide">
+						  <iframe width="700" height="400" src="usr/plugins/filemanager/dialog.php?type=2&field_id=fieldID4\'&fldr=" frameborder="0" style="overflow: scroll; overflow-x: hidden; overflow-y: scroll; "></iframe>
+					</div>
+			
+			
+			
+	<script type="text/javascript" src="usr/plugins/fancybox/jquery.fancybox.pack.js?v=2.1.5"></script>
+	<link rel="stylesheet" type="text/css" href="usr/plugins/fancybox/jquery.fancybox.css?v=2.1.5" media="screen" />
+			
+		<a class="various" data-fancybox-type="iframe" href="usr/plugins/filemanager/dialog.php?type=2&field_id=fieldID4\'&fldr=">Iframe</a>
+			
+			
+			
+				<script type="text/javascript">	
+$(document).ready(function() {
+	$(".various").fancybox({
+		maxWidth	: 880,
+		maxHeight	: 600,
+		fitToView	: false,
+		width		: \'70%\',
+		height		: \'70%\',
+		autoSize	: false,
+		closeClick	: false,
+		openEffect	: \'none\',
+		closeEffect	: \'none\'
+	});
+});
+</script>
+			
+			
+			
+			
+			
+			
+			
+			
+			<a href="usr/plugins/filemanager/dialog.php?type=0&amp;editor=mce_0" class="btn iframe-btn" type="button">Open File Manager</a>
+			';
+            
+  
+	
+	
 	if ($id == false){
 		mkdir(ROOT.'files/news/temp', 0777);
 		$_SESSION["RF"]["fff"] ="news/temp/";
@@ -1387,14 +540,7 @@ echo '<section id="content" class="table-layout animated fadeIn">
 		$_SESSION["RF"]["fff"] ="news/".$id."/";
 	}
 
-	echo'							</div>	
-								</div>		
-							</div>			
-						</div>
-						
-					</div>
-				</section>
-			</section> 
+	echo'			
 
 			<section>
 			<ul id="myTab3" class="nav nav-tabs">
@@ -1799,7 +945,12 @@ switch(isset($url[3]) ? $url[3] : null) {
 		} else {
 			echo '<div class="panel-heading">'  . _NEWS_NO_TAG . '</div>';		
 			}
-			echo'</section></div></div>';
+			echo'</section></div></div>        
+        </section>
+      </section>
+      <!-- Start: Right Sidebar-->
+     
+';
 		$adminTpl->close();
 		$adminTpl->admin_foot();
 		break;

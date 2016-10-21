@@ -20,6 +20,7 @@ define('PAUSE_TIME', 120);
 define('VERSION_ID', 'x.x.x');  
 define('COOKIE_TIME', 2592000);
 define('ADMIN', 'administration');
+define('ADMIN_TPL', 'usr/tpl/admin/');
 define('HACK_SQL', '/SELECT|INSERT|ALTER|DROP|UNION|OUTFILE|WHERE/i');
 define('DEBUG', false);
 define('INDEX', isset($_GET['url']) ? false : true);

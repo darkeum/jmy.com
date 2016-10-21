@@ -195,18 +195,38 @@ function exceMods($type = NULL)
 	}	
 }
 
+function ArrayToStr($array = NULL) 
+{
+	if (is_array($array))
+		{
+			$strs = null;
+			foreach($array as $str)
+			{
+				if($str)
+				{
+					$strs .= $str;
+				}		
+			}
+			return $strs;
+		}
+	else
+	{
+		return false;
+	}
+}
+
 
 /*
 * Выводим чекбоксы :D
 * $name - имя инпута чеки
 * $val - тру ор фалсе
 */
-function checkbox($name, $val) 
+function checkbox($name, $val, $text = null) 
 {
 	$checked = !empty($val) ? 'checked ' : false;
 	return '<div class="checkbox-custom mt10">
 				<input type="checkbox" name="' . $name . '" ' . $checked . '>
-				<label for="all"></label>
+				<label for="all">'.$text.'</label>
 			</div>';
 }
 

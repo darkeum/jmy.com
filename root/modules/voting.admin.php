@@ -1,13 +1,12 @@
 <?php
 
 /**
-* @name        JMY CMS
+* @name        JMY CORE
 * @link        http://jmy.su/
-* @copyright   Copyright (C) 2012-2015 JMY LTD
+* @copyright   Copyright (C) 2012-2017 JMY LTD
 * @license     LICENSE.txt (see attached file)
 * @version     VERSION.txt (see attached file)
 * @author      Komarov Ivan
-* @revision	   01.03.2015
 */ 
  
 if (!defined('ADMIN_ACCESS')) {
@@ -20,53 +19,53 @@ switch(isset($url[2]) ? $url[2] : null) {
 	default:
 		$adminTpl->admin_head($lang['polls']);
 		echo '<div id="content" class="animated fadeIn">';
-		$query = $db->query("SELECT id as ppid, title, votes, max, (SELECT COUNT(id) FROM ".DB_PREFIX."_poll_questions WHERE ppid = pid) as variants FROM ".DB_PREFIX."_polls ORDER BY title");	
-		
+		$query = $db->query("SELECT id as ppid, title, votes, max, (SELECT COUNT(id) FROM ".DB_PREFIX."_poll_questions WHERE ppid = pid) as variants FROM ".DB_PREFIX."_polls ORDER BY title");			
 		if($db->numRows($query) > 0) 
 		{
-			echo '
-		<div class="row">
-			<div class="col-lg-12">
-				<section class="panel">
-					<div class="panel-heading">
-						<b>'.$lang['polls_list'].'</b>						
-					</div>';
-					echo '<div class="panel-body no-padding">
-					<form id="tablesForm" style="margin:0; padding:0" method="POST" action="{ADMIN}/voting/action">
-						<table class="table no-margin">
-							<thead>
-								<tr>
-									<th><span class="pd-l-sm"></span>ID</th>
-									<th class="col-md-3">' . _POLL_VOTE . '</th>
-									<th class="col-md-1">' . _POLL_VAR . '</th>
-									<th class="col-md-3">' . _POLL_ANS . '</th>
-									<th class="col-md-2">' . _POLL_MAX . '</th>
-									<th class="col-md-2">' . _ACTIONS . '</th>								
-									<th class="col-md-1"><input type="checkbox" name="all" onclick="setCheckboxes(\'tablesForm\', true); return false;"></th>
-								</tr>
-							</thead>
-							<tbody>';				
-			while($poll = $db->getRow($query)) 
-			{
-				echo "
-				<tr>
-					<td><span class=\"pd-l-sm\"></span>" . $poll['ppid'] . "</td>
-					<td>" . $poll['title'] . "</td>
-					<td>" . $poll['variants'] . "</td>
-					<td>" . $poll['votes'] . "</td>
-					<td>" . $poll['max'] . "</td>
-					<td>";
-					echo $status_icon .'
-					<a href="{ADMIN}/voting/edit/'. $poll['ppid'] .'">
-					<button type="button" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="" data-original-title="'. _EDIT.'">E</button>
-					</a>
-					<a href="{ADMIN}/voting/delete/'. $poll['ppid'] .'" onclick="return getConfirm(\''._POLL_DEL.' - '. $poll['title'] .'?\')">
-					<button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="" data-original-title="' . _DELETE .'">X</button>
-					</a>';
-					echo "</td>
-					<td> <input type=\"checkbox\" name=\"checks[]\" value=\"" . $poll['ppid'] . "\"></td>
-				</tr>";	
-			}
+		echo '<div class="panel panel-dark panel-border top">
+				<div class="panel-heading"><span class="panel-title">'.$lang['polls_list'].':</span>                
+              </div>
+			  <div class="panel-body pn"> 
+				<form id="tablesForm"  style="margin:0; padding:0" method="POST" action="{ADMIN}/voting/action">
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th><span class="pd-l-sm"></span>#</th>
+								<th class="col-md-3">' . $lang['polls_name'] . '</th>
+								<th class="col-md-1">' . $lang['polls_list_variant'] . '</th>
+								<th class="col-md-3">' . $lang['polls_list_answer'] . '</th>
+								<th class="col-md-2">' . $lang['polls_list_max'] . '</th>
+								<th class="col-md-2">' . $lang['action'] . '</th>								
+								<th class="col-md-1">
+									<div class="checkbox-custom mb15">
+										<input id="all" type="checkbox" name="all" onclick="setCheckboxes(\'tablesForm\', true); return true;">
+										<label for="all"></label>
+									</div>	
+								</th>
+							</tr>
+						</thead>
+						<tbody>';				
+						while($poll = $db->getRow($query)) 
+						{
+							echo '
+							<tr>
+								<td><span class="pd-l-sm"></span>]' . $poll['ppid'] . '</td>
+								<td>' . $poll['title'] . '</td>
+								<td>' . $poll['variants'] . '</td>
+								<td>' . $poll['votes'] . '</td>
+								<td>' . $poll['max'] . '</td>
+								<td>';
+								echo $status_icon .'
+								<a href="{ADMIN}/voting/edit/'. $poll['ppid'] .'">
+								<button type="button" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="" data-original-title="'. _EDIT.'">E</button>
+								</a>
+								<a href="{ADMIN}/voting/delete/'. $poll['ppid'] .'" onclick="return getConfirm(\''._POLL_DEL.' - '. $poll['title'] .'?\')">
+								<button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="" data-original-title="' . _DELETE .'">X</button>
+								</a>';
+								echo "</td>
+								<td> <input type=\"checkbox\" name=\"checks[]\" value=\"" . $poll['ppid'] . "\"></td>
+							</tr>";	
+						}
 			
 		echo '<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>		
 		<div align="right">
@@ -259,8 +258,13 @@ function add($id = null)
 							<div class="col-sm-4">
 								<input name="submit" type="submit" class="btn btn-primary btn-parsley" id="sub" value="'.$btn.'">						
 							</div>
-						</div>
-					</form>
+						</div>';
+						if(isset($id))
+						{
+							echo '<input type="hidden" name="edit" value="1">';
+							echo '<input type="hidden" name="id" value="' . $id . '">';
+						}
+				echo '</form>
 				</div>';		
 		$adminTpl->admin_foot();
 }

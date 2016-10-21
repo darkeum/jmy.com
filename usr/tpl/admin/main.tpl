@@ -15,128 +15,27 @@
     <link rel="stylesheet" type="text/css" href="/{ADM_THEME}/assets/css/typeahead.js-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Lato:300,400,600,700%7CMontserrat:400,700">
     <link rel="stylesheet" type="text/css" href="/{ADM_THEME}/assets/css/theme.css">
+	<link rel="stylesheet" type="text/css" href="/{ADM_THEME}/assets/css/plugins/css/tagmanager.css">
+    <link rel="stylesheet" type="text/css" href="/{ADM_THEME}/assets/css/daterangepicker.css">
+    <link rel="stylesheet" type="text/css" href="/{ADM_THEME}/assets/css/bootstrap-datetimepicker.css">
+    <link rel="stylesheet" type="text/css" href="/{ADM_THEME}/assets/css/bootstrap-colorpicker.min.css">
+    <link rel="stylesheet" type="text/css" href="/{ADM_THEME}/assets/css/core.css">
 	<!--[if lt IE 10]>
 		<div style="background: #212121; padding: 10px 0; box-shadow: 3px 3px 5px 0 rgba(0,0,0,.3); clear: both; text-align:center; position: relative; z-index:1;"><a href="http://windows.microsoft.com/en-US/internet-explorer/"><img src="/{ADM_THEME}/assets/images/ie8-panel/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today."></a></div>
 		<script src="/{ADM_THEME}/assets/js/html5shiv.min.js"></script>
 	<![endif]-->
-	  <!-- core scripts-->
+	<!-- core scripts-->
     <script src="/{ADM_THEME}/assets/js/core.min.js"></script>
     <!-- Theme Javascript-->
     <script src="/{ADM_THEME}/assets/js/utility.js"></script>
     <script src="/{ADM_THEME}/assets/js/demo.js"></script>
-    <script src="http://livedemo00.template-help.com/wt_58708/assets/js/main.js"></script>
-  <script src="http://livedemo00.template-help.com/wt_58708/assets/js/demo/widgets.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.4.0/clipboard.min.js"></script>
-
-   <script type="text/javascript">
-   
-    function modal_o(id) {
-          // Inline Admin-Form example
-          $.magnificPopup.open({
-            removalDelay: 500, //delay removal by X to allow out-animation,
-            items: {
-              src: id
-            },
-            // overflowY: 'hidden', //
-            callbacks: {
-              beforeOpen: function (e) {
-                var Animation = 'mfp-zoomIn';
-                this.st.mainClass = Animation;
-              }
-            },
-            midClick: true // allow opening popup on middle mouse click. Always set it to true if you don't provide alternative source.
-          });
-        };
-   var Stacks = {
-          stack_top_right: {
-            "dir1": "down",
-            "dir2": "left",
-            "push": "top",
-            "spacing1": 10,
-            "spacing2": 10
-          },
-          stack_top_left: {
-            "dir1": "down",
-            "dir2": "right",
-            "push": "top",
-            "spacing1": 10,
-            "spacing2": 10
-          },
-          stack_bottom_left: {
-            "dir1": "right",
-            "dir2": "up",
-            "push": "top",
-            "spacing1": 10,
-            "spacing2": 10
-          },
-          stack_bottom_right: {
-            "dir1": "left",
-            "dir2": "up",
-            "push": "top",
-            "spacing1": 10,
-            "spacing2": 10
-          },
-          stack_bar_top: {
-            "dir1": "down",
-            "dir2": "right",
-            "push": "top",
-            "spacing1": 0,
-            "spacing2": 0
-          },
-          stack_bar_bottom: {
-            "dir1": "up",
-            "dir2": "right",
-            "spacing1": 0,
-            "spacing2": 0
-          },
-          stack_context: {
-            "dir1": "down",
-            "dir2": "left",
-            "context": $("#stack-context")
-          },
-        }
-
-   // PNotify Plugin Event Init
-       function notif(style, title_in, text_in) {
-          var noteStyle = style;
-          var noteShadow = true;
-          var noteOpacity = '1';
-          var noteStack = 'stack_bar_bottom';
-          var width = "290px";
-          // If notification stack or opacity is not defined set a default
-          var noteStack = noteStack ? noteStack : "stack_top_right";
-          var noteOpacity = noteOpacity ? noteOpacity : "1";
-          // We modify the width option if the selected stack is a fullwidth style
-          function findWidth() {
-            if (noteStack == "stack_bar_top") {
-              return "100%";
-            }
-            if (noteStack == "stack_bar_bottom") {
-              return "70%";
-            } else {
-              return "290px";
-            }
-          }
-   
-      
-	   new PNotify({
-            title: title_in,
-            text: text_in,
-            shadow: noteShadow,
-            opacity: noteOpacity,
-            addclass: noteStack,
-            type: noteStyle,
-            stack: Stacks[noteStack],
-            width: findWidth(),
-            delay: 1400
-          });
-		 }
- </script>
+    <script src="/{ADM_THEME}/assets/js/main.js"></script>
+	<script src="/{ADM_THEME}/assets/js/widgets.js"></script>
+	<script src="/{ADM_THEME}/assets/js/script.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.4.0/clipboard.min.js"></script>
   </head>  
-  <body data-spy="scroll" data-target="#nav-spy" data-offset="300" class="form-editors-page {BODY_CLASS}">   
-    <!-- Start: Main-->
-    <div id="main">
-      <!-- Start: Header-->	
+  <body data-spy="scroll" data-target="#nav-spy" data-offset="300" class="form-editors-page {BODY_CLASS}"> 
+    <div id="main">    
       <header class="navbar navbar-fixed-top bg-success">
         <div class="navbar-branding dark bg-success">
 			<a href="/{ADMIN}" class="navbar-brand text-uppercase"><i class="fa fa-check-circle mg-r-xs"></i> JMY<b>CMS</b></a>

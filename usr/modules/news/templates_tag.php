@@ -35,7 +35,7 @@ if (!defined('ACCESS')) {
 		"#\\[edit\\](.*?)\\[/edit\\]#is" => (($core->auth->isModer||$core->auth->isAdmin)  ? "\${1}" : ''),
 		"#\\{%MYDATE:(.*?)%\\}#ies" => "date('\\1', '" . $news['date'] . "')",
 		"#\\{%TITLE:(.*?)%\\}#ies" => "short('\\1', '" . $news['title'] . "')",
-		"#\\{%SHORT:(.*?)%\\}#ies" => "short('\\1', '" . $short . "')",
+		"#\\{%SHORT:(.*?)%\\}#ies" => "short('\\1', '" . processText($short) . "')",
 		"#\\[img:([0-9]*?)\\]#is" => (!empty($miniImg[0]) ? '<img src="' . $miniImg[0] . '" border="0" width="\\1" />' : ''),
 		"#\\[mini_img\\](.*?)\\[/mini_img\\]#ies" => "if_set('" . (!empty($miniImg[0]) ? true : '') . "', '\\1')",		
 	);

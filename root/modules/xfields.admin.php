@@ -77,7 +77,7 @@ global $adminTpl, $config, $core, $admin_conf, $db;
 						<button type="button" onclick="location.href = \'{ADMIN}/xfields/edit/' . $xfield['id'] . '\'" class="btn btn-xs btn-primary">'._EDIT_SHORT.'</button>
 						<button type="button" data-toggle="dropdown" class="btn btn-dro btn-primary dropdown-toggle"><span class="caret"></span><span class="sr-only">' . _ACTIONS . '</span></button>
 						<ul role="menu" class="dropdown-menu">
-							<li><a id="copy-button" data-clipboard-target="#copy">'._DOP_COPY.'</a></li>							
+							<li><a id="copy-button" data-clipboard-target="#copy" href="'.$core->fullURL().'#">'._DOP_COPY.'</a></li>							
 							<li class="divider"></li>
 							<li><a href="'.$core->fullURL().'#" onclick="modal_o(\'#modal-form-'.$xfield['id'].'\')">' . _DELETE .'</a></li>
 						</ul>

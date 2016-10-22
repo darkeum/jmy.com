@@ -18,6 +18,7 @@ class bb
 	{
 	global $smileRepl, $smiles, $core, $config;
 
+	/*
 		if($core->html_editor == 1)
 		{
 			$replace = array(
@@ -28,7 +29,7 @@ class bb
 
 			return $text;
 		}
-		
+		*/
 		if($pubId === true) $html = true;
 		
 		foreach($smiles as $smile => $info)
@@ -471,11 +472,12 @@ class bb
 	{
 	global $smileRepl, $smileRepl2, $smiles, $core;
 
+	/*
 		if($core->html_editor == 1)
 		{
 			return $text;
 		}
-		
+	*/	
 		foreach($smiles as $smile => $info)
 		{
 			$smileRepl .= $info['url'].'|';

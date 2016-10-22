@@ -1,0 +1,26 @@
+
+[class^="mce-i-dleicon"], [class*=" mce-i-dleicon"] {
+    font-family: 'dle-bb-font' !important;
+    speak: none !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+    font-variant: normal !important;
+    text-transform: none !important;
+    line-height: 1;
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+}
+
+i.icon-quote:before { content: "\e977"; }
+i.icon-hide:before { content: "\e9d1"; }
+i.icon-up:before { content: "\e930"; }
+i.icon-leech:before { content: "\e98d"; }
+i.icon-code:before { content: "\f121"; }
+i.icon-video:before { content: "\e913"; }
+i.icon-yt:before { content: "\f166"; }
+i.icon-spoiler:before { content: "\e600"; }
+i.icon-br:before { content: "\ea68"; }
+i.icon-pl:before { content: "\ea72"; }
+i.icon-audio:before { content: "\e911"; }
+

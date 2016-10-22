@@ -291,6 +291,7 @@ global $adminTpl, $core, $db, $core, $config, $lang;
 	$cats_arr = $core->aCatList('news');
 	echo '<section id="content" class="table-layout animated fadeIn">			
 				<div class="tray tray-center">
+					<form action="{MOD_LINK}/save" onsubmit="return caa(false);" method="post" name="content" role="form"  id="admin-form">
 					<div class="panel mb25 mt5">
 						<div class="panel-heading br-b-ddd"><span class="panel-title hidden-xs">'.$lang['news_add'].'</span>
 							<ul class="nav panel-tabs-border panel-tabs">
@@ -299,8 +300,7 @@ global $adminTpl, $core, $db, $core, $config, $lang;
 								<li><a href="#tab1_3" data-toggle="tab">'.$lang['news_add_tab_access'].'</a></li>
 								'.(($db->numRows($queryXF) > 0) ? '<li><a href="#tab1_4" data-toggle="tab">'.$lang['news_add_tab_xfields'].'</a></li>' : '').'
 							</ul>
-						</div>
-						<form action="{MOD_LINK}/save" onsubmit="return caa(false);" method="post" name="content" role="form" class="admin-form">
+						</div>						
 						<div class="panel-body p20 pb10">
 							<div class="tab-content pn br-n admin-form">
 								<div id="tab1_1" class="tab-pane active">
@@ -481,110 +481,78 @@ global $adminTpl, $core, $db, $core, $config, $lang;
 						echo'	
 						</div>
 					</div>
-				</div>
-				
-				
-				
-			<a data-toggle="modal" href="javascript:;" onclick="modal_o(\'#modal-form-fm\')"  class="btn" type="button">Select</a>
-			
-
-			<div id="modal-form-fm" class="popup-basic bg-none mfp-with-anim mfp-hide">
-						  <iframe width="700" height="400" src="usr/plugins/filemanager/dialog.php?type=2&field_id=fieldID4\'&fldr=" frameborder="0" style="overflow: scroll; overflow-x: hidden; overflow-y: scroll; "></iframe>
-					</div>
-			
-			
-			
-	<script type="text/javascript" src="usr/plugins/fancybox/jquery.fancybox.pack.js?v=2.1.5"></script>
-	<link rel="stylesheet" type="text/css" href="usr/plugins/fancybox/jquery.fancybox.css?v=2.1.5" media="screen" />
-			
-		<a class="various" data-fancybox-type="iframe" href="usr/plugins/filemanager/dialog.php?type=2&field_id=fieldID4\'&fldr=">Iframe</a>
-			
-			
-			
+				</div>';
+				$adminTpl->footIncludes[] ='
+				<script type="text/javascript" src="/usr/plugins/fancybox/jquery.fancybox.pack.js?v=2.1.5"></script>
+				<link rel="stylesheet" type="text/css" href="/usr/plugins/fancybox/jquery.fancybox.css?v=2.1.5" media="screen" />		
 				<script type="text/javascript">	
-$(document).ready(function() {
-	$(".various").fancybox({
-		maxWidth	: 880,
-		maxHeight	: 600,
-		fitToView	: false,
-		width		: \'70%\',
-		height		: \'70%\',
-		autoSize	: false,
-		closeClick	: false,
-		openEffect	: \'none\',
-		closeEffect	: \'none\'
-	});
-});
-</script>
-			
-			
-			
-			
-			
-			
-			
-			
-			<a href="usr/plugins/filemanager/dialog.php?type=0&amp;editor=mce_0" class="btn iframe-btn" type="button">Open File Manager</a>
-			';
-            
-  
-	
-	
-	if ($id == false){
-		mkdir(ROOT.'files/news/temp', 0777);
-		$_SESSION["RF"]["fff"] ="news/temp/";
-		
-	}
-	else
-	{
-		$_SESSION["RF"]["fff"] ="news/".$id."/";
-	}
-
-	echo'			
-
-			<section>
-			<ul id="myTab3" class="nav nav-tabs">
-				<li class="active">
-					<a href="#lang_main" data-toggle="tab">Основное язык (Русский)</a>
-				</li>
-				<li class="">
-					<a href="#lang_en" data-toggle="tab">Английский</a>
-				</li>	
-	<li style="margin-right: 0px;" class="pull-right">
-					<a href="" >Загрузка файлов</a>
-				</li>				
-			</ul>
-			
-			
-							
-			</ul>
-			<section class="panel">
-					<header class="panel-heading">'.  _NEWS_SHORT .'</header>			
-					<div class="panel-body">
-						<div class="form-horizontal bordered-group">
-							<div class="form-group">
-								
-								<div style="padding-left:34px;padding-right:34px"  class="col-sm-12">'
-									.adminArea('short[' . $config['lang'] . ']', (isset($short[$config['lang']]) ? $short[$config['lang']] : ''), 5, 'textarea', 'onchange="caa(this);"', true).'
-									<input  name="submit" type="submit" class="btn btn-primary btn-parsley" id="sub" value="' . $dosave . '" />
-								</div>
-								
-							</div>			
-							
+					$(document).ready(function() {
+						$(".various").fancybox({
+							maxWidth	: 880,
+							maxHeight	: 600,
+							fitToView	: false,
+							width		: \'70%\',
+							height		: \'70%\',
+							autoSize	: false,
+							closeClick	: false,
+							openEffect	: \'none\',
+							closeEffect	: \'none\'
+						});
+					});
+				</script>';
+				if ($id == false)
+				{
+					$dir = ROOT.'files/news/temp';
+					if (!file_exists($dir))
+					{
+						mkdir($dir, 0777);
+						
+					}
+					$_SESSION["RF"]["fff"] ="news/temp/";		
+				}
+				else
+				{
+					$_SESSION["RF"]["fff"] ="news/".$id."/";
+				}
+				echo'
+				<div class="tab-block mb25">
+					<ul class="nav nav-tabs_editor nav-tabs-right">
+						<li class="active">
+							<a href="#tab1" data-toggle="tab" aria-expanded="true">'.$lang['news_add_short'].'</a>
+						</li>
+						<li class="">
+							<a href="#tab2" data-toggle="tab" aria-expanded="false">'.$lang['news_add_full'].'</a>
+						</li>
+						<li class="">
+							<a class="various" data-fancybox-type="iframe" href="usr/plugins/filemanager/dialog.php?type=2&field_id=fieldID4\'&fldr="><i class="fa fa-folder-open-o text-purple"></i> '.$lang['news_add_upload'].'</a>
+						</li>    
+					</ul>
+					<div class="tab-content_editor">
+						<div id="tab1" class="tab-pane active">'
+							.adminArea('short[' . $config['lang'] . ']', (isset($short[$config['lang']]) ? $short[$config['lang']] : ''), 5, 'textarea', 'onchange="caa(this);"', true).'
 						</div>
-					</div>					
-					';		 
-	if($edit) 
-	{
-		echo "<input type=\"hidden\" name=\"edit\" value=\"1\" />";
-		if($news['active'] == 2) echo "<input type=\"hidden\" name=\"from_user\" value=\"1\" />";
-		echo "<input type=\"hidden\" name=\"edit_id\" value=\"".$id."\" />";
-	}	
-	if(isset($nid)) echo "<input type=\"hidden\" name=\"oldAltName\" value=\"$altname\" />";
-	echo'				</form>
-				</section>
-				</section>
-			';	
+						<div id="tab2" class="tab-pane">'
+							.adminArea('full[' . $config['lang'] . ']', (isset($full[$config['lang']]) ? $full[$config['lang']] : ''), 5, 'textarea', 'onchange="caa(this);"', true).'
+						</div>
+					</div>
+				</div>
+				<input  name="submit" type="submit" class="btn btn-primary btn-parsley" id="sub" value="' . $dosave . '" />';		 
+				if($edit) 
+				{
+					echo '<input type="hidden" name="edit" value="1" />';
+					if($news['active'] == 2)
+					{
+						echo '<input type="hidden" name="from_user" value="1" />';
+					}
+					echo '<input type="hidden" name="edit_id" value="'.$id.'" />';
+				}	
+				if(isset($nid))
+				{
+					echo '<input type="hidden" name="oldAltName" value="'.$altname.'" />';
+				}
+	echo'</form>
+		</div>
+	</section>';	
 	$adminTpl->admin_foot();
 } 
  
@@ -609,6 +577,10 @@ global $adminTpl, $core, $db, $cats, $groupss, $config;
 	
 	$full= isset($_POST['full']) ? $_POST['full'] : '';
 	$short= isset($_POST['short']) ? $_POST['short'] : '';
+	
+	//временно 
+	$full=$short;
+	
 	
 	$xfield = isset($_POST['xfield']) ? $_POST['xfield'] : '';
 	$xfieldT = isset($_POST['xfieldT']) ? ($_POST['xfieldT']) : '';

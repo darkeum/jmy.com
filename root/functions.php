@@ -39,30 +39,39 @@ global $adminTpl, $core;
 		$adminTpl->headerIncludes['htmleditor'] = '<script type="text/javascript" src="/usr/plugins/tinymce/tinymce.min.js"></script>
 		<script>
 tinymce.init({	
+
+ theme: \'modern\',
+    skin: \'custom\',
   selector: \'textarea\',
   language: \'ru\',
   height: 300,
+  menubar:false,
+    statusbar: false,
   convert_urls: false,
 relative_urls: false,
-  plugins: [
-    \'advlist autolink lists link image charmap print preview anchor\',
-    \'searchreplace visualblocks code fullscreen\',
-    \'insertdatetime media table contextmenu paste responsivefilemanager code\'
-  ],
-  toolbar1: \'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | responsivefilemanager\',
-  toolbar2: \'| responsivefilemanager\',
-  image_advtab: true ,
-  external_filemanager_path: \'usr/plugins/filemanager/\',
+	  plugins: [
+		\'advlist autolink lists link codesample hr image charmap print preview anchor\',
+		\'searchreplace visualblocks code fullscreen\',
+		\'insertdatetime media table contextmenu paste spellchecker responsivefilemanager code youtube jmybutton emoticons\'
+	  ],
+	toolbar1: \'undo redo | styleselect | fontsizeselect | fontselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent table hr\',
+	toolbar2: \'subscript superscript | link image responsivefilemanager jmymusic jmyvideo | jmymail jmyquote jmyhide codesample jmyspoiler | spellchecker removeformat searchreplace code fullscreen  \',
+	image_advtab: true ,
+	spellchecker_language : "ru",
+	spellchecker_languages : "Russian=ru,Ukrainian=uk,English=en",
+	spellchecker_rpc_url : "//speller.yandex.net/services/tinyspell",
+
+  external_filemanager_path: \'/usr/plugins/filemanager/\',
+  external_plugins: { "filemanager" : "/usr/plugins/filemanager/plugin.min.js"},
   filemanager_title: \'Управление файлами\',  
   content_css: [
     \'//fast.fonts.net/cssapi/e6dc9b99-64fe-4292-ad98-6974f93cd2a2.css\',
-    \'//www.tinymce.com/css/codepen.min.css\'
   ] 
 });
   </script>
 		
 		';
-		$editor = '<textarea id="' . $name . '" name="' . $name . '" rows="' . $rows . '" cols="90" class="' . $class . '" onclick="mainArea(\'' . $name . '\')">' . $val . '</textarea><br>';
+		$editor = '<textarea id="' . $name . '" name="' . $name . '" rows="' . $rows . '" cols="90" class="' . $class . '" onclick="mainArea(\'' . $name . '\')">' . $val . '</textarea>';
 
 		return $editor;
 	}

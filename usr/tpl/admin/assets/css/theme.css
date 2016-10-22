@@ -11591,12 +11591,20 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
     border-bottom-color: #fff;
   }
 }
-.tab-content > .tab-pane {
+.tab-content> .tab-pane {
   display: none;
 }
-.tab-content > .active {
+.tab-content> .active {
   display: block;
 }
+
+.tab-content_editor > .tab-pane {
+  display: none;
+}
+.tab-content_editor > .active {
+  display: block;
+}
+
 .nav-tabs .dropdown-menu {
   margin-top: -1px;
   border-top-right-radius: 0;
@@ -13415,15 +13423,25 @@ button.close {
   border: 1px solid #e2e2e2;
   background-color: #FFF;
 }
+
+.tab-block .tab-content_editor {
+  overflow: auto;
+  position: relative;
+  z-index: 10;
+  min-height: 125px;
+  background-color: #FFF;
+}
 /*===============================================
   Tab Navigation
 ================================================= */
-.tab-block .nav-tabs {
+.tab-block .nav-tabs,
+.tab-block .nav-tabs_editor {
   position: relative;
   border: 0;
 }
 /* nav tab item */
-.tab-block .nav-tabs > li {
+.tab-block .nav-tabs > li,
+.tab-block .nav-tabs_editor > li {
   float: left;
   margin-bottom: -1px;
 }
@@ -13440,11 +13458,27 @@ button.close {
   border-radius: 0;
   background: #fafafa;
 }
-.tab-block .nav-tabs > li:first-child > a {
+
+.tab-block .nav-tabs_editor > li > a {
+  z-index: 9;
+  position: relative;
+  color: #AAA;
+  font-size: 14px;
+  font-weight: 400;
+  padding: 14px 20px;
+  margin-right: -1px;
+  border: 1px solid #dddddd;
+  background: #fff;
+}
+
+.tab-block .nav-tabs > li:first-child > a,
+.tab-block .nav-tabs_editor > li:first-child > a {
   margin-left: 0;
 }
+
 /* nav tab link:hover */
-.tab-block .nav-tabs > li > a:hover {
+.tab-block .nav-tabs > li > a:hover,
+.tab-block .nav-tabs_editor > li > a:hover {
   background-color: #f4f4f4;
 }
 /* nav tab active link:focus:hover */
@@ -13459,6 +13493,18 @@ button.close {
   border-color: #e2e2e2;
   border-bottom: 1px solid #FFF;
 }
+
+.tab-block .nav-tabs_editor > li.active > a,
+.tab-block .nav-tabs_editor > li.active > a:hover,
+.tab-block .nav-tabs_editor > li.active > a:focus {
+  cursor: default;
+  position: relative;
+  z-index: 12;
+  color: #555555;
+  background: #fafafa;
+  border: 1px solid #dddddd;
+}
+
 /*===============================================
   Tab Navigation - Tabs Left
 ================================================= */
@@ -13639,6 +13685,17 @@ button.close {
   padding: 14px 10px;
 }
 /* tabs justified - bottom */
+.tab-block .tab-content_editor + .nav-tabs.nav-justified {
+  top: -1px;
+  margin-top: 0;
+}
+/* nav tab active link */
+.tab-block .tab-content_editor + .nav-tabs.nav-justified > li.active > a {
+  border-top-color: #fff;
+  border-bottom-color: #DDD;
+}
+
+
 .tab-block .tab-content + .nav-tabs.nav-justified {
   top: -1px;
   margin-top: 0;
@@ -13655,10 +13712,12 @@ button.close {
   left to right, not tabs that are to the right 
   of tab content
 ================================================= */
-.nav-tabs.nav-tabs-right > li {
+.nav-tabs.nav-tabs-right > li,
+.nav-tabs_editor.nav-tabs-right > li {
   float: right;
 }
-.nav-tabs.nav-tabs-right > li:first-child > a {
+.nav-tabs.nav-tabs-right > li:first-child > a,
+.nav-tabs_editor.nav-tabs-right > li:first-child > a {
   margin-right: 0;
 }
 /*===============================================
@@ -13690,7 +13749,11 @@ button.close {
   border-top: 2px solid #43c7d7;
 }
 /* tabs justified */
+
 .tab-block .tab-content + .tabs-border.nav-justified > li.active > a {
+  border-bottom: 2px solid #43c7d7;
+}
+.tab-block .tab-content_editor + .tabs-border.nav-justified > li.active > a {
   border-bottom: 2px solid #43c7d7;
 }
 /*====================================================
@@ -13743,7 +13806,7 @@ button.close {
   border-top-width: 0;
   border-bottom-color: #f8f8f8;
 }
-.tab-block.sidebar-block .tab-content {
+.tab-block.sidebar-block .tab-content .tab-content_editor {
   border: 0;
   background: transparent;
 }
@@ -18206,7 +18269,7 @@ table.tc-va-b-last tbody td:last-child {
 .table-checklist td {
   cursor: pointer;
 }
-.table-widget .tab-content {
+.table-widget .tab-content .tab-content_editor{
   padding: 0;
   border: 0;
   overflow: hidden;
@@ -22627,7 +22690,7 @@ body.timeline-page #content {
     display: none;
   }
 }
-#timeline .tab-content {
+#timeline .tab-content .tab-content_editor{
   min-height: 0;
 }
 #timeline .map {

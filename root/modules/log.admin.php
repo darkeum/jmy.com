@@ -28,7 +28,7 @@ switch(isset($url[2]) ? $url[2] : null) {
 		else
 		{
 		$adminTpl->admin_head(_LOG_LOG);
-		echo '<div class="row"><div class="col-lg-12"><section class="panel">';
+		echo '<div id="content" class="animated fadeIn">';
 		$adminTpl->open();		
 		$i = 0;
 		$logFiles = glob(ROOT . 'tmp/*.log');
@@ -62,7 +62,7 @@ switch(isset($url[2]) ? $url[2] : null) {
 				echo   _LOG_EMPTY ;				
 				echo '</div></div>';
 		}
-		echo '</section></div></div>';
+		echo '</div>';
 		$adminTpl->close();
 		$adminTpl->admin_foot();
 		}

@@ -8,9 +8,12 @@ if (!defined('ACCESS'))
 
 global $files_conf;
 $files_conf = array();
-$files_conf['imgFormats'] = "jpg,gif,png";
-$files_conf['attachFormats'] = "zip,rar,mp3,avi,mp4,flv,3gp";
-$files_conf['max_size'] = "10240000";
+$files_conf['imgFormats'] = "jpg,jpeg,png,gif,bmp,tiff,svg";
+$files_conf['videoFormats'] = "mov, mpeg, m4v, mp4, avi, mpg, wma, flv, webm";
+$files_conf['audioFormats'] = "mp3, m4a, ac3, aiff, mid, ogg, wav";
+$files_conf['filesFormats'] = "doc, docx, rtf, pdf, xls, xlsx, txt, csv, psd, ppt, pptx, odt, ots, ott, odb, odg, otp, otg, odf, ods, ai";
+$files_conf['archiveFormats'] = "zip, rar, gz, tar, iso, dmg";
+$files_conf['max_size'] = "10";
 $files_conf['thumb_width'] = "600";
 $files_conf['quality'] = "100";
 $files_conf['watermark'] = "1";

@@ -70,14 +70,14 @@ global $adminTpl, $config, $core, $admin_conf, $db;
 				<td><span class="pd-l-sm"></span> '. $xfield['id'] . '</td>
 				<td>' . $xfield['title'] . '</td>
 				<td>' . $xfield['description'] . '</td>
-				<td id="copy">[xfield:' . $xfield['id'] . '][xfield_value:' . $xfield['id'] . '][/xfield:' . $xfield['id'] . ']</td>
+				<td id="btn_copy" data-clipboard-text="1">[xfield:' . $xfield['id'] . '][xfield_value:' . $xfield['id'] . '][/xfield:' . $xfield['id'] . ']</td>
 				<td>' . _mName($xfield['module']) . '</td>
 				<td>				
 					<div class="btn-group">
 						<button type="button" onclick="location.href = \'{ADMIN}/xfields/edit/' . $xfield['id'] . '\'" class="btn btn-xs btn-primary">'._EDIT_SHORT.'</button>
 						<button type="button" data-toggle="dropdown" class="btn btn-dro btn-primary dropdown-toggle"><span class="caret"></span><span class="sr-only">' . _ACTIONS . '</span></button>
 						<ul role="menu" class="dropdown-menu">
-							<li><a id="copy-button" data-clipboard-target="#copy" href="'.$core->fullURL().'#">'._DOP_COPY.'</a></li>							
+							<li ><a  id="btn_copy" data-clipboard-target="#copy" href="'.$core->fullURL().'#copy">'._DOP_COPY.'</a></li>							
 							<li class="divider"></li>
 							<li><a href="'.$core->fullURL().'#" onclick="modal_o(\'#modal-form-'.$xfield['id'].'\')">' . _DELETE .'</a></li>
 						</ul>

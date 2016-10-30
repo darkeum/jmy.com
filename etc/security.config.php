@@ -6,8 +6,9 @@ if (!defined('ACCESS'))
 }
 
 
+global $security;
 $security = array();
-$security['xNums'] = "12345";
+$security['xNums'] = "123456";
 $security['stopNick'] = "%laed*";
 $security['stopMails'] = "";
 $security['stopWords'] = "хуй,пизда,шлюха";
@@ -24,5 +25,4 @@ $security['recaptcha_private'] = "";
 $security['captcha_width'] = "120";
 $security['captcha_height'] = "60";
 $security['captcha_lenght'] = "6";
-$security['lang'] = "ru";
 

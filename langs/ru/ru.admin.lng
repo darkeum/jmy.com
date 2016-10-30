@@ -40,6 +40,7 @@ $lang = array_merge($lang, array (
 	'log_write'									=> 'Вход {nick} в панель управления',
 	'version_id'								=> 'Версия системы',
 	'config_module'								=> 'Настройка модуля',	
+	'config_modules'							=> 'Настройка модулей',	
 	'standart'									=> 'Стандартный',
 	'table_cleaned'								=> 'Таблица очищена',
 
@@ -50,7 +51,18 @@ $lang = array_merge($lang, array (
 	'no_turns'									=> 'У вас не осталось попыток, попробуйте позже.',
 	'false_turn'								=> 'Пароль введен не верно! У вас осталось {turns} попытка(и)',
 	'empty_login'								=> 'Имя или пароль пусты!',
+	'confirm'									=> 'Подтвердите ваше действие!',
 	'action'									=> 'Действия',
+	'info'										=> 'Информация',
+	'author'									=> 'Автор',
+	'choose_cat'								=> 'Выберите категорию',
+	
+	
+	/* Действия */
+	'do_moderation'								=> 'Отправить на модерацию',
+	'do_activation'								=> 'Активировать',
+	'do_deactivation'							=> 'Отключить',
+	
 
 	/* root/list.php */
 

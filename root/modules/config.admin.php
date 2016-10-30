@@ -1,9 +1,9 @@
 <?php
 
 /**
-* @name        JMY CMS
+* @name        JMY CORE
 * @link        http://jmy.su/
-* @copyright   Copyright (C) 2012-2016 JMY LTD
+* @copyright   Copyright (C) 2012-2017 JMY LTD
 * @license     LICENSE.txt (see attached file)
 * @version     VERSION.txt (see attached file)
 * @author      Komarov Ivan
@@ -13,6 +13,7 @@ if (!defined('ADMIN_ACCESS')) {
     header('Location: /');
     exit;
 }
+global $lang;
 require ROOT . 'etc/configs.config.php';
 
 $core->loadLangFile('root/langs/{lang}.config.php');
@@ -801,32 +802,19 @@ $configBox = array(
 function conf_radio($name, $val) 
 {
 global $config;	
-	
-	$but_1 = ($val) ? "checked" : "";
-	$but_2 = (!$val) ? "checked" : "";
+	$but_1 = ($val) ? 'checked=""' : '';
 	return '
-	<table>
-	<tr>
-	<td valign="top">
-				<label class="radio radio-custom ' . $but_1 . '"><input type="radio" ' . $but_1 . ' value="1" name="{varName}" id="ch{varName}"><i class="radio ' . $but_1 . '"></i>'._YES.'</label>
-			</td>
-			<td>&nbsp&nbsp</td>
-			<td valign="top">
-				<label class="radio radio-custom ' . $but_2 . '"><input type="radio" ' . $but_2 . ' value="0" name="{varName}" id="ch{varName}"><i class="radio ' . $but_2 . '"></i>'._NO.'</label>
-				</td>
-				
-	</tr>
-	</table>';
-
-	
-	
-	
+	<div class="switch switch-info round switch-inline">
+		<input type="hidden" name="{varName}" value="0">
+		<input id="ch{varName}" name="{varName}" type="checkbox" '.$but_1.' value="1">
+		<label for="ch{varName}"></label>		
+	</div>';
 }
 
 function changeuGroup($var)
 {
 global $adminTpl, $db, $user;
-    $content = '<select name="{varName}">';
+    $content = '<select class="form-control" name="{varName}">';
 	$query2 = $db->query("SELECT * FROM `" . USER_DB . "`.`" . USER_PREFIX . "_groups`");
 	while($rows2 = $db->getRow($query2)) 
 	{
@@ -841,7 +829,7 @@ function changeModule()
 {
 global $config, $core;
 	$exceMods = array('feed', 'pm', 'search', 'poll');
-    $content = '<select name="{varName}">';
+    $content = '<select class="form-control" name="{varName}">';
 	foreach ($core->getModList() as $module) 
 	{
 		if(!in_array($module, $exceMods) && !empty($core->tpl->modules[$module]))
@@ -859,21 +847,12 @@ function yesNo($file, $global, $var)
 global $adminTpl, $$global;
 	$conf = $$global;
 	$but_1 = ($conf[$var] == 1 ) ? "checked" : "";
-	$but_2 = ($conf[$var] == 0) ? "checked" : "";	
 	return '
-	<table>
-	<tr>
-	<td valign="top">
-				<label class="radio radio-custom ' . $but_1 . '"><input type="radio" ' . $but_1 . ' value="1" name="{varName}" id="ch{varName}"><i class="radio ' . $but_1 . '"></i>'._YES.'</label>
-			</td>
-			<td>&nbsp&nbsp</td>
-			<td valign="top">
-				<label class="radio radio-custom ' . $but_2 . '"><input type="radio" ' . $but_2 . ' value="0" name="{varName}" id="ch{varName}"><i class="radio ' . $but_2 . '"></i>'._NO.'</label>
-				</td>
-		
-				
-	</tr>
-	</table>';
+	<div class="switch switch-info round switch-inline">
+		<input type="hidden" name="{varName}" value="0">
+		<input id="ch{varName}" name="{varName}" type="checkbox" '.$but_1.' value="1">
+		<label for="ch{varName}"></label>		
+	</div>';
 
 }
 
@@ -894,7 +873,7 @@ global $adminTpl, $files_conf, $select;
 function changeLang()
 {
 global $adminTpl, $config, $core;
-	$content = "<select name=\"" . $config['lang'] . "[lang]\" id=\"lang\" class=\"textinput\" >";
+	$content = "<select class=\"form-control\" name=\"" . $config['lang'] . "[lang]\" id=\"lang\" class=\"textinput\" >";
 	foreach($core->getLangList(true) as $_ => $massa)
 	{
 		$sel = ($config['lang'] == $massa[0]) ? 'selected' : '';
@@ -946,7 +925,7 @@ global $adminTpl, $config;
 function changeTpl()
 {
 global $adminTpl, $config;
-	$content = "<select class=\"other\" name=\"{varName}\">";
+	$content = "<select class=\"form-control\" name=\"{varName}\">";
 	$path = ROOT.'usr/tpl/';
 	$dh = opendir($path);
 	$c=0;
@@ -1027,77 +1006,75 @@ switch(isset($url[2]) ? $url[2] : null) {
 						$langArr[$flang] = $$varName;
 					}
 				}
-			}
-			
-			require(ROOT.'etc/'.$url[2].'.config.php');
-			
+			}			
+			require(ROOT.'etc/'.$url[2].'.config.php');			
 			$parseConf = $configBox[$url[2]];
 			$varName = $configBox[$url[2]]['varName'];
-			$confArr = $$varName;
-			
+			$confArr = $$varName;			
 			$adminTpl->admin_head(_CONFIGURATION . ' | ' . $parseConf['title']);
-		
-			echo '<form action="{ADMIN}/config/save" method="post" role="form"  data-parsley-validate="" novalidate="">';
+			$adminTpl->footIncludes[''] = '<script src="'.PLUGINS.'js/anchor.js"></script>
+			<script>
+				$( \'document\' ).ready( function() {
+					$( \'a[href*=#].anchored\').anchor( {
+						transitionDuration : 500,
+						transitionTimingFunction: \'swing\'
+					} );
+				} );
+			</script>';
+			$adminTpl->open();
+			echo '<section id="content" class="table-layout animated fadeIn">
+						<div class="tray tray-center" style="height: 763px;">
+							<form action="{ADMIN}/config/save" method="post"  role="form" class="form-horizontal parsley-form" data-parsley-validate>';	
 			if(isset($url[3]) && $url[3] == 'ok')
 			{
-				$adminTpl->info(_SUCCESS_SAVE);
-				echo '<br />';
+				$adminTpl->alert('success', $lang['info'], $lang['success_save']);				
 			}
-
-			
-			$adminTpl->open();
-		
 			foreach($parseConf['groups'] as $group)
 			{
-				echo '<div class="row">
-			<div class="col-lg-12">
-				<section class="panel">
-					<div class="panel-heading no-border">
-						<b>' . $group['title'] . '</b>
-					</div>
-				<div class="panel-body">
-				<div class="switcher-content">
-				<div class="form-horizontal parsley-form">
-				';
-			  foreach($group['vars'] as $var => $varArr)
-			  {
-				echo '
-				<div class="form-group">
-					<label class="col-sm-3 control-label">' . $varArr['title'] . '</label>
-					<div class="col-sm-4">';
-					    
-					
-				
-					echo (isset($confArr[$var]) ? str_replace(array('{varName}', '{var}'), array($config['lang'].'['.$var.']', $confArr[$var]), $varArr['content']) : $varArr['content']);
-				
-				echo '	<p class="help-block">' . $varArr['description'] . '</p>
-					</div>
-				</div>';
-			  }
-			  echo '			
-	<div align="right" style="padding-bottom:5px;"><input type="submit" class="btn btn-success" value="'._SAVE.'"></div>
-	</div>
-</div>
-				</section></div>
-				</div>';
+				echo '<div id="'.translit($group['title']).'" class="panel panel-info panel-border top mb35">
+							<div class="panel-heading">
+								<span class="panel-title">'. $group['title'].'</span>
+							</div>
+							<div class="panel-body bg-white">';
+							foreach($group['vars'] as $var => $varArr)
+							{
+								echo '<div class="form-group">
+											<label class="col-sm-4 control-label">'. $varArr['title'] .':</label>
+											<div class="col-sm-8">
+												' . (isset($confArr[$var]) ? str_replace(array('{varName}', '{var}'), array($config['lang'].'['.$var.']', $confArr[$var]), $varArr['content']) : $varArr['content']) . '
+												<p class="help-block">'. $varArr['description'] .'</p>
+											</div>	
+										</div>';
+							}
+						   echo '<div align="right" style="padding-bottom:5px;"><input type="submit" class="btn btn-success" value="' . _SAVE . '" /></div></div></div>';
 			}
-			echo '</table>
-			
-			
-			<input type="hidden" size="20" name="conf_file" class="form-control" value="' . $url[2] . '" maxlength="100" maxsize="100" />
-			<input type="hidden" size="20" name="conf_arr_name" class="form-control" value="' . $varName . '" maxlength="100" maxsize="100" />
-			
-			</form>';
+			echo '<input type="hidden" size="20" name="conf_file" class="form-control" value="' . $url[2] . '" maxlength="100" maxsize="100" /><input type="hidden" size="20" name="conf_arr_name" class="form-control" value="' . $varName . '" maxlength="100" maxsize="100" />			
+			</form>            
+			</div>
+			<aside data-tray-height="match" class="tray tray-right tray320" style="height: 568px;">
+				<div id="nav-spy">
+				 <b>'._CATS.':</b>
+				  <ul data-smoothscroll="-125" data-spy="affix" data-offset-top="200" class="nav tray-nav tray-nav-border affix-top">';
+					foreach($parseConf['groups'] as $group)
+					{		  
+						echo '<li class="nav-primary">
+								<a class="anchored" href="#'.translit($group['title']).'"> '.$group['title'].'</a>
+							</li>';
+					}
+					echo '
+				  </ul>
+				</div>
+			  </aside>
+			</section>';
 			$adminTpl->close();
-
 			$adminTpl->admin_foot();
 		}
 		else
 		{
 			$adminTpl->admin_head(_CONFIGURATION);
+			echo '<div id="content" class="animated fadeIn">';	
 			$num_configs = count($configs);
-			$count_configs = 0;
-			
+			$count_configs = 0;			
 			$subcount = 0;
 			foreach($configs as $subname => $subrow) 
 			{
@@ -1105,20 +1082,12 @@ switch(isset($url[2]) ? $url[2] : null) {
 				
 				$arr[$subcount] = $subname;
 			}
-				$adminTpl->open();	
-			echo '<div class="row">
-			<div class="col-lg-12">
-				<section class="panel">
-					<div class="panel-heading no-border">
-						<b>'._CONFIGURATION.':</b>
+			$adminTpl->open();	
+			echo '<div class="panel panel-dark panel-border top">
+					<div class="panel-heading">
+						<span class="panel-title">'._CONFIGURATION.'</span>	
 					</div>
-					<div class="panel-body">
-				<div class="switcher-content">
-					';
-
-						
-	
-			
+				<div class="panel-body">';
 			foreach($configs as $name => $row) 
 			{
 				if(isset($row['file'])) require ROOT . 'etc/' . $row['file'] . '.config.php';
@@ -1126,15 +1095,17 @@ switch(isset($url[2]) ? $url[2] : null) {
 				$val_name = $name;
 				echo '<div style="cursor:pointer"  onclick="document.location.href = \'{ADMIN}/config/' . $val_name . '\';">
 					<label style="cursor:pointer" class="control-label">'. $row['name'] .': (' . count($$row['param']) . ')</label><br>
-					'.$row['description'].'
-				<br>				
-				</div><br>	
-			';
-			}
-			echo '	</div></div>
-				</section></div>
-				</div>';
-			$adminTpl->close();
+					'.$row['description'].'<br></div><br>';
+			}	
+			echo '</div></div>';	
+			$adminTpl->close();		
+			$adminTpl->admin_foot();
+		}
+	break;
+	
+	case 'modules':
+			$adminTpl->admin_head(_CONFIGURATION);
+			echo '<div id="content" class="animated fadeIn">';	
 			foreach(glob(ROOT.'usr/modules/*/admin/list.php') as $listed) 
 			{
 				$file = $listed;
@@ -1142,41 +1113,28 @@ switch(isset($url[2]) ? $url[2] : null) {
 				$file = str_replace('/admin/list.php', '', $file);				
 				$core->loadLangFile('usr/modules/'.$file.'/admin/lang/{lang}.admin.php');
 				include($listed);
-			}
-			
+			}			
 			$toconfig['_smiles'] = array('name' => _SMILES,'link' => 'smiles','param'=>'smiles');
 			$toconfig['_blocks'] = array('name' => _BLOCK_STANDART,'link' => 'blocks/standard','param'=>'blocks/standard');
 			if(!empty($toconfig))
 			{
-			$adminTpl->open();
-				echo '<div class="row">
-			<div class="col-lg-12">
-				<section class="panel">
-					<div class="panel-heading no-border">
-						<b>'._CONFIG_MODULES.'</b>
-					</div>
-					<div class="panel-body">
-				<div class="switcher-content"><div class="_open_title"></div>';
-				
-				echo '<br style="clear:both" />';
-				foreach($toconfig as $name => $row) 
-				{
-				echo '<div style="cursor:pointer"  onclick="document.location.href = \'{ADMIN}/' . $row['link'] . '\';">
-					<label style="cursor:pointer" class="control-label">'. $row['name'] .':</label><br>
-					Настройки раздела: '. $row['name'].'
-				<br>				
-				</div><br>	
-			';
-					
-				}
-				echo '	</div></div>
-				</section></div>
-				</div>';
+				$adminTpl->open();
+				echo '<div class="panel panel-dark panel-border top">
+						<div class="panel-heading">
+							<span class="panel-title">'.$lang['config_modules'].'</span>	
+						</div>
+						<div class="panel-body">';
+						foreach($toconfig as $name => $row) 
+						{
+						echo '<div style="cursor:pointer"  onclick="document.location.href = \'{ADMIN}/' . $row['link'] . '\';">
+									<label style="cursor:pointer" class="control-label">'. $row['name'] .':</label><br>Настройки раздела: '. $row['name'].'<br>				
+							</div><br>	';							
+						}
+				echo '</div></div>';	
 				$adminTpl->close();
+				$adminTpl->admin_foot();
 			}
-			$adminTpl->admin_foot();
-		}
-	break;
+		break;
 
 	case 'doit':
 		$name = $url[3];
@@ -1243,31 +1201,34 @@ switch(isset($url[2]) ? $url[2] : null) {
 	case "save":
 		$file = 'etc/{lang}'.$_POST['conf_file'].'.config.php';
 		$conf_arr_name = $_POST['conf_arr_name'];
-		foreach($_POST as $lang => $arr)
+		foreach($_POST as $langs => $arr)
 		{
-			if(is_array($arr) && isset($core->langsLang[$lang]))
+			if(is_array($arr) && isset($core->langsLang[$langs]))
 			{
 				$content = '';
-				if($config['lang'] == $lang) 
+				if($config['lang'] == $langs) 
 				{
 					$content .= "global $$conf_arr_name;\n";
 					$content .= "\$$conf_arr_name = array();\n";
 				}
+				
+			
+				
 				$html = array('off_text', 'commentSignature', 'commentEditText');
-				foreach($arr as $k => $val) 
-				{
+				foreach($arr as $k => $val) 				{
+						
 					if($k != 'conf_arr_name' && $k != 'conf_file') 
 					{
 						if(!is_array($val)) {
 							if(!in_array($k, $html))
 							{
-								if(($config['lang'] != $lang && $root_conf[$k] != $val) || $config['lang'] == $lang) $content .= "\$".$conf_arr_name."['".$k."'] = \"".htmlspecialchars(str_replace('"', '\"', stripslashes($val)), ENT_QUOTES)."\";\n";
-								if($config['lang'] == $lang) $root_conf[$k] = $val;
+								if(($config['lang'] != $langs && $root_conf[$k] != $val) || $config['lang'] == $langs) $content .= "\$".$conf_arr_name."['".$k."'] = \"".htmlspecialchars(str_replace('"', '\"', stripslashes($val)), ENT_QUOTES)."\";\n";
+								if($config['lang'] == $langs) $root_conf[$k] = $val;
 							}
 							else
 							{
-								if(($config['lang'] != $lang && $root_conf[$k] != $val) || $config['lang'] == $lang) $content .= "\$".$conf_arr_name."['".$k."'] = \"".str_replace('"', '\"', stripslashes($val))."\";\n";
-								if($config['lang'] == $lang) $root_conf[$k] = $val;
+								if(($config['lang'] != $langs && $root_conf[$k] != $val) || $config['lang'] == $langs) $content .= "\$".$conf_arr_name."['".$k."'] = \"".str_replace('"', '\"', stripslashes($val))."\";\n";
+								if($config['lang'] == $langs) $root_conf[$k] = $val;
 							}
 						} else {
 							foreach($val as $karr => $varr) {
@@ -1279,7 +1240,7 @@ switch(isset($url[2]) ? $url[2] : null) {
 				if(!empty($content)) 
 				{
 					$result = "global $$conf_arr_name;\n".$content;
-					save_conf(str_replace('{lang}', ($config['lang'] == $lang ? '' : $lang.'.'), $file), $content);
+					save_conf(str_replace('{lang}', ($config['lang'] == $langs ? '' : $langs.'.'), $file), $content);
 				}
 				unset($content);
 			}

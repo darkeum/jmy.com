@@ -89,6 +89,7 @@ function ajaxPost(uri, id, data, type) {
 
 	xmlhttp.open('POST', link, true);
 	xmlhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+	alert(data);
 	xmlhttp.send(data);
 }
 

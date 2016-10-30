@@ -13,7 +13,7 @@
 define('ACCESS', true);
 define('TIMER', microtime(1));
 define('ROOT', dirname(__FILE__) . '/');
-define('PLUGINS', dirname(__FILE__) . '/usr/plugins/');
+define('PLUGINS', '/usr/plugins/');
 define('COOKIE_AUTH', 'auth_jmy');
 define('COOKIE_PAUSE', 'pause_jmy');
 define('PAUSE_TIME', 120);

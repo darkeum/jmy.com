@@ -1,9 +1,9 @@
 <?php
 
 /**
-* @name        JMY CMS
+* @name        JMY CORE
 * @link        http://jmy.su/
-* @copyright   Copyright (C) 2012-2014 JMY LTD
+* @copyright   Copyright (C) 2012-2017 JMY LTD
 * @license     LICENSE.txt (see attached file)
 * @version     VERSION.txt (see attached file)
 * @author      Komarov Ivan
@@ -17,19 +17,7 @@ class bb
 	function parse($text, $pubId, $html)
 	{
 	global $smileRepl, $smiles, $core, $config;
-
-	/*
-		if($core->html_editor == 1)
-		{
-			$replace = array(
-				'../../..' => $config['url'],
-			);
-			
-			$text = stripslashes(str_replace(array_keys($replace), array_values($replace), $text));
-
-			return $text;
-		}
-		*/
+	
 		if($pubId === true) $html = true;
 		
 		foreach($smiles as $smile => $info)
@@ -471,13 +459,7 @@ class bb
 	function htmltobb($text)
 	{
 	global $smileRepl, $smileRepl2, $smiles, $core;
-
-	/*
-		if($core->html_editor == 1)
-		{
-			return $text;
-		}
-	*/	
+	
 		foreach($smiles as $smile => $info)
 		{
 			$smileRepl .= $info['url'].'|';

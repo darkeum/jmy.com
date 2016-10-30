@@ -1,26 +1,20 @@
 <?php
 $config = include 'config/config.php';
-//TODO switch to array
 extract($config, EXTR_OVERWRITE);
-
-if (USE_ACCESS_KEYS != TRUE){
-	if (!isset($_GET['akey'], $access_keys) || empty($access_keys)){
-		die('Access Denied!');
-	}
-
-	$_GET['akey'] = strip_tags(preg_replace( "/[^a-zA-Z0-9\._-]/", '', $_GET['akey']));
-
-	if (!in_array($_GET['akey'], $access_keys)){
-		die('Access Denied!');
-	}
+define('RFILE', '../../../');
+define('ROOT', '../../../');
+require RFILE . 'lib/require.php';
+require RFILE . 'boot/sub_classes/upload.class.php';
+$auth = new auth(filter($_POST['hash'], 'a'));
+if(!$auth->user_info['admin'])
+{
+	 header('Location: /');
+    exit;
 }
 
 $_SESSION['RF']["verify"] = "RESPONSIVEfilemanager";
-
 if(isset($_POST['submit'])){
-
 	include 'upload.php';
-
 }
 else {
 include 'include/utils.php';

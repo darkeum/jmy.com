@@ -14,7 +14,7 @@ if (!defined('ACCESS')) {
 	header('Location: /');
 	exit;
 }
-
+global $lang;
 $component_array = array(
 	'config' => array (
 		'name' => _AP_CONF,
@@ -22,6 +22,7 @@ $component_array = array(
 		'shown' => 1,
 		'subAct' => array(
 			_AP_CONF_CONF => '',
+			$lang['config_modules'] => 'modules',
 			_AP_CONF_COPY => 'backup',
 		),
 	),

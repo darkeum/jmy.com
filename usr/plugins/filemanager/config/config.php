@@ -1,18 +1,14 @@
 <?php
 session_start();
-
 require_once '../../../define.php';
-
-
 if (!defined('ACCESS')) 
 {
     header('Location: /');
     exit;
 }
-
 require ROOT . 'etc/global.config.php';
 require ROOT . 'etc/files.config.php';
-
+global $files_conf;
 
 
 /*
@@ -32,15 +28,11 @@ require ROOT . 'etc/files.config.php';
 | ...
 |
 */
-
-
-
 $file_fff="";
 if (!empty($_SESSION["RF"]["fff"]))
 {
 	$file_fff = $_SESSION["RF"]["fff"];
 }
-
 /*
 |--------------------------------------------------------------------------
 | DON'T COPY THIS VARIABLES IN FOLDERS config.php FILES
@@ -137,7 +129,7 @@ $config = array(
 	| in Megabytes
 	|
 	*/
-	'MaxSizeUpload' => 100,
+	'MaxSizeUpload' => $files_conf['max_size'],
 
 
 	/*
@@ -145,7 +137,7 @@ $config = array(
 	| default language file name
 	|--------------------------------------------------------------------------
 	*/
-	'default_language' => "en_EN",
+	'default_language' => "ru",
 
 	/*
 	|--------------------------------------------------------------------------
@@ -268,11 +260,11 @@ $config = array(
 	//**********************
 	//Allowed extensions (lowercase insert)
 	//**********************
-	'ext_img'                                 => array( 'jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff', 'svg' ), //Images
-	'ext_file'                                => array( 'doc', 'docx', 'rtf', 'pdf', 'xls', 'xlsx', 'txt', 'csv', 'html', 'xhtml', 'psd', 'sql', 'log', 'fla', 'xml', 'ade', 'adp', 'mdb', 'accdb', 'ppt', 'pptx', 'odt', 'ots', 'ott', 'odb', 'odg', 'otp', 'otg', 'odf', 'ods', 'odp', 'css', 'ai' ), //Files
-	'ext_video'                               => array( 'mov', 'mpeg', 'm4v', 'mp4', 'avi', 'mpg', 'wma', "flv", "webm" ), //Video
-	'ext_music'                               => array( 'mp3', 'm4a', 'ac3', 'aiff', 'mid', 'ogg', 'wav' ), //Audio
-	'ext_misc'                                => array( 'zip', 'rar', 'gz', 'tar', 'iso', 'dmg' ), //Archives
+	'ext_img'                                 => explode(',' , str_replace(" ","",$files_conf['imgFormats'])), //Images
+	'ext_file'                                => explode(',' , str_replace(" ","",$files_conf['filesFormats'])), //Files
+	'ext_video'                               => explode(',' , str_replace(" ","",$files_conf['videoFormats'])), //Video
+	'ext_music'                               => explode(',' , str_replace(" ","",$files_conf['audioFormats'])), //Audio
+	'ext_misc'                                => explode(',' , str_replace(" ","",$files_conf['archiveFormats'])), //Archives
 
 	/******************
 	 * AVIARY config
@@ -302,7 +294,7 @@ $config = array(
 	 * JAVA upload
 	 *******************/
 	'java_upload'                             => true,
-	'JAVAMaxSizeUpload'                       => 200, //Gb
+	'JAVAMaxSizeUpload'                       => $files_conf['max_size']/1024, //Gb
 
 
 	//************************************
@@ -317,7 +309,7 @@ $config = array(
 	// path_from_filemanager/test/test1/
 	// PS if there isn't write permission in your destination folder you must set it
 	//
-	'fixed_image_creation'                    => false, //activate or not the creation of one or more image resized with fixed path from filemanager folder
+	'fixed_image_creation'                    => true, //activate or not the creation of one or more image resized with fixed path from filemanager folder
 	'fixed_path_from_filemanager'             => array( '../test/', '../test1/' ), //fixed path of the image folder from the current position on upload folder
 	'fixed_image_creation_name_to_prepend'    => array( '', 'test_' ), //name to prepend on filename
 	'fixed_image_creation_to_append'          => array( '_test', '' ), //name to appendon filename

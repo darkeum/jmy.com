@@ -15,6 +15,7 @@ if (!defined('ADMIN_ACCESS'))
     header('Location: /');
     exit;
 }
+global $lang;
 
 switch(isset($url[2]) ? $url[2] : null) 
 {
@@ -151,12 +152,20 @@ switch(isset($url[2]) ? $url[2] : null)
 		
 	case 'save':
 		foreach($_POST as $path => $html)
-		{
+		{			
 			if(eregStrt('usr/tpl/'.$config['tpl'], $path))
-			{
+			{	
+				$file =str_replace('usr/tpl/'.$config['tpl'], '', $path);
 				if(is_writable(str_replace('_tpl', '.tpl', $path)))
 				{
 					$fp = @fopen(str_replace('_tpl', '.tpl', $path), 'w');
+					fwrite($fp, stripslashes($html));
+					fclose($fp);
+					$save_is = true;
+				}
+				elseif (is_writable('usr/tpl/'.$config['tpl'].str_replace('_', '.', $file)))
+				{
+					$fp = @fopen('usr/tpl/'.$config['tpl'].str_replace('_', '.', $file), 'w');
 					fwrite($fp, stripslashes($html));
 					fclose($fp);
 					$save_is = true;
@@ -167,22 +176,8 @@ switch(isset($url[2]) ? $url[2] : null)
 	case 'edit_tpl':
 		$adminTpl->admin_head(_TPL_EDET);
 		$adminTpl->open();	
-		echo '<div class="row">
-				<div class="col-lg-12">
-					<section>
-						<nav class="navbar navbar-inverse" role="navigation"> 
-							<div class="navbar-header">
-								<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-									<span class="sr-only">'._TPL_EDET_CH.'</span>
-									<span class="icon-bar"></span>
-									<span class="icon-bar"></span>
-									<span class="icon-bar"></span>
-								</button>
-								<a class="navbar-brand">TPL</a>
-							</div>
-							<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-								<ul class="nav navbar-nav">';
-	
+		echo'<section id="content" class="table-layout animated fadeIn">
+				<div class="tray tray-center">';
         foreach(glob(ROOT.'usr/tpl/'.$config['tpl'].'/*/*.tpl') as $inFile)
         {
             $name = explode('usr/tpl/'.$config['tpl'].'/', $inFile);
@@ -211,7 +206,6 @@ switch(isset($url[2]) ? $url[2] : null)
 		$_names['news=news-main.tpl'] = _TPL_NAME_N_MAIN;
 		$_names['news=news-add.tpl'] = _TPL_NAME_N_ADD;
 		
-		
 		$_fold['blog'] = _TPL_FOLD_BLOG;
 		$_fold['board'] = _TPL_FOLD_BOARD;
 		$_fold['comments'] = _TPL_FOLD_COMM;
@@ -221,74 +215,64 @@ switch(isset($url[2]) ? $url[2] : null)
 		$_fold['news'] = _TPL_FOLD_NEWS;
 		$_fold['pm'] = _TPL_FOLD_PM;
 		$_fold['profile'] = _TPL_FOLD_PROFILE;
-		$_fold['search'] = _TPL_FOLD_SEARCH;		
-		echo '<li class="active dropdown">
-				<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">'._TPL_FOLD_MAIN.' <b class="caret"></b></a>
-				<ul class="dropdown-menu">';
-        foreach($zeroDirs as $file) 
-        {
-            $name = explode('usr/tpl/'.$config['tpl'].'/', $file);
-            $name = $name[1];
-            echo '<li>
-						<a href="{ADMIN}/templates/edit_tpl/' . $name . '">' . (isset($_names[$name]) ? $_names[$name] : $name) . '</a>
-				</li>';
-        }
-		echo '</ul>
-			</li>';
-        foreach($inDirs as $catalog => $files)
-        {
-				echo '<li class="dropdown">
-				<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown"> ' . (isset($_fold[$catalog]) ? $_fold[$catalog] : $catalog) . ' <b class="caret"></b></a>
-				<ul class="dropdown-menu">';          
-            foreach($files as $file)
-            {
-				$name = explode('/', $file);
-				$name = end($name);
-				$_a = explode('usr/tpl/'.$config['tpl'].'/', $file);
-				$absolute = str_replace('/', '=', end($_a));
-				echo '<li><a href="{ADMIN}/templates/edit_tpl/' . $absolute . '">' . (isset($_names[$absolute]) ? $_names[$absolute] : $name) . '</a></li>';
-            }
+		$_fold['search'] = _TPL_FOLD_SEARCH;
+	
+		if(isset($save_is)) $adminTpl->alert('success', $lang['info'], $lang['success_save']);
+		$codem = 'CodeMirror.fromTextArea("_code", {height: "dynamic",parserfile: ["parsexml.js", "parsecss.js", "tokenizejavascript.js", "parsejavascript.js", "parsehtmlmixed.js"],stylesheet: ["' . PLUGINS . 'highlight_code/xmlcolors.css", "' . $config['url'] . 'highlight_code/jscolors.css", "' . PLUGINS . '/usr/plugins/highlight_code/csscolors.css"], path: "' . PLUGINS . 'highlight_code/", lineNumbers: true});';
+		$file = $url[3];
+		$adminTpl->footIncludes[] ='<script src="' . PLUGINS . '/highlight_code/codemirror.js" type="text/javascript"></script>
+									<script type="text/javascript">	ajaxGetJS(\'' . ADMIN . '/templates/ajax/loadtpl/'.$file.'\', \''.$codem .'\', \'_div\');
+									</script>';
+		$adminTpl->headerIncludes[] = '<link rel="stylesheet" type="text/css" href="'.$adminTpl->file_dir.'assets/css/ui.fancytree.min.css">';			
+		$adminTpl->js_code[] = ' $("#tree5").fancytree({
+				click: function(event, data)
+				{ // allow re-loads
+					var node = data.node,
+					orgEvent = data.originalEvent;
+					if(node.data.href){						
+						ajaxGetJS(\'' . ADMIN . '/templates/ajax/loadtpl/\'+node.data.href, \''.$codem .'\', \'_div\');						
+					}
+				},
+				activateKey("id1.2"),
+			});';
+			echo '<div id="_div"></div>			
+			</div>
+			<aside class="tray tray-right tray320">
+						<h5>'._CATS.':</h5>
+						<hr class="alt short">
+			  <div id="tree5" class="fancytree-radio">
+                  <ul id="treeData" style="display: none;">';
+                   	$count_folder = 0;	
+					foreach($inDirs as $catalog => $files)
+					{
+						$count_folder++;
+						$count_files = 0;
+						echo '<li id="'.$count_folder.'" class="folder">'.(isset($_fold[$catalog]) ? $_fold[$catalog] : $catalog).'<ul>';
+						foreach($files as $file)
+						{
+							$count_files ++;
+							$name = explode('/', $file);
+							$name = end($name);
+							$_a = explode('usr/tpl/'.$config['tpl'].'/', $file);
+							$absolute = str_replace('/', '=', end($_a));
+							echo '<li id="'.$count_folder.'.'.$count_files.'"><a href="'.$absolute.'">' . (isset($_names[$absolute]) ? $_names[$absolute] : $name) . '</a></li>';
+						}
+						echo '</ul>';			
+					}
+					$count_files = 0;
+					foreach($zeroDirs as $file) 
+					{
+						$count_files ++;
+						$name = explode('usr/tpl/'.$config['tpl'].'/', $file);
+						$name = $name[1];
+						echo '<li id="'.$count_files.'"><a href="' . $name . '">' . (isset($_names[$name]) ? $_names[$name] : $name) . '</a></li>';
+					}						
 			echo '</ul>
-			</li>';
-        }
-		echo '</ul>
-		</div>
-	</nav>
-</section>
-</div>
-</div>';	
-if(isset($save_is)) $adminTpl->info(_TPL_INFO_5);
-$file = (isset($url[3]) && file_exists('usr/tpl/' . $config['tpl'] . '/'.str_replace('=', '/', $url[3]))) ? str_replace('=', '/', $url[3]) : 'index.tpl';
-		$text = htmlspecialchars(file_get_contents(ROOT . 'usr/tpl/' . $config['tpl'] . '/'.$file), ENT_QUOTES);
-		$count_rows = count(explode("\n", $text))*20;	
-echo '<div class="row">
-				<div class="col-lg-12">
-					<section class="panel">
-						<div class="panel-heading no-border">
-							<b>'._TPL_EDET.' ('.$file.')</b>
-						</div>
-						<div class="panel-body">
-							<div class="switcher-content">';
-		echo '<div class="_edit_right">';
-			
-		echo '<form action="{ADMIN}/templates/save/' .  str_replace('/', '=', $file) . '"  method="post" style="margin:0; padding:0;">
-		<div class="_code">		
-		<textarea name="usr/tpl/' . $config['tpl'] . '/'. $file . '" class="textarea" id="_code">' .$text . '</textarea>
-		<br />
-		<div class="_save_me">
-		<input name="submit" type="submit" class="btn btn-success" value="'._SAVE.'" /> 
-		</div>
-		</div>		
-		</form>';
-		echo '</div><br style="clear:both" />';
-		echo '<script src="' . $config['url'] . '/usr/plugins/highlight_code/codemirror.js" type="text/javascript"></script><script type="text/javascript">var editor = CodeMirror.fromTextArea(\'_code\', {height: "dynamic",parserfile: ["parsexml.js", "parsecss.js", "tokenizejavascript.js", "parsejavascript.js", "parsehtmlmixed.js"],stylesheet: ["' . $config['url'] . '/usr/plugins/highlight_code/xmlcolors.css", "' . $config['url'] . '/usr/plugins/highlight_code/jscolors.css", "' . $config['url'] . '/usr/plugins/highlight_code/csscolors.css"], path: "' . $config['url'] . '/usr/plugins/highlight_code/", lineNumbers: true});
-</script>';
-echo '										
-							</div>
-						</div>
-					</section>
-				</div>
-			</div>';
+                </div>
+              </div>
+		  </div>
+         </aside>
+		</section>';
 		$adminTpl->close();
 		$adminTpl->admin_foot();
 		break;		
@@ -460,6 +444,40 @@ echo '
 			setcookie('theme', $tpl_choose, time(), '/');
 			location(ADMIN.'/templates/choose_ok');
 		}
+		break;
+	
+	case 'ajax':
+		global $adminTpl,  $db;
+			ajaxInit();
+			$type = $url[3];			
+			switch($type) 
+			{
+				case "loadtpl":
+				$file = (isset($url[4]) && file_exists('usr/tpl/' . $config['tpl'] . '/'.str_replace('=', '/', $url[4]))) ? str_replace('=', '/', $url[4]) : 'index.tpl';
+				$text = htmlspecialchars(file_get_contents(ROOT . 'usr/tpl/' . $config['tpl'] . '/'.$file), ENT_QUOTES);
+				$count_rows = count(explode("\n", $text))*20;	
+				
+				echo '<form action="'.ADMIN.'/templates/save/' .  str_replace('/', '=', $file) . '"  method="post" id="form" class="form" name="form">
+						<div class="panel panel-dark panel-border top">			
+							<div class="panel-heading">
+								<span class="panel-title">'._TPL_EDET.' ('.$file.')</span>	
+								<div class="widget-menu pull-right" >
+									<div style="padding-top: 12px !important;" class="btn-group">
+									
+
+									<input name="submit" type="submit" class="btn btn-xs btn-success btn-block" value="'._SAVE.'">
+									</div>					
+								</div>
+							</div>
+							<div class="panel-body">
+								<div class="_code">		
+									<textarea name="usr/tpl/' . $config['tpl'] . '/'. $file . '" class="textarea" id="_code">' .$text . '</textarea>
+								</div>	
+							</div>	
+						</div>
+					</form>';
+				break;
+			}
 		break;
 		
 }

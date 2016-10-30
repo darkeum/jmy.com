@@ -246,17 +246,15 @@ function checkbox($name, $val, $text = null)
 * $val - тру ор фалсе
 */
 function radio($name, $val) 
-{
-	$but_1 = ($val) ? "checked" : "";
-	$but_2 = (!$val) ? "checked" : "";
+{	
+	$but_1 = ($val) ? 'checked=""' : '';
 	return '
-	<div class="switch switch-success round switch-inline">
-                            <input id="radio_' . $name . '" type="checkbox" name="' . $name . '" ' . $but_1 . '>
-                            <label for="radio_' . $name . '"></label>
-                          </div>
-	
-				
-			';
+	<div class="switch switch-info round switch-inline">
+		<input type="hidden" name="' . $name . '" value="0">
+		<input id="radio_' . $name . '" name="' . $name . '" type="checkbox" '.$but_1.' value="1">
+		<label for="radio_' . $name . '"></label>		
+	</div>';
+			
 }
 
 /*
@@ -542,16 +540,23 @@ function commentLink($mod, $id)
 //настроки в модулях
 function generateConfig($configBox, $type, $link, $ok = false)
 {
-global $adminTpl, $url, $core;
+global $adminTpl, $url, $core, $lang;
 	require (ROOT.'etc/'.$type.'.config.php');
 	$parseConf = $configBox[$type];
 	$varName = $configBox[$type]['varName'];
 	$confArr = $$varName;
-	$adminTpl->admin_head(_BASE_CONFIG .' | ' . $parseConf['title']);
+	$adminTpl->admin_head($lang['config_module'] .' | ' . $parseConf['title']);
+	$adminTpl->footIncludes[''] = '<script src="'.PLUGINS.'js/anchor.js"></script>
+			<script>
+				$( \'document\' ).ready( function() {
+					$( \'a[href*=#].anchored\').anchor( {
+						transitionDuration : 500,
+						transitionTimingFunction: \'swing\'
+					} );
+				} );
+			</script>';
 	if($ok)
 	{
-		$adminTpl->info(_SUCCESS_SAVE);
-		$adminTpl->admin_foot();
 		$file = 'etc/'.$_POST['conf_file'].'.config.php';
 		$conf_arr_name = $_POST['conf_arr_name'];
 		$content = "global $$conf_arr_name;\n";
@@ -574,20 +579,18 @@ global $adminTpl, $url, $core;
 				}
 			}
 		}
-		save_conf($file, $content);
-
-		echo '<br />';
-		
+		save_conf($file, $content);		
 		require (ROOT.'etc/'.$type.'.config.php');
 		$confArr = $$varName;
 	}
-	else
-	{
 	$adminTpl->open();
-	echo '  <section id="content" class="table-layout animated fadeIn">
-<!-- begin: .tray-center-->
-          <div class="tray tray-center" style="height: 763px;">
-			<form action="' . $link . '"  method="post"  role="form" class="form-horizontal parsley-form" data-parsley-validate>';	
+	echo ' <section id="content" class="table-layout animated fadeIn">
+          <div class="tray tray-center" style="height: 763px;">';		  
+			if($ok)
+			{		  
+				$adminTpl->alert('success', $lang['info'], $lang['success_save']);	
+			}
+			echo '<form action="' . $link . '"  method="post"  role="form" class="form-horizontal parsley-form" data-parsley-validate>';	
 				foreach($parseConf['groups'] as $group)
 				{
 					echo '<div id="'.translit($group['title']).'" class="panel panel-info panel-border top mb35">
@@ -598,8 +601,8 @@ global $adminTpl, $url, $core;
 				  foreach($group['vars'] as $var => $varArr)
 				  {
 					echo '<div class="form-group">
-								<label class="col-sm-3 control-label">'. $varArr['title'] .':</label>
-								<div class="col-sm-4">
+								<label class="col-sm-4 control-label">'. $varArr['title'] .':</label>
+								<div class="col-sm-8">
 									' . (isset($confArr[$var]) ? str_replace(array('{varName}', '{var}'), array($var, $confArr[$var]), $varArr['content']) : $varArr['content']) . '
 									<p class="help-block">'. $varArr['description'] .'</p>
 								</div>
@@ -608,13 +611,10 @@ global $adminTpl, $url, $core;
 				  echo '<div align="right" style="padding-bottom:5px;"><input type="submit" class="btn btn-success" value="' . _SAVE . '" /></div></div></div>';
 				}
 	
-	echo '<input type="hidden" size="20" name="conf_file" class="textinput" value="' . $type . '" maxlength="100" maxsize="100" />
-	<input type="hidden" size="20" name="conf_arr_name" class="textinput" value="' . $varName . '" maxlength="100" maxsize="100" />
-	
-	</form>
-            
+			echo '<input type="hidden" size="20" name="conf_file" class="textinput" value="' . $type . '" maxlength="100" maxsize="100" />
+					<input type="hidden" size="20" name="conf_arr_name" class="textinput" value="' . $varName . '" maxlength="100" maxsize="100" />	
+			</form>            
           </div>
-          <!-- begin: .tray-right-->
           <aside data-tray-height="match" class="tray tray-right tray320" style="height: 568px;">
             <div id="nav-spy">
 			 <b>'._CATS.':</b>
@@ -622,14 +622,14 @@ global $adminTpl, $url, $core;
 			  	foreach($parseConf['groups'] as $group)
 				{		  
 					echo '<li class="nav-primary">
-							<a href="'. $core->fullURL().'#'.translit($group['title']).'"> '.$group['title'].'</a>
+							<a class="anchored" href="#'.translit($group['title']).'"> '.$group['title'].'</a>
 						</li>';
 				}
 				echo '
               </ul>
             </div>
           </aside>
-		      </section>
+		</section>
 ';
 	
 	
@@ -637,7 +637,6 @@ global $adminTpl, $url, $core;
 	
 	$adminTpl->close();
 	$adminTpl->admin_foot();
-	}
 }
 
 function generateConfigBLOCK($configBox, $type, $link, $ok = false)

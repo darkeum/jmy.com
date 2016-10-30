@@ -14,8 +14,9 @@ if (!defined('ACCESS')) {
     exit;
 }
 
-global $cache;
+global $cache, $core;
 
+echo $core->tpl->vars['D_YEAR'];
 $calContent = $cache->do_get('calendar_block_'.$core->lang);
 
 if(empty($calContent))

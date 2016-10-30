@@ -10,6 +10,7 @@
 	<link rel="stylesheet" type="text/css" href="/{ADM_THEME}/assets/css/admin-forms.css">
 	<link rel="stylesheet" type="text/css" href="/{ADM_THEME}/assets/css/summernote.css">
     <link rel="stylesheet" type="text/css" href="/{ADM_THEME}/assets/css/bootstrap-editable.css">
+	<link rel="stylesheet" type="text/css" href="/{ADM_THEME}/assets/css/bootstrap-switch.min.css">
     <link rel="stylesheet" type="text/css" href="/{ADM_THEME}/assets/css/address.css">
 	<link rel="stylesheet" type="text/css" href="http://static.livedemo00.template-help.com/wt_58708/plugins/css/magnific-popup.css">	
     <link rel="stylesheet" type="text/css" href="/{ADM_THEME}/assets/css/typeahead.js-bootstrap.css">
@@ -32,7 +33,8 @@
     <script src="/{ADM_THEME}/assets/js/main.js"></script>
 	<script src="/{ADM_THEME}/assets/js/widgets.js"></script>
 	<script src="/{ADM_THEME}/assets/js/script.js"></script>
-	<script src="//cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.4.0/clipboard.min.js"></script>
+		<script src="/{ADM_THEME}/assets/js/bootstrap-switch.min.js"></script>
+	
   </head>  
   <body data-spy="scroll" data-target="#nav-spy" data-offset="300" class="form-editors-page {BODY_CLASS}"> 
     <div id="main">    
@@ -334,14 +336,24 @@
         // Init Theme Core
         Core.init();
         // Init Demo JS
-        Demo.init();     
+        Demo.init(); 
+		$('input[id="switch"]').bootstrapSwitch('state', true, true);	
         {JS_CODE}         
       });
     </script>
-<script type="text/javascript">
-						(function(){
-							new Clipboard('#copy-button');})();
-					</script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.4.0/clipboard.min.js"></script>
+	<script>
+    var btn = document.getElementById('btn_copy');
+    var clipboard = new Clipboard(btn);
+
+    clipboard.on('success', function(e) {
+        console.log(e);
+    });
+
+    clipboard.on('error', function(e) {
+        console.log(e);
+    });
+    </script>
 	
   </body>
 </html>

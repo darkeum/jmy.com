@@ -15,9 +15,9 @@
 </head>
 <body class="home blog custom-background">
   <div class="preloader">
-		<div class="preloaderInner">
-			<i class="fa fa-3x fa-circle-o-notch fa-spin"></i>
-		</div>
+    <div class="preloaderInner">
+      <i class="fa fa-3x fa-circle-o-notch fa-spin"></i>
+    </div>
   </div>
   <div id="page" class="hfeed site">    
     <header id="masthead" class="site-header" role="banner">
@@ -26,30 +26,30 @@
           <h1 class="site-title"><a href="{%URL%}" rel="home">{%SITE_NAME%}</a></h1>
           <h2 class="site-description">{%SITE_SLOGAN%}</h2>
         </div>    
-		<div class="site-social">
-			<div class="socialLine">
-				<a href="{%SHARE_VK%}" onclick="shareWindow(this.href); return false;" title="Вконтакте" rel="nofollow">
-					<i class="fa spaceLeftDouble fa-vk spaceLeftRight"></i>
-				</a>		
-				<a href="{%SHARE_FB%}" onclick="shareWindow(this.href); return false;" title="Facebook" rel="nofollow">
-					<i class="fa spaceLeftDouble fa-facebook spaceLeftRight"></i>
-				</a>
-				<a href="{%SHARE_TW%}" onclick="shareWindow(this.href); return false;" title="Twitter" rel="nofollow">
-					<i class="fa spaceLeftDouble fa-twitter spaceLeftRight"></i>
-				</a>					
-				<a href="{%SHARE_GP%}" onclick="shareWindow(this.href); return false;" title="Google Plus" rel="nofollow">
-					<i class="fa spaceLeftDouble fa-google-plus spaceLeftRight"></i>
-				</a>
-				<a href="{%SHARE_TB%}" onclick="shareWindow(this.href); return false;" title="Tumblr" rel="nofollow">
-					<i class="fa spaceLeftDouble fa-tumblr spaceLeftRight"></i>
-				</a>							
-				<a href="{%SHARE_LI%}" onclick="shareWindow(this.href); return false;" title="Linkedin" rel="nofollow">
-					<i class="fa spaceLeftDouble fa-linkedin spaceLeftRight"></i>
-				</a>				
-				<a href="{%SHARE_PT%}" title="Pinterest" rel="nofollow"><i class="fa spaceLeftDouble fa-pinterest spaceLeftRight"></i></a>
-				<a href="{%SHARE_MA%}" onclick="shareWindow(this.href); return false;" title="Почта" rel="nofollow"><i class="fa spaceLeftDouble fa-envelope-o spaceLeftRight"></i></a>
-			</div>
-		</div> 
+    <div class="site-social">
+      <div class="socialLine">
+        <a href="{%SHARE_VK%}" onclick="shareWindow(this.href); return false;" title="Вконтакте" rel="nofollow">
+          <i class="fa spaceLeftDouble fa-vk spaceLeftRight"></i>
+        </a>    
+        <a href="{%SHARE_FB%}" onclick="shareWindow(this.href); return false;" title="Facebook" rel="nofollow">
+          <i class="fa spaceLeftDouble fa-facebook spaceLeftRight"></i>
+        </a>
+        <a href="{%SHARE_TW%}" onclick="shareWindow(this.href); return false;" title="Twitter" rel="nofollow">
+          <i class="fa spaceLeftDouble fa-twitter spaceLeftRight"></i>
+        </a>          
+        <a href="{%SHARE_GP%}" onclick="shareWindow(this.href); return false;" title="Google Plus" rel="nofollow">
+          <i class="fa spaceLeftDouble fa-google-plus spaceLeftRight"></i>
+        </a>
+        <a href="{%SHARE_TB%}" onclick="shareWindow(this.href); return false;" title="Tumblr" rel="nofollow">
+          <i class="fa spaceLeftDouble fa-tumblr spaceLeftRight"></i>
+        </a>              
+        <a href="{%SHARE_LI%}" onclick="shareWindow(this.href); return false;" title="Linkedin" rel="nofollow">
+          <i class="fa spaceLeftDouble fa-linkedin spaceLeftRight"></i>
+        </a>        
+        <a href="{%SHARE_PT%}" title="Pinterest" rel="nofollow"><i class="fa spaceLeftDouble fa-pinterest spaceLeftRight"></i></a>
+        <a href="{%SHARE_MA%}" onclick="shareWindow(this.href); return false;" title="Почта" rel="nofollow"><i class="fa spaceLeftDouble fa-envelope-o spaceLeftRight"></i></a>
+      </div>
+    </div> 
       <nav id="site-navigation" class="main-navigation smallPart" role="navigation">
         <button class="menu-toggle">Меню<i class="fa fa-align-justify"></i></button>
         <div class="menu-menu-1-container">
@@ -100,68 +100,68 @@
     </header>
     <div id="content" class="site-content">
       <div id="primary" class="content-area">
-        <main id="main" class="site-main" role="main">		
+        <main id="main" class="site-main" role="main">    
           {%MODULE%}         
         </main>
       </div>
       <div id="secondary" class="widget-area" role="complementary">
         <aside id="search-2" class="widget widget_search">
-		 {%BLOCKS:FILE:search%}           
+     {%BLOCKS:FILE:search%}           
         </aside>  
-		<aside class="widget">
+    <aside class="widget">
            <div class="widget-title"><h3>Профиль</h3></div>
            [guest]
-		   <form action="profile/login" method="post" name="login" onkeypress="ctrlEnter(event, this);">
-				<table width="100%" border="0" cellspacing="0" cellpadding="1" align="center" style=" border-spacing: 7px 6px;">
-					<tr>
-						<td>Логин:</td>
-						<td><input type="text" name="nick" size="10" maxlength="25" class="binput" /></td>
-					</tr>
-					<tr>
-						<td>Пароль:</td>
-						<td><input type="password" name="password" size="10" maxlength="25" class="binput" /></td>
-					</tr>
-					<tr>
-						<td>
-							<div class="socialWidget">
-								<input type="submit" value="Войти"  class="socialWidget" />
-							</div>
-						</td>
-						[social]
-						<td>
-							<div class="socialWidget">
-								<a href="{%AUTH_VK%}" title="Авторизация через Вконтакте" rel="nofollow">
-									<i class="fa spaceLeftDouble fa-vk spaceLeftRight"></i>
-								</a>
-								<a href="{%AUTH_FB%}" title="Авторизация через Facebook"rel="nofollow">
-									&#160;<i class="fa spaceLeftDouble fa-facebook spaceLeftRight"></i>&#160;
-								</a>
-								<a href="{%AUTH_GP%}" title="Авторизация через Google+"rel="nofollow">
-									&#160;<i class="fa spaceLeftDouble fa-google-plus spaceLeftRight"></i>
-								</a>						
-							</div>
-						</td>
-						[/social]
-					</tr>	
-					<tr>
-						<td colspan="2" align="center">
-							<a href="profile/register">Регистрация</a>
-						</td>
-					</tr>					
-				</table>				
-			</form>			
-		   [/guest]
-		   [user]
-		   <div align="center">
-				Привет, <b> {%USER_NAME%}</b>!<br/><br/>
-				<img src="{%USER_AVATAR%}" border="0" alt="" /><br/><br/>
-			</div>
-			<a href="{%URL_PROFIL%}">Профиль</a><br/>
-			<a href="{%URL_PM%}">Приватные сообщения</a> ({%NEW_PM%})<br/>
-			<a href="{%URL_LOGOUT%}">Выход</a>
-			[admin]<hr/><a href="{%URL_ADMIN%}">Панель управления</a>[/admin]
-		   [/user]
-        </aside>		
+       <form action="profile/login" method="post" name="login" onkeypress="ctrlEnter(event, this);">
+        <table width="100%" border="0" cellspacing="0" cellpadding="1" align="center" style=" border-spacing: 7px 6px;">
+          <tr>
+            <td>Логин:</td>
+            <td><input type="text" name="nick" size="10" maxlength="25" class="binput" /></td>
+          </tr>
+          <tr>
+            <td>Пароль:</td>
+            <td><input type="password" name="password" size="10" maxlength="25" class="binput" /></td>
+          </tr>
+          <tr>
+            <td>
+              <div class="socialWidget">
+                <input type="submit" value="Войти"  class="socialWidget" />
+              </div>
+            </td>
+            [social]
+            <td>
+              <div class="socialWidget">
+                <a href="{%AUTH_VK%}" title="Авторизация через Вконтакте" rel="nofollow">
+                  <i class="fa spaceLeftDouble fa-vk spaceLeftRight"></i>
+                </a>
+                <a href="{%AUTH_FB%}" title="Авторизация через Facebook"rel="nofollow">
+                  &#160;<i class="fa spaceLeftDouble fa-facebook spaceLeftRight"></i>&#160;
+                </a>
+                <a href="{%AUTH_GP%}" title="Авторизация через Google+"rel="nofollow">
+                  &#160;<i class="fa spaceLeftDouble fa-google-plus spaceLeftRight"></i>
+                </a>            
+              </div>
+            </td>
+            [/social]
+          </tr>  
+          <tr>
+            <td colspan="2" align="center">
+              <a href="profile/register">Регистрация</a>
+            </td>
+          </tr>          
+        </table>        
+      </form>      
+       [/guest]
+       [user]
+       <div align="center">
+        Привет, <b> {%USER_NAME%}</b>!<br/><br/>
+        <img src="{%USER_AVATAR%}" border="0" alt="" /><br/><br/>
+      </div>
+      <a href="{%URL_PROFIL%}">Профиль</a><br/>
+      <a href="{%URL_PM%}">Приватные сообщения</a> ({%NEW_PM%})<br/>
+      <a href="{%URL_LOGOUT%}">Выход</a>
+      [admin]<hr/><a href="{%URL_ADMIN%}">Панель управления</a>[/admin]
+       [/user]
+        </aside>    
         <aside id="calendar-2" class="widget widget_calendar">
           <div class="widget-title">
             <h3>Календарь</h3>

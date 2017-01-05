@@ -1,9 +1,9 @@
 <?php
 
 /**
-* @name        JMY CMS
+* @name        JMY CORE
 * @link        http://jmy.su/
-* @copyright   Copyright (C) 2012-2016 JMY LTD
+* @copyright   Copyright (C) 2012-2017 JMY CORE
 * @license     LICENSE.txt (see attached file)
 * @version     VERSION.txt (see attached file)
 * @author      Komarov Ivan
@@ -20,10 +20,12 @@ if($config['plugin'])
 	$plugin = new plugin;
 }
 
+global $lang;
+
 switch(isset($url[2]) ? $url[2] : null) 
 {
 	default:
-		$adminTpl->admin_head(_USER_TITLE);		
+		$adminTpl->admin_head($lang['users_manager']);		
 		$where = '';
 		$query = isset($_POST['query']) ? filter($_POST['query'], 'a') : '';
 		$for = isset($_POST['for']) ? filter($_POST['for'], 'a') : '';
@@ -31,7 +33,6 @@ switch(isset($url[2]) ? $url[2] : null)
 		$banned = isset($_POST['banned']) ? true : false;
 		$q = isset($_POST['q']) ? filter($_POST['q'], 'a') : '';			
 			
-		
 		if(isset($url[2]) && $url[2] == 'group')
 		{
 			$where = "WHERE u.`group` = '" . intval($url[3]) . "' ";
@@ -39,7 +40,7 @@ switch(isset($url[2]) ? $url[2] : null)
 		elseif($query)
 		{
 			$where = "WHERE u.nick LIKE '%" . $db->safesql($query) . "%'";
-			echo '<b>Запрос:</b>: ' . $query . '<br style="clear:both" />';
+			echo '<b>'.$lang['db_query'].'</b>: ' . $query . '<br style="clear:both" />';
 		}
 		elseif($for)
 		{
@@ -51,225 +52,342 @@ switch(isset($url[2]) ? $url[2] : null)
 		{
 			$s = true;
 		}
-		echo '<div class="row">
-				<div class="col-lg-12">
-                    <section class="panel">
-                                                <header class="panel-heading">'._USER_NAVIGATION.' 
-												<div style="float:right">'._USER_SHORT.' [ <a href="' . ADMIN . '/user/order/abc">'._USER_ABC.'</a> | <a href="' . ADMIN . '/user/order/last">'._USER_LAST_V.'</a> | <a href="' . ADMIN . '/user/order/uid">'._USER_ID.'</a> ]</div></header>
-                                                <div class="panel-body">
-												<table width=100%>
-												<tr>
-												<td>
-												<button type="button"  onclick="showhide(\'newUser\')" class="btn btn-success btn-outline">'._USER_ADD.'</button>
-												<button type="button"  onclick="showhide(\'search\')" class="btn btn-primary btn-outline">'._USER_FULL_SEARCH.'</button>
-												</td>
-												<td>
-                                                    <form class="form-inline" role="form" align="right" method="POST" action="{MOD_LINK}">
-													 <div class="form-group">
-                                                            <label class="sr-only" for="exampleInputEmail2">'._USER_SEARCH.'</label>
-                                                            <input type="text"  name="query"  class="form-control" id="exampleInputEmail2" placeholder="'._USER_INPUT.'">
-                                                        </div>
-														<button type="submit" class="btn btn-default">'._USER_SEARCH.'</button>
-                                                    </form>
-												</td>
-											</tr>
-										</table>
-                                                </div>
-                                            </section>
-                                        </div>
-                                    </div>';
-				$adminTpl->open();	
-		
-		if(isset($s))
-		{
-		
-			
-			echo '			
-			<div id="search" class="row" ' . (!isset($o) ? 'style="display:none"' : '') . '>
-                                        <div class="col-lg-12">
-                                            <section class="panel">
-                                                <header class="panel-heading">'._USER_FULL_SEARCH.'</header>
-                                                <div class="panel-body">
-											<form class="form-inline" role="form" method="POST" action="{ADMIN}/user">
-                                                        <div class="form-group">
-                                                            <label class="sr-only" for="exampleInputEmail2">'._USER_SEARCH_BY.'</label>
-                                                           <select name="for" class="selinput">
-															<option value="nick" ' . ($for == 'nick' ? 'selected' : '') . '>'._USER_NICK.'</option>
-															<option value="email" ' . ($for == 'email' ? 'selected' : '') . '>'._USER_EMAIL.'</option>
-															<option value="name" ' . ($for == 'name' ? 'selected' : '') . '>'._USER_NAME.'</option>
-															<option value="surname" ' . ($for == 'surname' ? 'selected' : '') . '>'._USER_SONAME.'</option>
-															<option value="ip" ' . ($for == 'ip' ? 'selected' : '') . '>'._USER_IP.'</option>
-														</select>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label class="sr-only" for="exampleInputPassword2">Input</label>
-                                                            <input type="text" class="form-control" name="q" value="' . $q . '" >
-                                                        </div>
-														
-														 <div class="form-group">
-                                                            <label class="sr-only" for="exampleInputEmail2">'._USER_SEARCH_BY.'</label>
-															<select name="gr" class="selinput"><option value="">'._USER_G_D.'</option>';
-			$query = $db->query("SELECT * FROM `" . USER_DB . "`.`" . USER_PREFIX . "_groups` WHERE special='0' ORDER BY admin DESC,moderator DESC,user DESC,guest DESC,banned DESC");
-			while($rows = $db->getRow($query)) 
+		$adminTpl->open();	
+		echo '<section id="content" class="table-layout animated fadeIn">
+          <div class="tray tray-center">
+			<form enctype="multipart/form-data" role="form" method="POST" action="{ADMIN}/user/addUsr">
+            <div class="panel mb25 mt5">
+              <div class="panel-heading br-b-ddd"><span class="panel-title hidden-xs">'.$lang['users_add'].'</span>
+                <ul class="nav panel-tabs-border panel-tabs">
+                  <li class="active"><a href="#tab1_1" data-toggle="tab">'.$lang['general'].'</a></li>
+                  <li><a href="#tab1_2" data-toggle="tab">'.$lang['settings'].'</a></li>
+                  <li><a href="#tab1_3" data-toggle="tab">'.$lang['extra'].'</a></li>
+                </ul>
+              </div>
+              <div class="panel-body p20 pb10">
+                <div class="tab-content pn br-n admin-form">
+                  <div id="tab1_1" class="tab-pane active">
+                    <div class="section row mbn">
+                      <div class="col-md-9 pl15">
+                        <div class="section row mb15">                         
+                          <div class="col-xs-6">
+                            <label for="nick" class="field prepend-icon">
+                              <input id="nick" type="text" name="nick" placeholder="'.$lang['login'].'" class="event-name gui-input br-light light">
+                              <label for="nick" class="field-icon"><i class="fa fa-user"></i></label>
+                            </label>
+                          </div>
+						  <div class="col-xs-6">
+                            <label for="pass" class="field prepend-icon">
+                              <input id="password" type="password" name="pass" placeholder="'.$lang['password'].'" class="event-name gui-input br-light light">
+                              <label for="pass" class="field-icon"><i class="fa fa-lock"></i></label>
+                            </label>
+                          </div>
+                        </div>                      
+                        <div class="section mb15">
+                          <label for="mail" class="field prepend-icon">
+                            <input id="mail" type="text" name="mail" placeholder="'.$lang['email'].'" class="event-name gui-input br-light bg-light">
+                            <label for="mail" class="field-icon"><i class="fa fa-envelope-o"></i></label>
+                          </label>
+                        </div>
+						<div class="section mb10">
+							<input name="submit" type="submit" class="btn btn  btn-success" id="sub" value="'.$lang['users_add'].'" /> 
+						</div>	
+                      </div>
+                      <div class="col-md-3">
+                        <div data-provides="fileupload" class="fileupload fileupload-new admin-form">
+							<div class="fileupload-preview thumbnail mb15">
+								<img data-src="holder.js/100%x147" alt="holder"></div><span class="button btn-system btn-file btn-block ph5">
+								<span class="fileupload-new">'.$lang['users_add_avatar'].'</span>
+								<span class="fileupload-exists">'.$lang['users_add_avatar_again'].'</span>
+								<input type="file" name="avatar"></span>
+							</div>
+						</div>
+                    </div>
+                  </div>
+                  <div id="tab1_2" class="tab-pane">
+                    <div class="section row mbn">
+                      <div class="col-xs-6 pr15">
+                        <div class="section mb10">
+                          <label for="phone" class="field prepend-icon">
+                            <input id="phone" type="text" name="phone" placeholder="'.$lang['users_phone'].'" class="event-name gui-input bg-light br-light">
+                            <label for="phone" class="field-icon"><i class="fa fa-phone"></i></label>
+                          </label>
+                        </div>
+                        <div class="section">
+                          <label for="group" class="field select">
+                            <select id="group" name="group">';
+                             $query2 = $db->query("SELECT * FROM `" . USER_DB . "`.`" . USER_PREFIX . "_groups`  WHERE special='0' ORDER BY user ASC");
+								while($rows2 = $db->getRow($query2)) 
+								{
+									
+									echo '<option value="' . $rows2['id'] . '" '.(($rows2['id']=='2') ? 'selected' : '').'>' . $rows2['name'] . '</option>';
+								}
+							echo '</select><i class="arrow double"></i>
+                          </label>
+                        </div>                       
+                      </div>
+                      <div class="col-xs-6">
+                        <label class="field option">
+                          <input type="checkbox" name="activate" checked><span class="checkbox mr10"></span>'.$lang['users_activate'].'</label><br>
+                        <label class="field option mt15">
+                          <input type="checkbox" name="mailsend"><span class="checkbox mr10"></span>'.$lang['users_mailsend'].'</label>
+                        <hr class="alt short mv15">
+                        <p class="text-muted"><span class="fa fa-exclamation-circle text-warning fs15 pr5"></span> '.$lang['users_activate_text'].'</p>
+                      </div>
+                    </div>
+                    <hr class="short alt mtn">
+                    <div class="section mb15">
+                      <label class="field prepend-icon">
+                        <textarea id="signature" name="signature" placeholder="'.$lang['users_signature'].'" class="gui-textarea br-light bg-light"></textarea>
+                        <label for="signature" class="field-icon"><i class="fa fa-edit"></i></label>
+                      </label>
+                    </div>
+                  </div>
+                  <div id="tab1_3" class="tab-pane">                   
+                    <div class="section row">
+                      <div class="col-md-4">
+                        <label for="name" class="field prepend-icon">
+                          <input id="name" type="text" name="name" placeholder="'.$lang['name'].'" class="gui-input">
+                          <label for="name" class="field-icon"><i class="fa fa-user"></i></label>
+                        </label>
+                      </div>
+                      <div class="col-md-4">
+                        <label for="surname" class="field prepend-icon">
+                          <input id="surname" type="text" name="surname" placeholder="'.$lang['surname'].'" class="gui-input">
+                          <label for="surname" class="field-icon"><i class="fa fa-user"></i></label>
+                        </label>
+                      </div>
+                      <div class="col-md-4">
+                        <label for="ochestvo" class="field prepend-icon">
+                          <input id="ochestvo" type="text" name="ochestvo" placeholder="'.$lang['ochestvo'].'" class="gui-input">
+                          <label for="ochestvo" class="field-icon"><i class="fa fa-user"></i></label>
+                        </label>
+                      </div>
+                    </div>                    
+                  </div>
+                </div>
+              </div>
+            </div>
+			</form>';
+			$where .= ' ORDER BY regdate DESC';
+			$adminTpl->close();
+			if(isset($url[2]))
 			{
-				$selected = ($rows['id'] == $gr) ? "selected" : "";
-				echo '<option value="' . $rows['id'] . '" ' . $selected . '>' . $rows['name'] . '</option>';
-			}
-			echo '</select>	    </div>			
-                                       <div class="checkbox">
-                                                            <label>
-                                                             '._USER_BANNED.'? ' . checkbox('banned', $banned) . '
-                                                            </label>
-                                                        </div>
-                                                        <button type="submit" class="btn btn-default">'._USER_SEARCH.'</button>
-                                                    </form>
-                                                </div>
-                                            </section>
-                                        </div>
-                                    </div>';		
-			echo '<div class="row"  id="newUser" style="display:none" >
-                                        <div class="col-lg-12">
-                                            <section class="panel">
-                                                <header class="panel-heading">'._USER_ADD.'</header>
-                                                <div class="panel-body">
-												<form class="form-horizontal parsley-form"  role="form" method="POST" action="{ADMIN}/user/addUsr">
-												<div class="form-group">
-													<label class="col-sm-3 control-label">'._USER_NICK.'</label>
-													<div class="col-sm-4">
-														<input type="text" name="name"  class="form-control"   data-parsley-required="true" data-parsley-trigger="change" >
-													</div>
-												</div>
-												<div class="form-group">
-													<label class="col-sm-3 control-label">'._USER_PASS.'</label>
-													<div class="col-sm-4">
-														<input type="password" name="pass"  class="form-control"   data-parsley-required="true" data-parsley-trigger="change" >
-													</div>
-												</div>
-												<div class="form-group">
-													<label class="col-sm-3 control-label">'._USER_EMAIL.'</label>
-													<div class="col-sm-4">
-														<input type="text"  name="mail"  class="form-control"   data-parsley-required="true" data-parsley-trigger="change" >
-													</div>
-												</div>
-												<div class="form-group">
-													<label class="col-sm-3 control-label">'._USER_GROUP.'</label>
-													<div class="col-sm-4">
-													<select name="group" class="selinput">';
-													$query2 = $db->query("SELECT * FROM `" . USER_DB . "`.`" . USER_PREFIX . "_groups`  WHERE special='0' ORDER BY user DESC");
-													while($rows2 = $db->getRow($query2)) 
-													{
-														echo '<option value="' . $rows2['id'] . '">' . $rows2['name'] . '</option>';
-													}
-												echo '</select>
-												</div>
-												</div>
-												<div class="form-group">
-												<label class="col-sm-3 control-label"></label>
-												<div class="col-sm-4">
-													<input name="submit" type="submit" class="btn btn-primary btn-parsley" id="sub" value="'._ADD.'">						
-												</div>
-														</div>
-													</form>
-												</div>
-                                            </section>
-                                        </div>
-                                    </div>';			
-		}		
-		$where .= ' ORDER BY regdate DESC';
-		$adminTpl->close();
-		if(isset($url[2]))
-		{
-			if($url[2] == 'adderr')
-			{
-				$adminTpl->info(_USER_ADD_INFO_1, 'error');
-			}
-			elseif($url[2] == 'addok')
-			{
-				$adminTpl->info(_USER_ADD_INFO_2);
-			}
-			elseif($url[2] == 'order')
-			{
-				switch($url[3])
+				if($url[2] == 'adderr')
 				{
-					case 'abc':
-						$where = ' ORDER BY nick ASC';
-						break;		
-						
-					case 'last':
-						$where = ' ORDER BY last_visit DESC';
-						break;					
-						
-					case 'uid':
-						$where = ' ORDER BY id ASC';
-						break;
+					$adminTpl->info(_USER_ADD_INFO_1, 'error');
+				}
+				elseif($url[2] == 'addok')
+				{
+					$adminTpl->info(_USER_ADD_INFO_2);
+				}
+				elseif($url[2] == 'order')
+				{
+					switch($url[3])
+					{
+						case 'abc':
+							$where = ' ORDER BY nick ASC';
+							break;		
+							
+						case 'last':
+							$where = ' ORDER BY last_visit DESC';
+							break;					
+							
+						case 'uid':
+							$where = ' ORDER BY id ASC';
+							break;
+					}
 				}
 			}
-		}
-		$numU = 24;
-		$page = init_page();
-		$cut = ($page-1)*$numU;		
-		$query = $db->query("SELECT u.*, g.name, (SELECT uid FROM " . DB_PREFIX . "_online WHERE u.id=uid LIMIT 1) as online FROM `" . USER_DB . "`.`" . USER_PREFIX . "_users` as u LEFT JOIN `" . USER_DB . "`.`" . USER_PREFIX . "_groups` as g on(u.group = g.id) " . $where . " LIMIT " . $cut . ", " . $numU);		
-		echo '<div class="row">
-			<div class="col-lg-12">
-				<section class="panel">
-					<div class="panel-heading">
-						<b>Список пользователей</b>						
-					</div>';		
-		if($db->numRows($query) > 0) 
-		{
-		echo '<div class="panel-body no-padding">					
-						<table class="table no-margin">
-							<thead>
-								<tr>
-									<th><span class="pd-l-sm"></span>ID</th>
-									<th class="col-md-4">' . _NICK . '</th>
-									<th class="col-md-2">' . _GROUP . '</th>
-									<th class="col-md-2">' . _REGDATE . '</th>
-									<th class="col-md-2">' . _LASTDATE . '</th>
-									<th class="col-md-3">' . _ACTIONS . '</th>
-								</tr>
-							</thead>
-							<tbody>';		
-			$adminTpl->open();
-			while($adminUser = $db->getRow($query)) 
+			$numU = 24;
+			$page = init_page();
+			$cut = ($page-1)*$numU;		
+			$query = $db->query("SELECT u.*, g.name, (SELECT uid FROM " . DB_PREFIX . "_online WHERE u.id=uid LIMIT 1) as online FROM `" . USER_DB . "`.`" . USER_PREFIX . "_users` as u LEFT JOIN `" . USER_DB . "`.`" . USER_PREFIX . "_groups` as g on(u.group = g.id) " . $where . " LIMIT " . $cut . ", " . $numU);				
+			if($db->numRows($query) > 0) 
 			{
-				
-					echo '
-					<tr>
-						<td><span class="pd-l-sm"></span>' . $adminUser['id'] . '</td>
-						<td>
-							<a class="tooltip1" href="profile/' . $adminUser['nick'] . '">' . $adminUser['nick'] . '<span><img src="' . avatar($adminUser['id']) . '"/></span></a> - ' . ($adminUser['online'] ? '<font color="green">'._ONLINE.'</font>' : '<font color="red">'._OFFLINE.'</font>') . '</td>
-						<td>' . $adminUser['name'] . '</td>
-						<td>' . formatDate($adminUser['regdate'], true) . '</td>
-						<td>' . formatDate($adminUser['last_visit']) . '</td>						
-						<td>
-							<a href="/administration/user/edit/' . $adminUser['id'] . '">
-							<button type="button" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="" data-original-title="' . _EDIT .'">E</button>
-							</a>
-							<a href="/administration/user/ban/'. $adminUser['id'].'" onClick="return getConfirm(\'Вы действительно хотите забанить - ' . $adminUser['nick'] . '?\')">
-							<button type="button" class="btn btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="" data-original-title="Забанить">B</button>
-							</a>
-							<a href="/administration/user/delete/' . $adminUser['id'] . '" onClick="return getConfirm(\'Вы действительно хотите удалить - ' . $adminUser['nick'] . '?\')">
-							<button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="" data-original-title="' . _DELETE .'">X</button>
-							</a>
-				</td>
-			</tr>';
-				
-
+			echo '<div class="panel panel-dark panel-border top">
+				<div class="panel-heading"><span class="panel-title">'.$lang['users_list'].':</span>  
+					<div class="widget-menu pull-right mr5" >						
+							<select style="width: 200px; display: inline-block;" class="form-control" onchange="top.location=this.value">
+								<option value="' . ADMIN . '/user/">'.$lang['choose_sort'].'</option>
+								<option value="' . ADMIN . '/user/order/abc">'.$lang['users_sort_abc'].'</option>
+								<option value="' . ADMIN . '/user/order/last">'.$lang['users_sort_last'].'</option>
+								<option value="' . ADMIN . '/user/order/uid">'.$lang['users_sort_uid'].'</option>
+							</select>
+					</div>			
+              </div>
+              <div class="panel-body pn"> 
+				<form id="tablesForm" style="margin:0; padding:0" method="POST" action="{ADMIN}/user/action">
+                  <table class="table table-striped">
+                    <thead>
+						<tr>
+							<th><span class="pd-l-sm"></span>#</th>
+							<th class="text-center">' . $lang['avatar'] . '</th>
+							<th>' . $lang['nick'] . '</th>	
+							<th class="text-center">' . $lang['status'] . '</th>
+							<th>' . $lang['group'] . '</th>								
+							<th>' . $lang['users_date_reg_short'] . '</th>	
+							<th>' . $lang['users_date_last_short'] . '</th>									
+							<th class="w150">' . $lang['actions'] . '</th>
+							<th>
+								<div class="checkbox-custom mb15">
+									<input id="all" type="checkbox" name="all" onclick="setCheckboxes(\'tablesForm\', true); return true;">
+									<label for="all"></label>
+								</div>	
+							</th>
+						</tr>
+                    </thead>
+                    <tbody>';		
+		while($adminUser = $db->getRow($query)) 
+		{	
+			if ($adminUser['online'])
+			{
+				$status_icon = '<span class="fa fa-check-circle text-success fa-md"></span>';
 			}
-			echo '<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>';		
-		
-			
-			$queryq = $db->query("SELECT id FROM `" . USER_DB . "`.`" . USER_PREFIX . "_users` " . str_replace('u.', '', $where));
-			
-			
-			
-			echo'</div></section></div></div>';	
+			else
+			{
+				$status_icon = '<span class="fa fa-circle text-dark fa-md"></span>';
+			}	
+
+			if ($adminUser['group']=='5')
+			{
+				$status_icon = '<span class="fa fa-circle text-danger fa-md"></span>';
+			}	
+
+			if ($adminUser['active']!='1')
+			{
+				$status_icon = '<span class="fa fa-clock-o text-warning fa-md"></span>';
+			}				
+			echo '
+			<tr>
+				<td><span class="pd-l-sm"></span>' . $adminUser['id'] . '</td>
+				<td class="w50 text-center">
+					<img title="user" src="' . avatar($adminUser['id']) . '" class="img-responsive mw30 ib mr10">
+				</td>			
+				<td>' . $adminUser['nick'] . '</td>
+				<td class="text-center">'.$status_icon.'</td>
+				<td>' . $adminUser['name']  . '</td>	
+				<td>' . formatDate($adminUser['regdate'], true)  . '</td>	
+				<td>' . formatDate($adminUser['last_visit'], true)   . '</td>	
+				<td>				
+					<div class="btn-group">
+						<button type="button" onclick="location.href = \'{ADMIN}/user/edit/' . $adminUser['id'] . '\'" class="btn btn-xs btn-primary">'.$lang['edit_short'].'</button>
+						<button type="button" data-toggle="dropdown" class="btn btn-xs btn-primary dropdown-toggle"><span class="caret"></span><span class="sr-only">' . $lang['actions'] . '</span></button>
+						<ul role="menu" class="dropdown-menu">
+							<li>
+								<a href="{ADMIN}/user/ban/'. $adminUser['id'].'">' . $lang['users_ban'] .'</a>
+							</li>
+							<li class="divider"></li>
+							<li>
+								<a href="'.$core->fullURL().'#" onclick="modal_o(\'#modal-form-'.$adminUser['id'].'\')">' . $lang['delete'] .'</a>
+							</li>
+						</ul>
+					</div>
+					<div id="modal-form-'.$adminUser['id'].'" class="popup-basic bg-none mfp-with-anim mfp-hide">
+						<div class="panel">
+						  <div class="panel-heading"><span class="panel-icon"><i class="fa fa-check-square-o"></i></span><span class="panel-title">'. $lang['confirm'] .'</span></div>
+						  <div class="panel-body">
+							<h3 class="mt5">' . str_replace('[user]', $adminUser['nick'], $lang['users_del_title']) .  '</h3>							
+							<hr class="short alt">
+							<p>' . str_replace('[user]', $adminUser['nick'], $lang['users_del_text']) .  '</p>
+						  </div>
+						  <div class="panel-footer text-right">
+							<button type="button" onclick="location.href = \'{ADMIN}/user/delete/'.$adminUser['id'].'\'" class="btn btn-danger">' . $lang['delete']  .'</button>
+						  </div>
+						</div>
+					</div>				
+				</td>
+				<td>
+					<div class="checkbox-custom mb15">
+						<input id="checkbox' . $adminUser['id'] . '" type="checkbox" name="checks[]" value="' . $adminUser['id'] . '">
+						<label for="checkbox' . $adminUser['id'] . '"></label>
+					</div>
+				</td>
+			</tr>';				
 		}
-		else
-		{
-			$adminTpl->info('Пользователей не найдено...');
-		}
+		echo '	</tbody>
+				<tfoot class="footer-menu">
+                    <tr>                    
+					  <td colspan="9">
+                        <nav class="text-right">
+							<input name="submit" type="submit" class="btn btn btn-danger" id="sub" value="' . $lang['delete'] . '" />
+						 </nav>
+                      </td>
+                    </tr>
+                  </tfoot> 
+				</table> 
+			</form>				
+          </div>
+        </div>';
+	} 	
+	else 
+	{
+		$adminTpl->info($lang['users_empty'], 'empty', null, $lang['users_list']);	
+	}
+		 echo '</div>        
+          <aside data-tray-height="match" class="tray tray-right tray290">
+		  <form role="form" method="POST" action="{ADMIN}/user">
+            <div class="admin-form">
+              <h4>'.$lang['users_search'].'</h4>
+              <hr class="short">
+              <div class="section mb10">
+                <label for="s_id" class="field prepend-icon">
+                  <input id="s_id" type="text" name="s_id" placeholder="'.$lang['users_id'].'" class="gui-input">
+                  <label for="s_id" class="field-icon"><i class="fa fa-user"></i></label>
+                </label>
+              </div>
+              <div class="section mb10">
+                <label for="s_nick" class="field prepend-icon">
+                  <input id="s_nick" type="text" name="s_nick" placeholder="'.$lang['nick'].'" class="gui-input">
+                  <label for="s_nick" class="field-icon"><i class="fa fa-user"></i></label>
+                </label>
+              </div>
+              <div class="section mb25">
+                <label for="s_email" class="field prepend-icon">
+                  <input id="s_email" type="text" name="s_email" placeholder="'.$lang['email'].'" class="gui-input">
+                  <label for="s_email" class="field-icon"><i class="fa fa-envelope-o"></i></label>
+                </label>
+              </div>
+              <h5><small>'.$lang['group'].'</small></h5>
+              <div class="section mb15">
+                <label class="field select">
+                  <select id="s_group" name="s_group">';				  
+					$query = $db->query("SELECT * FROM `" . USER_DB . "`.`" . USER_PREFIX . "_groups` WHERE special='0' ORDER BY admin DESC,moderator DESC,user DESC,guest DESC,banned DESC");
+					while($rows = $db->getRow($query)) 
+					{
+						$selected = ($rows['id'] == $gr) ? "selected" : "";
+						echo '<option value="' . $rows['id'] . '" ' . $selected . '>' . $rows['name'] . '</option>';
+					}				  
+                 echo '</select><i class="arrow double"></i>
+                </label>
+              </div>             
+              <h5><small>'.$lang['users_search_date'].'</small></h5>
+              <div class="section row">
+                <div class="col-md-6">
+                  <label for="date1" class="field prepend-icon">
+                    <input id="date1" type="text" name="date1" placeholder="01/01/14" class="gui-input">
+                    <label for="date1" class="field-icon"><i class="fa fa-calendar"></i></label>
+                  </label>
+                </div>
+                <div class="col-md-6">
+                  <label for="date2" class="field prepend-icon">
+                    <input id="date2" type="text" name="date2" placeholder="06/01/15" class="gui-input">
+                    <label for="date2" class="field-icon"><i class="fa fa-calendar"></i></label>
+                  </label>
+                </div>
+              </div>
+			    <label class="field option ml15">
+                  <input type="checkbox" name="info"><span class="checkbox"></span><span class="text-muted">'.$lang['users_banned'].'</span>
+                </label>
+              <hr class="short">
+              <div class="section">
+                <button type="button" class="btn btn-default btn-sm ph25">'.$lang['search'].'</button>              
+              </div>
+            </div>
+			</form>
+          </aside>
+        </section>';	
+		$queryq = $db->query("SELECT id FROM `" . USER_DB . "`.`" . USER_PREFIX . "_users` " . str_replace('u.', '', $where));		
 		$adminTpl->pages($page, $numU, $db->numRows($queryq), ADMIN.'/user/{page}');
 		$adminTpl->close();
 		$adminTpl->admin_foot();
@@ -719,26 +837,63 @@ echo '</div>';
 	
 		
 	case 'addUsr':
-		$name = filter($_POST['name'], 'nick');
-		$pass = $_POST['pass'];
+	
+		require ROOT . 'etc/user.config.php';
+		$surname = !empty($_POST['surname']) ? filter($_POST['surname'], 'a') : '';
+		$name = !empty($_POST['name']) ? filter($_POST['name'], 'a') : '';
+		$nick = !empty($_POST['nick']) ? filter($_POST['nick'], 'nick') : '';
+		$ochestvo = !empty($_POST['ochestvo']) ? filter($_POST['ochestvo'], 'a') : '';
+		
 		$mail = filter($_POST['mail'], 'mail');
 		$group = intval($_POST['group']);
-		list($check) = $db->fetchRow($db->query("SELECT Count(id) FROM `" . USER_DB . "`.`" . USER_PREFIX . "_users` WHERE nick='" . $db->safesql($name) . "' OR email='" . $db->safesql($mail) . "'"));
-		if($check > 0 && !empty($name) && !empty($pass)) 
+		list($check) = $db->fetchRow($db->query("SELECT Count(id) FROM `" . USER_DB . "`.`" . USER_PREFIX . "_users` WHERE nick='" . $db->safesql($nick) . "' OR email='" . $db->safesql($mail) . "'"));
+		if($check > 0 && !empty($nick) && !empty($pass)) 
 		{
 			$result = 'adderr';
 		}
 		else
 		{
-			$tail = gencode(rand(6, 11));
-				
-			$core->auth->register($name, $pass, $tail, $mail, '', '', '', '', '', '', '', '', '', 1, '127.0.0.1', $group);
-			if($config['plugin']) $plugin->registration($name, $pass, $tail, $mail, '', '', '', '', '', '', '', '', '', 1, '127.0.0.1', $group);
-			list($uid) = $db->fetchRow($db->query("SELECT id FROM `" . USER_DB . "`.`" . USER_PREFIX . "_users` WHERE nick='" . $db->safesql($name) . "' LIMIT 1"));
+			
+			$active = 0;
+			if (isset($_POST['activate']))
+			{
+				$active = 1;
+			}
+			
+			$tail = gencode(rand(6, 11));				
+			$core->auth->register($nick, $pass, $tail, $mail, '', '', $surname, $name, $ochestvo, '', '', '', '', $active, '127.0.0.1', $group);
+			if($config['plugin']) $plugin->registration($nick, $pass, $tail, $mail, '', '', $surname, $name, $ochestvo, '', '', '', '', $active, '127.0.0.1', $group);
+			list($uid) = $db->fetchRow($db->query("SELECT id FROM `" . USER_DB . "`.`" . USER_PREFIX . "_users` WHERE nick='" . $db->safesql($nick) . "' LIMIT 1"));
 			$db->query("INSERT INTO `" . DB_PREFIX . "_board_users` (`uid`) VALUES ('" . $uid . "');", true);
+			
+			
+			$queryUU = $db->query('SELECT id FROM `' . USER_DB . '`.`' . USER_PREFIX . '_users` WHERE `nick`="'.$db->safesql($nick).'" LIMIT 1');
+			$UUID = $db->getRow($queryUU);
+			
+			echo $UUID['id'];
+			if($_FILES['avatar']['size'] > 0) 
+			{		
+echo $UUID['id'].'1';		
+				if($foo = new Upload($_FILES['avatar']))
+				{
+					echo $UUID['id'].'2';
+					$foo->file_new_name_body = 'av' .$UUID['id'];
+					$foo->image_resize = true;
+					$foo->image_x = $user['avatar_width'];
+					$foo->image_ratio_y = true;
+					$foo->file_overwrite = true;
+					$foo->file_auto_rename = false;
+					$foo->Process(ROOT.'files/avatars/users/');
+					$foo->allowed = array("image/*");
+						
+					if ($foo->processed) 
+					{
+						$foo->Clean();
+					}
+				}
+			}
 			$result = 'addok';
-		}
-		
+		}		
 		location(ADMIN.'/user/'.$result);
 		break;
 }

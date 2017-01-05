@@ -1,14 +1,13 @@
 <?php
 
 /*
-* @name        JMY CMS
+* @name        JMY CORE
 * @link        http://jmy.su/
-* @copyright   Copyright (C) 2012-2016 JMY LTD
+* @copyright   Copyright (C) 2012-2017 JMY LTD
 * @license     LICENSE.txt (see attached file)
 * @version     VERSION.txt (see attached file)
 * @author      Komarov Ivan
 */
-
 
 define('ACCESS', true);
 define('TIMER', microtime(1));
@@ -17,7 +16,7 @@ define('PLUGINS', '/usr/plugins/');
 define('COOKIE_AUTH', 'auth_jmy');
 define('COOKIE_PAUSE', 'pause_jmy');
 define('PAUSE_TIME', 120);
-define('VERSION_ID', 'x.x.x');  
+define('VERSION_ID', '3.0.1');  
 define('COOKIE_TIME', 2592000);
 define('ADMIN', 'administration');
 define('ADMIN_TPL', 'usr/tpl/admin/');
@@ -26,10 +25,19 @@ define('DEBUG', false);
 define('INDEX', isset($_GET['url']) ? false : true);
 @ini_set('allow_url_fopen', 1);
 header('Content-type: text/html; charset=utf-8');
-header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
-header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT"); // always modified
-header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
-header("Pragma: no-cache"); // HTTP/1.0'
-
-
+header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); 
+header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT"); 
+header("Cache-Control: no-cache, must-revalidate"); 
+header("Pragma: no-cache"); 
 mb_internal_encoding("UTF-8");
+
+if (DEBUG)
+{
+	ini_set('error_reporting', E_ALL);
+	ini_set('display_errors', 1);
+	ini_set('display_startup_errors', 1);
+}
+else
+{
+	ini_set('display_errors','Off');
+}

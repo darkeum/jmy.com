@@ -1,4 +1,5 @@
-<html lang="{LANG}">
+<!DOCTYPE html>
+<html lang="{LANG}" xmlns="http://www.w3.org/1999/xhtml" xml:lang="{LANG}">
   <head>
 	{META}
 	<meta name="theme-color" content="#535a6c">
@@ -101,10 +102,10 @@
 							<button type="button" class="multiselect dropdown-toggle btn btn-default btn-sm" data-toggle="dropdown" style="max-width: 100px;" aria-expanded="false">[alang_old:_PANEL_SUNMENU_VIEW] <b class="caret-right"></b></button></div>
 					</div>
 				</li>				
-				<li class="list-group-item"><a href="#" class="animated animated-short fadeInUp"><span class="fa fa-envelope"></span> Messages<span class="label label-warning">2</span></a></li>
-				<li class="list-group-item"><a href="#" class="animated animated-short fadeInUp"><span class="fa fa-user"></span> Friends<span class="label label-warning">6</span></a></li>
-				<li class="list-group-item"><a href="#" class="animated animated-short fadeInUp"><span class="fa fa-bell"></span> 	Notifications</a></li>
-				<li class="list-group-item"><a href="#" class="animated animated-short fadeInUp"><span class="fa fa-gear"></span> Settings</a></li>
+				<li class="list-group-item"><a href="/pm" class="animated animated-short fadeInUp"><span class="fa fa-envelope"></span> Сообщения<span class="label label-warning">{MESSAGES_NUMB}</span></a></li>
+				<li class="list-group-item"><a href="/profile" class="animated animated-short fadeInUp"><span class="fa fa-user"></span> Друзья<span class="label label-warning">{FRIENDS_NUMB}</span></a></li>
+				<li class="list-group-item"><a href="/profile" class="animated animated-short fadeInUp"><span class="fa fa-bell"></span> 	Профиль</a></li>
+				<li class="list-group-item"><a href="/{ADMIN}/config" class="animated animated-short fadeInUp"><span class="fa fa-gear"></span> Настройки</a></li>
 				<li class="dropdown-footer">
 					<a href="/profile/logout"><span class="fa fa-power-off pr5"></span> [alang_old:_PANEL_SUNMENU_EXIT]</a>
 				</li>
@@ -143,12 +144,7 @@
 						<a href="/{ADMIN}/xfields">
 							<span class="glyphicon glyphicon-star"></span>[alang_old:_PANEL_MENU_NEWS_XFIELDS]
 						</a>
-					</li>
-					<li {MENU_CHOOSE:fm}>
-						<a href="/{ADMIN}/fm">
-							<span class="glyphicon glyphicon-folder-open"></span>[alang_old:_PANEL_MENU_NEWS_FM]
-						</a>
-					</li>
+					</li>					
 				</ul>
             </li>
 			[/ACTIVE_MODULE]		

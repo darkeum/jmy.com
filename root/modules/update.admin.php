@@ -1,9 +1,9 @@
 <?php
 
 /**
-* @name        JMY CMS
-* @link        http://jmy.su/
-* @copyright   Copyright (C) 2012-2016 JMY LTD
+* @name        JMY CORE
+* @link        https://jmy.su/
+* @copyright   Copyright (C) 2012-2017 JMY LTD
 * @license     LICENSE.txt (see attached file)
 * @version     VERSION.txt (see attached file)
 * @author      Komarov Ivan
@@ -14,18 +14,16 @@ if (!defined('ADMIN_ACCESS')) {
     exit;
 }
 
+$now = file_get_contents('https://server.jmy.su/index.php?check_version');
+$next = file_get_contents('https://server.jmy.su/sequence.php?'.VERSION_ID);
 
-$now = file_get_contents('http://server.jmy.su/index.php?check_version');
-$next = file_get_contents('http://server.jmy.su/sequence.php?'.VERSION_ID);
+$allfiles = array(); 
 
-			$allfiles = array(); 
-function main() {
+function main() 
+{
 	global $adminTpl, $config, $core, $configs, $clear;
-}
-
-
-  
-  function makebackup() 
+}  
+function makebackup() 
   {
 		global $allfiles;
 		$makebackup=false;
@@ -126,8 +124,9 @@ switch(isset($url[2]) ? $url[2] : null) {
 	default:				
 			if (VERSION_ID<>$now)
 			{
-				if ($next<>'NU7LL')
+				if ($next<>'NULL')
 				{
+					
 					$adminTpl->admin_head(_UPDATE_MAIN);		
 					$adminTpl->open();	
 					echo '<div style="max-width: 625px" class="center-block mt70">           
@@ -170,10 +169,13 @@ switch(isset($url[2]) ? $url[2] : null) {
 					$adminTpl->admin_foot();
 				}
 				else
-				{
+				{				
 					$adminTpl->admin_head(_UPDATE_MAIN);
+					echo '<div id="content" class="animated fadeIn">';
 					$adminTpl->info(_UPDATE_ERROR_0, 'error');
+					echo '</div>';
 					$adminTpl->admin_foot();
+					
 				}
 			}
 			else

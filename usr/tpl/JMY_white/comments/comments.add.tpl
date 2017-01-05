@@ -1,7 +1,7 @@
 <article class="hentry inform">
-<div id="comments" class="comments-area">	
-	<ol class="comment-list">
-		<li id="comment-114" class="comment even thread-even depth-1">
+<div id="comments" class="comments-area">  
+  <ol class="comment-list">
+    <li id="comment-114" class="comment even thread-even depth-1">
 [open]
 <div class="commentAdd" id="comment_add">
 [guest]
@@ -38,8 +38,8 @@
 [/open]
 <script type="text/javascript">
 function reply_comment(id){gid('reply_to').value = id; gid('reply_comment').innerHTML = (id > 0 ? '<strong>Ответ на комментарий №:</strong> '+id + ' <a href="javascript:void(0)" onclick="reply_comment(0);">не отвечать</a>' : ''); window.scroll(0, parseInt(gid('comment_add').offsetTop));}
-</script>	
+</script>  
 </li>
-</ol>					
+</ol>          
 </div>
 </article>

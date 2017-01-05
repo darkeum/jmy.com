@@ -277,6 +277,7 @@ class admin extends template
 		$this->setVar('ADM_THEME', 'usr/tpl/admin');
 		$this->setVar('NOTIF', $notifications);
 		$this->setVar('NOTIF_NUMB', $i_n);
+		$this->setVar('MESSAGE_NUMB', $i_n);
 		$this->setVar('URL', $config['url']);
 		$this->setVar('URL_FULL', $core->fullURL());
 		$this->setVar('MODULE', $content);

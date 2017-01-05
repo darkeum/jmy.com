@@ -1,0 +1,77 @@
+<?php
+
+$lang = array_merge($lang, array (
+	
+	'install_jmy'								=> 'Installation JMY CMS',
+	'install_attention'							=> 'Attention!',
+	'install_information'						=> 'Information!',
+	'install_refresh'							=> 'Refresh',
+	'install_next'								=> 'Next',
+	'install_back'								=> 'Back',
+	'install_action'							=> 'Action',
+	'install_status'							=> 'Status',
+	'install_error'								=> 'Error',
+	
+	'step_0_agreement'							=> 'License agreement',
+	'step_0_welcome'							=> 'Welcome',
+	'step_0_welcome_text'						=> 'Welcome to the installation of JMY CMS. We are very grateful that you have chosen our product!',
+	'step_0_agreement_ok'						=> 'I agree, go to the installation process',
+	
+	'step_1_title'								=> 'Configuring the connection to the MySQL',
+	'step_1_desc'								=> 'Setting up to the database connection of MySQL. If you do not know the purpose of a field, contact your server administrator for clarification.',
+	'step_1_error'								=> 'The system was not able to get access to the file "etc/db.config.php", please set the rights <b>666</b> on this file to continue installation!',	
+	'step_1_mysql_server'						=> 'MySQL server',
+	'step_1_mysql_user'							=> 'User name',
+	'step_1_mysql_user_pre'						=> 'Enter the database user.',
+	'step_1_mysql_name'							=> 'The database name',
+	'step_1_mysql_name_pre'						=> 'Name of the database where the table will be created.',
+	'step_1_mysql_pass'							=> 'The password for the database',
+	'step_1_mysql_pass_pre'						=> 'Enter the password for the database which you entered above.',
+	'step_1_mysql_prefix'						=> 'Table prefix',
+	
+	'step_2_title'								=> 'Configuration of database tables',
+	'step_2_desc'								=> 'Actions with database completed. The report of the done work , you can see in the table below. To continue, click Next.',
+	'step_2_error_1'							=> 'Unfortunately, we were unable to establish a connection with the database. Check your entries!',
+	'step_2_error_2'							=> 'The connection with the server was successful, but we could not find the database:',
+	'step_2_ok'									=> 'Connection with the MySQL server is installed, access to the database received. Click Next to start the work with the database.',	
+	'step_2_table'								=> 'Table',
+	'step_2_create'								=> 'Creating table',
+	'step_2_success'							=> 'Successfully',
+	
+	'chmod_title'								=> 'Checking permissions',
+	'chmod_desc'								=> 'To continue, you must set rights on the appropriate folders, otherwise correct operation of the system can not be guaranteed!',
+	'chmod_folder'								=> 'Directory',
+	'chmod_rights'								=> 'Rights',
+	'chmod_allowed'								=> 'Allowed',
+	'chmod_forbidden'							=> 'Forbidden',
+	'chmod_next'								=> 'Go to the main site settings',
+	
+	'step_3_title'								=> 'Initial setup of the site ',
+	'step_3_desc'								=> 'Please fill out the basic parameters of your future site. Then click Next to continue the installation process.',
+	'step_3_url'								=> 'Your URL',
+	'step_3_name'								=> 'Name of the site',
+	'step_3_charset'							=> 'Encoding of the site',
+	'step_3_gzip'								=> 'Enable g-zip?',
+	'step_3_rewrite'							=> 'Enable friendly URL?',
+	'step_3_admin_email'						=> 'Administrator E-mail ',
+	'step_3_admin_login'						=> 'Administrator Name',
+	'step_3_admin_pass'							=> 'Administrator Password',
+	
+	'step_4_title'								=> 'Saving your configuration',
+	'step_4_error'								=> 'Required fields are not filled!',
+	'step_4_ok'									=> 'Settings have been saved!',
+	'step_4_login'								=> 'Login',
+	'step_4_pass'								=> 'Password',
+	
+	'step_5_title'								=> 'Installing of JMY CMS completed!',
+	'step_5_desc'								=> 'The installation was successful, now you can use your site. Thank you that you have chosen our product, we look forward to long-term cooperation.',
+	'step_5_install'							=> 'Delete the file install.php and a folder install from the root!',
+	'step_5_site'								=> 'Go to the website',
+	'step_5_panel'								=> 'Go to the Control Panel',
+	'step_5_jmy'								=> 'Go to the official site',
+
+	
+
+));
+
+?>

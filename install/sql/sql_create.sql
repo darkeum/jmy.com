@@ -28,63 +28,6 @@ CREATE TABLE `[prefix]sitemap` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `[prefix]guestbook`;
-CREATE TABLE `[prefix]guestbook` (
-  `id` int(11) NOT NULL auto_increment,
-  `uid` int(11) NOT NULL,
-  `date` varchar(55) default NULL,
-  `name` varchar(50) NOT NULL,
-  `email` varchar(50) NOT NULL,
-  `website` varchar(75) NOT NULL,
-  `gender` varchar(10) NOT NULL,
-  `comment` text NOT NULL,
-  `reply` text NOT NULL, 
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
-
-DROP TABLE IF EXISTS `[prefix]blog_posts`;
-CREATE TABLE `[prefix]blog_posts` (
-  `id` int(11) NOT NULL auto_increment,
-  `bid` int(11) NOT NULL,
-  `title` varchar(255) NOT NULL,
-  `text` text NOT NULL,
-  `comments` int(11) NOT NULL,
-  `views` int(11) NOT NULL,
-  `date` int(11) NOT NULL,
-  `rating` int(11) NOT NULL,
-  `ratingUsers` text NOT NULL,
-  `tags` varchar(255) NOT NULL,
-  `uid` int(11) NOT NULL,
-  `status` int(1) NOT NULL,
-  PRIMARY KEY  (`id`),
-  KEY `bid` (`bid`),
-  KEY `uid` (`uid`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
-
-
-DROP TABLE IF EXISTS `[prefix]blog_readers`;
-CREATE TABLE `[prefix]blog_readers` (
-  `bid` int(11) NOT NULL,
-  `uid` int(11) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
-DROP TABLE IF EXISTS `[prefix]blogs`;
-CREATE TABLE `[prefix]blogs` (
-  `id` int(11) NOT NULL auto_increment,
-  `title` varchar(255) NOT NULL,
-  `altname` varchar(55) NOT NULL,
-  `description` text NOT NULL,
-  `avatar` varchar(200) NOT NULL,
-  `posts` int(11) NOT NULL,
-  `readersNum` int(11) NOT NULL,
-  `date` int(11) NOT NULL,
-  `lastUpdate` int(11) NOT NULL,
-  `admins` varchar(255) NOT NULL,
-  `readers` varchar(255) NOT NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
-
 DROP TABLE IF EXISTS `[prefix]board_forums`;
 CREATE TABLE `[prefix]board_forums` (
   `id` int(11) NOT NULL auto_increment,
@@ -227,45 +170,6 @@ CREATE TABLE `[prefix]content` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `[prefix]gallery_albums`;
-CREATE TABLE `[prefix]gallery_albums` (
-  `album_id` int(11) NOT NULL auto_increment,
-  `title` varchar(250) NOT NULL,
-  `trans` varchar(250) NOT NULL,
-  `description` text NOT NULL,
-  `views` int(11) NOT NULL,
-  `nums` int(11) NOT NULL,
-  `last_update` varchar(250) NOT NULL,
-  `last_author` varchar(250) NOT NULL,
-  `last_image` varchar(250) NOT NULL,
-  `watermark` int(1) default NULL,
-  `sizes` text NOT NULL,
-  `gropups_allow` int(11) NOT NULL,
-  `dir` varchar(255) NOT NULL,
-  PRIMARY KEY  (`album_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
-
-DROP TABLE IF EXISTS `[prefix]gallery_photos`;
-CREATE TABLE `[prefix]gallery_photos` (
-  `photo_id` int(11) NOT NULL auto_increment,
-  `cat` int(11) NOT NULL,
-  `title` varchar(250) NOT NULL,
-  `description` varchar(250) NOT NULL,
-  `author` varchar(250) NOT NULL,
-  `add_date` varchar(250) NOT NULL,
-  `photo_date` varchar(250) NOT NULL,
-  `photos` text NOT NULL,
-  `tech` text NOT NULL,
-  `views` int(11) NOT NULL,
-  `gets` int(11) NOT NULL,
-  `comments` int(11) NOT NULL,
-  `score` int(11) NOT NULL,
-  `ratings` int(11) NOT NULL,
-  `status` int(11) NOT NULL,
-  `groups_allow` int(11) NOT NULL,
-  PRIMARY KEY  (`photo_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
-
 
 DROP TABLE IF EXISTS `[prefix]groups`;
 CREATE TABLE `[prefix]groups` (
@@ -324,6 +228,7 @@ CREATE TABLE `[prefix]news` (
   `tags` varchar(255) NOT NULL,
   `cat` varchar(200) default NULL,
   `altname` varchar(55) NOT NULL,
+  `preview` varchar(255) DEFAULT NULL,
   `keywords` text,
   `description` text,
   `allow_comments` int(1) NOT NULL,
@@ -366,6 +271,9 @@ CREATE TABLE `[prefix]plugins` (
   `groups` varchar(255) NOT NULL,
   `free` tinyint(1) unsigned NOT NULL,
   `template` text,
+  `categories` int(1) NOT NULL,
+  `xfields` int(1) NOT NULL,
+  `menu` int(11) NOT NULL,
   `active` tinyint(1) unsigned NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `active` (`active`),
@@ -412,6 +320,7 @@ CREATE TABLE `[prefix]polls` (
   `title` varchar(255) NOT NULL,
   `votes` int(5) NOT NULL,
   `max` int(2) NOT NULL,
+  `active` int(2) NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
@@ -476,6 +385,7 @@ CREATE TABLE `[prefix]users` (
   `social_id` varchar(255) NOT NULL,
   `status` varchar(255) default NULL,
   `icq` varchar(55) NOT NULL,
+  `phone` varchar(55) NOT NULL,
   `skype` varchar(55) NOT NULL,
   `surname` varchar(55) NOT NULL,
   `name` varchar(55) NOT NULL,

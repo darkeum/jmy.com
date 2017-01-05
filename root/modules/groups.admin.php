@@ -1,13 +1,12 @@
 <?php
 
 /**
-* @name        JMY CMS
+* @name        JMY CORE
 * @link        http://jmy.su/
-* @copyright   Copyright (C) 2012-2014 JMY LTD
+* @copyright   Copyright (C) 2012-2017 JMY LTD
 * @license     LICENSE.txt (see attached file)
 * @version     VERSION.txt (see attached file)
 * @author      Komarov Ivan
-* @revision	   07.03.2015
 */
  
 if (!defined('ADMIN_ACCESS')) {
@@ -15,59 +14,102 @@ if (!defined('ADMIN_ACCESS')) {
     exit;
 }
 
+global $lang; 
+
+function yesorno($val = 0)
+{
+	if ($val)
+	{
+		return '<span class="fa fa-check-circle text-success fa-md"></span>';
+	}
+	else
+	{
+		return '<span class="fa fa-circle text-danger fa-md"></span>';
+	}
+		
+}
+
 switch(isset($url[2]) ? $url[2] : null) {
 	default:
-		$adminTpl->admin_head('Группы');
-		echo '<div class="row">
-			<div class="col-lg-12">
-				<section class="panel">
-					<div class="panel-heading">
-						<b>Группы</b>						
-					</div>';			
+		$adminTpl->admin_head($lang['group_users']);
+		echo '<div id="content" class="animated fadeIn">';			
 		$query = $db->query("SELECT * FROM `" . USER_DB . "`.`" . USER_PREFIX . "_groups` ORDER BY name ASC");
 		if($db->numRows($query) > 0) 
 		{
-			echo '<div class="panel-body no-padding">
-					<form id="tablesForm" style="margin:0; padding:0" method="POST" action="{ADMIN}/module/news/action&moderate">
-						<table class="table no-margin">
-							<thead>
-								<tr>
-									<th><span class="pd-l-sm"></span>ID</th>
-									<th class="col-md-6">'._CAPTION.'</th>
-									<th class="col-md-1">'._GROUP_NAME_SPECIAL.'</th>
-									<th class="col-md-2">'._APANEL.'</th>
-									<th class="col-md-1">'._GROUP_NAME_PROTECTED.'</th>
-									<th class="col-md-2">' . _ACTIONS . '</th>									
-								</tr>
-							</thead>
-							<tbody>';	
+			echo '<div class="panel panel-dark panel-border top">
+				<div class="panel-heading"><span class="panel-title">' . $lang['group_users_list'] . ':</span>                
+              </div>
+              <div class="panel-body pn"> 
+				<form id="tablesForm" style="margin:0; padding:0" method="POST" action="{ADMIN}/module/news/action&moderate">
+                  <table class="table table-striped">
+                    <thead>
+						<tr>
+							<th><span class="pd-l-sm"></span>#</th>
+							<th class="col-md-6">'.$lang['title'].'</th>
+							<th class="col-md-1 text-center">'.$lang['group_users_special'].'</th>
+							<th class="col-md-1 text-center">'.$lang['panel'].'</th>
+							<th class="col-md-2 text-center">'.$lang['group_users_protect'].'</th>
+							<th class="col-md-3">'.$lang['action'].'</th>									
+						</tr>						
+                    </thead>
+                    <tbody>';		
 			while($group = $db->getRow($query)) 
 			{
 				echo '
 				<tr>
 					<td><span class="pd-l-sm"></span>' . $group['id'] . '</td>
 					<td><div id="editTitle_' . $group['id'] . '" onclick="EditTitle(\'editTitle_' . $group['id'] . '\', \'group\', \'' . $group['id'] . '\')">' . $group['name'] . '</div></td>
-					<td>' . ($group['special'] ? '<font color="green">' . _YES . '</font>' : '<font color="red">' . _NO . '</font>') . '</td>
-					<td>' . ($group['admin'] ? '<font color="green">' . _YES . '</font>' : '<font color="red">' . _NO . '</font>') . '</td>
-					<td>' . ($group['protect'] ? '<font color="green">' . _YES . '</font>' : '<font color="red">' . _NO . '</font>') . '</td>
+					<td class="text-center">' . yesorno($group['special'])  . '</td>
+					<td class="text-center">' . yesorno($group['admin']) . '</td>
+					<td class="text-center">' . yesorno($group['protect']) . '</td>
 					<td>
-						<a href="{ADMIN}/groups/edit/' . $group['id'] . '">
-						<button type="button" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="" data-original-title="' . _EDIT .'">E</button>
-						</a>'
-						. ($group['protect'] ? '' : '<a href="{ADMIN}/groups/delete/' . $group['id'] . '" onClick="return getConfirm(\''._GROUP_DEL.'' . $group['name'] . '?\')" title="' . _DELETE . '" class="delete">
-						<button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="" data-original-title="' . _DELETE .'">X</button>
-						</a>') . '				
-					</td>
+						<div class="btn-group">
+						<button type="button" onclick="location.href = \'{ADMIN}/groups/edit/' . $group['id'] . '\'" class="btn btn-xs btn-primary">'.$lang['edit_short'].'</button>
+						<button type="button" data-toggle="dropdown" class="btn btn-dro btn-primary dropdown-toggle"><span class="caret"></span><span class="sr-only">' . $lang['action'] . '</span></button>
+						<ul role="menu" class="dropdown-menu">							
+							<li><a href="'.$core->fullURL().'#" onclick="modal_o(\'#modal-form-'.$group['id'].'\')">' . $lang['delete'] .'</a></li>
+						</ul>
+					</div>';
+					if ($group['protect'])
+					{
+						echo '<div id="modal-form-'.$group['id'].'" class="popup-basic bg-none mfp-with-anim mfp-hide">
+						<div class="panel">
+						  <div class="panel-heading"><span class="panel-icon"><i class="fa fa-check-square-o"></i></span><span class="panel-title">'.$lang['info'].'</span></div>
+						  <div class="panel-body">
+							<h3 class="mt5">' . str_replace('[group]', $group['name'], $lang['group_users_protect_title']) .  '</h3>							
+							<hr class="short alt">
+							<p>' . str_replace('[group]', $group['name'], $lang['group_users_protect_text']) .  '</p>
+						  </div>						  
+						</div>
+					  </div>';
+					}
+					else 
+					{
+					echo '<div id="modal-form-'.$group['id'].'" class="popup-basic bg-none mfp-with-anim mfp-hide">
+						<div class="panel">
+						  <div class="panel-heading"><span class="panel-icon"><i class="fa fa-check-square-o"></i></span><span class="panel-title">'.$lang['confirm'].'</span></div>
+						  <div class="panel-body">
+							<h3 class="mt5">' . str_replace('[group]', $group['name'], $lang['group_users_del_title']) .  '</h3>							
+							<hr class="short alt">
+							<p>' . str_replace('[group]', $group['name'], $lang['group_users_del_text']) .  '</p>
+						  </div>
+						  <div class="panel-footer text-right">
+							<button type="button" onclick="location.href = \'{ADMIN}/groups/delete/' . $group['id'] .'\'" class="btn btn-danger">' . $lang['delete'] .'</button>
+						  </div>
+						</div>
+					  </div>';
+					}
+					echo '</td>
 				</tr>';	
 			}
-			echo '<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>';
-			echo "</form></div>";
+			echo '</tbody></table>
+			</form></div></div>';
 		} 
 		else
 		{
-			echo '<div class="panel-heading">'._GROUP_EMPTY.'</div>';		
+			$adminTpl->info($lang['group_users_empty'], 'empty', null, $lang['group_users_list'], $lang['group_users_add'], ADMIN.'/groups/add');				
 		}
-		echo'</section></div></div>';
+		echo'</div>';
 		$adminTpl->admin_foot();
 		break;	
 		
@@ -108,27 +150,35 @@ switch(isset($url[2]) ? $url[2] : null) {
 			$tit = _GROUP_ADD;
 		}
 		$adminTpl->admin_head($tit);
-		echo '<div class="row">
-			<div class="col-lg-12">
-				<section class="panel">
-					<div class="panel-heading">
-						<b>' . $tit . '</b>						
+		$validation_array = array(		
+		'title' => array(
+			'required' =>  array('true', _CAT_NAME_ERR)			
+		)
+		
+	);
+	validationInit($validation_array);	
+		echo '<div id="content" class="animated fadeIn">
+			<div class="panel panel-dark panel-border top">
+				<div class="panel-heading"><span class="panel-title">'. $tit .'</span>					
+			</div>
+			<div class="panel-body">		
+				<form id="admin-form" class="form-horizontal parsley-form" role="form" action="{ADMIN}/groups/save" method="post">
+					<div class="form-group">
+						<label for="title"  class="col-sm-3 control-label">'. _GROUP_NAME .'</label>
+							<div class="col-sm-4">
+									<label for="name" class="field prepend-icon">
+								<input value="' . $group['name'] . '" type="text" name="title" class="form-control" data-parsley-required="true" data-parsley-trigger="change">
+								<label for="name" class="field-icon"><i class="fa fa-pencil"></i></label>
+							</label>	
+							</div>
 					</div>
-					<div class="panel-body">
-						<form class="form-horizontal parsley-form" role="form" action="{ADMIN}/groups/save" method="post">
-												<div class="form-group">
-													<label class="col-sm-3 control-label">'. _GROUP_NAME .'</label>
-													<div class="col-sm-4">
-														<input value="' . $group['name'] . '" type="text" name="title" class="form-control" data-parsley-required="true" data-parsley-trigger="change">
-													</div>
-												</div>
-												<div class="form-group">
-													<label class="col-sm-3 control-label">'. _GROUP_SPECIAL .'</label>
-													<div class="col-sm-4">
-														'.radio("special", $group['special']).'
-														<p class="help-block">'. _GROUP_SPECIAL_DESC .'</p>
-													</div>
-												</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">'. _GROUP_SPECIAL .'</label>
+							<div class="col-sm-4">
+								'.radio("special", $group['special']).'
+								<p class="help-block">'. _GROUP_SPECIAL_DESC .'</p>
+							</div>
+					</div>
 												<div class="form-group">
 													<label class="col-sm-3 control-label">'. _GROUP_POINTS .'</label>
 													<div class="col-sm-4">

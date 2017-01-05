@@ -218,7 +218,7 @@ switch(isset($url[2]) ? $url[2] : null)
 		$_fold['search'] = _TPL_FOLD_SEARCH;
 	
 		if(isset($save_is)) $adminTpl->alert('success', $lang['info'], $lang['success_save']);
-		$codem = 'CodeMirror.fromTextArea("_code", {height: "dynamic",parserfile: ["parsexml.js", "parsecss.js", "tokenizejavascript.js", "parsejavascript.js", "parsehtmlmixed.js"],stylesheet: ["' . PLUGINS . 'highlight_code/xmlcolors.css", "' . $config['url'] . 'highlight_code/jscolors.css", "' . PLUGINS . '/usr/plugins/highlight_code/csscolors.css"], path: "' . PLUGINS . 'highlight_code/", lineNumbers: true});';
+		$codem = 'CodeMirror.fromTextArea("_code", {height: "dynamic",parserfile: ["parsexml.js", "parsecss.js", "tokenizejavascript.js", "parsejavascript.js", "parsehtmlmixed.js"],stylesheet: ["' . PLUGINS . 'highlight_code/xmlcolors.css", "' . PLUGINS . 'highlight_code/jscolors.css", "' . PLUGINS . '/usr/plugins/highlight_code/csscolors.css"], path: "' . PLUGINS . 'highlight_code/", lineNumbers: true});';
 		$file = $url[3];
 		$adminTpl->footIncludes[] ='<script src="' . PLUGINS . '/highlight_code/codemirror.js" type="text/javascript"></script>
 									<script type="text/javascript">	ajaxGetJS(\'' . ADMIN . '/templates/ajax/loadtpl/'.$file.'\', \''.$codem .'\', \'_div\');
@@ -232,9 +232,10 @@ switch(isset($url[2]) ? $url[2] : null)
 					if(node.data.href){						
 						ajaxGetJS(\'' . ADMIN . '/templates/ajax/loadtpl/\'+node.data.href, \''.$codem .'\', \'_div\');						
 					}
-				},
-				activateKey("id1.2"),
-			});';
+				}
+				
+			});
+			';
 			echo '<div id="_div"></div>			
 			</div>
 			<aside class="tray tray-right tray320">
@@ -255,6 +256,10 @@ switch(isset($url[2]) ? $url[2] : null)
 							$name = end($name);
 							$_a = explode('usr/tpl/'.$config['tpl'].'/', $file);
 							$absolute = str_replace('/', '=', end($_a));
+							if ($url[3] == $absolute)
+							{
+								$adminTpl->js_code[] = '$("#tree5").fancytree("getTree").activateKey("'.$count_folder.'.'.$count_files.'");';
+							}
 							echo '<li id="'.$count_folder.'.'.$count_files.'"><a href="'.$absolute.'">' . (isset($_names[$absolute]) ? $_names[$absolute] : $name) . '</a></li>';
 						}
 						echo '</ul>';			
@@ -265,7 +270,11 @@ switch(isset($url[2]) ? $url[2] : null)
 						$count_files ++;
 						$name = explode('usr/tpl/'.$config['tpl'].'/', $file);
 						$name = $name[1];
-						echo '<li id="'.$count_files.'"><a href="' . $name . '">' . (isset($_names[$name]) ? $_names[$name] : $name) . '</a></li>';
+						if ($url[3] == $name)
+						{
+							$adminTpl->js_code[] = '$("#tree5").fancytree("getTree").activateKey("0.'.$count_files.'");';
+						}
+						echo '<li id="0.'.$count_files.'"><a href="' . $name . '">' . (isset($_names[$name]) ? $_names[$name] : $name) . '</a></li>';
 					}						
 			echo '</ul>
                 </div>

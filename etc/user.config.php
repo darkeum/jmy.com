@@ -38,5 +38,6 @@ $user['userWallNum'] = "10";
 $user['userFriends'] = "1";
 $user['userGuests'] = "1";
 $user['readBlog'] = "1";
+$user['hackPoll'] = "1";
 $user['lang'] = "ru";
 

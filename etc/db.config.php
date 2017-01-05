@@ -9,9 +9,9 @@ if (!defined('ACCESS'))
 $dbhost = 'localhost';
 $dbuser = 'root';
 $dbpass = '';
-$dbname = 'jmy';
+$dbname = 'test';
 
 $prefix = 'JMY';
 $user_prefix = 'JMY';
-$user_db = 'jmy';
+$user_db = 'test';
 

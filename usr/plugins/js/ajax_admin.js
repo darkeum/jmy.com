@@ -24,12 +24,16 @@ function ajaxEngine(replaceID, type, js) {
 				if(type == 2)
 				{
 					document.getElementById(replaceID).value = xmlhttp.responseText;
+					
 					eval(js);
+					
 				}
 				else
 				{
 					document.getElementById(replaceID).innerHTML = xmlhttp.responseText;
+					
 					eval(js);
+					
 				}
 			} else {
 				//alert('AJAX: ошибка выполнения!');
@@ -89,7 +93,7 @@ function ajaxPost(uri, id, data, type) {
 
 	xmlhttp.open('POST', link, true);
 	xmlhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-	alert(data);
+	//alert(data);
 	xmlhttp.send(data);
 }
 

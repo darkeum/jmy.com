@@ -1,9 +1,9 @@
 <?php
 
 /*
-* @name        JMY CMS
+* @name        JMY CORE
 * @link        http://jmy.su/
-* @copyright   Copyright (C) 2012-2016 JMY LTD
+* @copyright   Copyright (C) 2012-2017 JMY LTD
 * @license     LICENSE.txt (see attached file)
 * @version     VERSION.txt (see attached file)
 * @author      Komarov Ivan
@@ -21,7 +21,6 @@ require ROOT . 'etc/user.config.php';
 require ROOT . 'etc/log.config.php';
 require ROOT . 'lib/php_funcs.php';
 require ROOT . 'lib/global.php';
-
 
 if(isset($_COOKIE['theme']))
 {
@@ -51,14 +50,10 @@ function __autoload($class_name)
 	require_once($class_path);
 	}
 }
-
 $cache = new cache;
-
 require ROOT . 'boot/db/' . $config['dbType'] . '.db.php';
 require ROOT . 'boot/db' . (($config['dbCache'] == 1) ? '_cache' : '') . '.class.php';
 require ROOT . 'boot/auth.class.php';
 require ROOT . 'boot/template.class.php';
 require ROOT . 'boot/core.class.php';
 require ROOT . 'boot/loader.php';
-
-

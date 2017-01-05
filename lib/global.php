@@ -1702,6 +1702,27 @@ global $config, $core, $social;
 	return $s_list;
 }
 
+function social_list_admin()
+{
+loadConfig('social');
+global $config, $core, $social, $lang;	
+	$s_list = '';
+	
+	if ($social['vk_is'] == '1') {$s_list .= '<div class="col-sm-4"><a href="'.$config['url'].'/auth.php?url=vk" class="button btn-social vk span-left mr5 btn-block"><span><i class="fa fa-vk"></i></span>'.$lang['vk'].'</a></div>';}
+	
+	if ($social['fb_is'] == '1') {$s_list .= '<div class="col-sm-4"><a href="'.$config['url'].'/auth.php?url=facebook" class="button btn-social facebook span-left mr5 btn-block"><span><i class="fa fa-facebook"></i></span>'.$lang['facebook'].'</a></div>';}
+	
+	if ($social['gg_is'] == '1') {$s_list .= '<div class="col-sm-4"><a href="'.$config['url'].'/auth.php?url=google" class="button btn-social googleplus span-left btn-block"><span><i class="fa fa-google-plus"></i></span>'.$lang['google'].'</a></div>';}
+	
+	if ($social['ya_is'] == '1') {$s_list .= '<div class="col-sm-4"><a href="'.$config['url'].'/auth.php?url=yandex" class="button btn-social yandex span-left mr5 btn-block"><span><i class="fa fa-yahoo"></i></span>'.$lang['yandex'].'</a></div>';}
+	
+	if ($social['ok_is'] == '1') {$s_list .= '<div class="col-sm-4"><a href="'.$config['url'].'/auth.php?url=odnoklassniki" class="button btn-social ok span-left mr5 btn-block"><span><i class="fa fa-odnoklassniki"></i></span>'.$lang['ok'].'</a></div>';}
+	
+	if ($social['mm_is'] == '1') {$s_list .= '<div class="col-sm-4"><a href="'.$config['url'].'/auth.php?url=mailru" class="button btn-social mail span-left mr5 btn-block"><span><i class="fa fa-envelope-o"></i></span>'.$lang['mailru'].'</a></div>';}
+	
+	return $s_list;
+}
+
 
 
 function loadLang($file)

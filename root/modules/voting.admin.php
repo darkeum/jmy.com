@@ -19,7 +19,7 @@ switch(isset($url[2]) ? $url[2] : null) {
 	default:
 		$adminTpl->admin_head($lang['polls']);
 		echo '<div id="content" class="animated fadeIn">';
-		$query = $db->query("SELECT id as ppid, title, votes, max, (SELECT COUNT(id) FROM ".DB_PREFIX."_poll_questions WHERE ppid = pid) as variants FROM ".DB_PREFIX."_polls ORDER BY title");			
+		$query = $db->query("SELECT id as ppid, title, votes, max, active, (SELECT COUNT(id) FROM ".DB_PREFIX."_poll_questions WHERE ppid = pid) as variants FROM ".DB_PREFIX."_polls ORDER BY title");			
 		if($db->numRows($query) > 0) 
 		{
 		echo '<div class="panel panel-dark panel-border top">
@@ -31,10 +31,11 @@ switch(isset($url[2]) ? $url[2] : null) {
 						<thead>
 							<tr>
 								<th><span class="pd-l-sm"></span>#</th>
-								<th class="col-md-3">' . $lang['polls_name'] . '</th>
+								<th class="col-md-4">' . $lang['polls_name'] . '</th>
 								<th class="col-md-1">' . $lang['polls_list_variant'] . '</th>
-								<th class="col-md-3">' . $lang['polls_list_answer'] . '</th>
-								<th class="col-md-2">' . $lang['polls_list_max'] . '</th>
+								<th class="col-md-1">' . $lang['polls_list_answer'] . '</th>
+								<th class="col-md-1">' . $lang['polls_list_max'] . '</th>
+								<th class="col-md-3 text-center">' . $lang['status'] . '</th>
 								<th class="col-md-2">' . $lang['action'] . '</th>								
 								<th class="col-md-1">
 									<div class="checkbox-custom mb15">
@@ -47,39 +48,74 @@ switch(isset($url[2]) ? $url[2] : null) {
 						<tbody>';				
 						while($poll = $db->getRow($query)) 
 						{
+							if ($poll['active'])
+							{
+								if ($poll['votes'] == $poll['max'] )
+								{
+									$status_icon = '<span class="fa fa-check-circle text-warning fa-md"></span>';
+								}
+								else
+								{
+									$status_icon = '<span class="fa fa-check-circle text-success fa-md"></span>';
+								}
+							}
+							else
+							{
+								$status_icon = '<span class="fa fa-circle text-danger fa-md"></span>';
+							}
 							echo '
 							<tr>
-								<td><span class="pd-l-sm"></span>]' . $poll['ppid'] . '</td>
+								<td><span class="pd-l-sm"></span>' . $poll['ppid'] . '</td>
 								<td>' . $poll['title'] . '</td>
 								<td>' . $poll['variants'] . '</td>
 								<td>' . $poll['votes'] . '</td>
 								<td>' . $poll['max'] . '</td>
-								<td>';
-								echo $status_icon .'
-								<a href="{ADMIN}/voting/edit/'. $poll['ppid'] .'">
-								<button type="button" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="" data-original-title="'. _EDIT.'">E</button>
-								</a>
-								<a href="{ADMIN}/voting/delete/'. $poll['ppid'] .'" onclick="return getConfirm(\''._POLL_DEL.' - '. $poll['title'] .'?\')">
-								<button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="" data-original-title="' . _DELETE .'">X</button>
-								</a>';
-								echo "</td>
-								<td> <input type=\"checkbox\" name=\"checks[]\" value=\"" . $poll['ppid'] . "\"></td>
-							</tr>";	
-						}
-			
-		echo '<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>		
-		<div align="right">
-		<table>
-		<tbody><tr>
-		<td valign="top">
-		<input name="submit" type="submit" class="btn btn-danger" id="sub" value="' . _DELETE .'"><span class="pd-l-sm"></span>
-		</td>
-		</tr>
-		</tbody></table>
-		<br>	
-		</div>
-		</form></div>';
-		echo'</section></div></div>';	
+								<td class="text-center">' . $status_icon . '</td>
+								<td>
+									<div class="btn-group">
+										<button type="button" onclick="location.href = \'{ADMIN}/voting/edit/'. $poll['ppid'] .'\'" class="btn btn-xs btn-primary">'.$lang['edit_short'].'</button>
+										<button type="button" data-toggle="dropdown" class="btn btn-dro btn-primary dropdown-toggle"><span class="caret"></span><span class="sr-only">' . $lang['action'] . '</span></button>
+										<ul role="menu" class="dropdown-menu">											
+											<li><a href="'.ADMIN.'/voting/retivate/'.$poll['ppid'].'">'.(($poll['active'] == 0) ? $lang['do_activation'] : $lang['do_deactivation']).'</a></li>   
+											<li class="divider"></li>
+											<li><a href="'.$core->fullURL().'#" onclick="modal_o(\'#modal-form-'.$poll['ppid'].'\')">' . $lang['delete'] .'</a></li>
+										</ul>
+									</div>
+									<div id="modal-form-'.$poll['ppid'].'" class="popup-basic bg-none mfp-with-anim mfp-hide">
+										<div class="panel">
+										  <div class="panel-heading"><span class="panel-icon"><i class="fa fa-check-square-o"></i></span><span class="panel-title">'.$lang['confirm'].'</span></div>
+										  <div class="panel-body">
+											<h3 class="mt5">' . str_replace('[poll]', $poll['title'], $lang['polls_del_title']) .  '</h3>							
+											<hr class="short alt">
+											<p>' . str_replace('[poll]', $poll['title'], $lang['polls_del_text']) .  '</p>
+										  </div>
+										  <div class="panel-footer text-right">
+											<button type="button" onclick="location.href = \'{ADMIN}/voting/delete/'.$poll['ppid'].'\'" class="btn btn-danger">' . $lang['delete'] .'</button>
+										  </div>
+										</div>
+									</div>
+								</td>
+								<td>
+									<div class="checkbox-custom mb15">
+										<input id="checkbox' . $poll['ppid'] . '" type="checkbox" name="checks[]" value="' . $poll['ppid'] . '"><label for="checkbox' . $poll['ppid'] . '"></label>
+									</div>
+								</td>
+							</tr>';	
+						}			
+				echo '</tbody>
+					  <tfoot class="footer-menu">
+						<tr>                    
+						  <td colspan="9">
+							<nav class="text-right">
+								<input name="submit" type="submit" class="btn btn btn-danger" id="sub" value="' . _DELETE . '" />
+							 </nav>
+						  </td>
+						</tr>
+					  </tfoot>
+				  </table>
+				 </form>
+				</div>
+			</div>';	
 		} 
 		else 
 		{
@@ -271,7 +307,7 @@ function add($id = null)
 
 function deleteVot($id)
 {
-global $adminTpl, $db;
+	global $adminTpl, $db;
 	$db->query("DELETE FROM `" . DB_PREFIX . "_poll_questions` WHERE `pid` = '" . $id . "'");
 	$db->query("DELETE FROM `" . DB_PREFIX . "_poll_voting` WHERE `pid` = '" . $id . "'");
 	$db->query("DELETE FROM `" . DB_PREFIX . "_polls` WHERE `id` = '" . $id . "'");

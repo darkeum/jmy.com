@@ -3,7 +3,7 @@
 /**
 * @name        JMY CMS
 * @link        http://jmy.su/
-* @copyright   Copyright (C) 2012-2016 JMY LTD
+* @copyright   Copyright (C) 2012-2017 JMY LTD
 * @license     LICENSE.txt (see attached file)
 * @version     VERSION.txt (see attached file)
 * @author      Komarov Ivan
@@ -16,8 +16,9 @@ if (!defined('ADMIN_SWITCH')) {
 
 function news_main() 
 {
-	global $adminTpl, $core, $db, $admin_conf, $url;
-	$adminTpl->admin_head(_MODULES . ' | ' . _NAME);
+	global $adminTpl, $core, $db, $admin_conf, $url, $lang;
+	$adminTpl->admin_head($lang['news'] . ' | ' . $lang['news_list']);
+	echo '<div id="content" class="animated fadeIn">';
 	$page = init_page();
 	$cut = ($page-1)*$admin_conf['num'];
 	$query_search = isset($_POST['query']) ? filter($_POST['query'], 'text') : '';
@@ -39,120 +40,152 @@ function news_main()
 	{
 		$where .= ' AND l.lang = \'' . $core->InitLang() . '\'';
 	}
-	$count = $db->numRows($db->query('SELECT id FROM '.DB_PREFIX.'_news WHERE active=2'));
-	if($count > 0)
+	if($query_search)
 	{
-		echo '<div style="clear:both"></div>';
-		$adminTpl->info(_MODER);
+		$where = 'WHERE l.title LIKE \'%' . $db->safesql($query_search) . '%\'';
 	}
-	$cats_arr = $core->aCatList('news');
-	echo '<div class="row">
-			<div class="col-lg-12">
-				<section class="panel">
-					<div class="panel-heading">
-						<b>' . _LIST_NEWS . '</b>						
-						<p class="text-left mg-b"><b>' . _SORT . '</b><span class="pd-l-sm">
-						<a href="' . ADMIN . '/module/news/cat/0"><span class="label ' . (($cat == 0 && isset($url[3]) && $url[3] == 'cat') ? 'label-dark' : 'label-default') . '">Без категории</span></a><span class="pd-l-sm">';	
-						foreach ($cats_arr as $cid => $name) 
-						{
-						echo '<a href="' . ADMIN . '/module/news/cat/' . $cid . '"><span class="label ' . (($cid == $cat) ? 'label-dark' : 'label-default') . '">'.$name.'</span></a><span class="pd-l-sm">';	
-						}
-	echo'</p></div>';	
+	
+	$cats_arr = $core->aCatList('news');	
 	$all = $db->numRows($db->query("SELECT * FROM " . DB_PREFIX . "_news $whereC"));
 	$adminTpl->a_pages($page, $admin_conf['num'], $all, ADMIN.'/module/news/{page}');
-	$query = $db->query("SELECT n.*, l.*, c.id as cid, c.name, c.altname as alturl FROM ".DB_PREFIX."_news AS n LEFT JOIN ".DB_PREFIX."_categories AS c ON (n.cat=c.id) LEFT JOIN ".DB_PREFIX."_langs as l on(l.postId=n.id and l.module='news') $where AND active!='2' ORDER BY n.date DESC LIMIT " . $cut . ", " . $admin_conf['num'] . "");
+	$query = $db->query("SELECT n.*, l.*, c.id as cid, c.name, c.altname as alturl FROM ".DB_PREFIX."_news AS n LEFT JOIN ".DB_PREFIX."_categories AS c ON (n.cat=c.id) LEFT JOIN ".DB_PREFIX."_langs as l on(l.postId=n.id and l.module='news') $where ORDER BY n.date DESC LIMIT " . $cut . ", " . $admin_conf['num'] . "");
 	if($db->numRows($query) > 0) 
 	{
-	echo '<div class="panel-body no-padding">
-					<form id="tablesForm" style="margin:0; padding:0" method="POST" action="{ADMIN}/module/news/action">
-						<table class="table no-margin table-responsive">
-							<thead>
-								<tr>
-									<th><span class="pd-l-sm"></span>ID</th>
-									<th class="col-md-3">' . _TITLE . '</th>
-									<th class="col-md-2">' . _DATE . '</th>
-									<th class="col-md-3">' . _CATS .'</th>
-									<th class="col-md-2">' . _AUTHOR . '</th>
-									<th class="col-md-2">' . _ACTIONS . '</th>								
-									<th class="col-md-1">
-										<div class="checkbox-custom mb5">
-											<input id="all" type="checkbox" name="all" onclick="setCheckboxes(\'tablesForm\', true); return true;">
-											<label for="all"></label>
-										</div>								
-									</th>
-								</tr>
-							</thead>
-							<tbody>';
+		$count = $db->numRows($db->query('SELECT id FROM '.DB_PREFIX.'_news WHERE active=2'));
+		if($count > 0)
+		{
+			$adminTpl->alert('warning', $lang['info'], $lang['news_moder']);
+		}
+		echo '<div class="panel panel-dark panel-border top">
+				<div class="panel-heading">
+					<span class="panel-title">' . $lang['news_list'] . ':</span>    
+						<div class="widget-menu pull-right mr5" >						
+							<form style=" display: inline-block;" method="POST" action="administration/module/news">
+								<input name="query" value="" placeholder="'.$lang['search'].'" class="form-control mr10">
+							</form>
+							<select style="width: 150px; display: inline-block;" class="form-control" onchange="top.location=this.value">
+								<option value="">'.$lang['choose_cat'].'</option>';
+								foreach ($cats_arr as $cid => $name) 
+									{
+										echo '  <option value="' . ADMIN . '/module/news/cat/' . $cid . '" ' . (($cid == $cat) ? 'selected' : '') . '">'.$name.'</option>';	
+									}
+						echo '</select>
+					</div>
+              </div>
+              <div class="panel-body pn"> 
+				<form id="tablesForm" method="POST" action="{ADMIN}/module/news/action">
+                  <table class="table table-striped">
+                    <thead>
+						<tr>
+							<th><span class="pd-l-sm"></span>#</th>
+							<th class="col-md-2">' . $lang['title'] . '</th>
+							<th class="col-md-2">' . $lang['date'] . '</th>
+							<th class="col-md-2">' . $lang['cats'] .'</th>
+							<th class="col-md-1 text-center">' . $lang['status'] .'</th>
+							<th class="col-md-1 text-center"><span class="fa fa-comments-o fa-lg"></span></th>
+							<th class="col-md-1 text-center"><span class="fa fa-eye fa-lg"></span></th>
+							<th class="col-md-1">' . $lang['author'] . '</th>
+							<th class="col-md-3">' . $lang['actions'] . '</th>
+							<th class="col-md-1">
+								<div class="checkbox-custom mb15">
+									<input id="all" type="checkbox" name="all" onclick="setCheckboxes(\'tablesForm\', true); return true;">
+									<label for="all"></label>
+								</div>	
+							</th>
+						</tr>
+                    </thead>
+                    <tbody>';
 		while($news = $db->getRow($query)) 
 		{
-			$status_icon = ($news['active'] == 0) ? '<a href="{MOD_LINK}/activate/' . $news['id'] . '" onClick="return getConfirm(\'' .  _ACTIVATE_NEWS .' - ' . $news['title'] . '?\')"><button  type="button" class="btn btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="" data-original-title="' . _NEWS_ACTIVE .'">A</button></a>' : '<a href="{MOD_LINK}/deactivate/' . $news['id'] . '" onClick="return getConfirm(\'' . _DEACTIVATE_NEWS .' - ' . $news['title'] . '?\')" ><button  type="button" class="btn btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="" data-original-title="' . _NEWS_DEACTIVE .'">A</button></a>';
-			
+			if ($news['active'] == 1)
+			{
+				$status_icon = '<span class="fa fa-check-circle text-success fa-md"></span>';
+			}
+			elseif ($news['active'] == 2)
+			{
+				$status_icon = '<span class="fa fa-clock-o text-warning fa-md"></span>';
+			}
+			else
+			{
+				$status_icon = '<span class="fa fa-circle text-danger fa-md"></span>';
+			}			
 			echo '
-			<tr '.(($news['active'] == 0) ? 'class="danger"' : '' ).'>
+			<tr>
 				<td><span class="pd-l-sm"></span>' . $news['id'] . '</td>
 				<td>' . $news['title'] . '</td>
 				<td>' . formatDate($news['date'], true) . '</td>				
 				<td>' . ($news['cat'] !== ',0,' ? $core->getCat('news', $news['cat'], 'short', 3) : 'Нет') . '</td>
+				<td class="text-center">' . $status_icon . '</td>
+				<td class="text-center">' . $news['comments'] . '</td>
+				<td class="text-center">' . $news['views'] . '</td>
 				<td>' . $news['author'] . '</td>
-				<td>
-				<div class="btn-group btn-group-xs mt15 d-sm-flex">
-				<button type="button" class="btn btn-info">А</button>
-				<button type="button" class="btn btn-system light">E</button>
-				<button type="button" class="btn btn-Danger">X</button>
-  <button type="button" data-toggle="dropdown" class="btn btn-alert dropdown-toggle" aria-expanded="true"><span class="caret"></span><span class="sr-only">Toggle Dropdown</span></button>
-  <ul role="menu" class="dropdown-menu">
-    <li><a href="#">'._CAT_VIEW.'</a></li>
-    <li><a href="#">Another action</a></li>
-    <li><a href="#">Something else here</a></li>
-    <li class="divider"></li>
-    <li><a href="#">Separated link</a></li>
-  </ul>
-				
-				</div>
-				
+					<td>				
+					<div class="btn-group">
+						<button type="button" onclick="location.href = \'{ADMIN}/module/news/edit/'.$news['id'].'\'" class="btn btn-xs btn-primary">'.$lang['edit_short'].'</button>
+						<button type="button" data-toggle="dropdown" class="btn btn-dro btn-primary dropdown-toggle"><span class="caret"></span><span class="sr-only">' . $lang['action'] . '</span></button>
+						<ul role="menu" class="dropdown-menu">
+							'.(($news['active'] != 2) ? '<li><a href="{ADMIN}/module/news/moderation/'.$news['id'].'">' . $lang['do_moderation'] . '</a></li>' : '' ).'
+							<li><a href="{ADMIN}/module/news/retivate/'.$news['id'].'">'. (($news['active'] != 1) ? $lang['do_activation'] : $lang['do_deactivation']).'</a></li>  
+							<li><a href="{ADMIN}/module/news/index/'.$news['id'].'">'. (($news['allow_index'] == 0) ? $lang['news_action_index'] : $lang['news_action_noindex']).'</a></li> 	
+							<li><a href="{ADMIN}/module/news/fix/'.$news['id'].'">'. (($news['fixed'] == 0) ? $lang['news_action_fix'] : $lang['news_action_nofix']).'</a></li> 								
+							<li class="divider"></li>
+							<li><a href="'.$core->fullURL().'#" onclick="modal_o(\'#modal-form-'.$news['id'].'\')">' . $lang['delete'] .'</a></li>
+						</ul>
+					</div>
+					<div id="modal-form-'.$news['id'].'" class="popup-basic bg-none mfp-with-anim mfp-hide">
+						<div class="panel">
+						  <div class="panel-heading"><span class="panel-icon"><i class="fa fa-check-square-o"></i></span><span class="panel-title">'.$lang['confirm'].'</span></div>
+						  <div class="panel-body">
+							<h3 class="mt5">' . str_replace('[news]', $news['title'], $lang['news_delete_title']) .'</h3>					
+							<hr class="short alt">
+							<p>' . str_replace('[news]', $news['title'], $lang['news_delete_text']) .  '</p>
+						  </div>
+						  <div class="panel-footer text-right">
+							<button type="button" onclick="location.href = \'{ADMIN}/module/news/delete/'.$news['id'].'\'" class="btn btn-danger">' . $lang['delete'] .'</button>
+						  </div>
+						</div>
+					  </div>
 				</td>
-				<td> 
-				
-				
+				<td>
+					<div class="checkbox-custom mb15">
+						<input id="checkbox' . $news['id'] . '" type="checkbox" name="checks[]" value="' . $news['id'] . '">
+						<label for="checkbox' . $news['id'] . '"></label>
+					</div>
 				</td>
 			</tr>';
-		}
-			echo '<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>';		
-			echo '
-				<div class="_tableBottom">
-					<div align="right">
-						<table>
-							<tr>
-								<td valign="top">
-									<select class="form-control" name="act">
-										<option value="blockComment">' . _FORBID_COMMENTS . '</option>
-										<option value="blockIndex">' . _REMOVE_MAIN .'</option>
-										<option value="nowDate">' . _SET_NOWDATE . '</option>
-										<option value="activate">' . _ACTIVATE . '</option>
-										<option value="deActivate">' . _DEACTIVATE . '</option>
-										<option value="reActivate">' . _REACTIVATE . '</option>									
-										<option value="cat">' . _CHANGE_CAT . '</option>
-										<option value="delete">' . _DELETE . '</option>
-									</select>
-								</td>
-								<td>&nbsp&nbsp</td>	
-								<td valign="top">
-								<input name="submit" type="submit" class="btn btn-success" id="sub" value="' .  _DOIT . '" /><span class="pd-l-sm"></span>
-								</td>
-							</tr>
-						</table>	
-					</div>
-				</div>
-			</form>
-		</div>';
-	} else {
-		echo '<div class="panel-heading">'  . _NEWS_NO_NEWS . '</div>';		
-	}
-	echo'</section></div></div>';	
-	
-	$all = $db->numRows($db->query("SELECT * FROM " . DB_PREFIX . "_news $whereC"));
-	$adminTpl->pages($page, $admin_conf['num'], $all, ADMIN.'/module/news/{page}');
-	
+		}	
+		echo '</tbody>
+				<tfoot class="footer-menu">
+                    <tr align="right">                    
+					  <td align="right" colspan="10">
+                        <nav align="right" class="text-right">						
+							<select style="width: 200px; display: inline-block;" class="form-control" name="act">
+								<option value="blockComment">' . _FORBID_COMMENTS . '</option>
+								<option value="blockIndex">' . _REMOVE_MAIN .'</option>
+								<option value="nowDate">' . _SET_NOWDATE . '</option>
+								<option value="activate">' . $lang['delete'] . '</option>
+								<option value="deActivate">' . $lang['delete'] . '</option>
+								<option value="reActivate">' . _REACTIVATE . '</option>									
+								<option value="cat">' . _CHANGE_CAT . '</option>
+								<option value="delete">' . _DELETE . '</option>
+							</select>
+							<input name="submit" type="submit" class="btn btn-success" style="display: inline-block;" id="sub" value="' .  $lang['doit'] . '" /><span class="pd-l-sm"></span>							
+						 </nav>
+                      </td>					 
+                    </tr>
+                  </tfoot> 
+				</table> 
+			</form>				
+          </div>
+        </div';	
+		$all = $db->numRows($db->query("SELECT * FROM " . DB_PREFIX . "_news $whereC"));
+		$adminTpl->pages($page, $admin_conf['num'], $all, ADMIN.'/module/news/{page}');
+	} 
+	else
+	{
+		$adminTpl->info($lang['news_empty'], 'empty', null, $lang['news_list'], $lang['news_add'], ADMIN.'/module/news/add');	
+	}		
+	echo'</div>';	
 	$adminTpl->admin_foot();
 } 
 
@@ -278,14 +311,10 @@ global $adminTpl, $core, $db, $core, $config, $lang;
 	$validation_array = array(		
 		'title' => array(
 			'required' =>  array('true', _DOP_ADD_TITLE_ERR)			
-		),	/*	
-		'description' => array(
-			'required' =>  array('true', _DOP_ADD_DESC_ERR_1),	
-			'maxlength' =>  array(200,  _DOP_ADD_DESC_ERR_2)				
-		),		
-		'type' => array(
-			'required' =>  array('true', _DOP_ADD_TYPE_ERR)				
-		)		*/
+		),
+		'translit' => array(
+			'required' =>  array('true', _DOP_ADD_TITLE_ERR)			
+		),
 	);
 	validationInit($validation_array);
 	$cats_arr = $core->aCatList('news');
@@ -512,6 +541,7 @@ global $adminTpl, $core, $db, $core, $config, $lang;
 				}
 				else
 				{
+				
 					$_SESSION["RF"]["fff"] ="news/".$id."/";
 				}
 				echo'
@@ -562,7 +592,7 @@ function news_save()
 global $adminTpl, $core, $db, $cats, $groupss, $config;
 	$bb = new bb;
 	$word_counter = new Counter();
-	
+	echo '<div id="content" class="animated fadeIn">';
 	
 	$title = $_POST['title'];
 	$langTitle = isset($_POST['langtitle']) ? $_POST['langtitle'] : '';
@@ -579,9 +609,7 @@ global $adminTpl, $core, $db, $cats, $groupss, $config;
 	$short= isset($_POST['short']) ? $_POST['short'] : '';
 	
 	//временно 
-	$full=$short;
-	
-	
+	$full=$short;	
 	$xfield = isset($_POST['xfield']) ? $_POST['xfield'] : '';
 	$xfieldT = isset($_POST['xfieldT']) ? ($_POST['xfieldT']) : '';
 	$category = isset($_POST['category']) ? array_unique($_POST['category']) : '0';
@@ -782,6 +810,7 @@ global $adminTpl, $core, $db, $cats, $groupss, $config;
 	{
 		$adminTpl->info(_NOT_FILLEDN, 'error');
 	}
+	echo '</div>';
 	$adminTpl->admin_foot();
 }
 

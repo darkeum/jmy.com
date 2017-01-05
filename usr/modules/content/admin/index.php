@@ -3,11 +3,10 @@
 /**
 * @name        JMY CMS
 * @link        http://jmy.su/
-* @copyright   Copyright (C) 2012-2015 JMY LTD
+* @copyright   Copyright (C) 2012-2017 JMY LTD
 * @license     LICENSE.txt (see attached file)
 * @version     VERSION.txt (see attached file)
 * @author      Komarov Ivan
-* @revision	   28.03.2015
 */
 
 if (!defined('ADMIN_SWITCH')) {
@@ -17,24 +16,26 @@ if (!defined('ADMIN_SWITCH')) {
 
 function content_main() 
 {
-global $adminTpl, $core, $db, $admin_conf;
-	$adminTpl->admin_head(_MODULES .' | '. _N_PAGE);
+global $adminTpl, $core, $db, $admin_conf, $lang;
+	$adminTpl->admin_head($lang['modules'] .' | '. $lang['static']);
+	echo '<div id="content" class="animated fadeIn">';
 	$page = init_page();
-	$cut = ($page-1)*$admin_conf['num'];
+	$cut = ($page-1)*$admin_conf['num'];		
+	$query = $db->query("SELECT c.*, l.* FROM ".DB_PREFIX."_content as c  LEFT JOIN ".DB_PREFIX."_langs as l on(l.postId=c.id and l.module='content') WHERE l.lang = '" . $core->InitLang() . "' LIMIT " . $cut . ", " . $admin_conf['num'] . "");
+	if($db->numRows($query) > 0)
+	{	
 	echo '<div class="row">
 			<div class="col-lg-12">
 				<section class="panel">
 					<div class="panel-heading">
-						<b>' . _N_LIST . '</b>
+						<b>' . $lang['static_list'] . '</b>
 					</div>';
-	$query = $db->query("SELECT c.*, l.* FROM ".DB_PREFIX."_content as c  LEFT JOIN ".DB_PREFIX."_langs as l on(l.postId=c.id and l.module='content') WHERE l.lang = '" . $core->InitLang() . "' LIMIT " . $cut . ", " . $admin_conf['num'] . "");
-	if($db->numRows($query) > 0) {	
 	echo '<div class="panel-body no-padding">
 					<form id="tablesForm" style="margin:0; padding:0" method="POST" action="{MOD_LINK}/action">
 						<table class="table no-margin">
 							<thead>
 								<tr>
-									<th><span class="pd-l-sm"></span>ID</th>
+									<th><span class="pd-l-sm"></span>#</th>
 									<th class="col-md-3">' . _TITLE . '</th>
 									<th class="col-md-1">' . _N_LINK . '</th>
 									<th class="col-md-2">' . _DATE . '</th>
@@ -88,22 +89,23 @@ global $adminTpl, $core, $db, $admin_conf;
 	</tr>
 	</table>	
 	</div></div>
-	</form></div>';		
+	</form></div>';	
+	echo'</section></div></div>';	
 	} 	
-	else {
-		echo '<div class="panel-heading">' . _N_EMPTY . '</div>';
+	else 
+	{
+		$adminTpl->info($lang['static_empty'], 'empty', null, $lang['static_list'], $lang['static_add'], ADMIN.'/module/content/add');	
 	}
-	echo'</section></div></div>';
-	
 	$all_query = $db->query("SELECT * FROM " . DB_PREFIX . "_content ");
 	$all = $db->numRows($all_query);
 	$adminTpl->pages($page, $admin_conf['num'], $all, ADMIN.'/module/content/{page}');
+	echo'</div>';
 	$adminTpl->admin_foot();
 } 
 
 function content_add($nid = null) 
 {
-global $adminTpl, $core, $db, $core, $config;
+global $adminTpl, $core, $db, $core, $config, $lang;
 	if(isset($nid)) 
 	{
 		$query = $db->query("SELECT * FROM ".DB_PREFIX."_content WHERE id = '" . $nid . "'");
@@ -124,8 +126,8 @@ global $adminTpl, $core, $db, $core, $config;
 			$title[$langs['lang']] = prepareTitle($langs['title']);
 			$text[$langs['lang']] = html2bb($langs['short']);
 		}
-		$lln = _N_EDITPAGE;
-		$dosave = _UPDATE;
+		$lln = $lang['static_edit'];
+		$dosave = $lang['update'];
 	} 
 	else 
 	{
@@ -139,13 +141,105 @@ global $adminTpl, $core, $db, $core, $config;
 		$text = '';
 		$theme = '';
 		$firstCat = '';
-		$lln = _N_ADDPAGE;
-		$dosave = _ADD;		
-	}	
+		$lln = $lang['static_add'];
+		$dosave = $lang['add'];		
+	}
+	$dir = ROOT.'/usr/tpl/'.$config['tpl'].'/content/';
+
+$skip = array('.', '..');
+$files = scandir($dir);
+foreach($files as $file) {
+    if(!in_array($file, $skip))
+	{
+		//if (is_dir($file)){
+        echo($file . '<br />');
+		//}
+	}
+}
+
 	if (empty($theme)) {  $placeholder = 'placeholder="'._N_DEFAULT.'"';}
 	$cats_arr = $core->aCatList('content');	
-	$adminTpl->admin_head(_MODULES . ' | ' . $lln);
-	require ROOT . 'usr/plugins/ajax_upload/init.php';
+	$adminTpl->admin_head($lang['modules'] . ' | ' . $lln);
+	echo '<div id="content" class="animated fadeIn">
+			<form action="{MOD_LINK}/save" onsubmit="return caa(false);" method="post" name="content" role="form" id="admin-form">
+				<div class="panel panel-dark panel-border top">
+					<div class="panel-heading"><span class="panel-title">'. $lln .'</span></div>
+					<div class="panel-body admin-form">		
+						<div class="section row mbn">
+							<div class="col-md-9 pl15">
+								<div class="section row mb15">
+									<div class="col-xs-6">
+										<label for="title" class="field prepend-icon">
+											<input type="text" name="title" '. (!isset($nid) ? 'onchange="getTranslit(gid(\'title\').value, \'altname\'); caa(this);"' : '').'  value="' . (isset($title[$config['lang']]) ? $title[$config['lang']] : '') . '" class="form-control" id="title" placeholder="'.$lang['static_add_title'].'" data-parsley-required="true" data-parsley-trigger="change">	
+											<label for="title" class="field-icon"><i class="fa fa-pencil"></i></label>
+										</label>
+												</div>
+												<div class="col-xs-6">
+													<label for="altname" class="field prepend-icon">
+														<input type="text" name="altname" value="'.$altname.'" class="form-control" id="altname"  data-parsley-required="true" data-parsley-trigger="change" placeholder="'.$lang['static_add_url'].'">
+														<label for="altname" class="field-icon"><i class="fa fa-link"></i></label>
+													</label>
+												</div>
+											</div>
+											<div class="section row mb15">
+												<div class="col-xs-6">
+													<label for="author" class="field prepend-icon">
+														<select name="author" class="select2-single form-control"><option value="admin" selected>admin</option><option value="zzverr" >zzverr</option><option value="zzverr007" >zzverr007</option>	</select>	
+														<label for="translit" class="field-icon"><i class="fa fa-user"></i></label>												
+													</label>
+												</div>
+												<div class="col-xs-6">
+													 <label for="date" class="field prepend-picker-icon">
+														<input id="date" type="text" name="date" placeholder="Дата публикации" class="gui-input" value="30.11.2016 14:08">
+													</label>
+												</div>
+											</div>
+											<div class="section mb10">												
+												<label class="field mb15">Теги публикации:</label>
+												<input id="tagsinput" name="tags" type="text" value="" class="bg-light mt10">
+											</div>
+											<div class="section row mb15">
+												<div class="col-xs-6">
+													<label for="category" class="field">
+														<select class="form-control" name="category[]" id="maincat" onchange="if(this.value != \'0\') {show(\'catSub\');}" >
+															<option value="0">Без категории</option><option value="33" >лол</option><option value="34" >привет</option></select>
+													</label>
+												</div>
+												<div class="col-xs-6" id="catSub" style="display:none;">
+												<label for="category" class="field">
+													<select class="form-control" name="category[]" id="category"  multiple ><option value="33"  id="cat_33">лол</option><option value="34"  id="cat_34">привет</option></select>
+												</label>
+											</div>
+										</div> 
+									</div>
+									<div class="col-md-3">
+										<div data-provides="fileupload" class="fileupload fileupload-new admin-form">
+											<div class="fileupload-preview thumbnail mb15">
+												<img data-src="holder.js/100%x147/text:миниатюра" alt="holder">
+											</div>
+											<span class="button btn-system btn-file btn-block ph5">
+												<span class="fileupload-new">Загрузить</span>
+												<span class="fileupload-exists">Удалить</span>
+												<input name="mini_img" type="file">
+											</span>
+										</div>
+									</div>
+								</div>
+
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	  </div>
+	</div>';
+	
+	
+
 	$cats_arr = $core->aCatList('content');
 	echo '<section>
 			<ul id="myTab2" class="nav nav-tabs">
@@ -229,7 +323,7 @@ global $adminTpl, $core, $db, $core, $config;
 							<div class="panel-body">
 								<div class="switcher-content">
 									<div class="form-horizontal parsley-form">';									
-echo file_upload('content', $id);							
+						
 echo'								</div>		
 								</div>			
 							</div>
@@ -245,6 +339,7 @@ echo'								</div>
 			</div>
 	</div></div>
 		</section></div></div>';
+		echo '</div>';
 	$adminTpl->admin_foot();
 } 
 

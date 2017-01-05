@@ -15,9 +15,9 @@ var Demo = function() {
         return;
       }
       e.preventDefault;
-	  alert('Your form has submitted!');
-      notif('primary', '_AJAX_INFO', '_AJAX_COMPL');
-      return false;
+	 // alert('Your form has submitted!');
+     // notif('primary', '_AJAX_INFO', '_AJAX_COMPL');
+     // return false;
     });
 
     // give file-upload preview onclick functionality

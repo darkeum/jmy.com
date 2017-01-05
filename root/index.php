@@ -462,15 +462,15 @@ function admin_main()
                       </div>
                       <div class="clearfix visible-sm-block"></div>
                       <div class="col-sm-6 col-md-3 br-lg-r mt-30 mt-md-0">
-                        <h2 class="mn monserrat fs47 ib pr20">'.$core->sum_row('guestbook').'</h2>
+                        <h2 class="mn monserrat fs47 ib pr20">'.$core->sum_row('content').'</h2>
                         <div class="reveal-xlg-inline-block text-center text-xlg-left">
-                          <p class="fs15 text-shady-lady mb2">'._PANEL_STATS_NUM_COMM.'</p>
+                          <p class="fs15 text-shady-lady mb2">Количество страниц</p>
                         </div>
                       </div>
                       <div class="col-sm-6 col-md-3 mt-30 mt-md-0">
-                        <h2 class="mn monserrat fs47 ib pr20">'.$core->sum_row('blog_posts').'</h2>
+                        <h2 class="mn monserrat fs47 ib pr20">'.$core->sum_row('board_threads').'</h2>
                         <div class="reveal-xlg-inline-block text-center text-xlg-left">
-                          <p class="fs15 text-shady-lady mb2">'._PANEL_STATS_NUM_BLOG.'</p>
+                          <p class="fs15 text-shady-lady mb2">Тем на форуме</p>
                         </div>
                       </div>
                     </div>
@@ -479,47 +479,8 @@ function admin_main()
                 <div class="col-sm-12">
                   <hr class="mt-35">
                 </div>
-                <div class="col-sm-12">
-                  <!-- Admin-panels-->
-                  <div class="admin-panels">
-                    <!-- dashboard activity-->
-                    <div id="p01" class="panel mbn mt-40 mt-md-0">
-                      <div class="panel-body pbn">
-                        <div class="row">
-                          <!-- Chart Column-->
-                          <div class="col-md-6">
-                            <div class="pl30 pr40">
-                              <h3 class="ib mn mr20">'._PANEL_STATS_VISIT.'</h3>
-                              <div class="float-sm-right mt-10 mt-sm-0">
-								<a href="#" id="visit" class="btn btn-xs btn-success chart-1 active-success">'._PANEL_STATS_VISITOR.'</a>
-								<a href="#" id="view" class="btn btn-xs btn-default ml4 chart-1">'._PANEL_STATS_VIEWS.'</a></div>
-                              <div id="ecommerce_chart1" style="height: 380px;"></div>
-                            </div>
-                          </div>
-                          <!-- Multi Text Column-->
-                          <div class="col-md-6 mt-30 mt-md-0">
-                            <div class="pr30 pl40">
-                              <h3 class="ib mn mr20">'._PANEL_STATS_USERS.'</h3>
-                              <div class="mt-10 mt-sm-0 pull-sm-right">
-                                <div class="btn-group">
-                                  <button type="button" data-toggle="dropdown" class="btn btn-xs btn-info dropdown-toggle">'._PANEL_STATS_FILTER.'<span class="caret ml15"></span></button>
-                                  <ul role="menu" class="dropdown-menu">
-                                    <li><a id="ecommerce_chart2-new-data" href="#" class="filter-range bg-whitesmoke">Type 1</a></li>
-                                    <li><a id="ecommerce_chart2-new-data-2" href="#" class="filter-range">Type 2</a></li>
-                                    <li><a id="ecommerce_chart2-new-data-3" href="#" class="filter-range">Type 3</a></li>
-                                  </ul>
-                                </div>
-                              </div>
-                              <div id="ecommerce_chart2" style="height: 380px;" class="pt20"></div>                             
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                
               </div>
-              <hr class="mt37">
               <div class="row text-center text-sm-left">
                 <div class="col-lg-6 admin-grid">
                   <div class="pl30 pr30">
@@ -589,178 +550,10 @@ function admin_main()
                   </div>
                 </div>
               </div>
-              <hr class="mt10">
-              <div class="row">
-                <!-- Three Pane Widget-->
-                <div class="col-md-12 admin-grid">
-                  <div class="panel mtn">
-                    <div class="panel-body">
-                      <div class="row">
-                        <div class="col-md-6 mt-30 mt-md-0">
-                          <div class="pl30 pr30">
-                            <h2 class="ib mn mr20">Региональная статистика</h2>
-                            <div class="clearfix mt30">
-                              <div class="pull-left">
-                                <div class="btn-group btn-group-xs d-sm-flex"><a href="#" class="btn btn-info">Пользователи</a><a href="#" class="btn btn-gray">
-                                    Посетители
-                                    </a></div>
-                              </div>
-                             
-                            </div>
-                            <div id="WidgetMap" style="width: 100%; height: 300px;" class="mt40 jvector-colors hide-jzoom"></div>
-                          </div>
-                        </div>
-                        <div class="col-md-6">
-                          <div class="pl30 pr30">
-                            <h2 class="ib mn mr20">Лента событий</h2>
-                            <div class="panel-scroller scroller-lg scroller-thick scroller-blue scroller-pn pn mt30">
-                              <table class="table list-table">
-                                <tbody>
-                                  <tr>
-                                    <td><span class="icon text-warning fa fa-bell"></span>Поступила публикация нового материала от пользователя zzverr.</td>
-                                    <td class="text-right">	сейчас</td>
-                                  </tr>
-								  <tr>
-                                    <td><span class="icon text-warning fa fa-bell"></span>Поступила новый комметарий от пользователя zzverr.</td>
-                                    <td class="text-right">	сейчас</td>
-                                  </tr>
-                                  <tr>
-                                    <td><span class="icon text-info fa fa-bullhorn"></span>Вход admin в панель управления.</td>
-                                    <td class="text-right">сейчас</td>
-                                  </tr>
-                                  <tr>
-                                    <td><span class="icon text-info fa fa-bullhorn"></span>Вход admin в панель управления.</td>
-                                    <td class="text-right">18 сен, 09:31</td>
-                                  </tr>
-                                  <tr>
-                                    <td><span class="icon text-info fa fa-bullhorn"></span>Вход admin в панель управления.</td>
-                                    <td class="text-right">	03 сен, 08:54</td>
-                                  </tr>
-                                  <tr>
-                                    <td><span class="icon text-info fa fa-bullhorn"></span>Вход admin в панель управления.</td>
-                                    <td class="text-right">	01 сен, 13:49</td>
-                                  </tr>
-                                   <tr>
-                                    <td><span class="icon text-warning fa fa-bell"></span>Поступила публикация нового материала от пользователя zzverr.</td>
-                                    <td class="text-right">	01 сен, 10:05</td>
-                                  </tr>
-                                   <tr>
-                                    <td><span class="icon text-info fa fa-bullhorn"></span>Вход admin в панель управления.</td>
-                                    <td class="text-right">	01 сен, 08:59</td>
-                                  </tr>
-                                   <tr>
-                                    <td><span class="icon text-info fa fa-bullhorn"></span>Вход admin в панель управления.</td>
-                                    <td class="text-right">	29 авг, 08:59</td>
-                                  </tr>
-                                  <tr>
-                                    <td><span class="icon text-info fa fa-bullhorn"></span>New order received. Please take care of it.</td>
-                                    <td class="text-right">2 hours</td>
-                                  </tr>
-                                  <tr>
-                                    <td><span class="icon text-info fa fa-bullhorn"></span>New order received. Please take care of it.</td>
-                                    <td class="text-right">2 hours</td>
-                                  </tr>
-                                  <tr>
-                                    <td><span class="icon text-info fa fa-bullhorn"></span>New order received. Please take care of it.</td>
-                                    <td class="text-right">2 hours</td>
-                                  </tr>
-                                  <tr>
-                                    <td><span class="icon text-info fa fa-bullhorn"></span>New order received. Please take care of it.</td>
-                                    <td class="text-right">2 hours</td>
-                                  </tr>
-                                  <tr>
-                                    <td><span class="icon text-info fa fa-bullhorn"></span>New order received. Please take care of it.</td>
-                                    <td class="text-right">2 hours</td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <hr class="mt25">              
+              <hr class="mt10">            
             </div>
           </div>
-          <!-- begin: .tray-right-->
-          <aside data-tray-height="match" class="tray tray-right tray270 pn hidden">
-            <!-- store activity timeline-->
-            <ol class="timeline-list pl5 mt5">
-              <li class="timeline-item">
-                <div class="timeline-icon bg-dark light"><span class="fa fa-tags"></span></div>
-                <div class="timeline-desc"><b>Michael</b> Added a new item to his store:<a href="#">Ipod</a></div>
-                <div class="timeline-date">1:25am</div>
-              </li>
-              <li class="timeline-item">
-                <div class="timeline-icon bg-dark light"><span class="fa fa-tags"></span></div>
-                <div class="timeline-desc"><b>Sara</b> Added a new item to his store:<a href="#">Notebook</a></div>
-                <div class="timeline-date">3:05am</div>
-              </li>
-              <li class="timeline-item">
-                <div class="timeline-icon bg-success"><span class="fa fa-usd"></span></div>
-                <div class="timeline-desc"><b>Admin</b> created a new invoice for:<a href="#">Software</a></div>
-                <div class="timeline-date">4:15am</div>
-              </li>
-              <li class="timeline-item">
-                <div class="timeline-icon bg-warning"><span class="fa fa-pencil"></span></div>
-                <div class="timeline-desc"><b>Laura</b> edited her work experience</div>
-                <div class="timeline-date">5:25am</div>
-              </li>
-              <li class="timeline-item">
-                <div class="timeline-icon bg-success"><span class="fa fa-usd"></span></div>
-                <div class="timeline-desc"><b>Admin</b> created a new invoice for:<a href="#">Apple Inc.</a></div>
-                <div class="timeline-date">7:45am</div>
-              </li>
-              <li class="timeline-item">
-                <div class="timeline-icon bg-dark light"><span class="fa fa-tags"></span></div>
-                <div class="timeline-desc"><b>Michael</b> Added a new item to his store:<a href="#">Ipod</a></div>
-                <div class="timeline-date">8:25am</div>
-              </li>
-              <li class="timeline-item">
-                <div class="timeline-icon bg-dark light"><span class="fa fa-tags"></span></div>
-                <div class="timeline-desc"><b>Sara</b> Added a new item to his store:<a href="#">Watch</a></div>
-                <div class="timeline-date">9:35am</div>
-              </li>
-              <li class="timeline-item">
-                <div class="timeline-icon bg-system"><span class="fa fa-fire"></span></div>
-                <div class="timeline-desc"><b>Admin</b> created a new invoice for:<a href="#">Software</a></div>
-                <div class="timeline-date">4:15am</div>
-              </li>
-              <li class="timeline-item">
-                <div class="timeline-icon bg-warning"><span class="fa fa-pencil"></span></div>
-                <div class="timeline-desc"><b>Laura</b> edited her work experience</div>
-                <div class="timeline-date">5:25am</div>
-              </li>
-              <li class="timeline-item">
-                <div class="timeline-icon bg-success"><span class="fa fa-usd"></span></div>
-                <div class="timeline-desc"><b>Admin</b> created a new invoice for:<a href="#">Software</a></div>
-                <div class="timeline-date">4:15am</div>
-              </li>
-              <li class="timeline-item">
-                <div class="timeline-icon bg-warning"><span class="fa fa-pencil"></span></div>
-                <div class="timeline-desc"><b>Laura</b> edited her work experience</div>
-                <div class="timeline-date">5:25am</div>
-              </li>
-              <li class="timeline-item">
-                <div class="timeline-icon bg-success"><span class="fa fa-usd"></span></div>
-                <div class="timeline-desc"><b>Admin</b> created a new invoice for:<a href="#">Apple Inc.</a></div>
-                <div class="timeline-date">7:45am</div>
-              </li>
-              <li class="timeline-item">
-                <div class="timeline-icon bg-dark light"><span class="fa fa-tags"></span></div>
-                <div class="timeline-desc"><b>Michael</b> Added a new item to his store:<a href="#">Ipod</a></div>
-                <div class="timeline-date">8:25am</div>
-              </li>
-              <li class="timeline-item">
-                <div class="timeline-icon bg-dark light"><span class="fa fa-tags"></span></div>
-                <div class="timeline-desc"><b>Sara</b> Added a new item to his store:<a href="#">Watch</a></div>
-                <div class="timeline-date">9:3</div>
-              </li>
-            </ol>
-          </aside>
+          <!-- begin: .tray-right-->      
 	 </section>
 	
 	
@@ -1014,7 +807,7 @@ global $adminTpl, $core, $config, $db, $admin_conf;
 	require ROOT . 'etc/social.config.php';			
 	if ($social['admin'] != '0')
 	{
-		$s_list = '<br><center>'.social_list().'</center>';
+		$s_list = social_list_admin();
 	}
 	else
 	{
@@ -1038,9 +831,17 @@ global $adminTpl, $core, $config, $db, $admin_conf;
 				}
 				else
 				{
-					$_SESSION[SESS_AUTH] = 'ok';
+					$_SESSION[SESS_AUTH] = 'ok';					
+					if(isset($_POST['remember']))
+					{
+						$time = COOKIE_TIME;
+					}
+					else
+					{
+						$time = '3600';
+					}
 					$newHash = md5(@$_SERVER['HTTP_USER_AGENT'].$config['uniqKey']);
-					setcookie(COOKIE_AUTH, engine_encode(serialize(array('id' => $access['id'], 'nick' => $nick, 'password' => md5(mb_substr($password, 0, -mb_strlen($access['tail'])) . $access['tail']), 'hash' => $newHash))), time() + COOKIE_TIME, '/');
+					setcookie(COOKIE_AUTH, engine_encode(serialize(array('id' => $access['id'], 'nick' => $nick, 'password' => md5(mb_substr($password, 0, -mb_strlen($access['tail'])) . $access['tail']), 'hash' => $newHash))), time() + $time, '/');
 				}
 				
 				if(isset($_SESSION[SESS_AUTH])) {
@@ -1095,7 +896,9 @@ global $adminTpl, $core, $config, $db, $admin_conf;
 	}
 	$adminTpl->loadFile('login');
 	$adminTpl->setVar('STOP', $stop);
+	$adminTpl->setVar('LANG', $core->InitLang());
 	$adminTpl->setVar('URL', $config['url']);
+	$adminTpl->setVar('ADMIN', $config['url'].'/'.ADMIN);	
 	$adminTpl->setVar('ADM_THEME', 'usr/tpl/admin');			
 	$adminTpl->setVar('SOCIAL', $s_list);	
 	$adminTpl->setVar('LICENSE', 'Powered by <a href="http://jmy.su" target="_blank" title="JMY CORE">JMY CORE</a>');	

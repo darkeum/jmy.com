@@ -50,7 +50,7 @@ global $adminTpl, $db;
 	$db->query("UPDATE `" . DB_PREFIX . "_plugins` SET `active` = NOT `active` WHERE `id` = " . $id . " LIMIT 1 ;");
 }
 
-$server_domain = 'http://server.jmy.su/';
+$server_domain = 'https://server.jmy.su/';
 switch(isset($url[2]) ? $url[2] : null) {
 	default:
 		$adminTpl->admin_head(_MODULE_MODULE);
@@ -97,7 +97,7 @@ switch(isset($url[2]) ? $url[2] : null) {
 					<td>					
 						<div class="btn-group">
 							<button type="button" onclick="modal_o(\'#modal-retivate-'.$mod['id'].'\')" class="btn btn-xs btn-primary">'.(($mod['active'] == 0) ? _ACTIVATE : _DEACTIVATE).'</button>
-							<button type="button" data-toggle="dropdown" class="btn btn-dro btn-primary dropdown-toggle"><span class="caret"></span><span class="sr-only">' . _ACTIONS . '</span></button>
+							<button type="button" data-toggle="dropdown" class="btn btn-xs btn-primary dropdown-toggle"><span class="caret"></span><span class="sr-only">' . _ACTIONS . '</span></button>
 							<ul role="menu" class="dropdown-menu">
 								<li><a href="{ADMIN}/modules/edit/'.$mod['id'].'">'._EDIT.'</a></li>
 								<li><a href="">'._CAT_VIEW_CONTENT.'</a></li>   

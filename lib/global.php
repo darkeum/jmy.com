@@ -617,45 +617,38 @@ global $url;
 */
 function fatal_error($title, $error) 
 {
-global $core, $config;
-	if(!defined('_'))
-	{
-		require(ROOT.'usr/langs/ru.system.php');
-	}
-	
+global $core, $config, $lang;
 	if($title && $error) 
 	{
 		die('<!DOCTYPE html>
-<html class="no-js">
-	<head>
-		<meta charset="utf-8">
-		<base href="' . $config['url'] . '/">
-		<meta name="viewport" content="width=device-width, user-scalable=1, initial-scale=1, maximum-scale=1">
-		<title>' . _FPCLATER . '</title>		
-		<link rel="stylesheet" href="usr/tpl/admin/assets/css/bootstrap.min.css">
-		<link rel="stylesheet" href="usr/tpl/admin/assets/css/palette.1.css" id="skin">
-		<link rel="stylesheet" href="usr/tpl/admin/assets/css/main.css">
-		<link rel="stylesheet" href="usr/tpl/admin/assets/css/animate.min.css">
-		<link rel="stylesheet" href="usr/tpl/admin/assets/css/style.1.css" id="font">		
-		<!--[if lt IE 9]>
-			<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-			<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-		<![endif]-->
-		<link rel="stylesheet" href="usr/tpl/admin/assets/css/panel.css">
-		<script src="usr/tpl/admin/assets/js/modernizr.js"></script>
-	</head>
-	<body class="bg-white app-error">
-		<div class="error-container text-center">
-			<div class="error-number">error</div>
-			<div class="mg-b-lg">' . $title . '</div>
-			<p>' . $error . '<br>' . _FPCSORRY . ' </p>
-			<ul class="mg-t-lg error-nav">
-				<li><a href="http://cms.jmy.su/">&copy; 2010 - <span id="year" class="mg-r-xs"></span>JMY CMS</a></li>
-			</ul>
-		</div>
-		<script type="text/javascript">var el=document.getElementById("year"),year=(new Date().getFullYear());el.innerHTML=year;</script>
-	</body>
-</html>');
+			<html lang="'.$core->InitLang().'">
+			<head>
+				<meta charset="utf-8">
+				<base href="' . $config['url'] . '/">
+				<meta name="viewport" content="width=device-width, user-scalable=1, initial-scale=1, maximum-scale=1">
+				<title>' . $lang['error'] . '</title>	
+				<!-- Stylesheets-->
+				<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Lato:300,400,600,700%7CMontserrat:400,700">
+				<link rel="stylesheet" type="text/css" href="/usr/tpl/admin/assets/css/theme.css">	
+				<!-- Favicon-->
+				<link rel="icon" href="/usr/tpl/admin/assets/images/favicon.ico" type="image/x-icon">
+			 </head>
+			 <body class="error-page external-page external-alt sb-l-c sb-r-c">  
+				<div id="main">    
+					<section id="content_wrapper">
+						<section id="content" class="pn animated fadeIn">
+							<div class="center-block mt50 mw800">
+								<h1 class="error-title">error</h1>
+								<h3 class="error-subtitle"><div class="mg-b-lg">' . $title . '</div></h3>			
+								<p style="margin-top:-50px;" class="text-center">' . $error . '<br>' . $lang['error_sorry'] . '</p>
+								<p class="text-center mt10"><a target="_blank" href="https://jmy.su/">&copy; 2012 - <span id="year" class="mg-r-xs"></span>JMY CORE</a></p>			
+							</div>
+							<script type="text/javascript">var el=document.getElementById("year"),year=(new Date().getFullYear());el.innerHTML=year;</script>
+						</section>
+				  </section>     
+				</div>   
+			  </body>
+			</html>');
 	}
 }
 
@@ -976,6 +969,27 @@ function getExt($file)
 	$arr = explode('.', $file);
 	return mb_strtolower(end($arr));
 }
+
+function getUserFriends($uid, $limit = 9999)
+{
+	loadConfig('user');	
+	global $db, $user, $core;
+	$friends = '';
+	
+		$fq = $db->query("SELECT u.id as uuid, u.nick, u.last_visit, f.* FROM `" . USER_DB . "`.`" . USER_PREFIX . "_users` as u LEFT JOIN `" . USER_DB . "`.`" . USER_PREFIX . "_user_friends` as f on(u.id = f.who_invite OR u.id = f.whom_invite) WHERE (f.who_invite = '" . $uid . "' OR f.whom_invite = '" . $uid . "') AND u.id != '" . $uid . "' AND f.confirmed = '1'");
+		$yourFriends = array();
+		if($db->numRows($fq) > 0)
+		{
+			while($frows = $db->getRow($fq))
+			{	
+				$friends .= '<span class="_userfriends"><a href="profile/'.$frows['nick'].'" title="На страницу друга">'.$frows['nick'].'</a></span> ';
+				$yourFriends[] = $frows['uuid'];
+			}
+		}
+	
+	return array($friends, $yourFriends);
+}
+
 
 function createThumb($fname, $thumb_fname, $max_x=99, $max_y=99, $resp = false) 
 {

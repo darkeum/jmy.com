@@ -1,9 +1,9 @@
 <?php
 
 /**
-* @name        JMY CMS
-* @link        http://jmy.su/
-* @copyright   Copyright (C) 2012-2014 JMY LTD
+* @name        JMY CORE
+* @link        https://jmy.su/
+* @copyright   Copyright (C) 2012-2017 JMY LTD
 * @license     LICENSE.txt (see attached file)
 * @version     VERSION.txt (see attached file)
 * @author      Komarov Ivan
@@ -122,7 +122,10 @@ global $db, $config, $core, $url, $user;
 			carmaInit($rows['id'], $rows['nick']);
 			$uFr = getUserFriends($rows['id']);
 			$uGu = getUserGuests($rows['id']);
-			$readBlog = readBlog($rows['nick']);
+			if ($core->checkModule('blog'))
+			{
+				$readBlog = readBlog($rows['nick']);
+			}
 			$exgroup = get_exgroup($rows['points'], $rows['exgroup']);
 			$geoip = geo_ip::getInstance(ROOT . 'media/geo_ip.dat');
 			$flag = $geoip->lookupCountryCode(!empty($rows['ip']) ? $rows['ip'] : '127.0.0.1');
@@ -243,25 +246,6 @@ global $core;
 	
 }
 
-function getUserFriends($uid, $limit = 9999)
-{
-global $db, $user, $core;
-	$friends = '';
-	if($user['userFriends'] == 1)
-	{
-		$fq = $db->query("SELECT u.id as uuid, u.nick, u.last_visit, f.* FROM `" . USER_DB . "`.`" . USER_PREFIX . "_users` as u LEFT JOIN `" . USER_DB . "`.`" . USER_PREFIX . "_user_friends` as f on(u.id = f.who_invite OR u.id = f.whom_invite) WHERE (f.who_invite = '" . $uid . "' OR f.whom_invite = '" . $uid . "') AND u.id != '" . $uid . "' AND f.confirmed = '1'");
-		$yourFriends = array();
-		if($db->numRows($fq) > 0)
-		{
-			while($frows = $db->getRow($fq))
-			{	
-				$friends .= '<span class="_userfriends"><a href="profile/'.$frows['nick'].'" title="На страницу друга">'.$frows['nick'].'</a></span> ';
-				$yourFriends[] = $frows['uuid'];
-			}
-		}
-	}
-	return array($friends, $yourFriends);
-}
 
 function readBlog($nick)
 {

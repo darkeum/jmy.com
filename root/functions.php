@@ -233,9 +233,9 @@ function ArrayToStr($array = NULL)
 function checkbox($name, $val, $text = null) 
 {
 	$checked = !empty($val) ? 'checked ' : false;
-	return '<div class="checkbox-custom mt10">
-				<input type="checkbox" name="' . $name . '" ' . $checked . '>
-				<label for="all">'.$text.'</label>
+	return '<div class="checkbox-custom">
+				<input id="cb_'.$name.'" type="checkbox" name="' . $name . '" ' . $checked . '>
+				<label for="cb_'.$name.'">'.$text.'</label>
 			</div>';
 }
 

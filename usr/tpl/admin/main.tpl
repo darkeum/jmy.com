@@ -337,19 +337,6 @@
         {JS_CODE}         
       });
     </script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.4.0/clipboard.min.js"></script>
-	<script>
-    var btn = document.getElementById('btn_copy');
-    var clipboard = new Clipboard(btn);
 
-    clipboard.on('success', function(e) {
-        console.log(e);
-    });
-
-    clipboard.on('error', function(e) {
-        console.log(e);
-    });
-    </script>
-	
   </body>
 </html>

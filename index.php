@@ -2,7 +2,7 @@
 
 /*
 * @name        JMY CORE
-* @link        http://jmy.su/
+* @link        https://jmy.su/
 * @copyright   Copyright (C) 2012-2017 JMY LTD
 * @license     LICENSE.txt (see attached file)
 * @version     VERSION.txt (see attached file)

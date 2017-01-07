@@ -62,6 +62,7 @@ class admin extends template
 		$meta .= "<script src=\"usr/plugins/js/JMY_Ajax.js\" type=\"text/javascript\"></script>" . "\n";	
 		$meta .= "<script src=\"usr/plugins/js/engine.js\" type=\"text/javascript\"></script>" . "\n";
 		$meta .= "<script src=\"usr/plugins/js/bb_editor.js\" type=\"text/javascript\"></script>" . "\n";
+		$meta .= "<script src=\"langs/".$core->InitLang()."/js/system.js\" type=\"text/javascript\"></script>" . "\n";
 	
 		if (isset($this->headerIncludes))
 		{
@@ -266,7 +267,10 @@ class admin extends template
 			$i_n='';
 			$notifications='<div class="panel-footer no-border">'._NOT_NOTIF.'</div>';		
 		}
-				
+		$newFriends = $db->query("SELECT u.id as uuid, u.nick, u.last_visit, u.regdate, f.* FROM `" . USER_DB . "`.`" . USER_PREFIX . "_users` as u LEFT JOIN `" . USER_DB . "`.`" . USER_PREFIX . "_user_friends` as f on(u.id = f.who_invite OR u.id = f.whom_invite) WHERE (f.who_invite = '" . $core->auth->user_info['id'] . "' OR f.whom_invite = '" . $core->auth->user_info['id'] . "') AND u.id != '" . $core->auth->user_info['id'] . "' AND f.confirmed = '0'");
+		
+		$newMessages = $db->query("SELECT id FROM `" . USER_PREFIX . "_pm` WHERE toid = '" . $core->auth->user_info['id'] . "' AND status = '0'");
+		
 		$avatar = avatar($core->auth->user_info['id']);
 		$this->loadFile('main');
 		$this->setVar('META', $meta);
@@ -297,7 +301,9 @@ class admin extends template
 		$this->setVar('pages', $this->page_nav);
 		$this->setVar('HIDE_STATUS_1', ($config['hide'] == 1) ? 'selected="selected"' : '');
 		$this->setVar('HIDE_STATUS_2', ($config['hide'] == 2) ? 'selected="selected"' : '');
-		$this->setVar('HIDE_STATUS_3', ($config['hide'] == 3) ? 'selected="selected"' : '');
+		$this->setVar('HIDE_STATUS_3', ($config['hide'] == 3) ? 'selected="selected"' : '');		
+		$this->setVar('MESSAGES_NUMB', $db->numRows($newMessages));
+		$this->setVar('FRIENDS_NUMB', $db->numRows($newFriends));
 		$this->setVar('TOPBAR', isset($topbar) ? $topbar : '');
 		$this->sources = preg_replace("#\\{MENU_OPEN:(.*?)\\}#ies", "openMenu('\${1}')" , $this->sources);
 		$this->sources = preg_replace("#\\{MENU_CHOOSE:(.*?)\\}#ies", "chooseMenu('\${1}')",$this->sources);

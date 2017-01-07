@@ -62,7 +62,7 @@ function modal_o(id) {
             "dir2": "left",
             "context": $("#stack-context")
           },
-        }
+        };
 
    // PNotify Plugin Event Init
        function notif(style, title_in, text_in) {
@@ -98,7 +98,8 @@ function modal_o(id) {
             width: findWidth(),
             delay: 1400
           });
-		 }
+		 };
 		 
-		 
+	
+
 

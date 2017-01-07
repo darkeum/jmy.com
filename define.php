@@ -2,7 +2,7 @@
 
 /*
 * @name        JMY CORE
-* @link        http://jmy.su/
+* @link        https://jmy.su/
 * @copyright   Copyright (C) 2012-2017 JMY LTD
 * @license     LICENSE.txt (see attached file)
 * @version     VERSION.txt (see attached file)
@@ -16,7 +16,7 @@ define('PLUGINS', '/usr/plugins/');
 define('COOKIE_AUTH', 'auth_jmy');
 define('COOKIE_PAUSE', 'pause_jmy');
 define('PAUSE_TIME', 120);
-define('VERSION_ID', '3.0.1');  
+define('VERSION_ID', '3.0.11');  
 define('COOKIE_TIME', 2592000);
 define('ADMIN', 'administration');
 define('ADMIN_TPL', 'usr/tpl/admin/');

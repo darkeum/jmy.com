@@ -1,6 +1,6 @@
 <?php
 define('ACCESS', true);
-define('VERSION_ID', '1.7'); 
+define('VERSION_ID', '3.0.11'); 
 define('TIMER', microtime(1));
 define('ROOT', dirname(__FILE__) . '/');
 define('PLUGINS', dirname(__FILE__) . '/usr/plugins/');

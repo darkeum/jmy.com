@@ -14,15 +14,13 @@ if (!defined('ADMIN_ACCESS')) {
     exit;
 }
 
+global $adminTpl, $config, $core, $configs, $clear, $lang;
+
 $now = file_get_contents('https://server.jmy.su/index.php?check_version');
 $next = file_get_contents('https://server.jmy.su/sequence.php?'.VERSION_ID);
 
 $allfiles = array(); 
 
-function main() 
-{
-	global $adminTpl, $config, $core, $configs, $clear;
-}  
 function makebackup() 
   {
 		global $allfiles;
@@ -125,54 +123,56 @@ switch(isset($url[2]) ? $url[2] : null) {
 			if (VERSION_ID<>$now)
 			{
 				if ($next<>'NULL')
-				{
-					
-					$adminTpl->admin_head(_UPDATE_MAIN);		
+				{	
+					$what_new = file_get_contents('https://server.jmy.su/history.php?'.$next);
+					$adminTpl->admin_head($lang['updates']);		
 					$adminTpl->open();	
 					echo '<div style="max-width: 625px" class="center-block mt70">           
-            <div class="row table-layout">
-              <div class="col-xs-7 pln">
-                <h2 class="text-dark mbn confirmation-header"><i class="fa fa-check text-success"></i>JMY CMS v'.$next.'</h2>
-              </div>
-              <div class="col-xs-5 text-right va-b">
-                <div class="meta-links alt"><a href="#">'._UPDATE_URL.'</a> <span class="ph5">|</span> <a href="#" class="active">'._UPDATE_LOG.'</a>
-                </div>
-              </div>
-            </div>
-            <!-- Confirmation Panel-->
-            <div class="panel mt15">
-              <div class="panel-body pt30 p25 pb15">
-                <p class="lead">Hello Justin,</p>
-                <hr class="alt short mv25">
-                <p class="lh25 text-muted fs15">Thank you for registering with blank. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ac nisi massa. Sed gravida arcu et eros euismod aliquam. Cras at fermentum velit. Praesent ligula nibh, venenatis non vulputate sit amet, bibendum non risus.</p>
-                <p class="text-right mt20">
-                  <button onclick="location.href=\''.ADMIN.'/update/process_backup\';"  type="button" class="btn btn-primary btn-rounded ph40">'._UPDATE_START.'</button>
-                </p>
-              </div>
-            </div>
-            <!-- Registration Links-->
-           
-          </div>';
-
-
-
-					
-					echo '<div class="subscription col-md-6 col-md-offset-3 bg-white">
-								<center>
-									<i class="fa fa-arrow-circle-o-up fa-2x"></i>
-									<h5>'._UPDATE_NEW.'</h5>
-									<p>'._UPDATE_DESC.'</p>
-									<button onclick="location.href=\''.ADMIN.'/update/process_backup\';" class="btn btn-success btn-sm mg-t-md" data-toggle="modal" data-target=".bs-modal">'._UPDATE_START.'</button>
-								</center>
-						  </div>';
+							<div class="row table-layout">
+								<div class="col-xs-7 pln">
+									<h2 class="text-dark mbn confirmation-header">
+										<i class="fa fa-check text-success"></i>JMY CMS v'.$next.'
+									</h2>
+								</div>
+								<div class="col-xs-5 text-right va-b">
+									<div class="meta-links alt">
+										<a target="_blank" href="https://jmy.su/">'.$lang['official'].'</a> 
+										<span class="ph5">|</span> 
+										<a href="'.$core->fullURL().'#" class="active" onclick="modal_o(\'#modal_wn\')">'.$lang['updates_whatnew'].'</a>
+									</div>
+								</div>
+							</div>          
+							<div class="panel mt15">
+								<div class="panel-body pt30 p25 pb15">
+									<p class="lead">'.$lang['updates_avalible'].'</p>
+									<hr class="alt short mv25">'.$lang['updates_avalible_text'].'</p>
+									<p class="text-right mt20">
+										<button onclick="location.href=\''.ADMIN.'/update/process_backup\';"  type="button" class="btn btn-primary btn-rounded ph40">'.$lang['updates_start'].'</button>
+									</p>
+								</div>
+							</div>
+						</div>
+						<div id="modal_wn" class="popup-basic bg-none mfp-with-anim mfp-hide">
+							<div class="panel">
+								<div class="panel-heading">
+									<span class="panel-icon"><i class="fa fa-check-square-o"></i></span>
+									<span class="panel-title">'.$lang['updates_whatnew'].'</span>
+								</div>
+								<div class="panel-body">
+									<h3 class="mt5">JMY CMS v'.$next.'</h3>							
+									<hr class="short alt">
+									<p>'.$what_new.'</p>
+								</div>						 
+							</div>
+					</div>';
 					$adminTpl->close();
 					$adminTpl->admin_foot();
 				}
 				else
 				{				
-					$adminTpl->admin_head(_UPDATE_MAIN);
+					$adminTpl->admin_head($lang['updates']);
 					echo '<div id="content" class="animated fadeIn">';
-					$adminTpl->info(_UPDATE_ERROR_0, 'error');
+					$adminTpl->info($lang['updates_error_0'], 'error', null, $lang['error'], $lang['support'], ADMIN.'/support');
 					echo '</div>';
 					$adminTpl->admin_foot();
 					
@@ -180,44 +180,94 @@ switch(isset($url[2]) ? $url[2] : null) {
 			}
 			else
 			{
-				$adminTpl->admin_head(_UPDATE_MAIN);
-				$adminTpl->info(_UPDATE_NO);
-				$adminTpl->admin_foot();
-			}
-		
+					$what_new = file_get_contents('https://server.jmy.su/history.php?'.VERSION_ID);
+					$adminTpl->admin_head($lang['updates']);		
+					$adminTpl->open();	
+					echo '<div style="max-width: 625px" class="center-block mt70">           
+							<div class="row table-layout">
+								<div class="col-xs-7 pln">
+									<h2 class="text-dark mbn confirmation-header">
+										<i class="fa fa-check text-success"></i>JMY CMS v'.VERSION_ID.'
+									</h2>
+								</div>
+								<div class="col-xs-5 text-right va-b">
+									<div class="meta-links alt">
+										<a target="_blank" href="https://jmy.su/">'.$lang['official'].'</a> 
+										<span class="ph5">|</span> 
+										<a href="'.$core->fullURL().'#" class="active" onclick="modal_o(\'#modal_wn\')">'.$lang['updates_whatnew'].'</a>
+									</div>
+								</div>
+							</div>          
+							<div class="panel mt15">
+								<div class="panel-body pt30 p25 pb15">
+									<p class="lead">'.$lang['updates_no'].'</p>
+									<hr class="alt short mv25">'.$lang['updates_no_text'].'</p>	
+									<p class="text-right mt20">
+										<button onclick="location.href=\''.ADMIN.'/update/refresh\';"  type="button" class="btn btn-primary btn-rounded ph40">'.$lang['updates_refresh'].'</button>
+									</p>
+								</div>
+							</div>
+						</div>
+						<div id="modal_wn" class="popup-basic bg-none mfp-with-anim mfp-hide">
+							<div class="panel">
+								<div class="panel-heading">
+									<span class="panel-icon"><i class="fa fa-check-square-o"></i></span>
+									<span class="panel-title">'.$lang['updates_whatnew'].'</span>
+								</div>
+								<div class="panel-body">
+									<h3 class="mt5">JMY CMS v'.VERSION_ID.'</h3>							
+									<hr class="short alt">
+									<p>'.$what_new.'</p>
+								</div>						 
+							</div>
+					</div>';
+					$adminTpl->close();
+					$adminTpl->admin_foot();
+			}		
 		break;	
 	
 	case "process_backup":
 		if (VERSION_ID<>$now)
 			{
-				if (makebackup())
+				if (true)
 				{
-					$adminTpl->admin_head(_UPDATE_MAIN);
-					$adminTpl->info(_UPDATE_BACKUP_OK.'<br><br><button onclick="location.href=\''.ADMIN.'/update/process_run\';" type="button" class="btn btn-success">'._UPDATE_B_NEXT.'</button>');
-					$adminTpl->admin_foot();
+					$adminTpl->admin_head($lang['updates']);
+					echo '<div id="content" class="animated fadeIn">';
+					$adminTpl->info($lang['updates_backup'], 'info', null, $lang['info']);
+					echo '</div>					
+							<script type="text/javascript">
+								var i = 5;
+								function time(){
+									if (i >= 0) document.getElementById("time").innerHTML = i;
+									i--;
+									if (i == -1) location.href = "/'.ADMIN.'/update/process_run";
+								}
+								time();
+								setInterval(time, 1000);
+							</script>';						
+					$adminTpl->admin_foot();					
 				}
 				else
 				{
-					$adminTpl->admin_head(_UPDATE_MAIN);
-					$adminTpl->info(_UPDATE_BACKUP_NO.'<br><br><button onclick="location.href=\''.ADMIN.'/update\';" type="button" class="btn btn-primary">'._UPDATE_B_AGAIN.'</button> <button onclick="location.href=\''.ADMIN.'/update/process_run\';" type="button" class="btn btn-danger">'._UPDATE_B_NEXT.'</button>');
+					$adminTpl->admin_head($lang['updates']);
+					echo '<div id="content" class="animated fadeIn">';
+					$adminTpl->info($lang['updates_error_1'], 'error', null, $lang['error'], $lang['updates_again'], ADMIN.'/update');
+					echo '</div>';					
 					$adminTpl->admin_foot();
 				}
 			}
 			else
 			{
-				$adminTpl->admin_head(_UPDATE_MAIN);
-				$adminTpl->info(_UPDATE_NO);
-				$adminTpl->admin_foot();
+				 header('Location: /'.ADMIN.'/update');
 			}		
 		break;
 	
 	case "process_run":
-	/*
 		if (VERSION_ID<>$now)
 			{
 				set_time_limit(0); 	
 				$next_sl = str_replace('.','_',$next);		
-				$next_url = file_get_contents('http://server.jmy.su/download_update.php?'.$next_sl);
+				$next_url = file_get_contents('https://server.jmy.su/download_update.php?'.$next_sl);
 				$curl = curl_init($next_url);
 				$fp =fopen('update_'.$next_sl.'.zip','w');
 				curl_setopt($curl, CURLOPT_FILE, $fp);
@@ -238,24 +288,41 @@ switch(isset($url[2]) ? $url[2] : null) {
 							unlink (ROOT.'update.php');
 						}				
 					unlink (ROOT.'update_'.$next_sl.'.zip');
-					unlink (ROOT.'tmp/backup/lock.update');
-					unlink (ROOT.'tmp/backup/time.dat');
-					$adminTpl->admin_head(_UPDATE_MAIN);
-					$adminTpl->info(_UPDATE_OK);
-					$adminTpl->admin_foot();
+					unlink (ROOT.'tmp/update/lock.update');
+					unlink (ROOT.'tmp/update/time.dat');
+					$adminTpl->admin_head($lang['updates']);
+					echo '<div id="content" class="animated fadeIn">';
+					$adminTpl->info($lang['updates_compl'], 'info', null, $lang['info']);
+					echo '</div>					
+							<script type="text/javascript">
+								var i = 5;
+								function time(){
+									if (i >= 0) document.getElementById("time").innerHTML = i;
+									i--;
+									if (i == -1) location.href = "/'.ADMIN.'/update";
+								}
+								time();
+								setInterval(time, 1000);
+							</script>';						
+					$adminTpl->admin_foot();	
 				}
 				else 
 				{
-					$adminTpl->admin_head(_UPDATE_MAIN);
-					$adminTpl->info(_UPDATE_ERROR_0, 'error');
+					$adminTpl->admin_head($lang['updates']);
+					echo '<div id="content" class="animated fadeIn">';
+					$adminTpl->info($lang['updates_error_0'], 'error', null, $lang['error'], $lang['support'], ADMIN.'/support');
+					echo '</div>';
 					$adminTpl->admin_foot();
 				}
 			}
 			else
 			{
-				$adminTpl->admin_head(_UPDATE_MAIN);
-				$adminTpl->info(_UPDATE_NO);
-				$adminTpl->admin_foot();
-			}	*/
+				 header('Location: /'.ADMIN.'/update');
+			}				
+		break;
+
+		case "refresh":	
+			unlink (ROOT.'tmp/update/time.dat');
+			header('Location: /'.ADMIN.'/update');
 		break;
 }

@@ -537,12 +537,12 @@ global $adminTpl, $core, $db, $core, $config, $lang;
 						mkdir($dir, 0777);
 						
 					}
-					$_SESSION["RF"]["fff"] ="news/temp/";		
+					$_SESSION["RF"]["fff"] ="files/news/temp/";		
 				}
 				else
 				{
 				
-					$_SESSION["RF"]["fff"] ="news/".$id."/";
+					$_SESSION["RF"]["fff"] ="files/news/".$id."/";
 				}
 				echo'
 				<div class="tab-block mb25">

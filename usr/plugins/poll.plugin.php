@@ -1,9 +1,9 @@
 <?php
 
 /**
-* @name        JMY CMS
-* @link        http://jmy.su/
-* @copyright   Copyright (C) 2012-2014 JMY LTD
+* @name        JMY CORE
+* @link        https://jmy.su/
+* @copyright   Copyright (C) 2012-2017 JMY LTD
 * @license     LICENSE.txt (see attached file)
 * @version     VERSION.txt (see attached file)
 * @author      Komarov Ivan
@@ -16,9 +16,9 @@ if (!defined('ACCESS')) {
 
 function show_poll($type = false, $pollId = false)
 {
-global $db, $core, $list, $core;
+global $db, $core, $list, $core, $lang;
 
-	$query = $db->query('SELECT p.id as poll_id, p.title, p.votes, p.max, GROUP_CONCAT(q.id) as var_ids, GROUP_CONCAT(q.variant) as variants, GROUP_CONCAT(q.vote) as var_votes, v.uid, v.ip FROM ' . DB_PREFIX . '_polls AS p INNER JOIN  ' . DB_PREFIX . '_poll_questions AS q ON (p.id = q.pid) LEFT JOIN ' . DB_PREFIX . '_poll_voting as v ON (' . ($core->auth->isUser ? 'v.uid = ' . $core->auth->user_id : 'v.ip = \'' . getRealIpAddr() . '\'') . ' and v.pid = p.id) ' . ($pollId ? 'WHERE p.id = \'' . $pollId . '\' GROUP BY q.pid' : 'GROUP BY q.pid ORDER BY p.title'));
+	$query = $db->query('SELECT p.id as poll_id, p.title, p.votes, p.max, p.active, GROUP_CONCAT(q.id) as var_ids, GROUP_CONCAT(q.variant) as variants, GROUP_CONCAT(q.vote) as var_votes, v.uid, v.ip FROM ' . DB_PREFIX . '_polls  AS p INNER JOIN  ' . DB_PREFIX . '_poll_questions AS q ON (p.id = q.pid) LEFT JOIN ' . DB_PREFIX . '_poll_voting as v ON (' . ($core->auth->isUser ? 'v.uid = ' . $core->auth->user_id : 'v.ip = \'' . getRealIpAddr() . '\'') . ' and v.pid = p.id) ' . ($pollId ? 'WHERE p.id = \'' . $pollId . '\' AND p.active="1" GROUP BY q.pid' : 'GROUP BY q.pid ORDER BY p.title'));
 	if($db->numRows($query) > 0)
 	{
 		$poll = $db->getRow($query);
@@ -137,6 +137,6 @@ global $db, $core, $list, $core;
 	}
 	else
 	{
-		echo _BLOCK_POLL_EMPTY;
+		echo $lang['block_poll_empty'];
 	}
 }

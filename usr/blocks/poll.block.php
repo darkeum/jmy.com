@@ -13,10 +13,10 @@ if (!defined('ACCESS')) {
     header('Location: /');
     exit;
 }
-loadConfigBLOCK('poll');
-loadLang('blocks');
-global $core, $db, $poll_conf;
-	
+	loadConfigBLOCK('poll');
+	global $core, $db, $poll_conf;	
+	$core->loadblockLang('poll');
+	global $lang;
 	require ROOT . 'usr/plugins/poll.plugin.php';
 	if ($poll_conf['poll_rand']==1) 
 	{
@@ -33,15 +33,10 @@ global $core, $db, $poll_conf;
 		}
 		else
 		{
-			echo _BLOCK_POLLS_EMPTY;
+			echo $lang['block_poll_empty'];
 		}
 	}
 	else
 	{
 		show_poll($type = false, $poll_conf['poll_id']);
 	}
-	
-	
-	
-
-

@@ -186,10 +186,10 @@ class core
 	function loadModLangADM($mod)
 	{
 		global $lang;
-		if(!isset($this->loadedLangs[$mod]) && file_exists(ROOT . 'language/'.$this->lang.'/modules/'.$mod.'/'.$this->lang.'.admin.lng'))
+		if(!isset($this->loadedLangs[$mod]) && file_exists(ROOT . 'langs/'.$this->lang.'/modules/'.$mod.'/'.$this->lang.'.admin.lng'))
 		{
 			$this->loadedLangs[$mod] = true;
-			require_once(ROOT . 'language/'.$this->lang.'/modules/'.$mod.'/'.$this->lang.'.admin.lng');
+			require_once(ROOT . 'langs/'.$this->lang.'/modules/'.$mod.'/'.$this->lang.'.admin.lng');
 		}
 		//подключение старых языковых файлов
 		if(!isset($this->loadedLangs[$mod]) && file_exists(ROOT . 'usr/modules/' . $mod . '/admin/lang/'. $this->lang . '.admin.php'))
@@ -199,13 +199,13 @@ class core
 		}
 	}
 	
-	function loadblockLangADM($block)
+	function loadblockLang($block)
 	{
 		global $lang;
-		if(!isset($this->loadedLangs[$block]) && file_exists(ROOT.'language/'.$this->lang.'/blocks/'.$this->lang.'.'.$block.'.lng'))
+		if(!isset($this->loadedLangs[$block]) && file_exists(ROOT.'langs/'.$this->lang.'/blocks/'.$this->lang.'.'.$block.'.lng'))
 		{
 			$this->loadedLangs[$block] = true;
-			require_once(ROOT.'language/'.$this->lang.'/blocks/'.$this->lang.'.'.$block.'.lng');
+			require_once(ROOT.'langs/'.$this->lang.'/blocks/'.$this->lang.'.'.$block.'.lng');
 		}
 	}
 	

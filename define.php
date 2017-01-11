@@ -17,7 +17,7 @@ define('COOKIE_AUTH', 'auth_jmy');
 define('COOKIE_PAUSE', 'pause_jmy');
 define('AJAX', true);
 define('PAUSE_TIME', 120);
-define('VERSION_ID', '3.0.12');  
+define('VERSION_ID', '3.0.13');  
 define('COOKIE_TIME', 2592000);
 define('ADMIN', 'administration');
 define('ADMIN_TPL', 'usr/tpl/admin/');

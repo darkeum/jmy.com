@@ -1,7 +1,9 @@
-/*
-* За разработку данного плагина говорим спасибо великому и ужасному(в хорошем смысле) RRRinat'у. Он мой онлайн друг, быдлокодер, мать тереза, дающая в долг и вообще вездесущий человек. А ещё хочу передать привет маме...
-*/
-
+function in_array_calendar(what, where) {
+    for(var i=0; i<where.length; i++)
+        if(what == where[i])
+            return true;
+    return false;
+}
 function calendar(year, month, thisDay)
 {
     if(year != null || month != null)
@@ -76,7 +78,7 @@ function calendar(year, month, thisDay)
 				}
 				else
 				{
-					if(!newsDays.in_array(mark))
+					if(!in_array(newsDays, mark))
 					{
 						addition = (mark == thisDay) ? 'dayNow' : '';
 						kmark = (mark == thisDay && month == exmonth) ? ((j == 5 || j == 6) ? '<font color="red">'+mark+'</font>' : '<font color="blue">'+mark+'</font>') : mark;

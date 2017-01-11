@@ -1,4 +1,4 @@
-<script type="text/javascript">var textareaName = '{%NAME%}';</script>0p
+<script type="text/javascript">var textareaName = '{%NAME%}';</script>
 <script type="text/javascript" src="usr/plugins/js/bb_editor.js"></script>
 <ul class="_bb bbLeft">
   <li><a href="javascript:void(0)" onclick="insertCode('b')"><img src="media/bb/bold.png" border="0" alt="" /></a></li>

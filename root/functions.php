@@ -123,7 +123,33 @@ global $adminTpl;
 	$adminTpl->admin_foot();
 }
 
+function fancyboxInit($id = 'fbox', $maxWidth='880', $maxHeight='600')
+{
+global $adminTpl, $core;
+	$adminTpl->footIncludes[] ='<script type="text/javascript" src="/usr/plugins/fancybox/jquery.fancybox.pack.js"></script>
+				<link rel="stylesheet" type="text/css" href="/usr/plugins/fancybox/jquery.fancybox.css" media="screen" />		
+				<script type="text/javascript">	
+					$(document).ready(function() {
+						$("#'.$id.'").fancybox({
+							maxWidth	: '.$maxWidth.',
+							maxHeight	: '.$maxHeight.',
+							fitToView	: false,
+							width		: \'70%\',
+							height		: \'70%\',
+							autoSize	: false,
+							closeClick	: false,
+							openEffect	: \'none\',
+							closeEffect	: \'none\'
+						});
+					});
+				</script>';
+}
 
+function colorpickerInit($id = 'color_p', $color='#02c385')
+{
+	global $adminTpl, $core;
+	$adminTpl->js_code[] = "$('#".$id."').colorpicker({color: '".$color."'});";
+}
 
 function dirsize($dir, $buf = 2)
 {
@@ -213,7 +239,7 @@ function ArrayToStr($array = NULL)
 			{
 				if($str)
 				{
-					$strs .= $str;
+					$strs .= $str."\n";
 				}		
 			}
 			return $strs;

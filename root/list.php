@@ -120,18 +120,7 @@ $services_array = array(
 			_AP_DB_FIX => 'fix',
 		),
 		'shown' => 1
-	),	
-	'fm' => array (
-		'name' => _AP_FM ,
-		'desc' => _AP_FM_DESC,	
-		'subAct' => array(
-			_AP_FM_MAIN => '',
-			_AP_FM_UPLOAD => 'upload',
-			_AP_FM_CREATE => 'create',
-			_AP_FM_SEARCH => 'search'
-		),
-		'shown' => 1
-	),	
+	),		
 	'smiles' => array (
 		'name' => _AP_SMILES,
 		'desc' => _AP_SMILES_DESC,			
@@ -161,26 +150,11 @@ $services_array = array(
 		'desc' => _AP_LOGS_DESC,		
 		'shown' => 1
 	),
-	'tool' => array (
-		'name' => '',
-		'desc' => '',			
-		'shown' => 1
-	),
 	'update' => array (
-		'name' => '',
-		'desc' => '',			
+		'name' => $lang['updates'],
+		'desc' => $lang['updates_desc'],			
 		'shown' => 1
-	),
-	'lang' => array (
-		'name' => _AP_LANG,
-		'desc' => _AP_LANG_DESC,	
-		'subAct' => array(
-			_AP_LANG_MAIN => '',
-			_AP_LANG_PANEL => 'panel',
-			_AP_LANG_MODULES => 'modules',
-		),				
-		'shown' => 1
-	),
+	),	
 	'templates' => array (
 		'name' => _AP_TPL,
 		'desc' => _AP_TPL_DESC,	

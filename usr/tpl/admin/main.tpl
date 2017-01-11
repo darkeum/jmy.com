@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{LANG}" xmlns="http://www.w3.org/1999/xhtml" xml:lang="{LANG}">
+<html lang="{LANG}" xml:lang="{LANG}">
   <head>
 	{META}
 	<meta name="theme-color" content="#535a6c">
@@ -13,29 +13,29 @@
     <link rel="stylesheet" type="text/css" href="/{ADM_THEME}/assets/css/bootstrap-editable.css">
 	<link rel="stylesheet" type="text/css" href="/{ADM_THEME}/assets/css/bootstrap-switch.min.css">
     <link rel="stylesheet" type="text/css" href="/{ADM_THEME}/assets/css/address.css">
-	<link rel="stylesheet" type="text/css" href="http://static.livedemo00.template-help.com/wt_58708/plugins/css/magnific-popup.css">	
-    <link rel="stylesheet" type="text/css" href="/{ADM_THEME}/assets/css/typeahead.js-bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Lato:300,400,600,700%7CMontserrat:400,700">
+	<link rel="stylesheet" type="text/css" href="/{ADM_THEME}/assets/css/magnific-popup.css">	
+    <link rel="stylesheet" type="text/css" href="/{ADM_THEME}/assets/css/typeahead.js-bootstrap.css">    
     <link rel="stylesheet" type="text/css" href="/{ADM_THEME}/assets/css/theme.css">
-	<link rel="stylesheet" type="text/css" href="/{ADM_THEME}/assets/css/plugins/css/tagmanager.css">
+	<link rel="stylesheet" type="text/css" href="/{ADM_THEME}/assets/css/tagmanager.css">
     <link rel="stylesheet" type="text/css" href="/{ADM_THEME}/assets/css/daterangepicker.css">
     <link rel="stylesheet" type="text/css" href="/{ADM_THEME}/assets/css/bootstrap-datetimepicker.css">
     <link rel="stylesheet" type="text/css" href="/{ADM_THEME}/assets/css/bootstrap-colorpicker.min.css">
     <link rel="stylesheet" type="text/css" href="/{ADM_THEME}/assets/css/core.css">
+	<!-- Fonts-->
+	<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Lato:300,400,600,700%7CMontserrat:400,700">
 	<!--[if lt IE 10]>
 		<div style="background: #212121; padding: 10px 0; box-shadow: 3px 3px 5px 0 rgba(0,0,0,.3); clear: both; text-align:center; position: relative; z-index:1;"><a href="http://windows.microsoft.com/en-US/internet-explorer/"><img src="/{ADM_THEME}/assets/images/ie8-panel/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today."></a></div>
 		<script src="/{ADM_THEME}/assets/js/html5shiv.min.js"></script>
 	<![endif]-->
-	<!-- core scripts-->
+	<!-- Core scripts-->
     <script src="/{ADM_THEME}/assets/js/core.min.js"></script>
     <!-- Theme Javascript-->
     <script src="/{ADM_THEME}/assets/js/utility.js"></script>
-    <script src="/{ADM_THEME}/assets/js/demo.js"></script>
+    <script src="/{ADM_THEME}/assets/js/demo.js"></script>		
     <script src="/{ADM_THEME}/assets/js/main.js"></script>
 	<script src="/{ADM_THEME}/assets/js/widgets.js"></script>
 	<script src="/{ADM_THEME}/assets/js/script.js"></script>
-		<script src="/{ADM_THEME}/assets/js/bootstrap-switch.min.js"></script>
-	
+	<script src="/{ADM_THEME}/assets/js/bootstrap-switch.min.js"></script>	
   </head>  
   <body data-spy="scroll" data-target="#nav-spy" data-offset="300" class="form-editors-page {BODY_CLASS}"> 
     <div id="main">    
@@ -325,7 +325,7 @@
         display: none;
       }
     </style>
-  {FOOT}
+	{FOOT}
     <script type="text/javascript">
       jQuery(document).ready(function () {
         "use strict";
@@ -337,6 +337,5 @@
         {JS_CODE}         
       });
     </script>
-
   </body>
 </html>

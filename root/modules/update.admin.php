@@ -16,10 +16,11 @@ if (!defined('ADMIN_ACCESS')) {
 
 global $adminTpl, $config, $core, $configs, $clear, $lang;
 
+$flag = true;
 $now = file_get_contents('https://server.jmy.su/index.php?check_version');
 $next = file_get_contents('https://server.jmy.su/sequence.php?'.VERSION_ID);
 
-$allfiles = array(); 
+$allfiles = array();  
 
 function makebackup() 
   {
@@ -131,7 +132,7 @@ switch(isset($url[2]) ? $url[2] : null) {
 							<div class="row table-layout">
 								<div class="col-xs-7 pln">
 									<h2 class="text-dark mbn confirmation-header">
-										<i class="fa fa-check text-success"></i>JMY CMS v'.$next.'
+										<i class="fa fa-check text-success"></i>JMY CMS v'.$now.'
 									</h2>
 								</div>
 								<div class="col-xs-5 text-right va-b">
@@ -262,67 +263,100 @@ switch(isset($url[2]) ? $url[2] : null) {
 			}		
 		break;
 	
-	case "process_run":
+	case "process_run":	
 		if (VERSION_ID<>$now)
+		{
+			process_run(VERSION_ID);
+			if ($flag)
 			{
-				set_time_limit(0); 	
-				$next_sl = str_replace('.','_',$next);		
-				$next_url = file_get_contents('https://server.jmy.su/download_update.php?'.$next_sl);
-				$curl = curl_init($next_url);
-				$fp =fopen('update_'.$next_sl.'.zip','w');
-				curl_setopt($curl, CURLOPT_FILE, $fp);
-				curl_setopt($curl, CURLOPT_HEADER, 0);
-				curl_exec($curl);
-				curl_close($curl);
-				fflush($fp);
-				fclose($fp);				
-				$zip = new ZipArchive;
-				$file = realpath(ROOT.'update_'.$next_sl.'.zip');
-				$res = $zip->open($file);
-				if ($res === TRUE) {
-					$zip->extractTo(ROOT);
-					$zip->close();
-					 if (file_exists(ROOT.'update.php'))
-						{
-							include(ROOT.'update.php');
-							unlink (ROOT.'update.php');
-						}				
-					unlink (ROOT.'update_'.$next_sl.'.zip');
-					unlink (ROOT.'tmp/update/lock.update');
-					unlink (ROOT.'tmp/update/time.dat');
-					$adminTpl->admin_head($lang['updates']);
-					echo '<div id="content" class="animated fadeIn">';
-					$adminTpl->info($lang['updates_compl'], 'info', null, $lang['info']);
-					echo '</div>					
-							<script type="text/javascript">
-								var i = 5;
-								function time(){
-									if (i >= 0) document.getElementById("time").innerHTML = i;
-									i--;
-									if (i == -1) location.href = "/'.ADMIN.'/update";
-								}
-								time();
-								setInterval(time, 1000);
-							</script>';						
-					$adminTpl->admin_foot();	
-				}
-				else 
-				{
-					$adminTpl->admin_head($lang['updates']);
-					echo '<div id="content" class="animated fadeIn">';
-					$adminTpl->info($lang['updates_error_0'], 'error', null, $lang['error'], $lang['support'], ADMIN.'/support');
-					echo '</div>';
-					$adminTpl->admin_foot();
-				}
+				$adminTpl->admin_head($lang['updates']);					
+				echo '<div id="content" class="animated fadeIn">';
+				$adminTpl->info($lang['updates_compl'], 'info', null, $lang['info']);
+				echo '</div>					
+					<script type="text/javascript">
+						var i = 5;
+						function time(){
+							if (i >= 0) document.getElementById("time").innerHTML = i;
+								i--;
+							if (i == -1) location.href = "/'.ADMIN.'/update";
+						}
+						time();
+						setInterval(time, 1000);
+					</script>';						
+				$adminTpl->admin_foot();
 			}
 			else
 			{
-				 header('Location: /'.ADMIN.'/update');
-			}				
+				$adminTpl->admin_head($lang['updates']);
+				echo '<div id="content" class="animated fadeIn">';
+				$adminTpl->info($lang['updates_error_0'], 'error', null, $lang['error'], $lang['support'], ADMIN.'/support');
+				echo '</div>';
+				$adminTpl->admin_foot();
+			}
+		}
+		else
+		{
+			header('Location: /'.ADMIN.'/update');
+		}	
+		
+		
 		break;
 
 		case "refresh":	
 			unlink (ROOT.'tmp/update/time.dat');
 			header('Location: /'.ADMIN.'/update');
 		break;
+}
+
+function process_run($version_id)
+{	
+	global $flag;
+	$now = file_get_contents('https://server.jmy.su/index.php?check_version');
+	if ($version_id<>$now)
+	{
+		set_time_limit(0); 	
+		$next = file_get_contents('https://server.jmy.su/sequence.php?'.$version_id);
+		$next_sl = str_replace('.','_',$next);		
+		$next_url = file_get_contents('https://server.jmy.su/download_update.php?'.$next_sl);
+		$curl = curl_init($next_url);
+		$fp =fopen('update_'.$next_sl.'.zip','w');
+		curl_setopt($curl, CURLOPT_FILE, $fp);
+		curl_setopt($curl, CURLOPT_HEADER, 0);
+		curl_exec($curl);
+		curl_close($curl);
+		fflush($fp);
+		fclose($fp);				
+		$zip = new ZipArchive;
+		$file = realpath(ROOT.'update_'.$next_sl.'.zip');
+		$res = $zip->open($file);
+		if ($res === TRUE) 
+		{
+			$zip->extractTo(ROOT);
+			$zip->close();
+			if (file_exists(ROOT.'update.php'))
+				{
+					include(ROOT.'update.php');
+					unlink (ROOT.'update.php');
+				}				
+			unlink (ROOT.'update_'.$next_sl.'.zip');
+			unlink (ROOT.'tmp/update/lock.update');
+			unlink (ROOT.'tmp/update/time.dat');
+			if ($next <> $now)
+				{
+					process_run($next);
+				}
+				else
+				{
+					return true;
+				}
+		}
+		else 
+			{
+				$flag = false;
+			}	
+	}
+	else
+	{
+		return true;
+	}
 }

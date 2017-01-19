@@ -125,7 +125,7 @@ switch(isset($url[2]) ? $url[2] : null) {
 			{
 				if ($next<>'NULL')
 				{	
-					$what_new = file_get_contents('https://server.jmy.su/history.php?'.$next);
+					$what_new = file_get_contents('https://server.jmy.su/history.php?'.$now);
 					$adminTpl->admin_head($lang['updates']);		
 					$adminTpl->open();	
 					echo '<div style="max-width: 625px" class="center-block mt70">           

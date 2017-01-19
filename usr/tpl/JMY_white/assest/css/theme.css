@@ -891,7 +891,7 @@ footer.entry-footer {
 	border-top-right-radius: 4px;
 }
 span.overlay-img {
-	background:url(./images/goto.png) center center no-repeat black;
+	background:url(../images/goto.png) center center no-repeat black;
 	height: 100%;
 	position: absolute;
 	width: 100%;

@@ -749,10 +749,7 @@ function validationInit($type)
 	}	
 	$rules .= '}, ';
 	$massege .= '}, ';
-	$script = '
-        $.validator.methods.smartCaptcha = function (value, element, param) {
-          return value == param;
-        };
+	$script = '      
         $("#admin-form").validate({        
           errorClass: "state-error",
           validClass: "state-success",

@@ -30,49 +30,42 @@ global $core;
 	return isset($core->tpl->modules[$mod]) ? $core->tpl->modules[$mod]['content'] : $mod;
 }
 
-function adminArea($name, $val = null, $rows = 10, $class = 'textarea', $onclick = null, $return = false)
+function adminArea($name, $val = null, $rows = 10, $class = 'textarea', $onclick = null, $return = false, $source = false)
 {
 global $adminTpl, $core;
 	if($core->html_editor == 1)
 	{
+		$id = $name;		
 		$adminTpl->headerIncludes['bb'] = '<script type="text/javascript" src="usr/plugins/js/bb_editor.js"></script><script type="text/javascript">var textareaName = \''.$name.'\';</script>';
 		$adminTpl->headerIncludes['htmleditor'] = '<script type="text/javascript" src="/usr/plugins/tinymce/tinymce.min.js"></script>
 		<script>
-tinymce.init({	
-
- theme: \'modern\',
-    skin: \'custom\',
-  selector: \'textarea\',
-  language: \'ru\',
-  height: 300,
-  menubar:false,
-    statusbar: false,
-  convert_urls: false,
-relative_urls: false,
-	  plugins: [
-		\'advlist autolink lists link codesample hr image charmap print preview anchor\',
-		\'searchreplace visualblocks code fullscreen\',
-		\'insertdatetime media table contextmenu paste spellchecker responsivefilemanager code youtube jmybutton emoticons\'
-	  ],
-	toolbar1: \'undo redo | styleselect | fontsizeselect | fontselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent table hr\',
-	toolbar2: \'subscript superscript | link image responsivefilemanager jmymusic jmyvideo | jmymail jmyquote jmyhide codesample jmyspoiler | spellchecker removeformat searchreplace code fullscreen  \',
-	image_advtab: true ,
-	spellchecker_language : "ru",
-	spellchecker_languages : "Russian=ru,Ukrainian=uk,English=en",
-	spellchecker_rpc_url : "//speller.yandex.net/services/tinyspell",
-
-  external_filemanager_path: \'/usr/plugins/filemanager/\',
-  external_plugins: { "filemanager" : "/usr/plugins/filemanager/plugin.min.js"},
-  filemanager_title: \'Управление файлами\',  
-  content_css: [
-    \'//fast.fonts.net/cssapi/e6dc9b99-64fe-4292-ad98-6974f93cd2a2.css\',
-  ] 
-});
-  </script>
-		
-		';
-		$editor = '<textarea id="' . $name . '" name="' . $name . '" rows="' . $rows . '" cols="90" class="' . $class . '" onclick="mainArea(\'' . $name . '\')">' . $val . '</textarea>';
-
+			tinymce.init({
+				theme: \'modern\',
+				skin: \'custom\',
+				selector: \'textarea\',
+				language: \'ru\',
+				height: 300,
+				menubar:false,
+				statusbar: false,
+				convert_urls: false,
+				relative_urls: false,
+				plugins: [
+					\'advlist autolink lists link codesample hr image charmap print preview anchor\',
+					\'searchreplace visualblocks code fullscreen\',
+					\'insertdatetime media table contextmenu paste spellchecker responsivefilemanager code youtube jmybutton emoticons\'
+				],
+				toolbar1: \'undo redo | styleselect | fontsizeselect | fontselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent table hr\',
+				toolbar2: \'subscript superscript | link image responsivefilemanager jmymusic jmyvideo | jmymail jmyquote jmyhide codesample jmyspoiler | spellchecker removeformat searchreplace code fullscreen  \',
+				image_advtab: true,
+				spellchecker_language : "ru",
+				spellchecker_languages : "Russian=ru,Ukrainian=uk,English=en",
+				spellchecker_rpc_url : "//speller.yandex.net/services/tinyspell",
+				external_filemanager_path: \'/usr/plugins/filemanager/\',
+				external_plugins: { "filemanager" : "/usr/plugins/filemanager/plugin.min.js"},
+				filemanager_title: \'Управление файлами\',  
+			});
+		</script>';
+		$editor = '<textarea id="' . $id . '" name="' . $name . '" rows="' . $rows . '" cols="90" class="' . $class . '" onclick="mainArea(\'' . $name . '\')">' . $val . '</textarea>';
 		return $editor;
 	}
 	else
@@ -149,6 +142,34 @@ function colorpickerInit($id = 'color_p', $color='#02c385')
 {
 	global $adminTpl, $core;
 	$adminTpl->js_code[] = "$('#".$id."').colorpicker({color: '".$color."'});";
+}
+
+function datetimepickerInit($id = 'date')
+{
+	global $adminTpl, $core;
+	$adminTpl->js_code[] = '$("#'.$id.'").datetimepicker({
+          showOn: \'both\',
+          buttonText: \'<i class="fa fa-calendar-o"></i>\',
+          prevText: \'<i class="fa fa-chevron-left"></i>\',
+          nextText: \'<i class="fa fa-chevron-right"></i>\',
+          beforeShow: function (input, inst) {
+            var newclass = \'admin-form\';
+            var themeClass = $(this).parents(\'.admin-form\').attr(\'class\');
+            var smartpikr = inst.dpDiv.parent();
+            if (!smartpikr.hasClass(themeClass)) {
+              inst.dpDiv.wrap(\'<div class="admin-form mw1000 center-block theme-primary" style="top: 100px !important;"></div>\');
+            }
+			var offset = $(input).offset();
+			var height = $(input).height();
+			window.setTimeout(function () {
+				inst.dpDiv.css({ top: (offset.top + height +19) + \'px\', left: (offset.left - 50) + \'px\' })
+			}, 1);
+          }
+        });';
+	$adminTpl->footIncludes[''] =  '<script src="'.ADMIN_TPL.'assets/js/jquery-ui-monthpicker.min.js"></script>
+									<script src="'.ADMIN_TPL.'assets/js/jquery-ui-datepicker.min.js"></script>
+									<script src="/langs/'.$core->InitLang().'/js/datepicker.js"></script>
+									<script src="/langs/'.$core->InitLang().'/js/timepicker.js"></script>';
 }
 
 function dirsize($dir, $buf = 2)

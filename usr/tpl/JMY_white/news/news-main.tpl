@@ -2,7 +2,7 @@
 	<div class="entry-featuredImg">
 		[more]
 			<span class="overlay-img"></span>
-			[mini_img][img:0][/mini_img]
+			[preview]<img src="{%PREVIEW%}">[/preview]
 		[/more]
 	</div>
 	<header class="entry-header">

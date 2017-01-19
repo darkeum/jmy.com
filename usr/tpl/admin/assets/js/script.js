@@ -65,7 +65,7 @@ function modal_o(id) {
         };
 
    // PNotify Plugin Event Init
-       function notif(style, title_in, text_in) {
+function notif(style, title_in, text_in) {
           var noteStyle = style;
           var noteShadow = true;
           var noteOpacity = '1';
@@ -98,7 +98,9 @@ function modal_o(id) {
             width: findWidth(),
             delay: 1400
           });
-		 };
+};
+
+
 		 
 	
 

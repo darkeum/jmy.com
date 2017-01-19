@@ -870,13 +870,11 @@ echo '</div>';
 			$queryUU = $db->query('SELECT id FROM `' . USER_DB . '`.`' . USER_PREFIX . '_users` WHERE `nick`="'.$db->safesql($nick).'" LIMIT 1');
 			$UUID = $db->getRow($queryUU);
 			
-			echo $UUID['id'];
+		
 			if($_FILES['avatar']['size'] > 0) 
-			{		
-echo $UUID['id'].'1';		
+			{			
 				if($foo = new Upload($_FILES['avatar']))
 				{
-					echo $UUID['id'].'2';
 					$foo->file_new_name_body = 'av' .$UUID['id'];
 					$foo->image_resize = true;
 					$foo->image_x = $user['avatar_width'];

@@ -57,7 +57,7 @@
             <li class="menu-item [index:1]current_page_item[/index]">
               <a href="{%URL%}">Главная</a>
             </li>
-            <li class="menu-item [index:0][modules:news,board,blog,guestbook,gallery,sitemap:1]current_page_item[/modules][/index]">
+            <li class="menu-item [index:0][modules:news,board,sitemap:1]current_page_item[/modules][/index]">
               <a href="#">Компоненты</a>
               <ul class="sub-menu">
                 <li class="menu-item [index:0][modules:news:1]current_page_item[/modules][/index]">
@@ -65,25 +65,8 @@
                 </li>
                 <li class="menu-item [modules:board:1]current_page_item[/modules]">
                   <a href="{%URL_FORUM%}">Форум</a>
-                </li>
-                <li class="menu-item [modules:blog:1]current_page_item[/modules]">
-                  <a href="{%URL_BLOG%}">Блоги</a>
-                </li>
-                <li class="menu-item [modules:guestbook:1]current_page_item[/modules]">
-                  <a href="{%URL_GUEST%}">Гостевая книга</a>
-                </li>
-                <li class="menu-item [modules:gallery:1]current_page_item[/modules]">
-                  <a href="{%URL_GALLERY%}">Галерея</a>              
-                  <ul class="sub-menu">
-                    <li class="menu-item">
-                      <a href="{%URL_GALLERY%}/top">Лучшие фото</a>
-                    </li>
-                    <li class="menu-item">
-                      <a href="{%URL_GALLERY%}/search">Поиск фотографий</a>
-                    </li>                   
-                  </ul>
-                </li>
-                <li class="menu-item [modules:sitemap:1]current_page_item[/modules]">
+                </li>  
+				<li class="menu-item [modules:sitemap:1]current_page_item[/modules]">
                   <a href="{%URL_SITEMAP%}">Карта сайта</a>
                 </li>
               </ul>          

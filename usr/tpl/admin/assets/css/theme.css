@@ -26943,4 +26943,11 @@ body.timeline-page .panel-clone {
   }
 }
 
-/*# sourceMappingURL=theme.css.map */
+.genPreview{padding:20px;color:#333;font-size:12px;}
+
+.genPreview .news{margin-top:10px;border:1px dashed #888;padding:5px;}
+
+.genPreview .pred{font-size:14px;font-weight:bold;border-bottom:1px dashed #888;margin-bottom:10px;padding-bottom:3px;}
+
+.genPreview h2{margin:0;padding:0;}
+.corners { -moz-border-radius:8px; -webkit-border-radius:8px; border-radius: 8px; }

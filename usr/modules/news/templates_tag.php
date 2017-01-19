@@ -24,12 +24,14 @@ if (!defined('ACCESS')) {
 	$core->tpl->setVar('ICON', isset($catInfo['icon']) ? $core->getCatImg($news_link, $catInfo['icon'], $catInfo['title']) : '');
 	$core->tpl->setVar('AUTHOR', '<a href="profile/' . $news['author'] . '" title="' . _PAGE . ': ' . $news['author'] . '">' . $news['author'] . '</a>');
 	$core->tpl->setVar('VIEWS', $news['views']);
+	$core->tpl->setVar('PREVIEW', $news['preview']);
 	$core->tpl->setVar('COMMENTS', $news['comments']);
 	$core->tpl->setVar('TAGS', mb_substr($tags, 0, -2));
 	$core->tpl->setVar('FULL_LINK', $news_link . $news['altname'] . ".html");
 	$miniImg = _getCustomImg($short);
 	$array_replace = array(
 		"#\\[tags\\](.*?)\\[/tags\\]#ies" => "if_set('" . $news['tags'] . "', '\\1')",
+		"#\\[preview\\](.*?)\\[/preview\\]#ies" => "if_set('" . $news['preview']. "', '\\1')",
 		"#\\[more\\](.*?)\\[/more\\]#ies" => "format_link('\\1', '" . $news_link . $news['altname'] . ".html')",
 		"#\\[category\\](.*?)\\[/category\\]#ies" => "if_set('".$cat."', '\\1')",
 		"#\\[edit\\](.*?)\\[/edit\\]#is" => (($core->auth->isModer||$core->auth->isAdmin)  ? "\${1}" : ''),

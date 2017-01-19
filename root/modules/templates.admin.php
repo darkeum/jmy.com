@@ -1,13 +1,12 @@
 <?php
 
 /**
-* @name        JMY CMS
-* @link        http://jmy.su/
-* @copyright   Copyright (C) 2012-2015 JMY LTD
+* @name        JMY COME
+* @link        https://jmy.su/
+* @copyright   Copyright (C) 2012-2017 JMY LTD
 * @license     LICENSE.txt (see attached file)
 * @version     VERSION.txt (see attached file)
 * @author      Komarov Ivan
-* @revision	   06.03.2015
 */
 
 if (!defined('ADMIN_ACCESS')) 

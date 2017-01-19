@@ -235,12 +235,12 @@ function getPreview()
 {
 global $core;
 	$title = utf_decode($_REQUEST['title']);
-	$short = utf_decode($_REQUEST['shortNews']);
-	$full = utf_decode($_REQUEST['fullNews']);
+	$short = htmlspecialchars_decode(utf_decode($_REQUEST['shortNews']));
+	$full = htmlspecialchars_decode(utf_decode($_REQUEST['fullNews']));
 	echo '<div class="genPreview">';
 	if(!empty($title) && !empty($short))
 	{
-		echo '<style>#sb-body,#sb-loading{background-color:#f2f2f2;} #sb-wrapper-inner{border:1px solid #555;}#sb-loading-inner span{background:url(\'/usr/tpl/admin/images/35-1.gif\') no-repeat;padding-left:34px;display:inline-block;}</style>';
+		echo '<style>#sb-body,#sb-loading{background-color:#f2f2f2;} #sb-wrapper-inner{border:1px solid #555;}padding-left:34px;display:inline-block;}</style>';
 		echo '<h2>'.$title.'</h2>';
 		echo '<div class="news"><div class="pred">Краткий текст</div>' . $core->bbDecode($short, false, true) . '</div>';
 		if(!empty($full))

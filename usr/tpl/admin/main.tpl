@@ -149,7 +149,7 @@
             </li>
 			[/ACTIVE_MODULE]		
             <li>
-				<a href="#" class="accordion-toggle {MENU_OPEN:user,groups,comments,voting}">
+				<a href="#" class="accordion-toggle {MENU_OPEN:user,groups,comments,publications,voting}">
 					<span class="glyphicon glyphicon-user"></span>
 					<span class="sidebar-title">[alang_old:_PANEL_MENU_USER]</span>
 					<span class="caret"></span>
@@ -163,6 +163,9 @@
 					</li>
 					<li {MENU_CHOOSE:comments}>
 						<a href="/{ADMIN}/comments"><span class="glyphicon glyphicon-comment"></span>[alang_old:_PANEL_MENU_USER_COMMENT]</a>
+					</li>
+					<li {MENU_CHOOSE:publications}>
+						<a href="/{ADMIN}/publications"><span class="glyphicon glyphicon-edit"></span>[alang:moder]</a>
 					</li>
 					<li {MENU_CHOOSE:voting}>
 						<a href="/{ADMIN}/voting"><span class="glyphicon glyphicon-plus-sign"></span>[alang_old:_PANEL_MENU_USER_POLL]</a>

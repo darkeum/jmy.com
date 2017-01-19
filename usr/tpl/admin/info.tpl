@@ -3,7 +3,7 @@
 	[URL]
 	<div class="widget-menu pull-right" >
 	  <div class="btn-group">
-		<button onclick="location.href = '{URL}'" type="button" class="btn btn-xs btn-primary btn-block">{URL_TEXT}</button>
+		<button onclick="{URL}" type="button" class="btn btn-xs btn-primary btn-block">{URL_TEXT}</button>
 	  </div>
 	</div>
 	[/URL]	

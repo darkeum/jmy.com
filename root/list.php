@@ -101,7 +101,7 @@ $component_array = array(
 		)
 	),		
 	'publications' => array (
-		'name' => _AP_PUB ,
+		'name' => $lang['moder'] ,
 		'desc' => _AP_PUB_DESC,		
 		'shown' => 1
 	),	

@@ -93,51 +93,24 @@ function ajaxPost(uri, id, data, type) {
 
 	xmlhttp.open('POST', link, true);
 	xmlhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-	//alert(data);
 	xmlhttp.send(data);
 }
 
-function genPreview(title, shortNews, fullNews)
+function genPreview(id_title, id_short, id_full)
 {
-	alert(shortNews);
-	if(caa(false))
+	tinymce.triggerSave();
+
+	var _title = gid(id_title).value;
+	var _shortNews = tinyMCE.get(id_short).getContent();
+	var _fullNews = tinyMCE.get(id_full).getContent();
+	
+	if(_title == '')
 	{
-		var xmlhttp = false
-		
-		try {
-			xmlhttp = new XMLHttpRequest();
-		} 
-		catch (e) {
-			try {
-			xmlhttp = new ActiveXObject('Microsoft.XMLHTTP');
-			}
-			catch (e) {
-			xmlhttp = new ActiveXObject('Msxml2.XMLHTTP');
-			}
-		}
-
-		xmlhttp.open('POST', 'ajax.php?do=getPreview', false);
-		xmlhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-		xmlhttp.send('title='+encodeURIComponent(title)+'&shortNews='+encodeURIComponent(shortNews)+'&fullNews='+encodeURIComponent(fullNews));
-
-		if (document.documentElement && (document.documentElement.clientWidth || document.documentElement.clientHeight)) 
-		{
-			clHeight = document.documentElement.clientHeight;
-			clientWidth = document.documentElement.clientWidth;
-		}
-		else if (document.body && (document.body.clientWidth || document.body.clientHeight)) 
-		{
-			clHeight = document.body.clientHeight;
-			clientWidth = document.body.clientWidth;
-		}
-			
-		Shadowbox.open({
-			content:	xmlhttp.responseText,
-			player:     "html",
-			title:      "Предпросмотр контента",
-			width: (clientWidth-200),
-			height:(clHeight-50)
-		});
+		notif('warning', lang.info, lang.preview_title);
+	}
+	else
+	{		
+		$.fancybox( {href : '/ajax.php?do=getPreview&title='+encodeURIComponent(_title)+'&shortNews='+encodeURIComponent(_shortNews)+'&fullNews='+encodeURIComponent(_fullNews), title : lang.preview, type : 'ajax', maxWidth: 880, maxHeight: 600, fitToView: false,	width: '70%', height: '70%', autoSize: false, closeClick: false} );
 	}
 }
 
@@ -156,9 +129,6 @@ function inputTags(tags, id, input)
 	}
 }
 
-/*
-	Этот участо кода позаимствован из Eleanor CMS Выражаю автору большую благодарность!
-*/
 function EditTitle(div, mod, id, subarr)
 {
 	var tempText = gid(div).innerHTML;

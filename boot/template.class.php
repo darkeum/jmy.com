@@ -567,14 +567,28 @@ class template
 			return $this->return_end();
 	}
 	
-	public function info($text, $type = 'info', $redicret = null, $title = null, $url_text = null, $url = null) 
+	public function info($text, $type = 'info', $redicret = null, $title = null, $url_text = null, $url = null, $url_type = 'url') 
 	{
 	global $config, $urll;
+	
 		$GLOBALS["urll"] = $url;
+		switch($url_type) 
+		{			
+			case 'url':
+				$url = "location.href = '".$url."'";
+			break;
+			case 'modal':
+				$url = "modal_o('#".$url."')";
+			break;
+			
+			default:
+				
+			break;
+		}			
 		$this->loadFile($type);
 		$this->setVar('TEXT', $text);
 		$this->setVar('TITLE', $title);
-		$this->setVar('URL', $urll);
+		$this->setVar('URL', $url);
 		$this->setVar('URL_TEXT', $url_text);	
 		$this->sources = preg_replace_callback("#\\[URL](.*?)\\[/URL]#is", create_function('$matches', 'if(!empty($GLOBALS["urll"])) {return $matches[1];}'),$this->sources);		
 		$this->end();

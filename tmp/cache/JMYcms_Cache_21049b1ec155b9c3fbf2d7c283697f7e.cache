@@ -1,6 +1,6 @@
 <?php
 
-$value = "<script type=\"text/javascript\" src=\"usr/plugins/calendar.js\"></script><div id=\"_calendar\"></div><script type=\"text/javascript\">var newsDays = []; calendar();</script>";
+$value = "<script type=\"text/javascript\" src=\"usr/plugins/calendar.js\"></script><div id=\"_calendar\"></div><script type=\"text/javascript\">var newsDays = [19]; calendar();</script>";
 
 $ttl = 1200;
 

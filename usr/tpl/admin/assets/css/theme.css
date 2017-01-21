@@ -24,7 +24,7 @@
   animation-duration: 0.3s !important;
 }
 .animated.animated-long {
-  -webkit-animation-duration: 1.4s !important;
+  -webkit-animation-duration: 1.4s !important;F
   animation-duration: 1.4s !important;
 }
 .animated.animated-longer {
@@ -8574,6 +8574,7 @@ img {
 }
 .img-circle {
   border-radius: 50%;
+  width: 38px;
 }
 hr {
   margin-top: 18px;
@@ -16034,6 +16035,7 @@ html .element-groups-custom > *:first-child {
 }
 .pull-left {
   float: left !important;
+  margin-right: 10px;
 }
 @media (min-width: 480px) {
   .pull-xs-left {

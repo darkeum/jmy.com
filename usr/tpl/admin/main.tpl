@@ -76,7 +76,7 @@
 						  {NOTIF}
 						</ol>
 					  </div>
-					  <div class="panel-footer text-center p7"><a href="#" class="link-unstyled"> View All</a></div>
+					  <div class="panel-footer text-center p7"><a href="#" class="link-unstyled"> Смотреть Все</a></div>
 					</div>
 				</div>
 			</div>

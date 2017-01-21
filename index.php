@@ -28,7 +28,7 @@ if(isset($_COOKIE['theme']))
 		$config['tpl'] = filter($_COOKIE['theme']);
 	else
 		setcookie('theme', false, time(), '/');
-		
+
 }
 
 if($config['timezone'] !== "")
@@ -36,16 +36,16 @@ if($config['timezone'] !== "")
 	date_default_timezone_set($config['timezone']);
 }
 
-if($config['gzip'] && !DEBUG) 
+if($config['gzip'] && !DEBUG)
 {
 	ob_start("ob_gzhandler");
 }
 
-function __autoload($class_name) 
+function __autoload($class_name)
 {
 	$class_path = ROOT.'boot/sub_classes/'.mb_strtolower($class_name).'.class.php';
 	$class_path = str_replace("\\", "/", $class_path);
-	if (file_exists($class_path)) 
+	if (file_exists($class_path))
 	{
 	require_once($class_path);
 	}

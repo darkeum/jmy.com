@@ -54,7 +54,7 @@
         <ul class="nav navbar-nav navbar-right">
 		  <li>
             <div class="navbar-btn btn-group">
-              <button class="btn btn-sm" title="Перейти на сайт" onclick='window.open("{URL}");'><span class="fa fa-globe fs15"></span></button>
+              <a href="{URL}" class="btn btn-sm" title="Перейти на сайт"><span class="fa fa-globe fs15"></span></a>
             </div>
           </li>		
 		  <li>

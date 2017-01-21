@@ -887,7 +887,7 @@ global $adminTpl, $config, $core;
 function timeZone()
 {
 global $adminTpl, $config;
-	return '<select name="' . $config['lang'] . '[timezone]">
+	return '<select class="form-control" name="' . $config['lang'] . '[timezone]">
       <option value="">Стандартный</option>
       <option value="Pacific/Kwajalein" ' .($config['timezone'] == "Pacific/Kwajalein" ? "selected" : ""). '>(GMT -12:00) Eniwetok, Kwajalein</option>
       <option value="Pacific/Samoa" ' .($config['timezone'] == "Pacific/Samoa" ? "selected" : ""). '>(GMT -11:00) Midway Island, Samoa</option>
@@ -945,7 +945,7 @@ global $adminTpl, $config;
 function imageEffect()
 {
 global $adminTpl, $config;
-	$content = "<select class=\"other\" name=\"" . $config['lang'] . "[imageEffect]\">";
+	$content = "<select class=\"other form-control\" name=\"" . $config['lang'] . "[imageEffect]\">";
 	$path = ROOT . 'media/imageEffects/';
 	$dh = opendir($path);
 	$c=0;
@@ -972,7 +972,7 @@ global $adminTpl, $config;
 function dbType()
 {
 global $adminTpl, $config;
-	$content = "<select class=\"other\" name=\"" . $config['lang'] . "[dbType]\">";
+	$content = "<select class=\"other form-control\" name=\"" . $config['lang'] . "[dbType]\">";
 	$path = ROOT . 'boot/db/';
 	$dh = opendir($path);
 	$c=0;

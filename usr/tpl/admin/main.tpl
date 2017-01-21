@@ -54,7 +54,7 @@
         <ul class="nav navbar-nav navbar-right">
 		  <li>
             <div class="navbar-btn btn-group">
-              <a href="{URL}" class="btn btn-sm" title="Перейти на сайт"><span class="fa fa-globe fs15"></span></a>
+              <a href="{URL}" target="_blank" class="btn btn-sm" title="Перейти на сайт"><span class="fa fa-globe fs15"></span></a>
             </div>
           </li>		
 		  <li>

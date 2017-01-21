@@ -10224,6 +10224,11 @@ output {
   border: 1px solid #ebebeb;
   border-radius: 4px;
   transition: border-color ease-in-out .15s;
+  cursor: pointer;
+}
+input.form-control, 
+textarea.form-control {
+	cursor: text;
 }
 .form-control:focus {
   border-color: #6dd4e0;
@@ -14515,6 +14520,9 @@ body .checkbox-custom input {
   transition: opacity 0.1s ease-in;
   -moz-transition: opacity 0.1s ease-in;
   -webkit-transition: opacity 0.1s ease-in;
+}
+td > span.fa {
+	font-size: 26px;
 }
 /* Glyphicon Pro and Halfling */
 .glyphicons-2x,

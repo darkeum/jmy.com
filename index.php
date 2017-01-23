@@ -21,7 +21,7 @@ require ROOT . 'etc/user.config.php';
 require ROOT . 'etc/log.config.php';
 require ROOT . 'lib/php_funcs.php';
 require ROOT . 'lib/global.php';
-
+ 
 if(isset($_COOKIE['theme']))
 {
 	if(file_exists(ROOT . 'usr/tpl/' . $_COOKIE['theme'] . '/index.tpl'))

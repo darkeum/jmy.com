@@ -43,10 +43,15 @@
 				<input type="text"  name="search" placeholder="[alang_old:_PANEL_SEARCH]" class="form-control">
 			</div>
         </form>
-        <ul class="nav navbar-nav navbar-right">		  
+        <ul class="nav navbar-nav navbar-right">
 		  <li>
             <div class="navbar-btn btn-group">
-              <button class="btn btn-sm request-fullscreen"><span class="fa fa-arrows-alt fs15"></span></button>
+              <a href="{URL}" target="_blank" class="btn btn-sm" title="Перейти на сайт"><span class="fa fa-globe fs15"></span></a>
+            </div>
+          </li>		
+		  <li>
+            <div class="navbar-btn btn-group">
+              <button class="btn btn-sm request-fullscreen" title="Во весь экран"><span class="fa fa-arrows-alt fs15"></span></button>
             </div>
           </li>
 		  <li>
@@ -68,7 +73,7 @@
 						  {NOTIF}
 						</ol>
 					  </div>
-					  <div class="panel-footer text-center p7"><a href="#" class="link-unstyled"> View All</a></div>
+					  <div class="panel-footer text-center p7"><a href="#" class="link-unstyled"> Смотреть Все</a></div>
 					</div>
 				</div>
 			</div>

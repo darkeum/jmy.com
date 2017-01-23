@@ -15,6 +15,7 @@ if (!defined('ACCESS')) {
 }
 
 
+
 if($core->auth->isUser == true)
 {
 	$mod = $url[0];

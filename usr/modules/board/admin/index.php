@@ -14,12 +14,12 @@ if (!defined('ADMIN_SWITCH')) {
     exit;
 }
 
-switch(isset($url[3]) ? $url[3] : null) 
+switch(isset($url[3]) ? $url[3] : null)
 {
 	default:
 		$adminTpl->admin_head('Модули | Форум');
 		$query = $db->query("SELECT id, title, pid, position FROM ".DB_PREFIX."_board_forums ORDER BY pid");
-		while($rows = $db->getRow($query)) 
+		while($rows = $db->getRow($query))
 		{
 			$cat_get[$rows['id']] = array($rows['title'], $rows['pid'], $rows['position']);
 		}
@@ -28,16 +28,16 @@ switch(isset($url[3]) ? $url[3] : null)
 				<section class="panel">
 					<div class="panel-heading">
 						<b>Список форумов</b>
-					</div>';	
+					</div>';
 		if(isset($cat_get))
 		{
-			foreach ($cat_get as $cid => $sub_arr) 
+			foreach ($cat_get as $cid => $sub_arr)
 			{
 				if($cid != $sub_arr[1])
 				{
 					$cats_arr[$cid] = array($sub_arr[0], $sub_arr[0]);
 					$flag = $sub_arr[1];
-					while ($flag > "0") 
+					while ($flag > "0")
 					{
 						$cats_arr[$cid] = array($cat_get[$flag][0]." / ".$cats_arr[$cid][0], $sub_arr[0]);
 						$flag = $cat_get[$flag][1];
@@ -48,7 +48,7 @@ switch(isset($url[3]) ? $url[3] : null)
 					$core->tpl->info('Обнаружено фатальное несоответсвие! Форум ' . $cid . ' является своим же подфорумом!');
 				}
 			}
-			asort($cats_arr);		
+			asort($cats_arr);
 		echo '<div class="panel-body no-padding">
 					<form id="tablesForm" style="margin:0; padding:0" method="POST" action="{MOD_LINK}/action">
 						<table class="table no-margin">
@@ -56,22 +56,22 @@ switch(isset($url[3]) ? $url[3] : null)
 								<tr>
 									<th><span class="pd-l-sm"></span>ID</th>
 									<th class="col-md-5">Форум</th>
-									<th class="col-md-4">Разметка</th>	
-									<th class="col-md-2">Положение</th>											
+									<th class="col-md-4">Разметка</th>
+									<th class="col-md-2">Положение</th>
 									<th class="col-md-3">' . _ACTIONS . '</th>
 									<th class="col-md-4"><input type="checkbox" name="all" onclick="setCheckboxes(\'tablesForm\', true); return false;"></th>
 								</tr>
 							</thead>
-							<tbody>';			
+							<tbody>';
 
-			foreach ($cats_arr as $cid => $arrName) 
+			foreach ($cats_arr as $cid => $arrName)
 			{
 				$name = $arrName[0];
 				$massa = explode(' / ', $name);
 				echo '<tr>
 				<td><span class="pd-l-sm"></span>' . $cid . '</td>
 				<td>'.$name.'</td>
-				<td>[<a href="{MOD_LINK}/add/' . $cid . '">Создать подфорум</a> | <a href="{MOD_LINK}/rules/' . $cid . '">Прикрепить правила</a>]</td>				
+				<td>[<a href="{MOD_LINK}/add/' . $cid . '">Создать подфорум</a> | <a href="{MOD_LINK}/rules/' . $cid . '">Прикрепить правила</a>]</td>
 				<td>' . (count($massa) < 3 ? '<div><input name="posit[' . $cid . ']" value="' . $cat_get[$cid][2] . '" style="width:20px; ' . (!eregStrt(' / ', $name) ? 'font-weight: bold;' : '') . '" /></div>' : '<div>Нет опций</div>' ). '</td>
 				<td>
 					<a href="{MOD_LINK}/edit/' . $cid . '">
@@ -96,23 +96,23 @@ switch(isset($url[3]) ? $url[3] : null)
 				</select>
 				</td>
 				<td>&nbsp&nbsp</td>
-				
+
 				<td valign="top">
 				<input name="submit" type="submit" class="btn btn-success" id="sub" value="' . _EDIT . '" /><span class="pd-l-sm"></span>
 				</td>
 				</tr>
-				</table>		
+				</table>
 				</div>
-				</form></div>';	
+				</form></div>';
 		}
 		else
 		{
-			echo '<div class="panel-heading">Вы ещё не добавили ниодного форума!</div>';			
+			echo '<div class="panel-heading">Вы ещё не добавили ниодного форума!</div>';
 		}
 		echo'</section></div></div>';
 		$adminTpl->admin_foot();
 		break;
-		
+
 	case 'add':
 		$adminTpl->admin_head('Модули | Форум | Создать форум');
 		$fid = isset($url[4]) ? intval($url[4]) : 0;
@@ -121,8 +121,8 @@ switch(isset($url[3]) ? $url[3] : null)
 			<div class="col-lg-12">
 				<section class="panel">
 					<div class="panel-heading">
-						<b>Добавление форума</b>						
-					</div>					
+						<b>Добавление форума</b>
+					</div>
 					<div class="panel-body">
 						<form class="form-horizontal parsley-form" role="form" action="{MOD_LINK}/save" method="post"  data-parsley-validate>
 												<div class="form-group">
@@ -134,53 +134,53 @@ switch(isset($url[3]) ? $url[3] : null)
 												<div class="form-group">
 													<label class="col-sm-3 control-label">Тип форума</label>
 													<div class="col-sm-4">
-														<select name="ftype">
+														<select class="form-control" name="ftype">
 															<option value="c">Категория</option>
 															<option value="f" selected>Форум</option>
-														</select>														
+														</select>
 													</div>
 												</div>
 												<div class="form-group">
 													<label class="col-sm-3 control-label">Описание форума</label>
 													<div class="col-sm-4">
-														<textarea cols="30" rows="5" name="descr" class="form-control" data-parsley-required="true" data-parsley-trigger="change"></textarea>														
+														<textarea cols="30" rows="5" name="descr" class="form-control" data-parsley-required="true" data-parsley-trigger="change"></textarea>
 													</div>
 												</div>
 												<div class="form-group">
 													<label class="col-sm-3 control-label">Родительский форум</label>
 													<div class="col-sm-4">
-														<select name="pid"><option value="0">Без форума</option>';
+														<select class="form-control" name="pid"><option value="0">Без форума</option>';
 										$query = $db->query("SELECT id, title, pid FROM ".DB_PREFIX."_board_forums ORDER BY pid");
-										while($rows = $db->getRow($query)) 
+										while($rows = $db->getRow($query))
 										{
 											$cat_get[$rows['id']] = array($rows['title'], $rows['pid']);
 										}
-										
+
 										if(isset($cat_get))
 										{
-											foreach ($cat_get as $cid => $sub_arr) 
+											foreach ($cat_get as $cid => $sub_arr)
 											{
 												if($cid != $sub_arr[1])
 												{
 													$cats_arr[$cid] = $sub_arr[0];
 													$flag = $sub_arr[1];
-													while ($flag != "0") 
+													while ($flag != "0")
 													{
 														$cats_arr[$cid] = $cat_get[$flag][0]." / ".$cats_arr[$cid];
 														$flag = $cat_get[$flag][1];
 													}
 												}
 											}
-											
+
 											asort($cats_arr);
-											
-											foreach ($cats_arr as $cid => $name) 
+
+											foreach ($cats_arr as $cid => $name)
 											{
 												$selected = ($cid == $fid) ? "selected" : "";
 												echo '<option value="' . $cid . '" ' . $selected . '>' . $name . '</option>';
 											}
 										}
-										echo '			</select>													
+										echo '			</select>
 													</div>
 												</div>
 												<div class="form-group">
@@ -202,7 +202,7 @@ switch(isset($url[3]) ? $url[3] : null)
 		</tr>
 		</thead>
 		<tbody>';
-		while($rows = $db->getRow($query)) 
+		while($rows = $db->getRow($query))
 		{
 			echo '<tr>
 			<td align="left">' . $rows['name'] . '</td>
@@ -217,20 +217,20 @@ switch(isset($url[3]) ? $url[3] : null)
 			</tr>';
 		}
 		echo '</tbody></table></div></div>
-		
+
 		<div class="form-group">
 														<label class="col-sm-3 control-label"></label>
 														<div class="col-sm-4">
-															<input name="submit" type="submit" class="btn btn-primary btn-parsley" id="sub" value="Добавить форум">						
+															<input name="submit" type="submit" class="btn btn-primary btn-parsley" id="sub" value="Добавить форум">
 														</div>
 												</div>';
 		echo '</form>';
 echo '</div>';
-			echo'</section></div></div>';	
+			echo'</section></div></div>';
 		$adminTpl->close();
 		$adminTpl->admin_foot();
 		break;
-		
+
 	case 'save':
 		$adminTpl->admin_head('Модули | Форум | Сохранение форума');
 		$title = filter($_POST['title'], 'title');
@@ -252,7 +252,7 @@ echo '</div>';
 				$allowAttach[$gid] = isset($infos['allowAttach']) ? 1 : 0;
 				$db->query("INSERT INTO `" . DB_PREFIX . "_board_permissions` ( `id` , `fid` , `gid` , `allowView` , `allowRead` , `allowCreate` , `allowReply` , `allowEdit` , `allowModer` , `allowAttach` ) VALUES (NULL, '" . $fid . "', '" . $gid . "', '" . $allowView[$gid] . "', '" . $allowRead[$gid]. "', '" . $allowCreate[$gid] . "', '" . $allowReply[$gid] . "', '" . $allowEdit[$gid] . "', '" . $allowModer[$gid] . "', '" . $allowAttach[$gid] . "');");
 			}
-			
+
 			$adminTpl->info('Форум успешно создан. <a href="{MOD_LINK}/add">Создать ешё</a> или <a href="{MOD_LINK}">к списку</a>');
 		}
 		else
@@ -261,11 +261,11 @@ echo '</div>';
 		}
 		$adminTpl->admin_foot();
 		break;
-		
+
 	case 'action':
 		$adminTpl->admin_head('Модули | Форум | Действия');
 		$do = filter($_POST['do'], 'a');
-	
+
 		switch($do)
 		{
 			case 'sort':
@@ -276,10 +276,10 @@ echo '</div>';
 						$db->query("UPDATE `" . DB_PREFIX . "_board_forums` SET `position` = '" . intval($posit) . "' WHERE `id` =" .intval($id) . " LIMIT 1 ;");
 					}
 				}
-				
+
 				$adminTpl->info('Форумы успешно отсортированы.  <a href="{MOD_LINK}">К списку</a>');
 				break;
-				
+
 			case 'delete':
 				foreach($_POST['posit'] as $id)
 				{
@@ -299,13 +299,13 @@ echo '</div>';
 					}
 				}
 				break;
-				
+
 			case 'savePerms':
 				foreach($_POST['fid'] as $fid)
 				{
 					$db->query("DELETE FROM `" . DB_PREFIX . "_board_permissions` WHERE `fid` = '" . intval($fid) . "'");
 				}
-				
+
 				foreach($_POST['permissions'] as $gid => $infos)
 				{
 					$allowView[$gid] = isset($infos['allowView']) ? 1 : 0;
@@ -315,7 +315,7 @@ echo '</div>';
 					$allowEdit[$gid] = isset($infos['allowEdit']) ? 1 : 0;
 					$allowModer[$gid] = isset($infos['allowModer']) ? 1 : 0;
 					$allowAttach[$gid] = isset($infos['allowAttach']) ? 1 : 0;
-					
+
 					foreach($_POST['fid'] as $fid)
 					{
 						$db->query("INSERT INTO `" . DB_PREFIX . "_board_permissions` ( `id` , `fid` , `gid` , `allowView` , `allowRead` , `allowCreate` , `allowReply` , `allowEdit` , `allowModer` , `allowAttach` ) VALUES (NULL, '" . $fid . "', '" . $gid . "', '" . $allowView[$gid] . "', '" . $allowRead[$gid]. "', '" . $allowCreate[$gid] . "', '" . $allowReply[$gid] . "', '" . $allowEdit[$gid] . "', '" . $allowModer[$gid] . "', '" . $allowAttach[$gid] . "');");
@@ -323,9 +323,9 @@ echo '</div>';
 				}
 				$adminTpl->info('Права успешно установлены.');
 				break;
-				
+
 			case 'permis':
-				$fid = isset($url[4]) ? intval($url[4]) : 0;				
+				$fid = isset($url[4]) ? intval($url[4]) : 0;
 				$adminTpl->info('Внимание! Права будут изменены у всех выделенных форумов и подфорумов! Будте внимательны!');
 				$adminTpl->open();
 				echo '
@@ -333,7 +333,7 @@ echo '</div>';
 			<div class="col-lg-12">
 				<section class="panel">
 					<div class="panel-heading">
-						<b>Глобальная смена прав:</b>						
+						<b>Глобальная смена прав:</b>
 					</div>
 					<div class="panel-body no-padding">';
 				echo "<form action=\"{MOD_LINK}/action\"  method=\"post\" name=\"forum\">";
@@ -353,7 +353,7 @@ echo '</div>';
 		</tr>
 		</thead>
 		<tbody>';
-		while($rows = $db->getRow($query)) 
+		while($rows = $db->getRow($query))
 		{
 			echo '<tr>
 			<td ><span class="pd-l-sm"></span>' . $rows['name'] . '</td>
@@ -372,8 +372,8 @@ echo '</div>';
 					echo '<input type="hidden" name="fid[]" value="' . $id . '" />';
 				}
 				echo '<input type="hidden" name="do" value="savePerms" />';
-		
-			echo '<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>		
+
+			echo '<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
 		<div align="right">
 		<table>
 		<tbody><tr>
@@ -382,16 +382,16 @@ echo '</div>';
 		</td>
 		</tr>
 		</tbody></table>
-		<br>	
+		<br>
 		</div>
-		</form></div>';				
-				
+		</form></div>';
+
 				$adminTpl->close();
 				break;
 		}
 		$adminTpl->admin_foot();
 		break;
-		
+
 	case 'delete':
 		$adminTpl->admin_head('Модули | Форум | Удаление форума');
 		if(isset($url[4]))
@@ -414,7 +414,7 @@ echo '</div>';
 		}
 		$adminTpl->admin_foot();
 		break;
-		
+
 	case 'edit':
 		$adminTpl->admin_head('Модули | Форум | Редактировать форум');
 		if(isset($_POST['title']))
@@ -424,7 +424,7 @@ echo '</div>';
 			$pid = intval($_POST['pid']);
 			$ftype = filter($_POST['ftype'], 'a');
 			$fid = intval($_POST['fid']);
-			
+
 			if($title && $fid && $fid != $pid)
 			{
 				$db->query("UPDATE `" . DB_PREFIX . "_board_forums` SET `title` = '" . $db->safesql($title) . "', `description` = '" . $db->safesql($descr) . "', `pid` = '" . $pid . "', `type` = '" . $db->safesql($ftype) . "' WHERE `id` =" . $fid . " LIMIT 1 ;");
@@ -443,7 +443,7 @@ echo '</div>';
 						$db->query("INSERT INTO `" . DB_PREFIX . "_board_permissions` ( `id` , `fid` , `gid` , `allowView` , `allowRead` , `allowCreate` , `allowReply` , `allowEdit` , `allowModer` , `allowAttach` ) VALUES (NULL, '" . $fid . "', '" . $gid . "', '" . $allowView[$gid] . "', '" . $allowRead[$gid]. "', '" . $allowCreate[$gid] . "', '" . $allowReply[$gid] . "', '" . $allowEdit[$gid] . "', '" . $allowModer[$gid] . "', '" . $allowAttach[$gid] . "');");
 					}
 				}
-				
+
 				$adminTpl->info('Форум успешно обновлён. <a href="{MOD_LINK}">К списку</a>');
 			}
 			else
@@ -468,8 +468,8 @@ echo '</div>';
 			<div class="col-lg-12">
 				<section class="panel">
 					<div class="panel-heading">
-						<b>Добавление форума</b>						
-					</div>					
+						<b>Добавление форума</b>
+					</div>
 					<div class="panel-body">
 						<form class="form-horizontal parsley-form" role="form" action="{MOD_LINK}/edit" method="post"  data-parsley-validate>
 												<div class="form-group">
@@ -481,50 +481,50 @@ echo '</div>';
 												<div class="form-group">
 													<label class="col-sm-3 control-label">Тип форума</label>
 													<div class="col-sm-4">
-														<select name="ftype">
+														<select class="form-control" name="ftype">
 															<option value="c" '. ($forum['type'] == 'c' ? 'selected' : '') .'>Категория</option>
 															<option value="f" '. ($forum['type'] == 'f' ? 'selected' : '') .'>Форум</option>
-														</select>														
+														</select>
 													</div>
 												</div>
 												<div class="form-group">
 													<label class="col-sm-3 control-label">Описание форума</label>
 													<div class="col-sm-4">
-														<textarea cols="30" rows="5" name="descr" class="form-control" data-parsley-required="true" data-parsley-trigger="change">'. $forum['description'] .'</textarea>														
+														<textarea cols="30" rows="5" name="descr" class="form-control" data-parsley-required="true" data-parsley-trigger="change">'. $forum['description'] .'</textarea>
 													</div>
 												</div>
 												<div class="form-group">
 													<label class="col-sm-3 control-label">Родительский форум</label>
 													<div class="col-sm-4">
-														<select name="pid"><option value="0">Без форума</option>';
+														<select class="form-control" name="pid"><option value="0">Без форума</option>';
 										$query = $db->query("SELECT id, title, pid FROM ".DB_PREFIX."_board_forums ORDER BY pid");
-										while($rows = $db->getRow($query)) 
+										while($rows = $db->getRow($query))
 										{
 											$cat_get[$rows['id']] = array($rows['title'], $rows['pid']);
 										}
-										
-										foreach ($cat_get as $cid => $sub_arr) 
+
+										foreach ($cat_get as $cid => $sub_arr)
 										{
 											if($cid != $sub_arr[1])
 											{
 												$cats_arr[$cid] = $sub_arr[0];
 												$flag = $sub_arr[1];
-												while ($flag != "0") 
+												while ($flag != "0")
 												{
 													$cats_arr[$cid] = $cat_get[$flag][0]." / ".$cats_arr[$cid];
 													$flag = $cat_get[$flag][1];
 												}
 											}
 										}
-										
+
 										asort($cats_arr);
-										
-										foreach ($cats_arr as $cid => $name) 
+
+										foreach ($cats_arr as $cid => $name)
 										{
 											$selected = ($cid == $forum['pid']) ? "selected" : "";
 											echo '<option value="' . $cid . '" ' . $selected . '>' . $name . '</option>';
 										}
-										echo '			</select>													
+										echo '			</select>
 													</div>
 												</div>
 												<div class="form-group">
@@ -546,7 +546,7 @@ echo '</div>';
 		</tr>
 		</thead>
 		<tbody>';
-		while($rows = $db->getRow($query)) 
+		while($rows = $db->getRow($query))
 		{
 			echo '<tr>
 			<td align="left">' . $rows['name'] . '</td>
@@ -565,30 +565,30 @@ echo '</div>';
 		<div class="form-group">
 														<label class="col-sm-3 control-label"></label>
 														<div class="col-sm-4">
-															<input name="submit" type="submit" class="btn btn-primary btn-parsley" id="sub" value="Редактировать форум">						
+															<input name="submit" type="submit" class="btn btn-primary btn-parsley" id="sub" value="Редактировать форум">
 														</div>
 												</div>';
 		echo '</form>';
 echo '</div>';
-			echo'</section></div></div>';	
+			echo'</section></div></div>';
 		$adminTpl->close();
-			
-			
+
+
 		}
 		$adminTpl->admin_foot();
 		break;
-		
+
 	case 'rules':
 		$adminTpl->admin_head('Модули | Форум | Правила форума');
 		$fid = isset($url[4]) ? intval($url[4]) : 0;
 		$query = $db->query("SELECT * FROM ".DB_PREFIX."_board_forums WHERE id = '" . $fid . "'");
-		$forum = $db->getRow($query);		
+		$forum = $db->getRow($query);
 		$adminTpl->open();
 		echo '<div class="row">
 			<div class="col-lg-12">
 				<section class="panel">
 					<div class="panel-heading">
-						<b>Правила форума</b>						
+						<b>Правила форума</b>
 					</div>
 					<div class="panel-body">
 						<form class="form-horizontal parsley-form" role="form" action="{MOD_LINK}/rulesSave" method="post"  data-parsley-validate>
@@ -608,24 +608,24 @@ echo '</div>';
 												<div class="form-group">
 														<label class="col-sm-3 control-label"></label>
 														<div class="col-sm-4">
-															<input name="submit" type="submit" class="btn btn-primary btn-parsley" id="sub" value="Сохранить">						
+															<input name="submit" type="submit" class="btn btn-primary btn-parsley" id="sub" value="Сохранить">
 														</div>
 												</div>';
 												echo '</form>';
 echo '</div>';
-			echo'</section></div></div>';	
-		
-		
-		
-		
-		
-		
-		
-	
+			echo'</section></div></div>';
+
+
+
+
+
+
+
+
 		$adminTpl->close();
 		$adminTpl->admin_foot();
 		break;
-	
+
 	case 'rulesSave':
 		$title = filter($_POST['title']);
 		$descr = filter($_POST['descr']);
@@ -636,10 +636,10 @@ echo '</div>';
 		$adminTpl->info('Правила форума обновлены. <a href="{MOD_LINK}">К списку</a>');
 		$adminTpl->admin_foot();
 		break;
-		
+
 	case 'config':
 		require (ROOT.'etc/board.config.php');
-		
+
 		$configBox = array(
 			'board' => array(
 				'varName' => 'board_conf',
@@ -652,28 +652,28 @@ echo '</div>';
 								'title' => 'Постов на страницу',
 								'description' => 'Сколько отображать постов на одну страницу',
 								'content' => '<input type="text" size="20" name="{varName}" class="form-control" value="{var}" />',
-							),						
+							),
 							'threads_num' => array(
 								'title' => 'Тем на страницу',
 								'description' => 'Количество топиков на одну страницу',
 								'content' => '<input type="text" size="20" name="{varName}" class="form-control" value="{var}" />',
-							),							
+							),
 							'loadFiles' => array(
 								'title' => 'Разрешить загрузку файлов',
 								'description' => 'Активация штатного загрузчика файлов',
 								'content' => radio("loadFiles", $board_conf['loadFiles']),
-							),							
+							),
 						)
 					),
 					'files_formats' => array(
 						'title' => 'Файловый редактор',
 						'vars' => array(
-		
+
 							'maxWH' => array(
 								'title' => 'Ширина превью',
 								'description' => 'Картинки автоматически сжимаются до указанного размера(указывается в пикселях)',
 								'content' => '<input type="text" size="20" name="{varName}" class="form-control" value="{var}" />',
-							),							
+							),
 							'maxSize' => array(
 								'title' => 'Максимальный вес файла',
 								'description' => 'Максимальный вес файла в Байтах',
@@ -683,7 +683,7 @@ echo '</div>';
 								'title' => 'Допустимые форматы файлов',
 								'description' => 'Допустимые форматы для загрузки',
 								'content' => '<input type="text" size="20" name="{varName}" class="form-control" value="{var}" />',
-							),							
+							),
 						)
 					),
 				),
@@ -691,12 +691,12 @@ echo '</div>';
 		);
 
 		$ok = false;
-		
+
 		if(isset($_POST['conf_file']))
 		{
 			$ok = true;
 		}
-		
+
 		generateConfig($configBox, 'board', '{MOD_LINK}/config', $ok);
 		break;
 }

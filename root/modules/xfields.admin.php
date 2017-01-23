@@ -14,20 +14,20 @@ if (!defined('ADMIN_ACCESS')) {
     exit;
 }
 
-function main() 
+function main()
 {
 global $adminTpl, $config, $core, $admin_conf, $db, $lang;
 	$adminTpl->admin_head($lang['xfields']);
-	echo '<div id="content" class="animated fadeIn">';	
+	echo '<div id="content" class="animated fadeIn">';
 	$query = $db->query("SELECT * FROM ".DB_PREFIX."_xfields ORDER BY id ASC");
-	
-	
-	
-	if($db->numRows($query) > 0) 
-	{		
+
+
+
+	if($db->numRows($query) > 0)
+	{
 	echo '<div class="panel panel-dark panel-border top">
 			<div class="panel-heading">
-				<span class="panel-title">' . $lang['xfields_list'] . '</span>	
+				<span class="panel-title">' . $lang['xfields_list'] . '</span>
 				<div class="widget-menu pull-right" >
 					<div class="btn-group">
 						<button onclick="modal_o(\'#modal-form-help\')" type="button" class="btn btn-xs btn-alert btn-block">'.$lang['help'].'</button>
@@ -35,8 +35,8 @@ global $adminTpl, $config, $core, $admin_conf, $db, $lang;
 					<div id="modal-form-help" class="popup-basic bg-none mfp-with-anim mfp-hide">
 						<div class="panel">
 						  <div class="panel-heading"><span class="panel-icon"><i class="fa fa-info-circle"></i></span><span class="panel-title">'.$lang['help'].'</span></div>
-						  <div class="panel-body">	
-							<h3 class="mt5">'.$lang['xfields'].'</h3>	
+						  <div class="panel-body">
+							<h3 class="mt5">'.$lang['xfields'].'</h3>
 							<hr class="short alt">
 							<p>'.$lang['xfields_help_1'].'</p>
 							<hr class="short alt">
@@ -61,12 +61,12 @@ global $adminTpl, $config, $core, $admin_conf, $db, $lang;
 								<div class="checkbox-custom mb15">
 									<input id="all" type="checkbox" name="all" onclick="setCheckboxes(\'tablesForm\', true); return true;">
 									<label for="all"></label>
-								</div>	
+								</div>
 							</th>
 						</tr>
 					</thead>
-					<tbody>';							
-		while($xfield = $db->getRow($query)) 
+					<tbody>';
+		while($xfield = $db->getRow($query))
 		{
 			echo '
 			<tr>
@@ -75,13 +75,13 @@ global $adminTpl, $config, $core, $admin_conf, $db, $lang;
 				<td>' . $xfield['description'] . '</td>
 				<td><input id="copy_'.$xfield['id'].'" type="text"  class="form-control input-sm" value="[xfield:' . $xfield['id'] . '][xfield_value:' . $xfield['id'] . '][/xfield:' . $xfield['id'] . ']" /></td>
 				<td>' . _mName($xfield['module']) . '</td>
-				<td>				
+				<td>
 					<div class="btn-group">
 						<button type="button" onclick="location.href = \'{ADMIN}/xfields/edit/' . $xfield['id'] . '\'" class="btn btn-xs btn-primary">'.$lang['edit_short'].'</button>
 						<button type="button" data-toggle="dropdown" class="btn btn-xs btn-primary dropdown-toggle"><span class="caret"></span><span class="sr-only">' . $lang['action'] . '</span></button>
 						<ul role="menu" class="dropdown-menu">';
 						$command = 'document.querySelector(\'#copy_'.$xfield['id'].'\').select(); document.execCommand(\'copy\'); notif(\'primary\', \''. $lang['info'].'\', \''. $lang['copy_success'].'\');';
-						echo '<li ><a href="'.$core->fullURL().'#copy" onclick="'.$command.'">'.$lang['xfields_copy'].'</a></li>							
+						echo '<li ><a href="'.$core->fullURL().'#copy" onclick="'.$command.'">'.$lang['xfields_copy'].'</a></li>
 							<li class="divider"></li>
 							<li><a href="'.$core->fullURL().'#" onclick="modal_o(\'#modal-form-'.$xfield['id'].'\')">' . $lang['delete'] .'</a></li>
 						</ul>
@@ -90,7 +90,7 @@ global $adminTpl, $config, $core, $admin_conf, $db, $lang;
 						<div class="panel">
 						  <div class="panel-heading"><span class="panel-icon"><i class="fa fa-check-square-o"></i></span><span class="panel-title">'.$lang['confirm'].'</span></div>
 						  <div class="panel-body">
-							<h3 class="mt5">' . str_replace('[title]', $xfield['title'], $lang['xfields_delete_title']) .  '</h3>							
+							<h3 class="mt5">' . str_replace('[title]', $xfield['title'], $lang['xfields_delete_title']) .  '</h3>
 							<hr class="short alt">
 							<p>' . str_replace('[title]', $xfield['title'], $lang['xfields_delete_text']) .  '</p>
 						  </div>
@@ -98,7 +98,7 @@ global $adminTpl, $config, $core, $admin_conf, $db, $lang;
 							<button type="button" onclick="location.href = \'{ADMIN}/xfields/delete/' . $xfield['id'] . '\'" class="btn btn-danger">' . $lang['delete'] .'</button>
 						  </div>
 						</div>
-					  </div>					  
+					  </div>
 				</td>
 				<td>
 					<div class="checkbox-custom mb15">
@@ -106,35 +106,35 @@ global $adminTpl, $config, $core, $admin_conf, $db, $lang;
 						<label for="checkbox' . $xfield['id'] . '"></label>
 					</div>
 				</td>
-			</tr>';	
+			</tr>';
 		}
 		echo '</tbody>
 			  <tfoot class="footer-menu">
-                    <tr>                    
+                    <tr>
 					  <td colspan="9">
                         <nav class="text-right">
 							<input name="submit" type="submit" class="btn btn btn-danger" id="sub" value="' . $lang['delete'] . '" />
 						 </nav>
                       </td>
                     </tr>
-               </tfoot> 
-		</table>	
+               </tfoot>
+		</table>
 	</form>
-	</div></div>';	
-	} 
-	
-	else 
+	</div></div>';
+	}
+
+	else
 	{
-		$adminTpl->info($lang['xfields_empty'], 'empty', null, $lang['xfields_list'], $lang['xfields_add_dop'], ADMIN.'/xfields/add');	
+		$adminTpl->info($lang['xfields_empty'], 'empty', null, $lang['xfields_list'], $lang['xfields_add_dop'], ADMIN.'/xfields/add');
 	}
 	echo'</div>';
 	$adminTpl->admin_foot();
 }
 
-function xfields_add($id = null) 
+function xfields_add($id = null)
 {
 global $adminTpl, $config, $core, $admin_conf, $db, $lang;
-	if(isset($id)) 
+	if(isset($id))
 	{
 		$query = $db->query("SELECT * FROM ".DB_PREFIX."_xfields WHERE id = '" . $id . "'");
 		$xfield = $db->getRow($query);
@@ -146,8 +146,8 @@ global $adminTpl, $config, $core, $admin_conf, $db, $lang;
 		$mod = $xfield['module'];
 		$title_lang = $lang['xfields_edit_dop'];
 		$compl = $lang['edit'];
-	} 
-	else 
+	}
+	else
 	{
 		$title = '';
 		$description = '';
@@ -159,21 +159,21 @@ global $adminTpl, $config, $core, $admin_conf, $db, $lang;
 		$compl = $lang['add'];
 	}
 	$adminTpl->admin_head($title_lang);
-	$validation_array = array(		
+	$validation_array = array(
 		'title' => array(
-			'required' =>  array('true', $lang['xfields_add_title_err'])			
-		),		
+			'required' =>  array('true', $lang['xfields_add_title_err'])
+		),
 		'description' => array(
-			'required' =>  array('true',$lang['xfields_add_desc_err_1']),	
-			'maxlength' =>  array(200,  $lang['xfields_add_desc_err_2'])				
-		),		
+			'required' =>  array('true',$lang['xfields_add_desc_err_1']),
+			'maxlength' =>  array(200,  $lang['xfields_add_desc_err_2'])
+		),
 		'type' => array(
-			'required' =>  array('true', $lang['xfields_add_type_err'])				
-		)		
+			'required' =>  array('true', $lang['xfields_add_type_err'])
+		)
 	);
-	validationInit($validation_array);	
+	validationInit($validation_array);
 	echo '<div id="content" class="animated fadeIn"><div class="panel panel-dark panel-border top">
-				<div class="panel-heading"><span class="panel-title">'. $title_lang .'</span>					
+				<div class="panel-heading"><span class="panel-title">'. $title_lang .'</span>
 			</div>
 	<script type="text/javascript">
 	function xfieldType(val)
@@ -194,7 +194,7 @@ global $adminTpl, $config, $core, $admin_conf, $db, $lang;
 		{
 			gid(\'typeExp\').innerHTML = \'<div class="form-group"><label for="default"  class="col-lg-3 control-label">'. $lang['xfields_add_def'] .'</label><div class="col-lg-4"><label for="default" class="field"><textarea name="default" id="full" placeholder="'.$lang['xfields_type_3_pre'].'" class="gui-textarea">' . $default . '</textarea><span class="input-footer">'.$lang['xfields_type_3_tt'].'</span></label></div></div>\';
 		}
-	}	
+	}
 	</script>
 	<div class="panel-body admin-form">
 		<form id="admin-form" action="{ADMIN}/xfields/save" method="post" name="xfields" role="form" class="form-horizontal parsley-form" data-parsley-validate>
@@ -204,7 +204,7 @@ global $adminTpl, $config, $core, $admin_conf, $db, $lang;
 					<label for="title" class="field prepend-icon">
 						<input id="title" type="text" name="title" value="'. $title .'" placeholder="'.$lang['xfields_add_title_pre'].'" class="gui-input">
 						<label for="title" class="field-icon"><i class="fa fa-pencil"></i></label>
-					</label>						
+					</label>
 				</div>
 			</div>
 			<div class="form-group">
@@ -213,15 +213,15 @@ global $adminTpl, $config, $core, $admin_conf, $db, $lang;
 					<label for="description" class="field prepend-icon">
 						<input id="description" type="text" name="description" value="'. $description .'" placeholder="'.$lang['xfields_add_desc_pre'].'" class="gui-input">
 						<label for="description" class="field-icon"><i class="fa fa-keyboard-o"></i></label>
-					</label>						
+					</label>
 				</div>
 			</div>
 			<div class="form-group">
 				<label for="category"  class="col-lg-3 control-label">'. $lang['xfields_add_module'] .'</label>
-				<div class="col-lg-3">							
+				<div class="col-lg-3">
 					<label class="field select">
-						<select name="module" id="module" onchange="updateCatList(this.value, \'category\');" >';							
-							foreach ($core->getModList() as $module) 
+						<select class="form-control" name="module" id="module" onchange="updateCatList(this.value, \'category\');" >';							
+							foreach ($core->getModList() as $module)
 							{
 								if(in_array($module, exceMods('xfields')))
 								{
@@ -236,23 +236,23 @@ global $adminTpl, $config, $core, $admin_conf, $db, $lang;
 			/*
 			<div class="form-group">
 				<label for="category"  class="col-lg-3 control-label">'. $lang['xfields_add_cat'] .'</label>
-				<div class="col-lg-3">							
+				<div class="col-lg-3">
 					<label class="field select">
 						<select name="category" id="category" >
-							<option value="">' . $lang['xfields_add_cat_all'] . '</option>';		
+							<option value="">' . $lang['xfields_add_cat_all'] . '</option>';
 							$cats_arr = $core->aCatList();
-							foreach ($cats_arr as $cid => $name) 
+							foreach ($cats_arr as $cid => $name)
 							{
 								$selected = ($cat_sl == $cid) ? "selected" : "";
 								echo '<option value="' . $cid . '" ' . $selected . '>' . $name . '</option>';
-							}		
+							}
 							echo '</select><i class="arrow double"></i>
 					</label>
 				</div>
 			</div>*/
 			echo '<div class="form-group">
 				<label for="type"  class="col-lg-3 control-label">'. $lang['xfields_add_type'] .'</label>
-				<div class="col-lg-3">							
+				<div class="col-lg-3">
 					<label class="field select">
 						<select name="type" id="type" onchange="xfieldType(this.value); caa(this);">
 							<option value="">'.$lang['xfields_type_0'].'</option>
@@ -262,14 +262,14 @@ global $adminTpl, $config, $core, $admin_conf, $db, $lang;
 						</select><i class="arrow double"></i>
 					</label>
 				</div>
-			</div>';	
+			</div>';
 			if(empty($id))
 			{
 				echo "<div id=\"typeExp\"></div>";
 			}
 			else
 			{
-				switch ($type) 
+				switch ($type)
 				{
 					case 1:
 						echo '<div id="typeExp"><div class="form-group"><label for="default"  class="col-lg-3 control-label">'. $lang['xfields_add_def'] .'</label><div class="col-lg-4"><label for="default" class="field"><input id="default" type="text" name="default" value="' . $default . '" placeholder="'.$lang['xfields_type_1_pre'].'" class="gui-input"></label></div></div></div>';
@@ -280,11 +280,11 @@ global $adminTpl, $config, $core, $admin_conf, $db, $lang;
 					case 3:
 						echo '<div id="typeExp"><div class="form-group"><label for="default"  class="col-lg-3 control-label">'. $lang['xfields_add_def'] .'</label><div class="col-lg-4"><label for="default" class="field"><textarea name="default" id="full" placeholder="'.$lang['xfields_type_3_pre'].'" class="gui-textarea">' . $default . '</textarea><span class="input-footer">'.$lang['xfields_type_3_tt'].'</span></label></div></div></div>';
 					break;
-				}		
-			}	
+				}
+			}
 			echo '<div class="form-group">
 					<label for="to_user"  class="col-lg-3 control-label">'. $lang['xfields_add_user'] .'</label>
-					<div class="col-lg-3">					
+					<div class="col-lg-3">
 						'.checkbox('to_user', $to_user).'
 					</div>
 				</div>
@@ -304,11 +304,11 @@ global $adminTpl, $config, $core, $admin_conf, $db, $lang;
 
 function xfields_save() {
 	global $adminTpl, $db, $core, $lang;
-	if(isset($_POST['edit'])) 
+	if(isset($_POST['edit']))
 	{
 		$adminTpl->admin_head($lang['xfields'].' | '.$lang['xfields_edits']);
-	} 
-	else 
+	}
+	else
 	{
 		$adminTpl->admin_head($lang['xfields'].' | '.$lang['xfields_adds']);
 	}
@@ -321,20 +321,20 @@ function xfields_save() {
 	$module = filter($_POST['module'], 'module');
 	$back = '{ADMIN}/xfields/';
 	echo '<div id="content" class="animated fadeIn">';
-	if(!empty($title) && !empty($description) && !empty($type)) 
+	if(!empty($title) && !empty($description) && !empty($type))
 	{
-		if(isset($_POST['edit'])) 
+		if(isset($_POST['edit']))
 		{
 			$db->query("UPDATE `" . DB_PREFIX . "_xfields` SET `title` = '" . $title . "',`description` = '" . $description . "',`type` = '" . $type . "',`content` = '" . $default . "',`to_user` = '" . $to_user . "',`module` = '" . $module . "' WHERE `id` = " . $fid . ";");
 			$adminTpl->info($lang['xfields_info_1'], 'info', null, $lang['info'], $lang['xfields_list'], ADMIN.'/xfields');
-		} 
-		else 
+		}
+		else
 		{
 			$db->query("INSERT INTO `" . DB_PREFIX . "_xfields` (`title` ,`description` ,`type` ,`content` ,`to_user` ,`module` ) VALUES ('" . $db->safesql(processText($title)) . "', '" . $db->safesql(processText($description)) . "', '" . $type . "', '" . $default . "', '" . $to_user . "', '" . $module . "');");
 			$adminTpl->info($lang['xfields_info_2'], 'info', null, $lang['info'], $lang['xfields_list'], ADMIN.'/xfields');
 		}
-	} 
-	else 
+	}
+	else
 	{
 		$adminTpl->info($lang['base_error_1'], 'error', null, $lang['error'], $lang['go_back'], 'javascript:history.go(-1)');
 	}
@@ -345,34 +345,34 @@ function xfields_save() {
 switch(isset($url[2]) ? $url[2] : null) {
 	default:
 		main();
-	break;	
-	
+	break;
+
 	case "add":
 		xfields_add();
 	break;
-	
+
 	case "save":
 		xfields_save();
 	break;
-	
+
 	case "delete":
 		$id = intval($url[3]);
 		$db->query("DELETE FROM `" . DB_PREFIX . "_xfields` WHERE `id` = " . $id . " LIMIT 1");
 		location(ADMIN.'/xfields');
 	break;
-	
+
 	case "edit":
 		$id = intval($url[3]);
 		xfields_add($id);
 	break;
-	
+
 	case "action":
 	global $lang;
 	$type = $_POST['submit'];
 	if(is_array($_POST['checks'])) {
 		switch($type) {
 			case $lang['delete']:
-				foreach($_POST['checks'] as $id) 
+				foreach($_POST['checks'] as $id)
 				{
 					$db->query("DELETE FROM `" . DB_PREFIX . "_xfields` WHERE `id` = " . intval($id) . " LIMIT 1");
 				}

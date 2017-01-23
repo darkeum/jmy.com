@@ -8,7 +8,7 @@
 * @version     VERSION.txt (see attached file)
 * @author      Komarov Ivan
 */
- 
+
 if (!defined('ADMIN_ACCESS')) {
     header('Location: /');
     exit;
@@ -17,10 +17,10 @@ if (!defined('ADMIN_ACCESS')) {
 $modArr[] = '';
 
 $query = $db->query("SELECT * FROM ".DB_PREFIX."_plugins WHERE service='modules'");
-while($_mod = $db->getRow($query)) 
+while($_mod = $db->getRow($query))
 {
 	$modArr[] = $_mod['title'];
-	
+
 	if(!file_exists(ROOT.'usr/modules/'.$_mod['title'].'/index.php'))
 	{
 		delete($_mod['id']);
@@ -29,9 +29,9 @@ while($_mod = $db->getRow($query))
 
 $path = ROOT.'usr/modules/';
 $dh = opendir($path);
-while ($file = readdir($dh)) 
+while ($file = readdir($dh))
 {
-	if(!in_array($file, $modArr) && file_exists($path.$file.'/index.php')) 
+	if(!in_array($file, $modArr) && file_exists($path.$file.'/index.php'))
 	{
 		$db->query("INSERT INTO `" . DB_PREFIX . "_plugins` (`title` , `content` , `service`  , `active` ) VALUES ('" . $file . "', '" . ucfirst($file) . "', 'modules', '1');");
 	}
@@ -58,14 +58,14 @@ switch(isset($url[2]) ? $url[2] : null) {
 		if(isset($url[2]) && $url[2] == 'ok')
 		{
 			$adminTpl->info(_MODULE_INFO, 'info', null, _BASE_INFO);
-		}			
+		}
 		$query = $db->query("SELECT * FROM ".DB_PREFIX."_plugins WHERE service='modules' ORDER BY title ASC");
-		if($db->numRows($query) > 0) 
+		if($db->numRows($query) > 0)
 		{
 			echo '<div class="panel panel-dark panel-border top">
-				<div class="panel-heading"><span class="panel-title">' . _MODULE_LIST_INSTALL . ':</span>                
+				<div class="panel-heading"><span class="panel-title">' . _MODULE_LIST_INSTALL . ':</span>
               </div>
-              <div class="panel-body pn"> 
+              <div class="panel-body pn">
 				<form id="tablesForm" style="margin:0; padding:0" method="POST" action="{ADMIN}/modules/action">
                   <table class="table table-striped">
                     <thead>
@@ -80,27 +80,27 @@ switch(isset($url[2]) ? $url[2] : null) {
 								<div class="checkbox-custom mb15">
 									<input id="all" type="checkbox" name="all" onclick="setCheckboxes(\'tablesForm\', true); return true;">
 									<label for="all"></label>
-								</div>	
+								</div>
 							</th>
 						</tr>
                     </thead>
-                    <tbody>';	
-			while($mod = $db->getRow($query)) 
-			{				
+                    <tbody>';
+			while($mod = $db->getRow($query))
+			{
 				echo '
 				<tr>
 					<td><span class="pd-l-sm"></span>' . $mod['id'] . '</td>
 					<td>' . $mod['title'] . '</td>
 					<td>' . $mod['content'] . '</td>
 					<td>' . (file_exists(ROOT.'usr/modules/'.$mod['title'].'/admin/index.php') ? '<font color="green">Да</font>' : '<font color="red">Нет</font>') . '</td>
-					<td>' . ($mod['groups'] == '' ? '<i>Все</i>' : $mod['groups']) . '</td>				
-					<td>					
+					<td>' . ($mod['groups'] == '' ? '<i>Все</i>' : $mod['groups']) . '</td>
+					<td>
 						<div class="btn-group">
 							<button type="button" onclick="modal_o(\'#modal-retivate-'.$mod['id'].'\')" class="btn btn-xs btn-primary">'.(($mod['active'] == 0) ? _ACTIVATE : _DEACTIVATE).'</button>
 							<button type="button" data-toggle="dropdown" class="btn btn-xs btn-primary dropdown-toggle"><span class="caret"></span><span class="sr-only">' . _ACTIONS . '</span></button>
 							<ul role="menu" class="dropdown-menu">
 								<li><a href="{ADMIN}/modules/edit/'.$mod['id'].'">'._EDIT.'</a></li>
-								<li><a href="">'._CAT_VIEW_CONTENT.'</a></li>   
+								<li><a href="">'._CAT_VIEW_CONTENT.'</a></li>
 								<li class="divider"></li>
 								<li><a href="'.$core->fullURL().'#" onclick="modal_o(\'#modal-del-'.$mod['id'].'\')">' . _DELETE .'</a></li>
 							</ul>
@@ -109,7 +109,7 @@ switch(isset($url[2]) ? $url[2] : null) {
 							<div class="panel">
 							  <div class="panel-heading"><span class="panel-icon"><i class="fa fa-check-square-o"></i></span><span class="panel-title">'._BASE_CONFIRM.'</span></div>
 							  <div class="panel-body">
-								<h3 class="mt5">' . str_replace('[mod]', $mod['content'], ($mod['active'] == 0) ? _MODULE_ACTIVATE_TITLE : _MODULE_DEACTIVATE_TITLE) .'</h3>							
+								<h3 class="mt5">' . str_replace('[mod]', $mod['content'], ($mod['active'] == 0) ? _MODULE_ACTIVATE_TITLE : _MODULE_DEACTIVATE_TITLE) .'</h3>
 								<hr class="short alt">
 								<p>' . str_replace('[mod]', $mod['content'], ($mod['active'] == 0) ? _MODULE_ACTIVATE_TEXT : _MODULE_DEACTIVATE_TEXT) .  '</p>
 							  </div>
@@ -117,12 +117,12 @@ switch(isset($url[2]) ? $url[2] : null) {
 								<button type="button" onclick="location.href = \'{ADMIN}/modules/retivate/'.$mod['id'].'\'" class="btn btn-warning">' . (($mod['active'] == 0) ? _MODULE_ACTIVATE : _MODULE_DEACTIVATE) .'</button>
 							  </div>
 							</div>
-						</div>					  
+						</div>
 						<div id="modal-del-'.$mod['id'].'" class="popup-basic bg-none mfp-with-anim mfp-hide">
 							<div class="panel">
 							  <div class="panel-heading"><span class="panel-icon"><i class="fa fa-check-square-o"></i></span><span class="panel-title">'._BASE_CONFIRM.'</span></div>
 							  <div class="panel-body">
-								<h3 class="mt5">' . str_replace('[mod]', $mod['content'], _MODULE_DELETE_TITLE) .'</h3>							
+								<h3 class="mt5">' . str_replace('[mod]', $mod['content'], _MODULE_DELETE_TITLE) .'</h3>
 								<hr class="short alt">
 								<p>' . str_replace('[mod]', $mod['content'], _MODULE_DELETE_TEXT) .  '</p>
 							  </div>
@@ -132,7 +132,7 @@ switch(isset($url[2]) ? $url[2] : null) {
 							</div>
 						</div>
 					</td>
-					<td>					
+					<td>
 						<div class="checkbox-custom mb15">
 							<input id="checkbox' . $mod['id'] . '" type="checkbox" name="checks[]" value="' . $mod['id'] . '">
 							<label for="checkbox' . $mod['id'] . '"></label>
@@ -142,27 +142,27 @@ switch(isset($url[2]) ? $url[2] : null) {
 			}
 			echo '</tbody>
 				<tfoot class="footer-menu">
-						<tr>                    
+						<tr>
 						  <td colspan="7">
 							<nav class="text-right">
 								<input name="submit" type="submit" class="btn btn btn-success" id="sub" value="' . _MODULE_REIVATE . '" />
 							 </nav>
 						  </td>
 						</tr>
-					  </tfoot> 			
+					  </tfoot>
 				</table>
-			</form>				
+			</form>
           </div>
         </div>';
-		} 
-		else 
+		}
+		else
 		{
-			$adminTpl->info(_MODULE_LIST_EMPTY, 'error', null, _MODULE_LIST_INSTALL, _MODULE_LIST_EMPTY_HELP, 'http://jmy.su/');	
-		}		
+			$adminTpl->info(_MODULE_LIST_EMPTY, 'error', null, _MODULE_LIST_INSTALL, _MODULE_LIST_EMPTY_HELP, 'http://jmy.su/');
+		}
 		echo'</div>';
 		$adminTpl->admin_foot();
-	break;		
-	
+	break;
+
 	case 'server':
 		$adminTpl->admin_head(_MODULE_MODULE.' | '._MODULE_SERVER);
 		$chmod_files = array('usr/modules', 'usr/blocks', 'usr/plugins');
@@ -173,7 +173,7 @@ switch(isset($url[2]) ? $url[2] : null) {
 			{
 				$write_error[] = str_replace('[dir]', $dir, _MODULE_DIRW);
 			}
-		}	
+		}
 		if(!empty($write_error))
 		{
 			$adminTpl->alert('danger', _ATTETION, implode($write_error, '<br />'));
@@ -185,16 +185,16 @@ switch(isset($url[2]) ? $url[2] : null) {
 			if(!empty($cat_list))
 			{
 				echo '<div class="panel panel-info panel-border top">
-						<div class="panel-heading"><span class="panel-title">'._NAVIGATION.'</span>  
+						<div class="panel-heading"><span class="panel-title">'._NAVIGATION.'</span>
 					  </div>
 					  <div class="panel-body">
 						 <div class="row">
 							<div class="col-md-4 col-lg-6">
-								<div class="btn-group">';						   
+								<div class="btn-group">';
 									foreach($cat_list as $li)
 									{
 										$cl = '';
-										$cat_li = explode('-', $li);				
+										$cat_li = explode('-', $li);
 										switch ($cat_li[1]) {
 										case "block":
 											$cl = "primary";
@@ -206,11 +206,11 @@ switch(isset($url[2]) ? $url[2] : null) {
 											$cl = "warning";
 											break;
 										}
-										echo '<button id="' . $cat_li[1] . '" type="button" onclick="ajaxGet(\'' . ADMIN . '/modules/ajax/cat/' . $cat_li[1] . '\', \'_div\'); setbold(\'' . $cat_li[1] . '\');" class="btn btn-'.$cl.'">' . $cat_li[0] . '</button> ';								
+										echo '<button id="' . $cat_li[1] . '" type="button" onclick="ajaxGet(\'' . ADMIN . '/modules/ajax/cat/' . $cat_li[1] . '\', \'_div\'); setbold(\'' . $cat_li[1] . '\');" class="btn btn-'.$cl.'">' . $cat_li[0] . '</button> ';
 									}
 								echo '</div>
-								</div>								
-								<div class="col-md-4 col-lg-6">								
+								</div>
+								<div class="col-md-4 col-lg-6">
 										<form class="form-inline" role="form" align="right"  onsubmit="ajaxGet(\'' . ADMIN . '/modules/ajax/search/\'+gid(\'querys\').value, \'_div\'); return false;">
 											<div class="form-group">
 												<label class="sr-only" for="exampleInputEmail2">'._SEARCH.':</label>
@@ -224,24 +224,24 @@ switch(isset($url[2]) ? $url[2] : null) {
 									</div>
 									<div id="_divi"></div>
 									<div class="panel panel-dark panel-border top">
-										<div class="panel-heading"><span class="panel-title">' . _MODULE_CATALOG . ':</span>                
+										<div class="panel-heading"><span class="panel-title">' . _MODULE_CATALOG . ':</span>
 									</div>
-									<div class="panel-body pn"> 
+									<div class="panel-body pn">
 										<div id="_div">
 											<div class="panel-heading" >'._AJAX_LOAD.'</div>
-											<script type="text/javascript">ajaxGet(\'' . ADMIN . '/modules/ajax/main\', \'_div\');</script>	
-										</div>								
+											<script type="text/javascript">ajaxGet(\'' . ADMIN . '/modules/ajax/main\', \'_div\');</script>
+										</div>
 									</div>';
 			}
 		}
 		else
 		{
 			$adminTpl->info(_MODULE_NO_CONNECTION, 'error', null, _MODULE_CATALOG, _MODULE_LIST_EMPTY_HELP, 'http://jmy.su/');
-		}						
-		echo '</div>';						
-		$adminTpl->admin_foot();	
+		}
+		echo '</div>';
+		$adminTpl->admin_foot();
 		break;
-		
+
 	case 'upload':
 		$adminTpl->admin_head(_MODULE_MODULE.' | '._MODULE_UPLOAD);
 		$chmod_files = array('usr/modules', 'usr/blocks', 'usr/plugins');
@@ -252,7 +252,7 @@ switch(isset($url[2]) ? $url[2] : null) {
 			{
 				$write_error[] = str_replace('[dir]', $dir, _MODULE_DIRW);
 			}
-		}	
+		}
 		if(!empty($write_error))
 		{
 			$adminTpl->alert('danger', _ATTETION, implode($write_error, '<br />'));
@@ -260,25 +260,25 @@ switch(isset($url[2]) ? $url[2] : null) {
 		echo '
 		<div id="_div"></div>
 		<div class="panel panel-dark panel-border top">
-			<div class="panel-heading"><span class="panel-title">'._MODULE_UPLOAD.'</span>    
+			<div class="panel-heading"><span class="panel-title">'._MODULE_UPLOAD.'</span>
 		</div>
 		<div class="panel-body">
 			<form onsubmit="ajaxGet(\'' . ADMIN . '/modules/ajax/install/&in=\'+fixedEncodeURIComponent(gid(\'_url\').value), \'_div\'); return false;">
 				<b>'._MODULE_UPLOAD_URL.'</b><br><br>
-				<div class="form-group">                  
+				<div class="form-group">
                     <input type="text" id="_url" name="_url" class="form-control" size=40" value="http://">
 					<br>
 					<font color="red">'._MODULE_UPLOAD_ATTATION.'</font>
                 </div>
-				<button type="submit" class="btn btn-info">'._MODULE_INSTALL.'</button>									
-            </form>	
+				<button type="submit" class="btn btn-info">'._MODULE_INSTALL.'</button>
+            </form>
 		</div>
-		</div>';				
+		</div>';
 		$adminTpl->admin_foot();
 		break;
-		
-		
-	case 'ajax':		
+
+
+	case 'ajax':
 		$versions[1] = VERSION_ID;
 		switch(isset($url[3]) ? $url[3] : '')
 		{
@@ -292,11 +292,11 @@ switch(isset($url[2]) ? $url[2] : null) {
 						$cat_li = explode('-', $li);
 						$min[$cat_li[1]] = $cat_li[0];
 					}
-				}			
+				}
 				echo '
 				<table class="table table-striped">
                     <thead>
-						<tr>												
+						<tr>
 							<th class="col-md-2"><span class="pd-l-sm"></span>'._TITLE.'</th>
 							<th class="col-md-4">'._DESCRIPTION.'</th>
 							<th class="col-md-2">'._AUTHOR.'</th>
@@ -306,10 +306,10 @@ switch(isset($url[2]) ? $url[2] : null) {
 							<th class="col-md-1">' . _ACTIONS . '</th>
 						</tr>
 					</thead>
-					<tbody>'; 			
-				$modules = unserialize($response);				
+					<tbody>';
+				$modules = unserialize($response);
 				foreach($modules as $mod => $info)
-				{					
+				{
 					$ajax_url = "'" . ADMIN . "/modules/ajax/install/&in='+fixedEncodeURIComponent('".$info['url']."'), '_divi'";
 					echo '<tr>
 								<td><span class="pd-l-sm"></span>'.$info['title'].'</td>
@@ -321,14 +321,14 @@ switch(isset($url[2]) ? $url[2] : null) {
 								<td>'.
 									(isset($core->tpl->modules[$mod]) ? '<button onclick="ajaxGet(\'' . ADMIN . '/modules/ajax/delete/' . $mod . '/' . $core->tpl->modules[$mod]['id'] . '\', \'_divi\');" type="button" class="btn btn-xs btn-danger ">'._DELETE.'</button>' : '<button onclick="ajaxGet('.$ajax_url.');" type="button" class="btn btn-xs btn-success ">'._BASE_INSTALL.'</button>').'
 								</td>
-							</tr>';					
+							</tr>';
 				}
 				echo '</tbody></table>';
 				break;
-				
+
 			case 'cat':
 				if(isset($url[4]))
-				{	
+				{
 					$response ='';
 					if (file_get_contents($server_domain.'modules.php?cat_'.$url[4]) != 'empty')
 					{
@@ -351,7 +351,7 @@ switch(isset($url[2]) ? $url[2] : null) {
 						}
 						echo '<table class="table no-margin">
 										<thead>
-											<tr>												
+											<tr>
 												<th class="col-md-2"><span class="pd-l-sm"></span>Название</th>
 												<th class="col-md-4">Описание</th>
 												<th class="col-md-2">Автор</th>
@@ -361,7 +361,7 @@ switch(isset($url[2]) ? $url[2] : null) {
 												<th class="col-md-1">' . _ACTIONS . '</th>
 											</tr>
 										</thead>
-										<tbody>';    	
+										<tbody>';
 						$modules = unserialize($response);
 						foreach($modules as $mod => $info)
 						{
@@ -372,7 +372,7 @@ switch(isset($url[2]) ? $url[2] : null) {
 								<td>'.$info['cat'].'</td>
 								<td>'.$info['version'].'</td>
 								<td>'.$info['version_jmy'].'</td>
-								<td><a href="javascript:;" class="btn btn-success btn-xs">Установить</a></td>										
+								<td><a href="javascript:;" class="btn btn-success btn-xs">Установить</a></td>
 							</tr>';
 							/*
 							echo '<div class="_module_boxes"><div class="_buts">' . (isset($core->tpl->modules[$mod]) ? '<div class="_but _butdel"><a href="javascript:void(0)" onclick="ajaxGet(\'' . ADMIN . '/modules/ajax/delete/' . $mod . '/' . $core->tpl->modules[$mod]['id'] . '\', \'_div\');">Удалить</a></div>' : '<div class="_but"><a href="javascript:void(0)" onclick="gid(\'_div\').innerHTML = \'Идёт установка модуля...\'; ajaxGet(\'' . ADMIN . '/modules/ajax/install/' . $mod . '\', \'_div\');">Установить</a></div>') . '<div class="_version ' . (!empty($info['for_toogle']) && $info['for_toogle'] != VERSION_ID ? (VERSION_ID > $info['for_toogle'] ? '_version2' : '_butdel') : (!empty($info['for_toogle']) ? '' : '_version3')) . '">' . (isset($info['for_toogle']) && isset($versions[$info['for_toogle']]) ? $versions[$info['for_toogle']] : 'N/A') . '</div></div><div class="_module_title">' . $info['title'] . ' (' . $mod . ')</div><p>' . $info['description'] . '</p><b>Версия модуля:</b> ' . $info['version'] . ($url[4] == 'all' ? '<br /><b>Раздел:</b> <a href="javascript:void(0)" onclick="ajaxGet(\'' . ADMIN . '/modules/ajax/cat/' . $info['cat'] . '\', \'_div\'); setbold(\'' . $info['cat'] . '\'); bold = \'' . $info['cat'] . '\';">'.$min[$info['cat']].'</a>' : '') . '</div>';*/
@@ -385,7 +385,7 @@ switch(isset($url[2]) ? $url[2] : null) {
 						echo '<div class="panel-heading" >Раздел не сушествует или он пуст!</div>';
 				}
 				break;
-				
+
 			case 'search':
 				if(isset($url[4]))
 				{
@@ -424,21 +424,21 @@ switch(isset($url[2]) ? $url[2] : null) {
 					}
 				}
 				break;
-				
-			case 'install':		
+
+			case 'install':
 				global $config, $adminTpl;
 				if(!empty($_REQUEST['in']))
 				{
 					$load_url=$_REQUEST['in'];
-					$load_url = str_replace('|', '/', $load_url);								
+					$load_url = str_replace('|', '/', $load_url);
 					if(eregStrt('.zip', $load_url))
 					{
 						$zip = $load_url;
 						$arr[1] = basename($zip);
 						$arr[2] = basename($zip, ".zip");
-					}					
+					}
 					if(!empty($arr[1]) && !isset($core->tpl->modules[$arr[2]]) && ($file_content = @file_get_contents($zip)))
-					{						
+					{
 						$file = fopen (ROOT."tmp/temp_install.zip", "w");
 						fputs ($file, $file_content);
 						fclose ($file);
@@ -447,25 +447,25 @@ switch(isset($url[2]) ? $url[2] : null) {
 						if($v_result_list = $archive->extract(PCLZIP_OPT_PATH, ROOT) == 0)
 						{
 							$adminTpl->admin_head();
-							$adminTpl->alert('warning', _ERROR, _MODULE_NO_ARCHIVE);					
+							$adminTpl->alert('warning', _ERROR, _MODULE_NO_ARCHIVE);
 						}
 						else
 						{
 							if(file_exists(ROOT.'usr/modules/' . $arr[2] . '/sql.sql'))
-							{								
+							{
 								$sql = @file_get_contents(ROOT.'usr/modules/' . $arr[2] . '/sql.sql');
 								if(!empty($sql))
 								{
 									$sql_create_massiv = explode(";", $sql);
 									foreach($sql_create_massiv as $query)
-									{										
+									{
 										preg_match('#`\[prefix\](.*)`#i', $query, $name);
-										if(preg_match('#CREATE#i', $query)) 
+										if(preg_match('#CREATE#i', $query))
 										{
 											if(!eregStrt('[prefix]_users', $sql))
 											{
 												$db->query(str_replace('[prefix]', DB_PREFIX, $query));
-											}												
+											}
 											$sql = true;
 										}
 									}
@@ -492,25 +492,25 @@ switch(isset($url[2]) ? $url[2] : null) {
 					else
 					{
 						$adminTpl->admin_head();
-						$adminTpl->alert('warning', _ERROR, _MODULE_INSTALL_ERROR);					
+						$adminTpl->alert('warning', _ERROR, _MODULE_INSTALL_ERROR);
 					}
 				}
 				break;
-	
+
 			case 'delete':
 				if(isset($url[4]) && isset($url[5]))
 				{
 					delete(intval($url[5]), $url[4]);
 					$adminTpl->admin_head();
-					$adminTpl->alert('success', _MODULE_DELETE, _MODULE_DELETE_COMPL);						
+					$adminTpl->alert('success', _MODULE_DELETE, _MODULE_DELETE_COMPL);
 				}
 				break;
 		}
 		break;
-	
-	
+
+
 	case 'edit':
-		if(isset($url[3])) 
+		if(isset($url[3]))
 		{
 			$modId = $url[3];
 			$query = $db->query("SELECT * FROM ".DB_PREFIX."_plugins WHERE id = '" . $modId . "'");
@@ -518,7 +518,7 @@ switch(isset($url[2]) ? $url[2] : null) {
 			$title = $module['content'];
 			$groups = explode(',', $module['groups']);
 			$unshow = explode(',', $module['unshow']);
-		} 
+		}
 		else
 		{
 			location();
@@ -526,19 +526,19 @@ switch(isset($url[2]) ? $url[2] : null) {
 
 		$adminTpl->admin_head('Модули | Редактировать модуль');
 		echo '<div class="row"><div class="col-lg-12"><section class="panel"><div class="panel-heading no-border"><b>Редактирование модуля: '.$title.'</b></div><div class="panel-body"><div class="switcher-content"><form action="{ADMIN}/modules/save" method="post" name="news" role="form" class="form-horizontal parsley-form" data-parsley-validate="" novalidate="">
-		
+
 		<div class="form-group">
 					<label class="col-sm-3 control-label">Описание модуля:</label>
 					<div class="col-sm-4">
 					<input type="text" size="20" name="title" class="textinput" value="'.$title.'" maxlength="100" maxsize="100" />
 					</div>
-		</div>	
+		</div>
 		<div class="form-group">
 			<label class="col-sm-3 control-label">'._GROUP_ACCESS.'</label>
 			<div class="col-sm-4">
 			<select name="groups[]" class="cat_select" multiple ><option value="" ' . (empty($groups) ? 'selected' : '') . '>Все группы</option>';
 			$query = $db->query("SELECT * FROM `" . USER_DB . "`.`" . USER_PREFIX . "_groups` ORDER BY admin DESC,moderator DESC,user DESC,guest DESC,banned DESC");
-			while($rows = $db->getRow($query)) 
+			while($rows = $db->getRow($query))
 			{
 				$selected = in_array($rows['id'], $groups) ? "selected" : "";
 				echo '<option value="' . $rows['id'] . '" ' . $selected . '>' . $rows['name'] . '</option>';
@@ -551,7 +551,7 @@ switch(isset($url[2]) ? $url[2] : null) {
 			<div class="col-sm-4">
 			<select name="type[]" class="cat_select" multiple>';
 			$query = $db->query("SELECT * FROM ".DB_PREFIX."_blocks_types ORDER BY type");
-			while($rows = $db->getRow($query)) 
+			while($rows = $db->getRow($query))
 			{
 				$selected = in_array($rows['type'], $unshow) ? "selected" : "";
 				echo '<option value="' . $rows['type'] . '" ' . $selected . '>' . $rows['title'] . ' [' . $rows['type'] . ']</option>';
@@ -559,27 +559,27 @@ switch(isset($url[2]) ? $url[2] : null) {
 		echo '</select>
 			</div>
 		</div>';
-		if(isset($modId)) 
+		if(isset($modId))
 		{
 			echo '<input type="hidden" name="id" value="' . $modId . '">';
 		}
 		echo '<div class="form-group">
 					<label class="col-sm-3 control-label"></label>
 					<div class="col-sm-4">
-						<input name="submit" type="submit" class="btn btn-primary btn-parsley" id="sub" value="'. _UPDATE .'">						
+						<input name="submit" type="submit" class="btn btn-primary btn-parsley" id="sub" value="'. _UPDATE .'">
 					</div>
-		</div></form></div></div></section></div></div>';		
-		
+		</div></form></div></div></section></div></div>';
+
 		$adminTpl->admin_foot();
 		break;
-		
-		
+
+
 	case 'save':
 		$id = isset($_POST['id']) ? intval($_POST['id']) : '';
 		$title = isset($_POST['title']) ? filter($_POST['title'], 'title') : '';
 		$type = isset($_POST['type']) ? $_POST['type'] : '';
 		$groups = isset($_POST['groups']) ? $_POST['groups'] : false;
-		
+
 		$g = 0;
 		$groupList = '';
 		if(!empty($groups))
@@ -598,9 +598,9 @@ switch(isset($url[2]) ? $url[2] : null) {
 						$groupList .= ',' . $group;
 					}
 				}
-			}		
+			}
 		}
-		
+
 		$d = 0;
 		$deList = '';
 		if(!empty($type))
@@ -621,7 +621,7 @@ switch(isset($url[2]) ? $url[2] : null) {
 				}
 			}
 		}
-		
+
 		$adminTpl->admin_head('Модули системы | Редактирование');
 		if(!empty($title))
 		{
@@ -633,12 +633,12 @@ switch(isset($url[2]) ? $url[2] : null) {
 		{
 
 		}
-		
+
 		$adminTpl->admin_foot();
-			
+
 		break;
-	
-	
+
+
 	case "delete":
 		$id = intval($url[3]);
 		$path = filter($url[4]);
@@ -646,21 +646,21 @@ switch(isset($url[2]) ? $url[2] : null) {
 		delcache('plugins');
 		location(ADMIN.'/modules/ok');
 	break;
-	
+
 	case "retivate":
 		$id = intval($url[3]);
 		retivate($id);
 		delcache('plugins');
 		location(ADMIN.'/modules/ok');
-	break;	
-	
+	break;
+
 	case 'action':
-		foreach($_POST['checks'] as $id) 
+		foreach($_POST['checks'] as $id)
 		{
 			retivate(intval($id));
 		}
 		delcache('plugins');
 		location(ADMIN.'/modules/ok');
 		break;
-	
+
 }

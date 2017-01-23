@@ -9,7 +9,7 @@
 * @author      Komarov Ivan
 * @revision	   27.02.2015
 */
- 
+
 if (!defined('ADMIN_ACCESS')) {
     header('Location: /');
     exit;
@@ -20,7 +20,7 @@ if(file_exists(ROOT . 'usr/langs/'. $config['lang'] . '.blocks.php'))
 {
 	include(ROOT . 'usr/langs/'. $config['lang'] . '.blocks.php');
 }
-		
+
 
 switch(isset($url[2]) ? $url[2] : null) {
 	default:
@@ -30,17 +30,17 @@ switch(isset($url[2]) ? $url[2] : null) {
 			<div class="col-lg-12">
 				<section class="panel">
 					<div class="panel-heading">
-						<b>' . _AP_BLOCKS . '</b>						
+						<b>' . _AP_BLOCKS . '</b>
 					</div>';
 	$queryTypes = $db->query("SELECT * FROM ".DB_PREFIX."_blocks_types ORDER BY title ASC");
-	while ($_type = $db->getRow($queryTypes)) $_types[$_type['type']] = $_type['title']; 
+	while ($_type = $db->getRow($queryTypes)) $_types[$_type['type']] = $_type['title'];
 	$query = $db->query("SELECT * FROM ".DB_PREFIX."_plugins WHERE service='blocks' ORDER BY type ASC, priority ASC");
-	if($db->numRows($query) > 0) 
+	if($db->numRows($query) > 0)
 	{
 		echo '<div class="panel-body no-padding">
 					<form id="tablesForm" style="margin:0; padding:0" method="POST" action="{ADMIN}/blocks/action">
-						<table class="table no-margin"  id="blockBox">';		
-		blockList();	
+						<table class="table no-margin"  id="blockBox">';
+		blockList();
 		echo '</table>
 		<div align="right">
 		<table>
@@ -53,20 +53,20 @@ switch(isset($url[2]) ? $url[2] : null) {
 			<option value="delete">' . _DELETE . '</option>
 		</select>
 		</td>
-		<td>&nbsp&nbsp</td>	
+		<td>&nbsp&nbsp</td>
 		<td valign="top">
 		<input name="submit" type="submit" class="btn btn-success" id="sub" value="' . _EDIT . '" /><span class="pd-l-sm"></span>
 		</td>
 		</tr>
-		</table>		
+		</table>
 	</div>
 	</form></div>';
 	}
 	else
 		{
-			echo '<div class="panel-heading">'._BLOCK_EMPTY.'</div>';					
+			echo '<div class="panel-heading">'._BLOCK_EMPTY.'</div>';
 		}
-		echo'</section></div></div>';	
+		echo'</section></div></div>';
 		$adminTpl->admin_foot();
 		break;
 
@@ -90,7 +90,7 @@ switch(isset($url[2]) ? $url[2] : null) {
 			$free = $bl['free'];
 			$unshow = $bl['unshow'];
 			$tit = _BLOCK_EDIT;
-		
+
 			if($unshow)
 			{
 				$modArrDb = explode(',', $bl['unshow']);
@@ -99,7 +99,7 @@ switch(isset($url[2]) ? $url[2] : null) {
 			{
 				$modArrDb = explode(',', $bl['showin']);
 			}
-			
+
 			$grroups = explode(',', $bl['groups']);
 		}
 		else
@@ -116,12 +116,12 @@ switch(isset($url[2]) ? $url[2] : null) {
 			$grroups = array();
 			$tit = _BLOCK_ADD;
 		}
-		$adminTpl->admin_head(_AP_BLOCKS . ' | ' . (isset($bid) ? _EDIT : _ADD) . ' '._BBLOCK);	
+		$adminTpl->admin_head(_AP_BLOCKS . ' | ' . (isset($bid) ? _EDIT : _ADD) . ' '._BBLOCK);
 		echo '<div class="row">
 			<div class="col-lg-12">
 				<section class="panel">
 					<div class="panel-heading">
-						<b>' . $tit . '</b>						
+						<b>' . $tit . '</b>
 					</div>
 					<div class="panel-body">
 						<form class="form-horizontal name="blocks" parsley-form" role="form" action="{ADMIN}/blocks/save" method="post">
@@ -134,14 +134,14 @@ switch(isset($url[2]) ? $url[2] : null) {
 												<div class="form-group">
 													<label class="col-sm-3 control-label">' . _BLOCK_FILE . '</label>
 													<div class="col-sm-4">
-														<select name="file" id="file">
+														<select class="form-control" name="file" id="file">
 														<option value="" ' . ($bfile == '' ? 'selected' : '') . ">" . _BLOCK_FILE_WITHOUT . '</option>';
 														$path = ROOT.'usr/blocks/';
 														$dh = opendir($path);
 														$c=0;
-														while ($file = readdir($dh)) 
+														while ($file = readdir($dh))
 														{
-															if(is_file($path.$file) && $file != '.' && $file != '..' && $file != '.htaccess') 
+															if(is_file($path.$file) && $file != '.' && $file != '..' && $file != '.htaccess')
 															{
 																$select = ($bfile == $file) ? 'selected' : '';
 																echo '<option value="'.$file.'" '.$select.'>'.$file.'</option>';
@@ -154,9 +154,9 @@ switch(isset($url[2]) ? $url[2] : null) {
 												<div class="form-group">
 													<label class="col-sm-3 control-label">' . _BLOCK_DESTANATION . '</label>
 													<div class="col-sm-4">
-														<select name="type" id="type">';
+														<select class="form-control" name="type" id="type">';
 														$query = $db->query("SELECT * FROM ".DB_PREFIX."_blocks_types ORDER BY type");
-														while($rows = $db->getRow($query)) 
+														while($rows = $db->getRow($query))
 														{
 															$select = ($type == $rows['type']) ? 'selected' : '';
 															echo '<option value="' . $rows['type'] . '" ' . $select . '>' . $rows['title'] . ' [' . $rows['type'] . ']</option>';
@@ -167,9 +167,9 @@ switch(isset($url[2]) ? $url[2] : null) {
 												<div class="form-group">
 													<label class="col-sm-3 control-label">' . _BLOCK_GROUPS . '</label>
 													<div class="col-sm-4">
-														<select name="groups[]" id="group" multiple ><option value="" ' . (empty($grroups) ? 'selected' : '') . '>Все группы</option>';
+														<select class="form-control" name="groups[]" id="group" multiple ><option value="" ' . (empty($grroups) ? 'selected' : '') . '>Все группы</option>';
 														$query = $db->query("SELECT * FROM `" . USER_DB . "`.`" . USER_PREFIX . "_groups` ORDER BY admin DESC,moderator DESC,user DESC,guest DESC,banned DESC");
-														while($rows = $db->getRow($query)) 
+														while($rows = $db->getRow($query))
 														{
 															$selected = in_array($rows['id'], $grroups) ? "selected" : "";
 															echo '<option value="' . $rows['id'] . '" ' . $selected . '>' . $rows['name'] . '</option>';
@@ -179,13 +179,13 @@ switch(isset($url[2]) ? $url[2] : null) {
 												</div>
 												<div class="form-group">
 													<label class="col-sm-3 control-label">'._MODULES.'</label>
-													<div class="col-sm-8">';													
+													<div class="col-sm-8">';
 													foreach(glob(ROOT.'usr/modules/*/index.php') as $dir)
 													{
 														$dir_a = explode('/', $dir);
 														$fileArr[] = $dir_a[count($dir_a)-2];
 													}
-													$limitCheck = ceil(count($fileArr)/3);		
+													$limitCheck = ceil(count($fileArr)/3);
 													$i = 0;
 													echo '<div style="float:left; width:150px;">';
 													foreach($fileArr as $file)
@@ -240,11 +240,11 @@ switch(isset($url[2]) ? $url[2] : null) {
 						</div>
 					</section>
 				</div>
-			</div>';	
-		
+			</div>';
+
 		$adminTpl->admin_foot();
 		break;
-	
+
 	case 'save':
 		$allowArray = array('_all', '_index');
 		$title = isset($_POST['name']) ? filter(htmlspecialchars_decode($_POST['name']), 'title') : '';
@@ -261,11 +261,11 @@ switch(isset($url[2]) ? $url[2] : null) {
 		$free = 0;
 		if(!empty($title) && (!empty($file) OR !empty($content)))
 		{
-			
+
 			if(!empty($mod))
 			{
 				$i = 0;
-				
+
 				if(array_search('_noChecked', $mod)) $unSearch = true;
 				if(is_numeric(array_search('_free', $mod))) $free = 1;
 
@@ -286,7 +286,7 @@ switch(isset($url[2]) ? $url[2] : null) {
 							}
 						}
 					}
-					
+
 					$u = 0;
 					foreach($mod as $module)
 					{
@@ -327,7 +327,7 @@ switch(isset($url[2]) ? $url[2] : null) {
 			{
 				$modList = '_all';
 			}
-			
+
 			$g = 0;
 			$groupList = '';
 			if(!empty($groups))
@@ -348,7 +348,7 @@ switch(isset($url[2]) ? $url[2] : null) {
 					}
 				}
 			}
-			
+
 			if(!$posit)
 			{
 				$query = $db->query("SELECT priority FROM `" . DB_PREFIX . "_plugins` WHERE `type`='" . $db->safesql($type) . "' ORDER BY `priority` DESC LIMIT 1");
@@ -362,7 +362,7 @@ switch(isset($url[2]) ? $url[2] : null) {
 					$posit = 0;
 				}
 			}
-			
+
 			$bb = new bb;
 			if($bid)
 			{
@@ -380,48 +380,48 @@ switch(isset($url[2]) ? $url[2] : null) {
 			location('/'.ADMIN.'/blocks/error');
 		}
 		break;
-		
+
 	case "action":
 		$type = $_POST['act'];
 		if(is_array($_POST['checks'])) {
 			switch($type) {
 				case "activate":
-					foreach($_POST['checks'] as $id) 
+					foreach($_POST['checks'] as $id)
 					{
 						$db->query("UPDATE `" . DB_PREFIX . "_plugins` SET `active` = '1' WHERE `id` =" . $id . " LIMIT 1 ;");
 					}
-					break;			
-				
+					break;
+
 				case "deActivate":
-					foreach($_POST['checks'] as $id) 
+					foreach($_POST['checks'] as $id)
 					{
 						$db->query("UPDATE `" . DB_PREFIX . "_plugins` SET `active` = '0' WHERE `id` =" . $id . " LIMIT 1 ;");
 					}
-					break;			
-					
+					break;
+
 				case "reActivate":
-					foreach($_POST['checks'] as $id) 
+					foreach($_POST['checks'] as $id)
 					{
 						$db->query("UPDATE `" . DB_PREFIX . "_plugins` SET `active` = NOT `active` WHERE `id` =" . $id . " LIMIT 1 ;");
 					}
 					break;
 
 				case "delete":
-					foreach($_POST['checks'] as $id) 
+					foreach($_POST['checks'] as $id)
 					{
 						$db->query("DELETE FROM `" . DB_PREFIX . "_plugins` WHERE `id` = " . $id . " LIMIT 1");
 					}
-					break;				
-					
+					break;
+
 				case "deleteType":
-					foreach($_POST['checks'] as $id) 
+					foreach($_POST['checks'] as $id)
 					{
 						$db->query("DELETE FROM `" . DB_PREFIX . "_blocks_types` WHERE `type` = '" . $id . "' LIMIT 1");
 					}
-					break;				
-				
+					break;
+
 				case "deleteBlockType":
-					foreach($_POST['checks'] as $id) 
+					foreach($_POST['checks'] as $id)
 					{
 						$db->query("DELETE FROM `" . DB_PREFIX . "_plugins` WHERE `type` = '" . $id . "'");
 					}
@@ -431,12 +431,12 @@ switch(isset($url[2]) ? $url[2] : null) {
 		delcache('plugins');
 		location(ADMIN . '/blocks');
 		break;
-		
+
 	case 'resort':
 		$query = $db->query("SELECT id, type FROM ".DB_PREFIX."_plugins ORDER BY type ASC, priority ASC");
-		if($db->numRows($query) > 0) 
+		if($db->numRows($query) > 0)
 		{
-			while ($result = $db->getRow($query)) 
+			while ($result = $db->getRow($query))
 			{
 				$blocks[$result['type']][] = $result;
 			}
@@ -453,8 +453,8 @@ switch(isset($url[2]) ? $url[2] : null) {
 		delcache('plugins');
 		location(ADMIN . '/blocks');
 		break;
-		
-		
+
+
 	case 'standard':
 		$adminTpl->admin_head(_AP_BLOCKS.' | '._BLOCK_STANDART);
 		echo '
@@ -462,12 +462,12 @@ switch(isset($url[2]) ? $url[2] : null) {
 			<div class="col-lg-12">
 				<section class="panel">
 					<div class="panel-heading">
-						<b>' . _BLOCK_STANDART . '</b>						
+						<b>' . _BLOCK_STANDART . '</b>
 					</div>
 					<div class="panel-body">
 				<div class="switcher-content">
-';		
-		
+';
+
 		 foreach(glob(ROOT.'usr/blocks/config/*.config.php') as $inFile)
         {
             $name = explode('usr/blocks/config/', $inFile);
@@ -475,13 +475,13 @@ switch(isset($url[2]) ? $url[2] : null) {
             $subDir = explode('/', $name);
             $inDirs[$subDir[0]][] = $inFile;
         }
-		$zeroDirs = glob(ROOT.'usr/blocks/config/*.config.php');		
-		$_names['cats.config.php'] = _BLOCK_CATS;	
-		$_names['online.config.php'] = _BLOCK_ONLINE;	
+		$zeroDirs = glob(ROOT.'usr/blocks/config/*.config.php');
+		$_names['cats.config.php'] = _BLOCK_CATS;
+		$_names['online.config.php'] = _BLOCK_ONLINE;
 		$_names['poll.config.php'] = _BLOCK_POLL;
 		if(!empty($zeroDirs))
-		{			
-			foreach($zeroDirs as $file) 
+		{
+			foreach($zeroDirs as $file)
 			{
 				$name = explode('usr/blocks/config/', $file);
 				$name = end($name);
@@ -490,31 +490,31 @@ switch(isset($url[2]) ? $url[2] : null) {
 				echo '<div style="cursor:pointer" onclick="document.location.href = \'{ADMIN}/blocks/standard_edit/' . $absolute . '\';">
 					<label style="cursor:pointer" class="control-label">' . (isset($_names[$name]) ? $_names[$name] : $name) . '</label><br>
 					Настройки блока: ' . (isset($_names[$name]) ? $_names[$name] : $name) . '
-				<br>				
+				<br>
 				</div><br>';
 			}
-			
+
 		}
-		echo'</div></div></section></div></div>';	
-		
+		echo'</div></div></section></div></div>';
+
 		delcache('plugins');
 		$adminTpl->admin_foot();
 		break;
-		
+
 	case 'standard_edit':
 		$adminTpl->admin_head(_AP_BLOCKS.' | '._BLOCK_STANDART);
-		require (ROOT.'etc/blocks/'.$url[3].'.config.php');		
+		require (ROOT.'etc/blocks/'.$url[3].'.config.php');
 		require (ROOT.'usr/blocks/config/'.$url[3].'.config.php');
-		$ok = false;		
+		$ok = false;
 		if(isset($_POST['conf_file']))
 		{
 			$ok = true;
 		}
-		generateConfigBLOCK($configBox, $url[3], '{ADMIN}/blocks/standard_edit/'.$url[3], $ok);		
+		generateConfigBLOCK($configBox, $url[3], '{ADMIN}/blocks/standard_edit/'.$url[3], $ok);
 		$adminTpl->admin_foot();
 		break;
-		
-		
+
+
 	case 'types':
 		$adminTpl->admin_head(_AP_BLOCKS.' | '._AP_BLOCKS_TYPE);
 		echo '
@@ -522,30 +522,30 @@ switch(isset($url[2]) ? $url[2] : null) {
 			<div class="col-lg-12">
 				<section class="panel">
 					<div class="panel-heading">
-						<b>' . _AP_BLOCKS_TYPE . '</b>						
-					</div>';		
-		
+						<b>' . _AP_BLOCKS_TYPE . '</b>
+					</div>';
+
 		$query = $db->query("SELECT * FROM ".DB_PREFIX."_blocks_types ORDER BY title ASC");
-		if($db->numRows($query) > 0) 
+		if($db->numRows($query) > 0)
 		{
 			echo '<div class="panel-body no-padding">
 					<form id="tablesForm" style="margin:0; padding:0" method="POST" action="{ADMIN}/blocks/action">
 						<table class="table no-margin">
 							<thead>
-								<tr>									
+								<tr>
 									<th class="col-md-4"><span class="pd-l-sm"></span>' . _TITLE . '</th>
-									<th class="col-md-3">'._TYPE.'</th>	
-									<th class="col-md-3">' . _BLOCK_FOR_TPL . '</th>									
-									<th class="col-md-3">' . _ACTIONS . '</th>	
-									<th class="col-md-1"> 
+									<th class="col-md-3">'._TYPE.'</th>
+									<th class="col-md-3">' . _BLOCK_FOR_TPL . '</th>
+									<th class="col-md-3">' . _ACTIONS . '</th>
+									<th class="col-md-1">
 										<input type="checkbox" name="all" onclick="setCheckboxes(\'tablesForm\', true); return false;" />
-									</th>								
+									</th>
 								</tr>
 							</thead>
-							<tbody>';	
-			while ($result = $db->getRow($query)) 
+							<tbody>';
+			while ($result = $db->getRow($query))
 			{
-				echo '<tr>				
+				echo '<tr>
 				<td><span class="pd-l-sm"></span>' . $result['title'] . '</td>
 				<td>' . $result['type'] . '</td>
 				<td>{%BLOCKS:TYPE:' . $result['type'] . '%}</td>
@@ -555,12 +555,12 @@ switch(isset($url[2]) ? $url[2] : null) {
 						</a>
 						<a href="{ADMIN}/blocks/delType/' . $result['type'] .  '" onClick="return getConfirm(\''._BLOCK_TYPE_DEL.' - ' . $result['title'] . '?\')" title="' . _DELETE . '" class="delete">
 						<button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="" data-original-title="' . _DELETE .'">X</button>
-						</a>			
+						</a>
 				</td>
 				<td align="center"> <input type="checkbox" name="checks[]" value="' . $result['type'] . '"></td>
 				</tr>';
 			}
-		
+
 		echo '<tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
 		<div align="right">
 	<table>
@@ -571,12 +571,12 @@ switch(isset($url[2]) ? $url[2] : null) {
 		<option value="deleteBlockType">' . _BLOCK_DELETEFROM_TYPE . '</option>
 	</select>
 	</td>
-	<td>&nbsp&nbsp</td>	
+	<td>&nbsp&nbsp</td>
 	<td valign="top">
 	<input name="submit" type="submit" class="btn btn-success" id="sub" value="' . _EDIT . '" /><span class="pd-l-sm"></span>
 	</td>
 	</tr>
-	</table>		
+	</table>
 	</div>
 	</form></div>';
 	}
@@ -584,12 +584,12 @@ else
 {
 echo '<div class="panel-heading">'._BLOCK_TYPE_EMPTY.'</div>';
 }
-echo'</section></div></div>';	
-		
+echo'</section></div></div>';
+
 		delcache('plugins');
 		$adminTpl->admin_foot();
 		break;
-		
+
 	case 'typeAdd':
 		if(isset($url[3]))
 		{
@@ -609,14 +609,14 @@ echo'</section></div></div>';
 			$tit = _BLOCK_ADD_TYPE;
 			$type = '';
 			$title = '';
-		}		
-		$adminTpl->admin_head(_AP_BLOCKS.' | ' . $tit);		
+		}
+		$adminTpl->admin_head(_AP_BLOCKS.' | ' . $tit);
 		$adminTpl->open();
 			echo '<div class="row">
 			<div class="col-lg-12">
 				<section class="panel">
 					<div class="panel-heading">
-						<b>' . $tit . '</b>						
+						<b>' . $tit . '</b>
 					</div>
 					<div class="panel-body">
 						<form class="form-horizontal parsley-form" action="{ADMIN}/blocks/saveType" method="post">
@@ -636,19 +636,19 @@ echo'</section></div></div>';
 												echo'<div class="form-group">
 														<label class="col-sm-3 control-label"></label>
 														<div class="col-sm-4">
-															<input name="submit" type="submit" class="btn btn-primary btn-parsley" id="sub" value="'.(isset($id) ? _EDIT : _ADD).'">						
+															<input name="submit" type="submit" class="btn btn-primary btn-parsley" id="sub" value="'.(isset($id) ? _EDIT : _ADD).'">
 														</div>
 													</div>
 												</form>
 											</div>
 										</section>
 									</div>
-								</div>';	
+								</div>';
 		$adminTpl->close();
 		delcache('plugins');
 		$adminTpl->admin_foot();
 		break;
-		
+
 	case 'saveType':
 		$name = isset($_POST['name']) ? filter($_POST['name'], 'a') : '';
 		$type = isset($_POST['type']) ? filter(translit($_POST['type']), 'a') : '';
@@ -657,7 +657,7 @@ echo'</section></div></div>';
 		{
 			if(!$tid)
 			{
-				$db->query("INSERT INTO `" . DB_PREFIX . "_blocks_types` ( `title` , `type` ) VALUES ('" . $name . "', '" . $type . "');");	
+				$db->query("INSERT INTO `" . DB_PREFIX . "_blocks_types` ( `title` , `type` ) VALUES ('" . $name . "', '" . $type . "');");
 			}
 			else
 			{
@@ -671,7 +671,7 @@ echo'</section></div></div>';
 			adminError(_NOT_FILLED, 'blocks/types');
 		}
 		break;
-		
+
 	case 'delType':
 		$id = filter($url[3]);
 		$db->query("DELETE FROM `" . DB_PREFIX . "_blocks_types` WHERE `type` = '" . $id . "' LIMIT 1");

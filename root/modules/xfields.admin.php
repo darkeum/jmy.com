@@ -220,7 +220,7 @@ global $adminTpl, $config, $core, $admin_conf, $db, $lang;
 				<label for="category"  class="col-lg-3 control-label">'. $lang['xfields_add_module'] .'</label>
 				<div class="col-lg-3">
 					<label class="field select">
-						<select class="form-control" name="module" id="module" onchange="updateCatList(this.value, \'category\');" >';							
+						<select class="form-control" name="module" id="module" onchange="updateCatList(this.value, \'category\');" >';
 							foreach ($core->getModList() as $module)
 							{
 								if(in_array($module, exceMods('xfields')))
@@ -254,7 +254,7 @@ global $adminTpl, $config, $core, $admin_conf, $db, $lang;
 				<label for="type"  class="col-lg-3 control-label">'. $lang['xfields_add_type'] .'</label>
 				<div class="col-lg-3">
 					<label class="field select">
-						<select name="type" id="type" onchange="xfieldType(this.value); caa(this);">
+						<select class="form-control" name="type" id="type" onchange="xfieldType(this.value); caa(this);">
 							<option value="">'.$lang['xfields_type_0'].'</option>
 							<option value="1" '. ($type == 1 ? 'selected' : '') .'>'.$lang['xfields_type_1'].'</option>
 							<option value="2" '. ($type == 2 ? 'selected' : '') .'>'.$lang['xfields_type_2'].'</option>

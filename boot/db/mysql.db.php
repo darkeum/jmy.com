@@ -120,4 +120,9 @@ class controlDB
             return false;
         }
 	}
+	
+	public function info()
+	{
+        return mysql_info();
+	}
 }

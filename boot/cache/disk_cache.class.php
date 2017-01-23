@@ -14,7 +14,7 @@ class cache_lib
 	var $identifier;
 	var $crashed = 0;	
 	
-	function cache_lib( $identifier='' )
+	function __construct( $identifier='' )
 	{
 		if( !is_writeable( ROOT.'tmp/cache' ) )
 		{

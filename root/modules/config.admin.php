@@ -605,8 +605,8 @@ $configBox = array(
 						'content' => '<input type="text" size="20" name="{varName}" class="form-control" value="{var}" />',
 					),		
 					'avatarGuest' => array(
-						'title' => _USER_AVATAR_GUEST,
-						'description' => _USER_AVATAR_GUESTD,
+						'title' => 'Аватар у гостя',
+						'description' => 'Аватар у гостя',
 						'content' => '<input type="text" size="20" name="{varName}" class="form-control" value="{var}" />',
 					),	
 					'avatar_load' => array(

@@ -1,0 +1,10 @@
+<?php
+
+$lang = array_merge($lang, array (
+
+	'sitemap'									=> 'Карта сайта',
+	'sitemap_empty'								=> 'Карта сайта еще не создана!',
+
+));
+
+?>

@@ -27,15 +27,7 @@
 		<div style="background: #212121; padding: 10px 0; box-shadow: 3px 3px 5px 0 rgba(0,0,0,.3); clear: both; text-align:center; position: relative; z-index:1;"><a href="http://windows.microsoft.com/en-US/internet-explorer/"><img src="/{ADM_THEME}/assets/images/ie8-panel/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today."></a></div>
 		<script src="/{ADM_THEME}/assets/js/html5shiv.min.js"></script>
 	<![endif]-->
-	<!-- Core scripts-->
-    <script src="/{ADM_THEME}/assets/js/core.min.js"></script>
-    <!-- Theme Javascript-->
-    <script src="/{ADM_THEME}/assets/js/utility.js"></script>
-    <script src="/{ADM_THEME}/assets/js/demo.js"></script>		
-    <script src="/{ADM_THEME}/assets/js/main.js"></script>
-	<script src="/{ADM_THEME}/assets/js/widgets.js"></script>
-	<script src="/{ADM_THEME}/assets/js/script.js"></script>
-	<script src="/{ADM_THEME}/assets/js/bootstrap-switch.min.js"></script>	
+	
   </head>  
   <body data-spy="scroll" data-target="#nav-spy" data-offset="300" class="form-editors-page {BODY_CLASS}"> 
     <div id="main">    
@@ -149,7 +141,7 @@
             </li>
 			[/ACTIVE_MODULE]		
             <li>
-				<a href="#" class="accordion-toggle {MENU_OPEN:user,groups,comments,publications,voting}">
+				<a href="#" class="accordion-toggle {MENU_OPEN:user,groups,comments,moderation,voting}">
 					<span class="glyphicon glyphicon-user"></span>
 					<span class="sidebar-title">[alang_old:_PANEL_MENU_USER]</span>
 					<span class="caret"></span>
@@ -164,8 +156,8 @@
 					<li {MENU_CHOOSE:comments}>
 						<a href="/{ADMIN}/comments"><span class="glyphicon glyphicon-comment"></span>[alang_old:_PANEL_MENU_USER_COMMENT]</a>
 					</li>
-					<li {MENU_CHOOSE:publications}>
-						<a href="/{ADMIN}/publications"><span class="glyphicon glyphicon-edit"></span>[alang:moder]</a>
+					<li {MENU_CHOOSE:moderation}>
+						<a href="/{ADMIN}/moderation"><span class="glyphicon glyphicon-edit"></span>[alang:moder]</a>
 					</li>
 					<li {MENU_CHOOSE:voting}>
 						<a href="/{ADMIN}/voting"><span class="glyphicon glyphicon-plus-sign"></span>[alang_old:_PANEL_MENU_USER_POLL]</a>
@@ -328,6 +320,15 @@
         display: none;
       }
     </style>
+	<!-- Core scripts-->
+    <script src="/{ADM_THEME}/assets/js/core.min.js"></script>
+    <!-- Theme Javascript-->
+    <script src="/{ADM_THEME}/assets/js/utility.js"></script>
+    <script src="/{ADM_THEME}/assets/js/demo.js"></script>		
+    <script src="/{ADM_THEME}/assets/js/main.js"></script>
+	<script src="/{ADM_THEME}/assets/js/widgets.js"></script>
+	<script src="/{ADM_THEME}/assets/js/script.js"></script>
+	<script src="/{ADM_THEME}/assets/js/bootstrap-switch.min.js"></script>	
 	{FOOT}
     <script type="text/javascript">
       jQuery(document).ready(function () {

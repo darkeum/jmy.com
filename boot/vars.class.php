@@ -19,11 +19,8 @@ if (!defined('ACCESS')) {
 		$desc = (isset($this->description) ? $this->description : $config['description']);
 		$title_now = html_entity_decode((!empty($this->title) && !empty($_REQUEST['url']) ? $this->title . $config['name'] : $config['name'] . $config['divider'] . $config['slogan']), ENT_QUOTES);
 		
-		$this->setVarBlock('BLOCKS:FILE:(.*?)', "\$this->blockParse('\\1', 'file')");
-		$this->setVarBlock('BLOCKS:TYPE:(.*?)', "\$this->blockParse('\\1', 'type')");
-		$this->setVarBlock('BLOCKS:ID:([0-9]*)', "\$this->blockParse('\\1', 'id')");
 		
-		$this->setVarTPL('TPL:(.*?)', "\$this->loadTPL('\\1')");
+		
 
 		$this->setVar('FULL_AJAX:start', '<div id="fullAjax">');
 		$this->setVar('FULL_AJAX:end', '</div>');

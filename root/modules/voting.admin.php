@@ -223,7 +223,7 @@ switch(isset($url[2]) ? $url[2] : null) {
 				  <div class="panel-body">
 					<p class="p2">
 					<div id="result" style="min-width: 310px; max-width: 800px; height: 200px; margin: 0 auto"></div>';				
-					echo '
+					$adminTpl->footIncludes[] = '
 					<script type="text/javascript">
 						var pollsHighCharts = function ()
 						{				 

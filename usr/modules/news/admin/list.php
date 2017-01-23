@@ -17,7 +17,7 @@ $module_array['news'] = array(
 		)
 );
 
-$component_array['publications']['subAct'] = array('Новости' => 'mod/news');
+$component_array['moderation']['subAct'] = array_merge($component_array['moderation']['subAct'], array('Новости' => 'mod/news'));
 
 $toconfig['news'] = array
 (

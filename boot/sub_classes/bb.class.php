@@ -152,17 +152,16 @@ class bb
 	
 	function bbSite($text, $pubId)
 	{
-	global $core, $config;
-		$in[] = '%\[hide\](.+?)\[\/hide\]%iues';
-		$out[] = '$this->hide(\'\\1\')';
-		
+	global $core, $config;		
+		$text = preg_replace_callback( "%\[hide\](.+?)\[\/hide\]%ius", array(&$this, 'hide'), $text);		
 		if(strpos($text, "[attach=") !== false && $pubId)
 		{
 			$text = $this->parseAttach($text, $pubId);
-		}
-		
+		}		
 		if($core->html_editor == 1)
 		{
+			$text = preg_replace_callback( "%\[video\](.+?)\[\/video\]%ius", array( &$this, 'formatBBVideo'), $text);	
+			$text = preg_replace_callback( "%\[audio\](.+?)\[\/audio\]%ius", array( &$this, 'formatBBVideo'), $text);	
 			$in[] = '%\[video\](.+?)\[\/video\]%iues';
 			$out[] = '$this->formatBBVideo(\'\\1\')';		
 
@@ -215,7 +214,7 @@ class bb
 		/* ]]> */
 		</script>";
 		}
-		return preg_replace($in, $out, $text);
+		return $text;
 	}
 	
 	function imageParse($img, $align = '', $alt = '')
@@ -342,7 +341,7 @@ class bb
 	global $core;
 		if($core->auth->group_info['showHide'] == 1)
 		{
-			return stripslashes($content);
+			return stripslashes($content[1]);
 		}
 		else
 		{
@@ -582,9 +581,10 @@ class bb
 		}
 	}
 
-	private function formatBBVideo($url)
+	private function formatBBVideo($matches=array())
 	{
 	global $core, $config;
+		$url = $matches[1]; 
 		$parseUrl = parse_url(htmlspecialchars_decode($url, ENT_QUOTES));
 		$query = array();
 		if(isset($parseUrl['query']))

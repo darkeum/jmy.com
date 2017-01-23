@@ -66,7 +66,7 @@ $lang = array_merge($lang, array (
 	'news_action_nofix'							=> 'Снять фиксацию',
 	'news_delete_title'							=> 'Удалить новость - [news]?',
 	'news_delete_text'							=> 'Вы действительно хотите удалить новость "[news]"? Все медиаданные к этой новости также будут удалены без возможности восстановления!',
-	'news_moder'								=> 'У вас имеются новости на модерации! <a style="color: fff;"href="{ADMIN}/publications/mod/news">Перейти</a></p>',
+	'news_moder'								=> 'У вас имеются новости на модерации! <a style="color: fff;"href="{ADMIN}/moderation/mod/news">Перейти</a></p>',
 	'news_config'								=> 'Настройки модуля Новостей',
 	'news_config_main'							=> 'Основные настройки',
 	'news_config_main_numt'						=> 'Количество новостей на страницу',

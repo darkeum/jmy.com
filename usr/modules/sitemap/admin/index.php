@@ -1,13 +1,12 @@
 <?php
 
 /**
-* @name        JMY CMS
-* @link        http://jmy.su/
+* @name        JMY CORE
+* @link        https://jmy.su/
 * @copyright   Copyright (C) 2012-2017 JMY LTD
 * @license     LICENSE.txt (see attached file)
 * @version     VERSION.txt (see attached file)
 * @author      Komarov Ivan
-* @revision	   27.09.2016
 */
  
 if (!defined('ACCESS')) {
@@ -20,26 +19,27 @@ global $lang;
 switch(isset($url[3]) ? $url[3] : null) 
 {
 	default:
-		$adminTpl->admin_head(_MODULES .' | '. $lang['sitemap']);
-		echo '<section id="content" class="table-layout">         
-          <div class="tray tray-center">
-            <div class="panel">              
-              <div class="panel-body pn">
-                <div class="table-responsive of-y-a">';
+		$adminTpl->admin_head($lang['modules'] .' | '. $lang['sitemap']);
+		echo '<div id="content" class="animated fadeIn">';
 		$query = $db->query("SELECT * FROM ".DB_PREFIX."_sitemap ORDER BY id ASC");
 		if($db->numRows($query) > 0) 
 		{
-			echo '<table class="table admin-form theme-warning tc-checkbox-1 fs13">
-					<thead>
-						<tr class="bg-light">									
-							<th><span class="pd-l-sm"></span>ID</th>
-							<th class="col-md-3">'._TITLE.'</th>
-							<th class="col-md-2">'._SM_UPDATE.'</th>
-							<th class="col-md-2">'._SM_PR.'</th>
-							<th class="col-md-5">URL</th>
+			echo '<div class="panel panel-dark panel-border top">
+				<div class="panel-heading"><span class="panel-title">' . $lang['sitemap'] . ':</span>                
+              </div>
+              <div class="panel-body pn table-responsive"> 
+				<form id="tablesForm" style="margin:0; padding:0" method="POST" action="{ADMIN}/cats/action">
+                  <table class="table table-striped ">
+                    <thead>
+						<tr>
+							<th><span class="pd-l-sm"></span>#</th>
+							<th>' . $lang['title'] . '</th>
+							<th>' . $lang['sitemap_update'] . '</th>
+							<th>' . $lang['sitemap_rang'] .'</th>
+							<th>' . $lang['url'] . '</th>						
 						</tr>
-					</thead>
-					<tbody>';	
+                    </thead>
+                    <tbody>';		
 					while ($result = $db->getRow($query)) 
 					{
 						echo '<tr>				
@@ -50,25 +50,26 @@ switch(isset($url[3]) ? $url[3] : null)
 						<td>'. $result['url'] . '</td>				
 						</tr>';
 					}		
-			echo '</tbody></table>';
+			echo '	</tbody>				
+					</table> 
+				</form>				
+			  </div>
+			</div>';
 		}
 		else
 		{
-			echo '<div class="panel-heading">'._SM_EMPTY.'</div>';
+			$adminTpl->info($lang['sitemap_empty'], 'empty', null, $lang['sitemap'], $lang['sitemap_gen'], ADMIN.'/module/sitemap/create');	
 		}
-		echo'   </div>
-              </div>
-            </div>
-          </div>         
-        </section>';	
+		echo' </div>';	
 		$adminTpl->admin_foot();
 		break;
 
-case 'create':
+	case 'create':
 		global $core, $config;
-		$adminTpl->admin_head(_MODULES .' | '. _SM_SITEMAP.' | '. _SM_GEN);
+		$adminTpl->admin_head($lang['modules'] .' | '. $lang['sitemap'].' | '. $lang['sitemap_gens']);
+		echo '<div id="content" class="animated fadeIn">';
 		$db->query("TRUNCATE TABLE " . DB_PREFIX . "_sitemap");
-		$db->query("INSERT INTO `" . DB_PREFIX . "_sitemap` ( `name` , `url`) VALUES ('". _SM_MAIN. "', '".$config['url']."/');");
+		$db->query("INSERT INTO `" . DB_PREFIX . "_sitemap` ( `name` , `url`) VALUES ('". $lang['sitemap_main'] . "', '".$config['url']."/');");
 		$query = $db->query("SELECT * FROM ".DB_PREFIX."_plugins WHERE service='modules' ORDER BY title ASC");
 		$exceMods = array('feed', 'pm', 'profile', 'search', 'poll', 'mainpage');
 		if($db->numRows($query) > 0) 
@@ -111,54 +112,56 @@ case 'create':
 		$fp=fopen('files/sitemap.xml','w+');if(!fwrite($fp,$sitemapXML)){$flag=false;}fclose($fp);	
 		if ($flag==true)
 		{
-			$adminTpl->info(str_replace('{numb}', $ic, _SM_GEN_OK));	
+			$adminTpl->info(str_replace('[numb]', $ic, $lang['sitemap_gen_ok']), 'info', null, $lang['info'], $lang['sitemap'], ADMIN.'/module/sitemap');	
 		}
 		else
 		{
-			$adminTpl->info(_SM_ERROR_0, 'error');	
+			$adminTpl->info($lang['sitemap_gen_error'], 'error', null, $lang['error'], $lang['sitemap'], ADMIN.'/module/sitemap');	
 		}
+		echo' </div>';	
 		$adminTpl->admin_foot();		
 		break;
 		
 	case 'update':
 		global $core, $config;
-		$adminTpl->admin_head(_MODULES .' | '. _SM_SITEMAP.' | '. _SM_SEARCH);		
+		$adminTpl->admin_head($lang['modules'] .' | '. $lang['sitemap'] .' | '. $lang['sitemap_searchs']);	
+		echo '<div id="content" class="animated fadeIn">';		
 		$url_map=$config['url'].'/sitemap.xml';
-		$content_map = '';
-			
+		$content_map = '';			
 		if (strpos ( send_url("http://google.com/webmasters/sitemaps/ping?sitemap=", $url_map), "successfully added" ) !== false) 
 		{
-			$content_map .='Google: '._SM_SEND_OK.'<br />';
+			$content_map .='Google: '.$lang['sitemap_send_ok'].'<br />';
 		} 
 		else
 		{
-			$content_map .='Google: <a href="http://google.com/webmasters/sitemaps/ping?sitemap='.urlencode($url_map).'">'._SM_SEND_ERROR.'</a><br />';
+			$content_map .='Google: <a href="http://google.com/webmasters/sitemaps/ping?sitemap='.urlencode($url_map).'">'.$lang['sitemap_send_error'].'</a><br />';
 		}
 		if (strpos ( send_url("http://ping.blogs.yandex.ru/ping?sitemap=", $url_map), "OK" ) !== false) 
 		{
-			$content_map .='Яндекс: '._SM_SEND_OK.'<br />';
+			$content_map .='Яндекс: '.$lang['sitemap_send_ok'].'<br />';
 		} 
 		else
 		{
-			$content_map .='Яндекс: <a href="http://ping.blogs.yandex.ru/ping?sitemap='.urlencode($url_map).'">'._SM_SEND_ERROR.'</a><br />';
+			$content_map .='Яндекс: <a href="http://ping.blogs.yandex.ru/ping?sitemap='.urlencode($url_map).'">'.$lang['sitemap_send_error'].'</a><br />';
 		}
 		if (strpos ( send_url("http://rpc.weblogs.com/pingSiteForm?name=InfraBlog&url=", $url_map), "Thanks for the ping" ) !== false) 
 		{
-			$content_map .='Weblogs: '._SM_SEND_OK.'<br />';
+			$content_map .='Weblogs: '.$lang['sitemap_send_ok'].'<br />';
 		} 
 		else
 		{
-			$content_map .='Weblogs: <a href="http://rpc.weblogs.com/pingSiteForm?name=InfraBlog&url='.urlencode($url_map).'">'._SM_SEND_ERROR.'</a><br />';
+			$content_map .='Weblogs: <a href="http://rpc.weblogs.com/pingSiteForm?name=InfraBlog&url='.urlencode($url_map).'">'.$lang['sitemap_send_error'].'</a><br />';
 		}		
 		if (strpos ( send_url("http://www.bing.com/webmaster/ping.aspx?siteMap=", $url_map), "http://www.bing.com/ping?sitemap=" ) == false) 
 		{
-			$content_map .='Bing: '._SM_SEND_OK.'<br />';
+			$content_map .='Bing: '.$lang['sitemap_send_ok'].'<br />';
 		} 
 		else
 		{
-			$content_map .='Bing: <a href="http://rpc.weblogs.com/pingSiteForm?name=InfraBlog&url='.urlencode($url_map).'">'._SM_SEND_ERROR.'</a><br />';
+			$content_map .='Bing: <a href="http://rpc.weblogs.com/pingSiteForm?name=InfraBlog&url='.urlencode($url_map).'">'.$lang['sitemap_send_error'].'</a><br />';
 		}
-		$adminTpl->info($content_map.' <br /><a href="{MOD_LINK}">'._SM_BACK.'</a>');			
+		$adminTpl->info($content_map, 'info', null, $lang['info'], $lang['sitemap'], ADMIN.'/module/sitemap');
+		echo' </div>';			
 		$adminTpl->admin_foot();
 		break;			
 		
@@ -166,29 +169,34 @@ case 'create':
 		$configBox = array(
 			'sitemap' => array(
 				'varName' => 'sitemap_conf',
-				'title' => _SM_CONFIG,
+				'title' => $lang['sitemap_config'],
 				'groups' => array(
 					'main' => array(
-						'title' => _SM_CONFIG_MAIN,
+						'title' => $lang['config_main'],
 						'vars' => array(											
 							'priority' => array(
-								'title' => _SM_CONFIG_PR,
-								'description' => _SM_CONFIG_PR_DESC,
+								'title' => $lang['sitemap_config_rang'],
+								'description' => $lang['sitemap_config_rang_desc'],
 								'content' => '<input type="text" size="20" name="{varName}" class="form-control" value="{var}" />',
 							),							
 							'change' => array(
-								'title' => _SM_CONFIG_UPDATE,
-								'description' => _SM_CONFIG_UPDATE_DESC,
+								'title' => $lang['sitemap_config_update'],
+								'description' => $lang['sitemap_config_update_desc'],
 								'content' => '<input type="text" size="20" name="{varName}" class="form-control" value="{var}" />',
-							),	
+							),									
+						)
+					),
+					'seo' => array(
+						'title' => $lang['seo'],
+						'vars' => array(		
 							'keywords' => array(
-								'title' => _CONFIG_KEYWORDS,
-								'description' => _CONFIG_SEO_DESC,
+								'title' => $lang['seo_keywords'],
+								'description' => $lang['seo_settings'],
 								'content' => '<input type="text" size="20" name="{varName}" class="form-control" value="{var}" />',
 							),		
 							'description' => array(
-								'title' => _CONFIG_DESC,
-								'description' => _CONFIG_SEO_DESC,
+								'title' => $lang['seo_description'],
+								'description' => $lang['seo_settings'],
 								'content' => '<input type="text" size="20" name="{varName}" class="form-control" value="{var}" />',
 							),									
 						)
@@ -206,27 +214,26 @@ case 'create':
 		
 }
 
-function send_url($url, $sitemap)
-{		
-			$data = false;
-			$file = $url.urlencode($sitemap);		
-			if(function_exists('curl_init'))
-			{			
-				$ch = curl_init();
-				curl_setopt( $ch, CURLOPT_URL, $file );
-				curl_setopt( $ch, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT'] );
-				curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, 1 );
-				curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
-				curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, 6 );			
-				$data = curl_exec( $ch );
-				curl_close( $ch );
-				return $data;
-				
-			} 
-			else 
-			{
-				return @file_get_contents( $file );
-			}	
-}
+	function send_url($url, $sitemap)
+	{		
+		$data = false;
+		$file = $url.urlencode($sitemap);		
+		if(function_exists('curl_init'))
+		{			
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_URL, $file);
+			curl_setopt($ch, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
+			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1 );
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1 );
+			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 6 );			
+			$data = curl_exec($ch);
+			curl_close($ch);
+			return $data;
+		} 
+		else 
+		{
+			return @file_get_contents($file);
+		}	
+	}
 
 ?>

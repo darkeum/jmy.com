@@ -621,7 +621,7 @@ global $core, $config, $lang;
 	if($title && $error) 
 	{
 		die('<!DOCTYPE html>
-			<html lang="'.$core->InitLang().'">
+			<html lang="en">
 			<head>
 				<meta charset="utf-8">
 				<base href="' . $config['url'] . '/">
@@ -1858,9 +1858,11 @@ global $core, $security;
 * $group - группы для которых закрыть доступ через ,
 * $content - то что прячем
 */
-function noGroup($group, $content) 
+function noGroup($matches) 
 {
 global $core;
+	$group = $matches[1];
+	$content = $matches[2];
 	$gr_array = explode(',', $group);
 	if(in_array($core->auth->group, $gr_array)) 
 	{
@@ -1877,9 +1879,11 @@ global $core;
 * $group - группы для которым показывать ,
 * $content - то что прячем
 */
-function Group($group, $content) 
+function Group($matches) 
 {
 global $core;
+	$group = $matches[1];
+	$content = $matches[2];
 	$gr_array = explode(',', $group);
 	if(!in_array($core->auth->group, $gr_array)) 
 	{
@@ -1900,55 +1904,63 @@ function if_set($content, $data) {
 	return empty($content) ? '' : stripslashes($data);
 }
 
-function checkUser($content)
+function if_sets($rule, $data, $flag) {
+	
+	$GLOBALS["if_sets_flag"] = $flag;	
+	return preg_replace_callback($rule, create_function('$matches', 'if(!empty($GLOBALS["if_sets_flag"])) {return stripslashes($matches[1]);} else return "";'), $data);
+}
+
+function checkUser($matches)
 {
 global $core;
 	if($core->auth->isUser)
 	{
-		return stripslashes($content);
+		return stripslashes($matches[1]);
 	}
 }
 
-function checkAdmin($content)
+function checkAdmin($matches)
 {
 global $core;
 	if($core->auth->isAdmin)
 	{
-		return stripslashes($content);
+		return stripslashes($matches[1]);
 	}
 }
 
-function checkGuest($content)
+function checkGuest($matches)
 {
 global $core;
 	if($core->auth->isUser == false)
 	{
-		return stripslashes($content);
+		return stripslashes($matches[1]);
 	}
 	
 }
 
-function checkCaptcha($content)
+function checkCaptcha($matches)
 {
   global $core, $security;
 	if ($security['switch_cp']==1)
 	{
-		return stripslashes($content);
+		return stripslashes($matches[1]);
 	}
 }
 
-function checkSocial($content)
+function checkSocial($matches)
 {
   global $core, $social;
 	if ($social['switch'] ==1)
 	{
-		return stripslashes($content);
+		return stripslashes($matches[1]);
 	}
 }
 
-function checkReCaptcha($is, $content)
+function checkReCaptcha($matches)
 {
   global $core, $security;
+	$is = $matches[1];
+	$content = $matches[2];
 	if($is > 0)
 	{
 		if ($security['recaptcha']==1)
@@ -2021,11 +2033,11 @@ function short($count, $text) {
 * $is - true или false отображать ТОЛЬКО на главной или КРОМЕ главной)
 * $content - контент
 */
-function indexShow($is, $content)
+function indexShow($matches)
 {
 global $url;
-	$is = intval($is);
-
+	$is = intval($matches[1]);
+	$content = $matches[2];
 	if($is > 0)
 	{
 		if(defined('INDEX_NOW'))
@@ -2047,26 +2059,13 @@ global $url;
 * $modules - модули в которых показывать через ,(запятую)
 * $content - контент
 */
-function moduleShow($modules, $content)
-{
-global $url;
-	$modulesArray = explode(',', $modules);
-	
-	if(in_array($url[0], $modulesArray)) 
-	{
-		return stripslashes($content);
-	}
-	else
-	{
-		return false;
-	}
-}
 
-function modulesShow($modules, $tag, $content)
+function modulesShow($matches)
 {
 global $url;
-	$modulesArray = explode(',', $modules);
-	
+	$modulesArray = explode(',', $matches[1]);
+	$tag = $matches[2]; 
+	$content = $matches[3];
 	
 	if(in_array($url[0], $modulesArray)) 
 	{
@@ -2079,10 +2078,12 @@ global $url;
 	
 }
 
-function categoryShow($category, $tag, $content)
+function categoryShow($matches)
 {
-global $url, $db;
-	$categoryArray = explode(',', $category);
+global $url, $db;	
+	$categoryArray = explode(',', $matches[1]);
+	$tag = $matches[2]; 
+	$content = $matches[3];
 	if ($url[0]=='news'||$url[0]=='content')
 	{
 		$where = "altname='".$url[1]."'";
@@ -2103,7 +2104,9 @@ global $url, $db;
 function newsShow($news, $tag, $content)
 {
 global $url, $db;
-	$newsArray = explode(',', $news);
+	$newsArray = explode(',', $matches[1]);
+	$tag = $matches[2]; 
+	$content = $matches[3];	
 	if ($url[0]=='news')
 	{
 		if (eregStrt('.html', $url[1]))
@@ -2131,10 +2134,12 @@ global $url, $db;
 	}
 }
 
-function contentShow($news, $tag, $content)
+function contentShow($matches)
 {
 global $url, $db;
-	$newsArray = explode(',', $news);
+	$newsArray = explode(',', $matches[1]);
+	$tag = $matches[2]; 
+	$content = $matches[3];	
 	if ($url[0]=='content')
 	{
 		if (eregStrt('.html', $url[1]))
@@ -2164,10 +2169,11 @@ global $url, $db;
 
 
 
-function addnewsShow($is, $content)
+function addnewsShow($matches)
 {
 global $url;
-	$is = intval($is);
+	$is = intval($matches[1]);
+	$content = $matches[2];
 
 	if($is > 0)
 	{
@@ -2185,10 +2191,11 @@ global $url;
 	}
 }
 
-function fullnewsShow($is, $content)
+function fullnewsShow($matches)
 {
 global $url;
-	$is = intval($is);
+	$is = intval($matches[1]);
+	$content = $matches[2];
 
 	if($is > 0)
 	{
@@ -2207,17 +2214,20 @@ global $url;
 }
 
 
-function buildCustom($category = '', $template = '', $aviable = '', $limit = '', $module = '', $order = '', $short = '', $notin = false)
+function buildCustom($matches)
 {
-
-	$category = filter($category, 'a');
-	$template = filter($template, 'a');
-	$aviable = filter($aviable, 'a');
-	$limit = intval($limit);
-	$module = filter($module, 'module');
-	$order = filter($order, 'a');
-	$short = filter($short, 'a');	
-
+	$category = filter($matches[1], 'a');
+	$template = filter($matches[2], 'a');
+	$aviable = filter($matches[3], 'a');
+	$limit = intval($matches[4]);
+	$module = filter($matches[5], 'module');
+	$order = filter($matches[6], 'a');
+	$short = filter($matches[7], 'a');	
+	$notin = false;
+	if (isset($matches[7]))
+	{
+		$notin = $matches[7];
+	}
 	
 	if(!empty($category) && !empty($template) && !empty($aviable) && ($limit > 0) && !empty($module) && file_exists(ROOT.'usr/modules/'.$module.'/custom.php'))
 	{
@@ -2236,47 +2246,9 @@ function _getCustomImg($html)
 	return $images[1];
 }
 
-function openMenu($type = '')
-	{
-	global $url;		
-		$typeArray = explode(',', $type);
-		$ccount = 1;
-		if (!empty($url[1]))
-		{
-			if ($url[1]=='module')
-			{
-				$ccount = 2;
-			}		 
-			if(in_array($url[$ccount], $typeArray)) 
-			{
-				return 'menu-open';
-			}
-		}
-		
-	}
 
-function chooseMenu($type = '')
-	{
-	global $url;		
-		$typeArray = explode(',', $type);
-		$ccount = 1;
-		if (!empty($url[1]))
-		{
-			if ($url[1]=='module')
-			{
-				$ccount = 2;
-			}
-		}
-		else
-		{
-			$ccount = 0;
-		}
-			if((in_array($url[$ccount], $typeArray))||(($type == 'main')&&(empty($url[1])))) 
-			{
-				return 'class="active"';
-			}
-		
-	}
+
+
 	
 function chooseModuleMenu($type = '', $mode = '')
 	{
@@ -2311,46 +2283,18 @@ function chooseModuleMenu($type = '', $mode = '')
 		
 	}
 	
-function activeModule($name = '', $content)
-	{	
-		global $core;		
-			if($core->checkModule($name)=='1') 
-			{
-				return stripslashes($content);
-			}		
+function activeModule($matches)
+	{			
+		global $core;
+		$name = $matches[1];
+		$content = $matches[2];	
+		if($core->checkModule($name)=='1') 
+		{
+			return stripslashes($content);
+		}		
 	}
 
-function checkActive($content)
-	{	
-		global $core, $url;
-			if (!empty($url[1]))
-			{	
-				if ($url[1]=='update')
-				{
-					return false;
-				}
-				if ($url[1]=='module')
-				{
-					if($core->checkModule($url[2])=='1') 
-					{
-						return stripslashes($content);
-					}		
-				}
-				else
-				{
-					return stripslashes($content);
-				}	
-			}	
-			else
-			{
-				
-				return '<header id="topbar" class="alt">
-          <div class="topbar-left pull-left">
-            <h1 class="mn">' ._MAIN_MAIN . '</h1><span class="text-shady-lady fs15">version '.VERSION_ID.'</span>
-          </div>         
-        </header>';
-			}			
-	}
+
 
 
 

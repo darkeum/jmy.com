@@ -130,9 +130,9 @@ global $db, $core, $list, $core, $lang;
 		}
 
 		$core->tpl->setVar('LIST', $list);
-		$core->tpl->sources = preg_replace( "#\\[voted\\](.*?)\\[/voted\\]#ies","if_set('".$voted."', '\\1')", $core->tpl->sources);
-		$core->tpl->sources = preg_replace( "#\\[novoted\\](.*?)\\[/novoted\\]#ies","if_set('".$nvoted."', '\\1')", $core->tpl->sources);
-		$core->tpl->sources = preg_replace( "#\\[result\\](.*?)\\[/result\\]#ies","if_set('".$result."', '\\1')", $core->tpl->sources);
+		$core->tpl->sources = if_sets("#\\[voted\\](.*?)\\[/voted\\]#is", $core->tpl->sources, $voted);		
+		$core->tpl->sources = if_sets("#\\[novoted\\](.*?)\\[/novoted\\]#is", $core->tpl->sources, $nvoted);
+		$core->tpl->sources = if_sets("#\\[result\\](.*?)\\[/result\\]#is", $core->tpl->sources, $result);
 		$core->tpl->end();
 	}
 	else

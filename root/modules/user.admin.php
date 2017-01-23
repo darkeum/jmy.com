@@ -2,7 +2,7 @@
 
 /**
 * @name        JMY CORE
-* @link        http://jmy.su/
+* @link        https://jmy.su/
 * @copyright   Copyright (C) 2012-2017 JMY CORE
 * @license     LICENSE.txt (see attached file)
 * @version     VERSION.txt (see attached file)
@@ -28,29 +28,52 @@ switch(isset($url[2]) ? $url[2] : null)
 		$adminTpl->admin_head($lang['users_manager']);		
 		$where = '';
 		$query = isset($_POST['query']) ? filter($_POST['query'], 'a') : '';
+		$s_id = isset($_POST['s_id']) ? intval($_POST['s_id']) : '';
+		$s_nick = isset($_POST['s_nick']) ? filter($_POST['s_nick'], 'a') : '';
+		$s_email = isset($_POST['s_email']) ? filter($_POST['s_email'], 'a') : '';
 		$for = isset($_POST['for']) ? filter($_POST['for'], 'a') : '';
-		$gr = isset($_POST['gr']) ? intval($_POST['gr']) : '';
-		$banned = isset($_POST['banned']) ? true : false;
-		$q = isset($_POST['q']) ? filter($_POST['q'], 'a') : '';			
-			
-		if(isset($url[2]) && $url[2] == 'group')
+		$s_group = isset($_POST['s_group']) ? intval($_POST['s_group']) : '';
+		$s_active = isset($_POST['s_active']) ? true : false;
+		$q = isset($_POST['q']) ? filter($_POST['q'], 'a') : '';
+		if($s_active) 
 		{
-			$where = "WHERE u.`group` = '" . intval($url[3]) . "' ";
-		}
-		elseif($query)
-		{
-			$where = "WHERE u.nick LIKE '%" . $db->safesql($query) . "%'";
-			echo '<b>'.$lang['db_query'].'</b>: ' . $query . '<br style="clear:both" />';
-		}
-		elseif($for)
-		{
-			$where = "WHERE u." . $for . " LIKE '%" . $db->safesql($q) . "%'" . ($gr ? "AND u.`group` = '" . $gr . "'" : '');
-			$s = true;
-			$o = true;
+			if ($_POST['s_active']==1)
+			{
+				$where = 'WHERE u.active = 1 ';
+			}
+			else
+			{
+				$s_active = false;
+				$where = 'WHERE u.active = 0 ';
+			}
 		}
 		else
 		{
-			$s = true;
+			$s_active = true;
+			$where = 'WHERE u.active = 1 ';
+		}		
+		if($s_id)
+		{
+			$where .= "AND u.id LIKE '%" . $db->safesql($s_id) . "%' ";			
+		}
+		else
+		{
+			$s_id='';
+		}
+		if($s_nick)
+		{
+			$where .= "AND u.nick LIKE '%" . $db->safesql($s_nick) . "%' ";			
+		}
+		if($s_email)
+		{
+			$where .= "AND u.email LIKE '%" . $db->safesql($s_email) . "%' ";			
+		}
+		if($s_group)
+		{
+			if ($s_group != 0)
+			{
+				$where .= "AND u.`group` = '" . intval($s_group) . "' ";	
+			}
 		}
 		$adminTpl->open();	
 		echo '<section id="content" class="table-layout animated fadeIn">
@@ -326,36 +349,37 @@ switch(isset($url[2]) ? $url[2] : null)
 	}
 		 echo '</div>        
           <aside data-tray-height="match" class="tray tray-right tray290">
-		  <form role="form" method="POST" action="{ADMIN}/user">
+		  <form role="form" method="POST" action="">
             <div class="admin-form">
               <h4>'.$lang['users_search'].'</h4>
               <hr class="short">
               <div class="section mb10">
                 <label for="s_id" class="field prepend-icon">
-                  <input id="s_id" type="text" name="s_id" placeholder="'.$lang['users_id'].'" class="gui-input">
+                  <input id="s_id" type="text" name="s_id" placeholder="'.$lang['users_id'].'" class="gui-input" value="'.$s_id.'" />
                   <label for="s_id" class="field-icon"><i class="fa fa-user"></i></label>
                 </label>
               </div>
               <div class="section mb10">
                 <label for="s_nick" class="field prepend-icon">
-                  <input id="s_nick" type="text" name="s_nick" placeholder="'.$lang['nick'].'" class="gui-input">
+                  <input id="s_nick" type="text" name="s_nick" placeholder="'.$lang['nick'].'" class="gui-input" value="'.$s_nick.'" />
                   <label for="s_nick" class="field-icon"><i class="fa fa-user"></i></label>
                 </label>
               </div>
               <div class="section mb25">
                 <label for="s_email" class="field prepend-icon">
-                  <input id="s_email" type="text" name="s_email" placeholder="'.$lang['email'].'" class="gui-input">
+                  <input id="s_email" type="text" name="s_email" placeholder="'.$lang['email'].'" class="gui-input" value="'.$s_email.'" />
                   <label for="s_email" class="field-icon"><i class="fa fa-envelope-o"></i></label>
                 </label>
               </div>
               <h5><small>'.$lang['group'].'</small></h5>
               <div class="section mb15">
                 <label class="field select">
-                  <select id="s_group" name="s_group">';				  
+                  <select id="s_group" name="s_group">';
+					echo '<option value="0">' . $lang['users_all_group'] . '</option>';
 					$query = $db->query("SELECT * FROM `" . USER_DB . "`.`" . USER_PREFIX . "_groups` WHERE special='0' ORDER BY admin DESC,moderator DESC,user DESC,guest DESC,banned DESC");
 					while($rows = $db->getRow($query)) 
 					{
-						$selected = ($rows['id'] == $gr) ? "selected" : "";
+						$selected = ($rows['id'] == $s_group) ? "selected" : "";
 						echo '<option value="' . $rows['id'] . '" ' . $selected . '>' . $rows['name'] . '</option>';
 					}				  
                  echo '</select><i class="arrow double"></i>
@@ -377,11 +401,12 @@ switch(isset($url[2]) ? $url[2] : null)
                 </div>
               </div>
 			    <label class="field option ml15">
-                  <input type="checkbox" name="info"><span class="checkbox"></span><span class="text-muted">'.$lang['users_banned'].'</span>
+				  <input type="hidden" name="s_active" value="0" />
+                  <input type="checkbox" name="s_active" '.($s_active ? 'checked' : '').' value="1"><span class="checkbox"></span><span class="text-muted">'.$lang['users_active'].'</span>
                 </label>
               <hr class="short">
               <div class="section">
-                <button type="button" class="btn btn-default btn-sm ph25">'.$lang['search'].'</button>              
+                <button type="submit" class="btn btn-default btn-sm ph25">'.$lang['search'].'</button>              
               </div>
             </div>
 			</form>
@@ -389,7 +414,6 @@ switch(isset($url[2]) ? $url[2] : null)
         </section>';	
 		$queryq = $db->query("SELECT id FROM `" . USER_DB . "`.`" . USER_PREFIX . "_users` " . str_replace('u.', '', $where));		
 		$adminTpl->pages($page, $numU, $db->numRows($queryq), ADMIN.'/user/{page}');
-		$adminTpl->close();
 		$adminTpl->admin_foot();
 	break;	
 	

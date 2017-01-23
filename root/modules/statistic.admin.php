@@ -32,12 +32,6 @@ list($cats) = $db->fetchRow($db->query("SELECT COUNT(*) FROM  ".DB_PREFIX."_cate
 list($contents) = $db->fetchRow($db->query("SELECT COUNT(*) FROM ".DB_PREFIX."_content"));
 list($comments) = $db->fetchRow($db->query("SELECT COUNT(*) FROM ".DB_PREFIX."_comments"));
 list($online) = $db->fetchRow($db->query("SELECT COUNT(*) FROM ".DB_PREFIX."_online"));
-list($blogs) = $db->fetchRow($db->query("SELECT COUNT(*) FROM ".DB_PREFIX."_blogs"));
-list($bposts) = $db->fetchRow($db->query("SELECT COUNT(*) FROM ".DB_PREFIX."_blog_posts"));
-list($forums) = $db->fetchRow($db->query("SELECT COUNT(*) FROM ".DB_PREFIX."_board_forums"));
-list($fposts) = $db->fetchRow($db->query("SELECT COUNT(*) FROM ".DB_PREFIX."_board_posts"));
-list($albums) = $db->fetchRow($db->query("SELECT COUNT(*) FROM ".DB_PREFIX."_gallery_albums"));
-list($photos) = $db->fetchRow($db->query("SELECT COUNT(*) FROM ".DB_PREFIX."_gallery_photos"));
 $cacheSize = formatfilesize(dirsize(ROOT.'tmp/mysql')+dirsize(ROOT.'tmp/cache'));
 $dbSize = formatfilesize($dbsize);
 

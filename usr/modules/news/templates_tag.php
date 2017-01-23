@@ -1,8 +1,8 @@
 <?php
 
 /**
-* @name        JMY CMS
-* @link        http://jmy.su/
+* @name        JMY CORE
+* @link        https://jmy.su/
 * @copyright   Copyright (C) 2012-2017 JMY LTD
 * @license     LICENSE.txt (see attached file)
 * @version     VERSION.txt (see attached file)
@@ -27,20 +27,44 @@ if (!defined('ACCESS')) {
 	$core->tpl->setVar('PREVIEW', $news['preview']);
 	$core->tpl->setVar('COMMENTS', $news['comments']);
 	$core->tpl->setVar('TAGS', mb_substr($tags, 0, -2));
-	$core->tpl->setVar('FULL_LINK', $news_link . $news['altname'] . ".html");
+	$core->tpl->setVar('FULL_LINK', $news_link . $news['altname'] . ".html");	
 	$miniImg = _getCustomImg($short);
-	$array_replace = array(
-		"#\\[tags\\](.*?)\\[/tags\\]#ies" => "if_set('" . $news['tags'] . "', '\\1')",
-		"#\\[preview\\](.*?)\\[/preview\\]#ies" => "if_set('" . $news['preview']. "', '\\1')",
-		"#\\[more\\](.*?)\\[/more\\]#ies" => "format_link('\\1', '" . $news_link . $news['altname'] . ".html')",
-		"#\\[category\\](.*?)\\[/category\\]#ies" => "if_set('".$cat."', '\\1')",
-		"#\\[edit\\](.*?)\\[/edit\\]#is" => (($core->auth->isModer||$core->auth->isAdmin)  ? "\${1}" : ''),
-		"#\\{%MYDATE:(.*?)%\\}#ies" => "date('\\1', '" . $news['date'] . "')",
-		"#\\{%TITLE:(.*?)%\\}#ies" => "short('\\1', '" . $news['title'] . "')",
-		"#\\{%SHORT:(.*?)%\\}#ies" => "short('\\1', '" . processText($short) . "')",
-		"#\\[img:([0-9]*?)\\]#is" => (!empty($miniImg[0]) ? '<img src="' . $miniImg[0] . '" border="0" width="\\1" />' : ''),
-		"#\\[mini_img\\](.*?)\\[/mini_img\\]#ies" => "if_set('" . (!empty($miniImg[0]) ? true : '') . "', '\\1')",		
+	$core->tpl->sources = if_sets("#\\[tags\\](.*?)\\[/tags\\]#is", $core->tpl->sources, $news['tags']);
+	$core->tpl->sources = if_sets("#\\[preview\\](.*?)\\[/preview\\]#is", $core->tpl->sources, $news['preview']);
+	$core->tpl->sources = if_sets("#\\[category\\](.*?)\\[/category\\]#is", $core->tpl->sources, $cat);
+	$core->tpl->sources = if_sets("#\\[mini_img\\](.*?)\\[/mini_img\\]#is", $core->tpl->sources, (!empty($miniImg[0]) ? true : ''));
+	$altname = $news["altname"];
+	$core->tpl->sources = preg_replace_callback("#\\[more\\](.*?)\\[/more\\]#is",  
+		function($match) use ($news_link, $altname)
+		{
+			return format_link($match[1], $news_link . $altname . '.html');
+		},$core->tpl->sources);
+		
+	$news_date = $news['date'];
+	$core->tpl->sources = preg_replace_callback("#\\{%MYDATE:(.*?)%\\}#is",  
+		function($match) use ($news_date)
+		{
+			return date($match[1], $news_date);
+		},$core->tpl->sources);	
+		
+	$news_title = $news['title'];
+	$core->tpl->sources = preg_replace_callback("#\\{%TITLE:(.*?)%\\}#is",  
+		function($match) use ($news_title)
+		{
+			return short($match[1], $news_title);
+		},$core->tpl->sources);	
+		
+	$core->tpl->sources = preg_replace_callback("#\\{%SHORT:(.*?)%\\}#is",  
+		function($match) use ($short)
+		{
+			return short($match[1], processText($short));
+		},$core->tpl->sources);	
+	
+	$array_replace = array(		
+		"#\\[edit\\](.*?)\\[/edit\\]#is" => (($core->auth->isModer||$core->auth->isAdmin)  ? "\${1}" : ''),		
+		"#\\[img:([0-9]*?)\\]#is" => (!empty($miniImg[0]) ? '<img src="' . $miniImg[0] . '" border="0" width="\\1" />' : ''),	
 	);
+	
 	if(!empty($news['fields']) && $news['fields'] != 'N;')
 	{
 		$fields = unserialize($news['fields']);
@@ -52,12 +76,20 @@ if (!defined('ACCESS')) {
 			}
 		}
 	}
-	$array_replace["#\\[xfield:([0-9]*?)\\](.*?)\\[/xfield:([0-9]*?)\\]#ies"] = "ifFields('" . $news['fields'] . "', '\\1', '\\2')";
+	
+	$news_fields = $news['fields'];
+	$core->tpl->sources = preg_replace_callback("#\\[xfield:([0-9]*?)\\](.*?)\\[/xfield:([0-9]*?)\\]#is",  
+		function($match) use ($news_fields)
+		{
+			return ifFields($news_fields, $match[1], $match[2]);
+		},$core->tpl->sources);
+		
 	if($news_conf['showBreadcumb'] == '1')
 	{
 		$catId = explode(',', $news['cat']);
 		$core->tpl->setVar('BREADCUMB', $core->getCat('news', ($catId[1] != 0) ? $catId[1] : '', 'breadcrumb', 1));
 	}	
+	
 	$core->tpl->sources = preg_replace(array_keys($array_replace), array_values($array_replace), $core->tpl->sources);
 	$core->tpl->sources = preg_replace("#\\{%IMG:(.*?):(.*?)%\\}#is", (!empty($miniImg[(int)"\${1}"]) ? $miniImg[(int)"\${1}"] : "\${2}") , $core->tpl->sources);
 	$core->tpl->sources = preg_replace("#\\{%IMG:(.*?)%\\}#is",  (!empty($miniImg[(int)"\${1}"]) ? $miniImg[(int)"\${1}"] : ''), $core->tpl->sources);

@@ -23,6 +23,91 @@ global $adminTpl, $core;
 	$adminTpl->admin_foot();
 }
 	
+function openMenu($matches)
+	{
+	global $url;
+		$type = $matches[1];
+		$typeArray = explode(',', $type);
+		$ccount = 1;
+		if (!empty($url[1]))
+		{
+			if ($url[1]=='module')
+			{
+				$ccount = 2;
+			}		 
+			if(in_array($url[$ccount], $typeArray)) 
+			{
+				return 'menu-open';
+			}
+		}
+		
+	}	
+
+function chooseMenu($matches)
+	{
+	global $url;
+		$type = $matches[1];
+		$typeArray = explode(',', $type);
+		$ccount = 1;
+		if (!empty($url[1]))
+		{
+			if ($url[1]=='module')
+			{
+				$ccount = 2;
+			}
+		}
+		else
+		{
+			$ccount = 0;
+		}
+			if((in_array($url[$ccount], $typeArray))||(($type == 'main')&&(empty($url[1])))) 
+			{
+				return 'class="active"';
+			}
+		
+	}
+	
+function checkActive($matches)
+	{
+		$content = $matches[1];	
+		global $core, $url;
+			if (!empty($url[1]))
+			{	
+				if ($url[1]=='update')
+				{
+					return false;
+				}
+				if ($url[1]=='module')
+				{
+					if($core->checkModule($url[2])=='1') 
+					{
+						return stripslashes($content);
+					}		
+				}
+				else
+				{
+					return stripslashes($content);
+				}	
+			}	
+			else
+			{
+				
+				return '<header id="topbar" class="alt">
+          <div class="topbar-left pull-left">
+            <h1 class="mn">' ._MAIN_MAIN . '</h1><span class="text-shady-lady fs15">version '.VERSION_ID.'</span>
+          </div> 
+<div class="topbar-right">
+							<div class="btn-group">
+							  <button onclick="document.getElementById(\'report_month\').submit();" type="button" class="btn btn-system">Статистика сайта</button>
+							  <button type="button" data-toggle="dropdown" class="btn btn-system dropdown-toggle" aria-expanded="false" style="height: 47px;"><span class="caret"></span><span class="sr-only">Toggle Dropdown</span></button>
+							  <ul role="menu" class="dropdown-menu">
+								
+							  </ul>
+							</div>
+						  </div>		  
+        </header>';
+			}			
+	}
 	
 function _mName($mod)
 {

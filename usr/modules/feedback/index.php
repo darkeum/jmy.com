@@ -1,9 +1,9 @@
 <?php
 
 /**
-* @name        JMY CMS
-* @link        http://jmy.su/
-* @copyright   Copyright (C) 2012-2014 JMY LTD
+* @name        JMY CORE
+* @link        https://jmy.su/
+* @copyright   Copyright (C) 2012-2017 JMY LTD
 * @license     LICENSE.txt (see attached file)
 * @version     VERSION.txt (see attached file)
 * @author      Komarov Ivan
@@ -14,26 +14,25 @@ if (!defined('ACCESS')) {
     exit;
 }
 
+global $lang;
 loadConfig('feedback'); 
-
-			if(!empty($feedback_conf['keywords']))
-			{
-				$core->tpl->keywords =$feedback_conf['keywords'];
-			}
-			if(!empty($feedback_conf['description']))
-			{
-				$core->tpl->description = $feedback_conf['description'];
-			}
-
+if(!empty($feedback_conf['keywords']))
+{
+	$core->tpl->keywords =$feedback_conf['keywords'];
+}
+if(!empty($feedback_conf['description']))
+{
+	$core->tpl->description = $feedback_conf['description'];
+}
 switch(isset($url[1]) ? $url[1] : null) 
 {
 	default:
-		set_title(array(_FEEDBACK));
+		set_title(array($lang['feedback']));
 		$core->tpl->loadFile('feedback');
 		$core->tpl->setVar('CAPTCHA', captcha_image());
 		$core->tpl->setVar('FILE_SIZE', formatfilesize($feedback_conf['file_size']));
 		$core->tpl->setVar('FORMATS', $feedback_conf['formats']);
-		$core->tpl->sources = preg_replace("#\\[load_attach\\](.*?)\\[/load_attach\\]#ies", "if_set('" . $feedback_conf['allow_attach'] . "', '\\1')", $core->tpl->sources);
+		$core->tpl->sources = if_sets("#\\[load_attach\\](.*?)\\[/load_attach\\]#is", $core->tpl->sources, $feedback_conf['allow_attach']);
 		$core->tpl->end();
 		break;	
 	

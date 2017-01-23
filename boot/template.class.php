@@ -1,13 +1,12 @@
 <?php
 
 /**
-* @name        JMY CMS
-* @link        http://jmy.su/
-* @copyright   Copyright (C) 2012-2015 JMY LTD
+* @name        JMY CORE
+* @link        https://jmy.su/
+* @copyright   Copyright (C) 2012-2017 JMY LTD
 * @license     LICENSE.txt (see attached file)
 * @version     VERSION.txt (see attached file)
 * @author      Komarov Ivan
-* @revision	   31.03.2015
 */
 
 if (!defined('ACCESS')) 
@@ -284,85 +283,62 @@ class template
 		$this->vars[$k] = $v;
 	}	
 	
-	public function setVarBlock($k, $v) 
-	{
-		$this->vars_block[$k] = $v;
-	}
 	
 	public function setVarTPL($k, $v) 
 	{
 		$this->vars_tpl[$k] = $v;
 	}
 
-
-
 	public function parse() 
 	{ 
 		global $config, $url, $core;
 		if($url[0] != ADMIN)
-		{	
-			$in["#\\{%NOWDATE:(.*?)%\\}#ies"] = "date('\\1', '" . time() . "')";
-			$in["#\\[group=(.+?)](.*?)\\[/group]#ies"] = "Group('\\1', '\\2')";
-			$in["#\\[nogroup=(.+?)](.*?)\\[/nogroup]#ies"] = "noGroup('\\1', '\\2')";			
-			$in["#\\[index:(.+?)\\](.*?)\\[/index\\]#ies"] = "indexShow('\\1', '\\2')";
-			$in["#\\[modules:(.+?):(.+?)](.*?)\\[/modules]#ies"] = "modulesShow('\\1', '\\2', '\\3')";
-			$in["#\\[category:(.+?):(.+?)](.*?)\\[/category]#ies"] = "categoryShow('\\1', '\\2', '\\3')";
-			$in["#\\[news:(.+?):(.+?)](.*?)\\[/news]#ies"] = "newsShow('\\1', '\\2', '\\3')";
-			$in["#\\[addnews:(.+?)\\](.*?)\\[/addnews\\]#ies"] = "addnewsShow('\\1', '\\2')";
-			$in["#\\[full:(.+?)\\](.*?)\\[/full\\]#ies"] = "fullnewsShow('\\1', '\\2')";
-			$in["#\\[content:(.+?):(.+?)](.*?)\\[/content]#ies"] = "contentShow('\\1', '\\2', '\\3')";
-			$in["#\\[lang_old:(.+?)]#ies"] =  "constant('\\1')";
-			$in["#\\[lang_old:(.+?)]#ies"] =  "constant('\\1')";
-			$in["#\\[guest](.*?)\\[/guest]#ies"] =  "checkGuest('\\1')";
-			$in["#\\[user](.*?)\\[/user]#ies"] =  "checkUser('\\1')";
-			$in["#\\[admin](.*?)\\[/admin]#ies"] =  "checkAdmin('\\1')";
-			$in["#\\[captcha](.*?)\\[/captcha]#ies"] =  "checkCaptcha('\\1')";
-			$in["#\\[social](.*?)\\[/social]#ies"] =  "checkSocial('\\1')";
-			$in["#\\[recaptcha:(.+?)\\](.*?)\\[/recaptcha]#ies"] =  "checkReCaptcha('\\1', '\\2')";
-			$in["#\\[title:(.*?)]#ies"] =  "\$this->preTitle('\\1');";
-			$in["#\\[open](.*?)\\[/open]#ies"] =  "\$this->preOpen('\\1');";
-			$in["#\\[userinfo:(.*?)]#ies"] =  "\$this->ustinf('\\1')";
-			$in["#\\[custom category=\"(.*?)\" template=\"(.*?)\" aviable=\"(.*?)\" limit=\"(.*?)\" module=\"(.*?)\" order=\"(.*?)\" short=\"(.*?)\" notin=\"(.*?)\"]#ieus"] =  "buildCustom('\\1', '\\2', '\\3', '\\4', '\\5', '\\6', '\\7', '\\8')";
-			$in["#\\[custom category=\"(.*?)\" template=\"(.*?)\" aviable=\"(.*?)\" limit=\"(.*?)\" module=\"(.*?)\" order=\"(.*?)\" short=\"(.*?)\"]#ieus"] =  "buildCustom('\\1', '\\2', '\\3', '\\4', '\\5', '\\6', '\\7')";	
-			$this->sources = preg_replace_callback( "#\\[lang:(.+?)\\]#i", array( &$this, 'lang_include'), $this->sources );
+		{		
+			$this->sources = preg_replace_callback( "#\\[lang_old:(.+?)]#is", create_function('$matches', 'return constant($matches[1]);'), $this->sources);	
+			$this->sources = preg_replace_callback( "#\\[lang:(.+?)\\]#i", array( &$this, 'lang_include'), $this->sources );			
+			$this->sources = preg_replace_callback( "#\\{%NOWDATE:(.*?)%\\}#is", create_function('$matches', 'return date($matches[1], time());'), $this->sources );
+			$this->sources = preg_replace_callback( "#\\[group=(.+?)](.*?)\\[/group]#is", "Group", $this->sources);
+			$this->sources = preg_replace_callback( "#\\[nogroup=(.+?)](.*?)\\[/nogroup]#is", "noGroup", $this->sources);
+			$this->sources = preg_replace_callback( "#\\[index:(.+?)\\](.*?)\\[/index\\]#is", "indexShow", $this->sources);
+			$this->sources = preg_replace_callback( "#\\[modules:(.+?):(.+?)](.*?)\\[/modules]#is", "modulesShow", $this->sources);
+			$this->sources = preg_replace_callback( "#\\[category:(.+?):(.+?)](.*?)\\[/category]#is", "categoryShow", $this->sources);
+			$this->sources = preg_replace_callback( "#\\[news:(.+?):(.+?)](.*?)\\[/news]#is", "newsShow", $this->sources);
+			$this->sources = preg_replace_callback( "#\\[addnews:(.+?)\\](.*?)\\[/addnews\\]#is", "addnewsShow", $this->sources);
+			$this->sources = preg_replace_callback( "#\\[full:(.+?)\\](.*?)\\[/full\\]#is", "fullnewsShow", $this->sources);
+			$this->sources = preg_replace_callback( "#\\[content:(.+?):(.+?)](.*?)\\[/content]#is", "contentShow", $this->sources);
+			$this->sources = preg_replace_callback( "#\\[guest](.*?)\\[/guest]#is", "checkGuest", $this->sources);
+			$this->sources = preg_replace_callback( "#\\[user](.*?)\\[/user]#is", "checkUser", $this->sources);
+			$this->sources = preg_replace_callback( "#\\[admin](.*?)\\[/admin]#is", "checkAdmin", $this->sources);
+			$this->sources = preg_replace_callback( "#\\[social](.*?)\\[/social]#is", "checkSocial", $this->sources);
+			$this->sources = preg_replace_callback( "#\\[captcha](.*?)\\[/captcha]#is", "checkCaptcha", $this->sources);
+			$this->sources = preg_replace_callback( "#\\[recaptcha:(.+?)\\](.*?)\\[/recaptcha]#is", "checkReCaptcha", $this->sources);
+			$this->sources = preg_replace_callback( "#\\[title:(.*?)]#is", array(&$this, 'preTitle'), $this->sources);
+			$this->sources = preg_replace_callback( "#\\[open](.*?)\\[/open]#is", array(&$this, 'preOpen'), $this->sources);
+			$this->sources = preg_replace_callback( "#\\[userinfo:(.*?)]#is", array(&$this, 'ustinf'), $this->sources);
+			$this->sources = preg_replace_callback( "#\\[custom category=\"(.*?)\" template=\"(.*?)\" aviable=\"(.*?)\" limit=\"(.*?)\" module=\"(.*?)\" order=\"(.*?)\" short=\"(.*?)\" notin=\"(.*?)\"]#is", "buildCustom", $this->sources);
+			$this->sources = preg_replace_callback( "#\\[custom category=\"(.*?)\" template=\"(.*?)\" aviable=\"(.*?)\" limit=\"(.*?)\" module=\"(.*?)\" order=\"(.*?)\" short=\"(.*?)\"]#is", "buildCustom", $this->sources);			
 		}
 		else
 		{
-			$this->sources = preg_replace( "#\\[alang_old:(.+?)]#ies", "constant('\\1')", $this->sources);
+			$this->sources = preg_replace_callback( "#\\[alang_old:(.+?)]#is", create_function('$matches', 'return constant($matches[1]);'), $this->sources);			
 			$this->sources = preg_replace_callback ( "#\\[(lang)=(.+?)\\](.*?)\\[/lang\\]#is", array( &$this, 'check_lang'), $this->sources ); 
 			$this->sources = preg_replace_callback( "#\\[alang:(.+?)\\]#i", array( &$this, 'lang_include'), $this->sources );
-		}
-		
-		
-		
+		}		
 		
 		foreach ($this->vars as $k => $v) 
 		{
 			$in['#{' . $this->sep . $k . $this->sep . '}#i'] = $v;
-		}
-		
-		if (count($this->vars_block)) 
-		{
-			foreach ($this->vars_block as $key => $val) 
-			{
-				$in["#\\{" . $this->sep . $key . $this->sep . "}#ies"] = $val;
-			}
-		}
-
-		if (count($this->vars_tpl)) 
-		{
-			foreach ($this->vars_tpl as $key => $val) 
-			{
-				$in["#\\{" . $this->sep . $key . $this->sep . "}#ies"] = $val;
-			}
-		}
+		}		
 		
 		if(!empty($in))
 		{
 			$this->sources = preg_replace(array_keys($in), array_values($in), $this->sources);
 		}
-		
-		
+		if($url[0] != ADMIN)
+		{	
+			$this->sources = preg_replace_callback( "#\\{".$this->sep."BLOCKS:(.*?):(.*?)".$this->sep."\\}#is", array(&$this, 'blockParse'), $this->sources);
+			$this->sources = preg_replace_callback( "#\\{".$this->sep."TPL:(.*?)".$this->sep."\\}#is", array(&$this, 'loadTPL'), $this->sources);
+		}		
 	}
 	
 	function check_lang($matches=array()) 
@@ -380,16 +356,16 @@ class template
 		return $lang[$matches[1]]; 
 	}
 	
-	function preOpen($content)
+	function preOpen($matches=array())
 	{
 		$this->open();
-		echo stripslashes($content);
+		echo stripslashes($matches[1]);
 		return $this->close(true);
 	}	
 	
-	function preTitle($content)
+	function preTitle($matches=array())
 	{
-		return $this->title(stripslashes($content), true);
+		return $this->title(stripslashes($matches[1]), true);
 	}
 	
 	function enUrl($urlGo, $lang)
@@ -410,12 +386,12 @@ class template
 		}
 	}
 	
-	function ustinf($tag)
+	function ustinf($matches=array())
 	{
 	global $core;
-		if(isset($core->auth->user_info[$tag]))
+		if(isset($core->auth->user_info[$matches[1]]))
 		{
-			return stripslashes($core->auth->user_info[$tag]);
+			return stripslashes($core->auth->user_info[$matches[1]]);
 		}
 	}
 
@@ -446,7 +422,6 @@ class template
 		{
 			$this->listTemplates[($this->file ? $this->file : 'main')] = MicroTime(1)-$this->startCompile;
 		}
-
 		$this->time_compile += microtime(1)-$this->startCompile;
 		$this->parse();
 		$this->compile();
@@ -456,10 +431,7 @@ class template
 	public function head() 
 	{
 		ob_start();
-	}
-	
-
-	
+	}	
 		
 	public function foot($subContent = false) 
 	{
@@ -526,10 +498,10 @@ class template
         unset($this->cacheTpl);
 	}
 	
-	public function loadTPL($file) 
+	public function loadTPL($matches=array()) 
 	{
 		global $config, $url, $db, $core;
-		$this->loadFile($file);
+		$this->loadFile($matches[1]);
 		include(ROOT.'boot/vars.class.php');	
 		return $this->return_end();
 	}
@@ -614,9 +586,12 @@ class template
 	}
 	
 	
-	public function blockParse($file = null, $type = null) 
+	public function blockParse($matches=array()) 
 	{
 	global $db, $config, $core, $url;
+		$type = mb_strtolower($matches[1]);
+		$file = $matches[2];
+		
 		switch($type) 
 		{
 			case 'file':
@@ -710,7 +685,7 @@ class template
 			
 			default:
 
-				break;
+			break;
 		}
 	}
 	

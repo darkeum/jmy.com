@@ -5,7 +5,22 @@ $lang = array_merge($lang, array (
 	'sitemap'									=> 'Карта сайта',
 	'sitemap_desc'								=> 'Данный модуль предназначен для создания карт сайта для поисковых систем Google и Yandex.',
 	'sitemap_gen'								=> 'Генерировать карту',
-	'sitemap_upd'								=> 'Уведомить поисковые системы',
+	'sitemap_gen_ok'							=> 'Карта сайта сгенерирована! Было добавлено [numb] страниц.',
+	'sitemap_gen_error'							=> 'Ошибка генерации карты сайта!',
+	'sitemap_gens'								=> 'Генерация карты сайта',
+	'sitemap_main'								=> 'Главная страница',
+	'sitemap_search'							=> 'Уведомить поисковые системы',
+	'sitemap_searchs'							=> 'Уведомление поисковых систем',
+	'sitemap_send_ok'							=> 'Карта сайта принята',
+	'sitemap_send_error'						=> 'Ошибка отправки карты сайта',
+	'sitemap_update'							=> 'Частота обновления',
+	'sitemap_rang'								=> 'Приоритет',
+	'sitemap_empty'								=> 'Карта сайта еще не создана, нажмите на кнопку выше, чтобы сгенерировать новую!',
+	'sitemap_config'							=> 'Настройки модуля "Карта сайта"',
+	'sitemap_config_rang'						=> 'Приоритет страниц',
+	'sitemap_config_rang_desc'					=> 'Для генерации в xml карте сайта',
+	'sitemap_config_update'						=> 'Частота обновлений',
+	'sitemap_config_update_desc'				=> 'Для генерации в xml карте сайта',
 
 ));
 

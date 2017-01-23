@@ -1,15 +1,13 @@
 <?php
 
 /**
-* @name        JMY CMS
-* @link        http://jmy.su/
-* @copyright   Copyright (C) 2012-2014 JMY LTD
+* @name        JMY CORE
+* @link        https://jmy.su/
+* @copyright   Copyright (C) 2012-2017 JMY LTD
 * @license     LICENSE.txt (see attached file)
 * @version     VERSION.txt (see attached file)
 * @author      Komarov Ivan
-*/ 
- 
-//редакция 19.01.2015
+*/  
 
 if (!defined('ACCESS')) {
     header('Location: /');
@@ -20,36 +18,41 @@ if (!defined('ACCESS')) {
 if($core->auth->isUser == true)
 {
 	$mod = $url[0];
-
-	function menu($title = 'Приватные сообщения')
+	function menu($matches=array())
 	{
-	global $core;
+	global $core, $lang;
+		$title = $lang['pm'];
+		if (isset($matches[1]))
+		{
+			$title = $matches[1];
+		}
+		
 		$core->tpl->loadFile('pm/menu');
-		//$core->tpl->setVar('TITLE', $title);
+		$core->tpl->setVar('TITLE', $title);
 		return $core->tpl->return_end();
 	}
 
 	switch(isset($url[1]) ? $url[1] : null) 
 	{
 		default:
-			set_title(array('Приватные сообщения', 'Входящие'));
+			set_title(array($lang['pm'], $lang['pm_in']));
 			$core->tpl->loadFile('pm/main');
-			$core->tpl->sources = preg_replace("#\\[menu:(.*?)\\]#ies", "menu('\\1')", $core->tpl->sources);	
+			$core->tpl->sources = preg_replace_callback("#\\[menu:(.*?)\\]#is", "menu", $core->tpl->sources);	
 			$core->tpl->end();
 			break;
 			
 		case 'inbox':
 			$result = $db->query("SELECT pm.*, u.nick FROM `" . DB_PREFIX . "_pm` as pm LEFT JOIN `" . USER_DB . "`.`" . USER_PREFIX . "_users` as u on (pm.fromid = u.id) WHERE pm.toid = '" . $core->auth->user_id . "' ORDER BY time DESC");
-			$messNo = 'входящих сообщений';
-			$th1 = 'Отправитель';
+			$messNo = $lang['pm_ins'];
+			$th1 = $lang['pm_sender'];
 			$init = 'fromid';
 			
 		case 'sentbox':
 			if(!isset($messNo))
 			{
 				$result = $db->query("SELECT pm.*, u.nick FROM `" . DB_PREFIX . "_pm` as pm LEFT JOIN `" . USER_DB . "`.`" . USER_PREFIX . "_users` as u on (pm.toid = u.id) WHERE pm.fromid = '" . $core->auth->user_id . "' ORDER BY time DESC");
-				$messNo = 'исходящих сообщений';
-				$th1 = 'Получатель';
+				$messNo = $lang['pm_outs'];
+				$th1 = $lang['pm_receiver'];
 				$init = 'toid';
 			}
 			
@@ -57,19 +60,17 @@ if($core->auth->isUser == true)
 			if(!isset($messNo))
 			{
 				$result = $db->query("SELECT pm.*, u.nick FROM `" . DB_PREFIX . "_pm` as pm LEFT JOIN `" . USER_DB . "`.`" . USER_PREFIX . "_users` as u on (pm.toid = u.id) WHERE pm.fromid = '" . $core->auth->user_id . "' AND pm.status='2' ORDER BY time DESC");
-				$messNo = 'черновиков';
-				$th1 = 'Получатель';
+				$messNo = $lang['pm_drafts'];
+				$th1 = $lang['pm_receiver'];
 				$init = 'toid';
-			}
-			
-			ajaxInit();
-			
+			}			
+			ajaxInit();			
 			$no_head = true;
 			$numRes = $db->numRows($result);
 			$core->tpl->loadFile('pm/list');
 			$core->tpl->setVar('TH1', $th1);
 			$core->tpl->setVar('MESSNO', $messNo);
-			$core->tpl->sources = preg_replace("#\\[initfrom\\](.*?)\\[/initfrom\\]#ies", "if_set('" . ($init == 'fromid' ? 1 : 0) . "', '\\1')", $core->tpl->sources);	
+			$core->tpl->sources = if_sets("#\\[initfrom\\](.*?)\\[/initfrom\\]#is", $core->tpl->sources, ($init == 'fromid' ? 1 : 0));
 			preg_match("#\\[list\\](.*?)\\[/list\\]#si", $core->tpl->sources, $matches);
 			$list = $matches[1];			
 			preg_match("#\\[messEmpty\\](.*?)\\[/messEmpty\\]#si", $core->tpl->sources, $matchEmpty);
@@ -132,7 +133,7 @@ if($core->auth->isUser == true)
 			$write .= "<tr><td colspan=\"2\" style=\"text-align:center\"><br /><input type=\"hidden\" name=\"id\" value=\"\"><input type=\"submit\" value=\"" . _SEND . "\" ></td></tr></form></table>";
 			
 			$core->tpl->loadFile('pm/write');
-			$core->tpl->sources = preg_replace("#\\[menu:(.*?)\\]#ies", "menu('\\1')", $core->tpl->sources);	
+			$core->tpl->sources = preg_replace_callback("#\\[menu:(.*?)\\]#is", "menu", $core->tpl->sources);	
 			$core->tpl->setVar('WRITE', $write);
 			$core->tpl->end();
 			break;

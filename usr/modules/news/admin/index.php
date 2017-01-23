@@ -62,7 +62,7 @@ function news_main()
 						echo '</select>
 					</div>
               </div>
-              <div class="panel-body pn"> 
+              <div class="panel-body pn table-responsive"> 
 				<form id="tablesForm" method="POST" action="{ADMIN}/module/news/action">
                   <table class="table table-striped">
                     <thead>
@@ -1057,7 +1057,7 @@ switch(isset($url[3]) ? $url[3] : null) {
 		delete($id);
 		if(isset($_GET['moderate']))
 		{
-			location(ADMIN.'/publications/mod/news');
+			location(ADMIN.'/moderation/mod/news');
 		}
 		else
 		{
@@ -1089,7 +1089,7 @@ switch(isset($url[3]) ? $url[3] : null) {
 		$query = $db->query("SELECT * FROM ".DB_PREFIX."_news WHERE id = '" . $id . "'");
 		$news = $db->getRow($query);
 		$db->query("UPDATE `" . USER_DB . "`.`" . USER_PREFIX . "_users` SET user_news=user_news+1 WHERE `nick` ='" . $news['author'] . "' LIMIT 1", true);
-		location(ADMIN.'/publications/mod/news');
+		location(ADMIN.'/moderation/mod/news');
 	break;	
 	
 	case "deactivate":
@@ -1163,7 +1163,7 @@ switch(isset($url[3]) ? $url[3] : null) {
 	}
 		if(isset($_GET['moderate']))
 		{
-			location(ADMIN.'/publications/mod/news');
+			location(ADMIN.'/moderation/mod/news');
 		}
 		else
 		{
@@ -1210,7 +1210,7 @@ switch(isset($url[3]) ? $url[3] : null) {
 				'title' => $lang['news_config'],
 				'groups' => array(
 					'main' => array(
-						'title' => $lang['news_config_main'],
+						'title' => $lang['config_main'],
 						'vars' => array(
 							'num' => array(
 								'title' => $lang['news_config_main_numt'],

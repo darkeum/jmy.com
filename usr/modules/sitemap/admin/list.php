@@ -1,9 +1,9 @@
 <?php
 
 /**
-* @name        JMY CMS
-* @link        http://jmy.su/
-* @copyright   Copyright (C) 2012-2016 JMY LTD
+* @name        JMY CORE
+* @link        https://jmy.su/
+* @copyright   Copyright (C) 2012-2017 JMY LTD
 * @license     LICENSE.txt (see attached file)
 * @version     VERSION.txt (see attached file)
 * @author      Komarov Ivan
@@ -15,25 +15,22 @@ if (!defined('ACCESS')) {
 }
 $core->loadModLangADM('sitemap');
 
-$module_array['sitemap'] = array(
-		'name' => _SM_SITEMAP,
-		'desc' => _SM_SITEMAP_DESC,
-		'subAct' => array(
-			_SM_SITEMAP => '',					
-			_CONFIG => 'config',
-		)
-);
+global $lang;
 
-$topbar_array['sitemap'] = array(		
+$module_array['sitemap'] = array(
+		'name' => $lang['sitemap'],
+		'desc' => $lang['sitemap_desc'],
 		'subAct' => array(
-			_SM_SITEMAP_GEN => array('create','fa fa-refresh','ajax', "notif(\'primary\', \'"._AJAX_INFO."\', \'"._AJAX_COMPL."\');"),
-			_SM_SITEMAP_UPDATE => 'update'
+			$lang['sitemap'] => '',		
+			$lang['sitemap_gen'] => 'create',
+			$lang['sitemap_search'] => 'update',
+			$lang['config'] => 'config'
 		)
 );
 
 $toconfig['sitemap'] = array
 (
-	'name' => _SM_SITEMAP,
+	'name' => $lang['sitemap'],
 	'link' => 'module/sitemap/config',
 	'param' => 'sitemap_config'
 );

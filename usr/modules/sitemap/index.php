@@ -1,19 +1,20 @@
 <?php
 
 /**
-* @name        JMY CMS
-* @link        http://jmy.su/
-* @copyright   Copyright (C) 2012-2016 JMY LTD
+* @name        JMY CORE
+* @link        https://jmy.su/
+* @copyright   Copyright (C) 2012-2017 JMY LTD
 * @license     LICENSE.txt (see attached file)
 * @version     VERSION.txt (see attached file)
 * @author      Komarov Ivan
-*/ 
+*/
  
 if (!defined('ACCESS')) {
     header('Location: /');
     exit;
 }
 
+global $lang;
 loadConfig('sitemap'); 
 
 if(!empty($sitemap_conf['keywords']))
@@ -24,7 +25,7 @@ if(!empty($sitemap_conf['description']))
 {
 	$core->tpl->description = $sitemap_conf['description'];
 }
-
+set_title(array($lang['sitemap']));
 $query = $db->query("SELECT * FROM ".DB_PREFIX."_sitemap ORDER BY id ASC");
 if($db->numRows($query) > 0) 
 	{	
@@ -40,5 +41,5 @@ if($db->numRows($query) > 0)
 	} 
 	else 
 	{
-		$core->tpl->info(_SM_INFO);
+		$core->tpl->info($lang['sitemap_empty']);
 	}

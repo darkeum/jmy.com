@@ -65,7 +65,7 @@ class auth
 				
 				$db->query("UPDATE `" . DB_PREFIX . "_online` SET `time` = '" . time() . "' WHERE `ip` = '" . getRealIpAddr() . "' AND `uid` = '" . $uid . "'", true);
 				
-				$error = mysql_info();
+				$error = $db->info();
 				preg_match("/^\D+(\d+)/", $error, $result);
 
 				if ($result[1] == 0) 
@@ -145,7 +145,7 @@ class auth
 						setcookie(COOKIE_PAUSE, time() + PAUSE_TIME, time() + PAUSE_TIME, '/');
 						$db->query("UPDATE `" . DB_PREFIX . "_online` SET `time` = '" . time() . "', `ip` = '" . getRealIpAddr() . "' WHERE `uid` = '" . $this->user_id . "'", true);
 						
-						$error = mysql_info();
+						$error = $db->info();
 						preg_match("/^\D+(\d+)/", $error, $result);
 						if (isset($result[1]) && $result[1] == 0) 
 						{
@@ -175,9 +175,9 @@ class auth
 					{
 						if(($_COOKIE[COOKIE_PAUSE]-(PAUSE_TIME*2/3)) < time())
 						{
-							$db->query("UPDATE `" . DB_PREFIX . "_online` SET `time` = '" . time() . "', `url` = '" . $dsUrl . "' WHERE `uid` = '" . $this->user_id . "'");
+							$db->query("UPDATE `" . DB_PREFIX . "_online` SET `time` = '" . time() . "', `url` = '" . $dsUrl . "' WHERE `uid` = '" . $this->user_id . "'");							
+							$error = $db->info();
 							
-							$error = mysql_info();
 							preg_match("/^\D+(\d+)/", $error, $result);
 							if ($result[1] == 0) 
 							{

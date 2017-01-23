@@ -25,9 +25,10 @@ else
 	$page = init_page();
 	$cut = ($page-1)*$admin_conf['num'];
 	$where = '';
+	$whereC = 'WHERE active=\'2\'';
 	$cat = 0;
 	$all = $db->numRows($db->query("SELECT * FROM " . DB_PREFIX . "_news $whereC"));
-	$adminTpl->a_pages($page, $admin_conf['num'], $all, ADMIN.'/module/news/{page}');
+	$adminTpl->a_pages($page, $admin_conf['num'], $all, ADMIN.'/moderation/mod/news/{page}');
 	$query = $db->query("SELECT n.*, l.*, c.id as cid, c.name, c.altname as alturl FROM ".DB_PREFIX."_news AS n LEFT JOIN ".DB_PREFIX."_categories AS c ON (n.cat=c.id) LEFT JOIN ".DB_PREFIX."_langs as l on(l.postId=n.id and l.module='news') WHERE n.active='2' ORDER BY n.date DESC LIMIT " . $cut . ", " . $admin_conf['num'] . "");	
 	if($db->numRows($query) > 0) 
 	{
@@ -35,7 +36,7 @@ else
 				<div class="panel-heading">
 					<span class="panel-title">' . $lang['news_onmoder_list'] . ':</span>  						
 				</div>
-              <div class="panel-body pn"> 
+              <div class="panel-body pn table-responsive"> 
 				<form id="tablesForm" method="POST" action="{ADMIN}/module/news/action&moderate">
                   <table class="table table-striped">
                     <thead>
@@ -134,7 +135,7 @@ else
         </div>';	
 		$all_query = $db->query("SELECT * FROM " . DB_PREFIX . "_news WHERE active=2");
 		$all = $db->numRows($all_query);
-		$adminTpl->pages($page, $admin_conf['num'], $all, ADMIN.'/administration/publications/mod/news/{page}');
+		$adminTpl->pages($page, $admin_conf['num'], $all, ADMIN.'/moderation/mod/news/{page}');
 	} 
 	else
 	{

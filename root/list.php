@@ -55,7 +55,7 @@ $component_array = array(
 		'desc' => _AP_COM_DESC,	
 		'subAct' => array(
 			_AP_COMMENTS_MAIN => '',
-			_AP_COMMENTS_MODER => 'moder',
+			_AP_COMMENTS_MODER => '../moderation/com/comments',
 		),
 		'shown' => 1
 	),	
@@ -100,10 +100,13 @@ $component_array = array(
 			_AP_MODS_UPLOAD => 'upload',
 		)
 	),		
-	'publications' => array (
+	'moderation' => array (
 		'name' => $lang['moder'] ,
 		'desc' => _AP_PUB_DESC,		
-		'shown' => 1
+		'shown' => 1,
+		'subAct' => array(
+			$lang['comments'] => 'com/comments'
+		)
 	),	
 	
 );

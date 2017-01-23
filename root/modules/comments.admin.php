@@ -1,13 +1,12 @@
 <?php
 
 /**
-* @name        JMY CMS
-* @link        http://jmy.su/
-* @copyright   Copyright (C) 2012-2015 JMY LTD
+* @name        JMY CORE
+* @link        https://jmy.su/
+* @copyright   Copyright (C) 2012-2017 JMY LTD
 * @license     LICENSE.txt (see attached file)
 * @version     VERSION.txt (see attached file)
 * @author      Komarov Ivan
-* @revision	   27.02.2015
 */
  
 if (!defined('ADMIN_ACCESS')) {
@@ -15,6 +14,7 @@ if (!defined('ADMIN_ACCESS')) {
     exit;
 }
 
+global $lang;
 switch(isset($url[2]) ? $url[2] : null) 
 {
 	default:
@@ -22,93 +22,123 @@ switch(isset($url[2]) ? $url[2] : null)
 		$cut = ($page-1)*$admin_conf['num'];
 		$where = '';
 		$textup =_COM_LIST;
-		$adminTpl->admin_head(_COM_COM);
+		$adminTpl->admin_head($lang['comments']);
+		$where = ' WHERE c.status=\'1\'';
+		echo '<div id="content" class="animated fadeIn">';
 		if(isset($url[2]) && $url[2] == 'ok')
 		{
-			$adminTpl->info(_COM_OK);
-		}
-		elseif(isset($url[2]) && $url[2] == 'moder')
-		{
-			$where = ' WHERE c.status=\'0\'';
-			$textup =_COM_LIST_M;
-		}
-		echo '<div class="row">
-			<div class="col-lg-12">
-				<section class="panel">
-					<div class="panel-heading">
-						<b>' . $textup . '</b>
-					</div>';			
+			$adminTpl->alert('success', $lang['info'], $lang['action_success']);
+		}		
 		$query = $db->query("SELECT c.*, u.nick, u.group, u.last_visit FROM ".DB_PREFIX."_comments as c LEFT JOIN `" . USER_DB . "`.`" . USER_PREFIX . "_users` as u on (c.uid=u.id) " . $where . " ORDER BY date DESC LIMIT $cut,".$admin_conf['num']);
 		if($db->numRows($query) > 0) 				
 		{
-		echo '<div class="panel-body no-padding">
-					<form id="tablesForm" style="margin:0; padding:0" method="POST" action="{ADMIN}/comments/action">
-						<table class="table no-margin">
-							<thead>
-								<tr>
-									<th><span class="pd-l-sm"></span>ID</th>
-									<th class="col-md-3">' . _COMMENT . '</th>
-									<th class="col-md-1">' . _MODULE . '</th>
-									<th class="col-md-2">' . _DATE . '</th>
-									<th class="col-md-3">' . _USER .'</th>
-									<th class="col-md-1">' . _LINKS . '</th>
-									<th class="col-md-3">' . _ACTIONS . '</th>
-									<th class="col-md-3"><input type="checkbox" name="all" onclick="setCheckboxes(\'tablesForm\', true); return false;"></th>
-								</tr>
-							</thead>
-							<tbody>';
-			while($commment = $db->getRow($query)) 
+			echo '<div class="panel panel-dark panel-border top">
+					<div class="panel-heading">
+							<span class="panel-title">' . $lang['comments_list'] . ':</span>  						
+					</div>
+					 <div class="panel-body pn table-responsive"> 
+						<form id="tablesForm" method="POST" action="{ADMIN}/comments/action">
+							<table class="table table-striped">
+								<thead>
+									<tr>
+										<th><span class="pd-l-sm"></span>#</th>
+										<th class="w250">' . $lang['comment'] . '</th>
+										<th>' . $lang['module'] . '</th>
+										<th>' . $lang['date'] .'</th>
+										<th>' . $lang['links'] .'</th>
+										<th class="w150">' . $lang['author'] . '</th>
+										<th class="text-center">' . $lang['status'] .'</th>
+										<th>' . $lang['actions'] . '</th>
+										<th class="text-right">
+											<div class="checkbox-custom mb15">
+												<input id="all" type="checkbox" name="all" onclick="setCheckboxes(\'tablesForm\', true); return true;">
+												<label for="all"></label>
+											</div>	
+										</th>
+									</tr>
+								</thead>
+								<tbody>';
+			while($comment = $db->getRow($query)) 
 			{
-				$active = ($commment['status'] == 0) ? '<a href="{ADMIN}/comments/activate/' . $commment['id'] . '" onClick="return getConfirm(\'' ._ACTIVATE .' - ' . str(htmlspecialchars(strip_tags($commment['text'])), 40) . '?\')"><button  type="button" class="btn btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="" data-original-title="' . _ACTIVATE .'">A</button></a>' : '<a href="{ADMIN}/comments/deactivate/' . $commment['id'] . '" onClick="return getConfirm(\'' . _DEACTIVATE .' - ' . str(htmlspecialchars(strip_tags($commment['text'])), 40) . '?\')" ><button  type="button" class="btn btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="" data-original-title="' ._DEACTIVATE .'">A</button></a>';
-				$tt = str(htmlspecialchars(strip_tags($commment['text'])), 30);
+				$tt = str(htmlspecialchars(strip_tags($comment['text'])), 30);
+				if ($comment['status'] == 1)
+				{
+					$status_icon = '<span class="fa fa-check-circle text-success fa-md"></span>';
+				}
+				else
+				{
+					$status_icon = '<span class="fa fa-clock-o text-warning fa-md"></span>';
+				}				
 				echo '
-				<tr '.(($commment['status'] == 0) ? 'class="danger"' : '' ).'>
-					<td><span class="pd-l-sm"></span>' . $commment['id'] . '</td>
-					<td>' . (($tt != '') ? $tt : '<font color="red">'._NO_TEXT.'</font>') . '</td>
-					<td>' . commentLink($commment['module'], $commment['post_id']) . '</td>
-					<td>' . formatDate($commment['date'], true) . '</td>
-					<td>' . (($commment['uid'] != 0) ? '<a href="profile/' . $commment['nick'] . '" title="' . $commment['nick'] . '">' . $commment['nick'] . '</a>' : $commment['gname']) . '</td>
-					<td>' . (eregStrt('href', $commment['text']) ? '<font color="red">'._YES.'</font>' : '<font color="green">'._NO.'</font>') . '</td>
-					<td>' . $active . '<a href="{ADMIN}/comments/edit/' . $commment['id'] . '">
-					<button type="button" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="" data-original-title="' . _EDIT .'">E</button>
-					</a>
-					<a href="{ADMIN}/comments/delete/' .$commment['id'] . '" onClick="return getConfirm(\'' . _COM_DELETE .' - ' . str(htmlspecialchars(strip_tags($commment['text'])), 40) . '?\')">
-					<button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="" data-original-title="' . _DELETE .	'">X</button>
-					</a>
-					<td> <input type="checkbox" name="checks[]" value="' . $commment['id'] . '"><input type="hidden" name="module[' . $commment['id'] . ']" value="' . $commment['module'] . '"></td>
+				<tr>
+					<td><span class="pd-l-sm"></span>' . $comment['id'] . '</td>
+					<td>' . (($tt != '') ? $tt : '<font color="red">'.$lang['no_text'].'</font>') . '</td>
+					<td>' . commentLink($comment['module'], $comment['post_id']) . '</td>				
+					<td>' . formatDate($comment['date'], true) . '</td>
+					<td>' .  (eregStrt('href', $comment['text']) ? '<font color="red">'.$lang['yes'].'</font>' : '<font color="green">'.$lang['no'].'</font>') . '</td>
+					<td>' . (($comment['uid'] != 0) ? '<a href="profile/' . $comment['nick'] . '" title="' . $comment['nick'] . '">' . $comment['nick'] . '</a>' : $comment['gname']) . '</td>
+					<td class="text-center">' . $status_icon . '</td>
+						<td>				
+						<div class="btn-group">
+							<button type="button" onclick="location.href = \'{ADMIN}/comments/edit/'.$comment['id'].'\'" class="btn btn-xs btn-primary">'.$lang['edit_short'].'</button>
+							<button type="button" data-toggle="dropdown" class="btn btn-xs btn-primary dropdown-toggle"><span class="caret"></span><span class="sr-only">' . $lang['action'] . '</span></button>
+							<ul role="menu" class="dropdown-menu">
+								<li><a href="{ADMIN}/comments/reactivate/'.$comment['id'].'">' . $lang['do_moderation'] . '</a></li>
+								<li class="divider"></li>
+								<li><a href="'.$core->fullURL().'#" onclick="modal_o(\'#modal-form-'.$comment['id'].'\')">' . $lang['delete'] .'</a></li>
+							</ul>
+						</div>
+						<div id="modal-form-'.$comment['id'].'" class="popup-basic bg-none mfp-with-anim mfp-hide">
+							<div class="panel">
+							  <div class="panel-heading"><span class="panel-icon"><i class="fa fa-check-square-o"></i></span><span class="panel-title">'.$lang['confirm'].'</span></div>
+							  <div class="panel-body">
+								<h3 class="mt5">' . str_replace('[comment]', $tt, $lang['comments_delete_title']) .'</h3>					
+								<hr class="short alt">
+								<p>' . str_replace('[comment]', $tt, $lang['comments_delete_text']) .  '</p>
+							  </div>
+							  <div class="panel-footer text-right">
+								<button type="button" onclick="location.href = \'{ADMIN}/comments/delete/'.$comment['id'].'\'" class="btn btn-danger">' . $lang['delete'] .'</button>
+							  </div>
+							</div>
+						  </div>
+					</td>
+					<td class="text-right">
+						<div class="checkbox-custom mb15">
+							<input id="checkbox' . $comment['id'] . '" type="checkbox" name="checks[]" value="' . $comment['id'] . '">
+							<label for="checkbox' . $comment['id'] . '"></label>
+						</div>
+					</td>
 				</tr>';
 					
 			}
-				echo '<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
-				<div align="right">
-	<table>
-	<tr>
-	<td valign="top">
-	<select name="act">
-		<option value="activate">' . _ACTIVATE . '</option>
-		<option value="deActivate">' . _DEACTIVATE . '</option>
-		<option value="reActivate">' . _REACTIVATE . '</option>
-		<option value="delete">' . _DELETE . '</option>
-	</select>
-	</td>
-	<td>&nbsp&nbsp</td>
-	
-	<td valign="top">
-	<input name="submit" type="submit" class="btn btn-success" id="sub" value="' . _DOIT . '" /><span class="pd-l-sm"></span>
-	</td>
-	</tr>
-	</table>		
-	</div>
-	</form></div>';
+			echo '</tbody>
+				<tfoot class="footer-menu">
+                    <tr align="right">                    
+					  <td align="right" colspan="10">
+                        <nav align="right" class="text-right">						
+							<select style="width: 250px; display: inline-block;" class="form-control" name="act">
+								<option value="deActivate">' . $lang['do_moderation'] . '</option>	
+								<option value="delete">' . $lang['delete'] . '</option>
+							</select>
+							<input name="submit" type="submit" class="btn btn-success" style="display: inline-block;" id="sub" value="' .  $lang['doit'] . '" /><span class="pd-l-sm"></span>							
+						 </nav>
+                      </td>					 
+                    </tr>
+                  </tfoot> 
+				</table> 
+			</form>				
+          </div>
+        </div>';	
 		} 
 		else 
 		{
-			echo '<div class="panel-heading">'  . _COM_NO . '</div>';
+			$adminTpl->info($lang['comments_empty'], 'empty', null, $lang['comments_list']);	
 		}
 		echo'</section></div></div>';
 		$all_query = $db->query("SELECT * FROM " . DB_PREFIX . "_comments " . str_replace('c.', '', $where));
 		$all = $db->numRows($all_query);
 		$adminTpl->pages($page, $admin_conf['num'], $all, ADMIN.'/comments/{page}');
+		echo'</div>';
 		$adminTpl->admin_foot();
 		break;
 		
@@ -229,8 +259,15 @@ switch(isset($url[2]) ? $url[2] : null)
 		list($mod) = $db->fetchRow($db->query("SELECT module FROM `" . DB_PREFIX . "_comments` WHERE id = " . $commId . " LIMIT 1"));
 		if($commId != 0 && $mod)
 		{
-			deleteComment($commId, $mod);
-			location(ADMIN . '/comments/ok');
+			deleteComment($commId, $mod);			
+			if(isset($_GET['moderate']))
+			{
+				location(ADMIN.'/moderation/com/comments');
+			}
+			else
+			{
+				location(ADMIN.'/comments/ok');
+			}
 		}
 		else
 		{
@@ -249,10 +286,24 @@ switch(isset($url[2]) ? $url[2] : null)
 		$db->query("UPDATE `" . DB_PREFIX . "_comments` SET `status` = '0' WHERE `id` = " . $id . " LIMIT 1 ;");
 		header('Location: /'.ADMIN.'/comments');
 	break;
+	
+	case "reactivate":
+		$id = intval($url[3]);
+		$db->query("UPDATE `" . DB_PREFIX . "_comments` SET `status` = NOT `status` WHERE `id` =" . $id . " LIMIT 1 ;");
+		if(isset($_GET['moderate']))
+		{
+			location(ADMIN.'/moderation/com/comments');
+		}
+		else
+		{
+			location(ADMIN.'/comments');
+		}
+	break;
 		
 	case "action":
 		$type = $_POST['act'];
-		if(is_array($_POST['checks'])) {
+		$checks = isset($_POST['checks']) ? $_POST['checks']: '';
+		if(is_array($checks)) {
 			switch($type) {
 				case "activate":
 					foreach($_POST['checks'] as $id) 
@@ -278,18 +329,25 @@ switch(isset($url[2]) ? $url[2] : null)
 				case "delete":
 					foreach($_POST['checks'] as $id) 
 					{
-						deleteComment($id, $_POST['checks'][$id]);
+						deleteComment($id);
 					}
 					break;				
 			}
 		}
-		location(ADMIN . '/comments/ok');
+		if(isset($_GET['moderate']))
+		{
+			location(ADMIN.'/moderation/com/comments');
+		}
+		else
+		{
+			location(ADMIN.'/comments/ok');
+		}
 		break;
 }
 
-function deleteComment($id, $mod)
+function deleteComment($id, $mod ='')
 {
 global $db;
-	add_point($mod, $id, '-');
+	//add_point($mod, $id, '-');
 	$db->query("DELETE FROM `" . DB_PREFIX . "_comments` WHERE `id` = ".$id);
 }

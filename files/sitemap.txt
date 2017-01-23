@@ -1,0 +1,8 @@
+
+http://jmy.com/ weekly 0.5
+http://jmy.com/board weekly 0.5
+http://jmy.com/content weekly 0.5
+http://jmy.com/feedback weekly 0.5
+http://jmy.com/news weekly 0.5
+http://jmy.com/news/123.html weekly 0.5
+http://jmy.com/sitemap weekly 0.5

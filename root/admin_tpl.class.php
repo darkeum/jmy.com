@@ -270,7 +270,7 @@ class admin extends template
 		$newFriends = $db->query("SELECT u.id as uuid, u.nick, u.last_visit, u.regdate, f.* FROM `" . USER_DB . "`.`" . USER_PREFIX . "_users` as u LEFT JOIN `" . USER_DB . "`.`" . USER_PREFIX . "_user_friends` as f on(u.id = f.who_invite OR u.id = f.whom_invite) WHERE (f.who_invite = '" . $core->auth->user_info['id'] . "' OR f.whom_invite = '" . $core->auth->user_info['id'] . "') AND u.id != '" . $core->auth->user_info['id'] . "' AND f.confirmed = '0'");
 		
 		$newMessages = $db->query("SELECT id FROM `" . USER_PREFIX . "_pm` WHERE toid = '" . $core->auth->user_info['id'] . "' AND status = '0'");
-		
+		$config['hide'] = 1;
 		$avatar = avatar($core->auth->user_info['id']);
 		$this->loadFile('main');
 		$this->setVar('META', $meta);
@@ -305,10 +305,10 @@ class admin extends template
 		$this->setVar('MESSAGES_NUMB', $db->numRows($newMessages));
 		$this->setVar('FRIENDS_NUMB', $db->numRows($newFriends));
 		$this->setVar('TOPBAR', isset($topbar) ? $topbar : '');
-		$this->sources = preg_replace("#\\{MENU_OPEN:(.*?)\\}#ies", "openMenu('\${1}')" , $this->sources);
-		$this->sources = preg_replace("#\\{MENU_CHOOSE:(.*?)\\}#ies", "chooseMenu('\${1}')",$this->sources);
-		$this->sources = preg_replace("#\\[CHECK_ACTIVE](.*?)\\[/CHECK_ACTIVE]#ies", "checkActive('\${1}')",$this->sources);		
-		$this->sources = preg_replace("#\\[ACTIVE_MODULE:(.+?)](.*?)\\[/ACTIVE_MODULE]#ies", "activeModule('\${1}','\${2}')",$this->sources);	
+		$this->sources = preg_replace_callback("#\\{MENU_OPEN:(.*?)\\}#is", "openMenu" , $this->sources);
+		$this->sources = preg_replace_callback("#\\{MENU_CHOOSE:(.*?)\\}#is", "chooseMenu",$this->sources);
+		$this->sources = preg_replace_callback("#\\[CHECK_ACTIVE](.*?)\\[/CHECK_ACTIVE]#is", "checkActive",$this->sources);		
+		$this->sources = preg_replace_callback("#\\[ACTIVE_MODULE:(.+?)](.*?)\\[/ACTIVE_MODULE]#is", "activeModule",$this->sources);	
 			
 		$this->end();
 		

@@ -1,8 +1,8 @@
 <?php
 
 /**
-* @name        JMY CMS
-* @link        http://jmy.su/
+* @name        JMY CORE
+* @link        https://jmy.su/
 * @copyright   Copyright (C) 2012-2017 JMY LTD
 * @license     LICENSE.txt (see attached file)
 * @version     VERSION.txt (see attached file)
@@ -24,81 +24,113 @@ global $adminTpl, $core, $db, $admin_conf, $lang;
 	$query = $db->query("SELECT c.*, l.* FROM ".DB_PREFIX."_content as c  LEFT JOIN ".DB_PREFIX."_langs as l on(l.postId=c.id and l.module='content') WHERE l.lang = '" . $core->InitLang() . "' LIMIT " . $cut . ", " . $admin_conf['num'] . "");
 	if($db->numRows($query) > 0)
 	{	
-	echo '<div class="row">
-			<div class="col-lg-12">
-				<section class="panel">
-					<div class="panel-heading">
-						<b>' . $lang['static_list'] . '</b>
-					</div>';
-	echo '<div class="panel-body no-padding">
-					<form id="tablesForm" style="margin:0; padding:0" method="POST" action="{MOD_LINK}/action">
-						<table class="table no-margin">
-							<thead>
-								<tr>
-									<th><span class="pd-l-sm"></span>#</th>
-									<th class="col-md-3">' . _TITLE . '</th>
-									<th class="col-md-1">' . _N_LINK . '</th>
-									<th class="col-md-2">' . _DATE . '</th>
-									<th class="col-md-4">' . _N_WORD .'</th>
-									<th class="col-md-2">' . _ACTIONS . '</th>
-									<th class="col-md-1"><input type="checkbox" name="all" onclick="setCheckboxes(\'tablesForm\', true); return false;"></th>
-								</tr>
-							</thead>
-							<tbody>';
+		echo '<div class="panel panel-dark panel-border top">
+				<div class="panel-heading">
+					<span class="panel-title">' . $lang['static_list'] . ':</span>  						
+              </div>
+              <div class="panel-body pn table-responsive"> 
+				<form id="tablesForm" method="POST" action="{MOD_LINK}/action">
+                  <table class="table table-striped">
+                    <thead>
+						<tr>
+							<th><span class="pd-l-sm"></span>#</th>
+							<th>' . $lang['title'] . '</th>
+							<th>' . $lang['date'] . '</th>
+							<th>' . $lang['template'] .'</th>
+							<th>' . $lang['keywords'] .'</th>
+							<th class="text-center">' . $lang['status'] .'</th>
+							<th class="text-center"><span class="fa fa-comments-o fa-lg"></span></th>
+							<th>' . $lang['actions'] . '</th>
+							<th>
+								<div class="checkbox-custom mb15">
+									<input id="all" type="checkbox" name="all" onclick="setCheckboxes(\'tablesForm\', true); return true;">
+									<label for="all"></label>
+								</div>	
+							</th>
+						</tr>
+                    </thead>
+                    <tbody>';
 		while($content = $db->getRow($query)) 
 		{
-			$contentLink = $content['cat'] !== ',0,' ? 'content/' . $core->getCat('content', $content['cat'], 'development') . '/' : 'content/';			
-			$status_icon = ($content['active'] == 0) ? '<a href="{MOD_LINK}/activate/' . $content['id'] . '" onClick="return getConfirm(\'' . _N_ACTIV .' - ' . $content['title'] . '?\')"><button  type="button" class="btn btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="" data-original-title="' . _N_ACTIVE .'">A</button></a>' : '<a href="{MOD_LINK}/deactivate/' . $content['id'] . '" onClick="return getConfirm(\'' . _N_DACTIV .' - ' . $content['title'] . '?\')" ><button  type="button" class="btn btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="" data-original-title="' . _N_DEACTIVE .'">A</button></a>';
+			$contentLink = $content['cat'] !== ',0,' ? 'content/' . $core->getCat('content', $content['cat'], 'development') . '/' : 'content/';
+			if ($content['active'] == 1)
+			{
+				$status_icon = '<span class="fa fa-check-circle text-success fa-md"></span>';
+			}		
+			else
+			{
+				$status_icon = '<span class="fa fa-circle text-danger fa-md"></span>';
+			}			
 			echo '
-				<tr '.(($content['active'] == 0) ? 'class="danger"' : '' ).'>
+			<tr>
 				<td><span class="pd-l-sm"></span>' . $content['id'] . '</td>
 				<td>' . $content['title'] . '</td>
-				<td><a target="_blank" href="' . $contentLink . $content['translate'] . '.html">'._N_REFER.'</a></td>
-				<td>' . formatDate($content['date'], true) . '</td>
-				<td>' . (!empty($content['keywords']) ? str($content['keywords'], 20) : _NO) . '</td>
-				<td>
-				'.$status_icon.'				
-				<a href="{MOD_LINK}/edit/' . $content['id'] . '">
-				<button type="button" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="" data-original-title="' . _EDIT .'">E</button>
-				</a>
-				<a href="{MOD_LINK}/delete/' . $content['id'] . '" onClick="return getConfirm(\'' . _N_DEL .' - ' . $content['title'] . '?\')">
-				<button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="" data-original-title="' . _N_DELITE .'">X</button>
-				</a>
+				<td>' . formatDate($content['date'], true) . '</td>				
+				<td>' . ($content['theme'] == '0' ? $lang['static_tpl_default'] : $content['theme']) . '</td>
+				<td>' . (!empty($content['keywords']) ? str($content['keywords'], 20) : $lang['no']) . '</td>
+				<td class="text-center">' . $status_icon . '</td>
+				<td class="text-center">' . $content['comments'] . '</td>
+					<td>				
+					<div class="btn-group">
+						<button type="button" onclick="location.href = \'{MOD_LINK}/edit/' . $content['id'] . '\'" class="btn btn-xs btn-primary">'.$lang['edit_short'].'</button>
+						<button type="button" data-toggle="dropdown" class="btn btn-xs btn-primary dropdown-toggle"><span class="caret"></span><span class="sr-only">' . $lang['action'] . '</span></button>
+						<ul role="menu" class="dropdown-menu">	
+							<li><a target="_blank" href="' . $contentLink . $content['translate'] . '.html">'. $lang['view'] .'</a></li>  
+							<li><a href="{MOD_LINK}/reactivate/'.$content['id'].'">'. (($content['active'] != 1) ? $lang['do_activation'] : $lang['do_deactivation']).'</a></li>  													
+							<li class="divider"></li>
+							<li><a href="'.$core->fullURL().'#" onclick="modal_o(\'#modal-form-'.$content['id'].'\')">' . $lang['delete'] .'</a></li>
+						</ul>
+					</div>
+					<div id="modal-form-'.$content['id'].'" class="popup-basic bg-none mfp-with-anim mfp-hide">
+						<div class="panel">
+						  <div class="panel-heading"><span class="panel-icon"><i class="fa fa-check-square-o"></i></span><span class="panel-title">'.$lang['confirm'].'</span></div>
+						  <div class="panel-body">
+							<h3 class="mt5">' . str_replace('[content]', $content['title'], $lang['static_delete_title']) .'</h3>					
+							<hr class="short alt">
+							<p>' . str_replace('[content]', $content['title'], $lang['static_delete_text']) .  '</p>
+						  </div>
+						  <div class="panel-footer text-right">
+							<button type="button" onclick="location.href = \'{MOD_LINK}/delete/'.$content['id'].'\'" class="btn btn-danger">' . $lang['delete'] .'</button>
+						  </div>
+						</div>
+					  </div>
 				</td>
-				<td> <input type="checkbox" name="checks[]" value="' . $content['id'] . '"><span class="pd-l-sm"></span></td>
-			</tr>';	
-		}		
-		echo '<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>';		
-	echo '
-	<div class="_tableBottom">
-	<div align="right">
-	<table>
-	<tr>
-	<td valign="top">
-	<select name="act">
-		<option value="activate">' . _N_ACTIVE . '</option>
-		<option value="deActivate">' . _N_DEACTIVE . '</option>
-		<option value="reActivate">' . _EDIT . '</option>
-		<option value="delete">' . _N_DELITE . '</option>
-	</select>
-	</td>
-	<td>&nbsp&nbsp</td>	
-	<td valign="top">
-	<input name="submit" type="submit" class="btn btn-success" id="sub" value="' . _N_COMPLITE . '" /><span class="pd-l-sm"></span>
-	</td>
-	</tr>
-	</table>	
-	</div></div>
-	</form></div>';	
-	echo'</section></div></div>';	
+				<td>
+					<div class="checkbox-custom mb15">
+						<input id="checkbox' . $content['id'] . '" type="checkbox" name="checks[]" value="' . $content['id'] . '">
+						<label for="checkbox' . $content['id'] . '"></label>
+					</div>
+				</td>
+			</tr>';		
+		}
+		echo '</tbody>
+				<tfoot class="footer-menu">
+                    <tr align="right">                    
+					  <td align="right" colspan="10">
+                        <nav align="right" class="text-right">						
+							<select style="width: 250px; display: inline-block;" class="form-control" name="act">							
+								<option value="activate">' . $lang['do_activation'] . '</option>
+								<option value="deActivate">' . $lang['do_deactivation'] . '</option>
+								<option value="reActivate">' . $lang['do_reactivation']  . '</option>		
+								<option value="delete">' . $lang['delete'] . '</option>
+							</select>
+							<input name="submit" type="submit" class="btn btn-success" style="display: inline-block;" id="sub" value="' .  $lang['doit'] . '" /><span class="pd-l-sm"></span>							
+						 </nav>
+                      </td>					 
+                    </tr>
+                  </tfoot> 
+				</table> 
+			</form>				
+          </div>
+        </div';	
+		$all_query = $db->query("SELECT * FROM " . DB_PREFIX . "_content ");
+		$all = $db->numRows($all_query);
+		$adminTpl->pages($page, $admin_conf['num'], $all, ADMIN.'/module/content/{page}');	
 	} 	
 	else 
 	{
 		$adminTpl->info($lang['static_empty'], 'empty', null, $lang['static_list'], $lang['static_add'], ADMIN.'/module/content/add');	
-	}
-	$all_query = $db->query("SELECT * FROM " . DB_PREFIX . "_content ");
-	$all = $db->numRows($all_query);
-	$adminTpl->pages($page, $admin_conf['num'], $all, ADMIN.'/module/content/{page}');
+	}	
 	echo'</div>';
 	$adminTpl->admin_foot();
 } 
@@ -115,6 +147,7 @@ global $adminTpl, $core, $db, $core, $config, $lang;
 		$theme = $content['theme']; 
 		$active = $content['active']; 
 		$altname = $content['translate']; 
+		$preview = $content['preview']; 
 		$cat = $content['cat']; 
 		$catttt = explode(',', $cat);
 		$firstCat = $catttt[1];
@@ -126,6 +159,7 @@ global $adminTpl, $core, $db, $core, $config, $lang;
 			$title[$langs['lang']] = prepareTitle($langs['title']);
 			$text[$langs['lang']] = html2bb($langs['short']);
 		}
+		$remote = ADMIN.'/module/content/ajax/isurl/update';
 		$lln = $lang['static_edit'];
 		$dosave = $lang['update'];
 	} 
@@ -136,216 +170,209 @@ global $adminTpl, $core, $db, $core, $config, $lang;
 		$keywords = false; 
 		$cat = false; 
 		$altname = false; 
+		$preview = false; 
 		$catttt = false; 
 		$active = 1;
 		$text = '';
 		$theme = '';
 		$firstCat = '';
+		$remote = ADMIN.'/module/content/ajax/isurl';
 		$lln = $lang['static_add'];
 		$dosave = $lang['add'];		
-	}
-	$dir = ROOT.'/usr/tpl/'.$config['tpl'].'/content/';
-
-$skip = array('.', '..');
-$files = scandir($dir);
-foreach($files as $file) {
-    if(!in_array($file, $skip))
-	{
-		//if (is_dir($file)){
-        echo($file . '<br />');
-		//}
-	}
-}
-
-	if (empty($theme)) {  $placeholder = 'placeholder="'._N_DEFAULT.'"';}
+	}	
+	$validation_array = array(		
+		'title' => array(
+			'required' =>  array('true', $lang['static_add_title_err'])			
+		),
+		'altname' => array(
+			'required' =>  array('true', $lang['static_add_url_err_1']),
+			'remote' =>  array($remote,  $lang['static_add_url_err_3'])
+		)
+	);
+	$codem = '';
+	$file = $theme;
+	$adminTpl->footIncludes[] ='<script src="' . PLUGINS . '/highlight_code/codemirror.js" type="text/javascript"></script>';
+	//$codem = 'CodeMirror.fromTextArea("_code", {height: "dynamic",parserfile: ["parsexml.js", "parsecss.js", "tokenizejavascript.js", "parsejavascript.js", "parsehtmlmixed.js"],stylesheet: ["' . PLUGINS . 'highlight_code/xmlcolors.css", "' . PLUGINS . 'highlight_code/jscolors.css", "' . PLUGINS . '/highlight_code/csscolors.css"], path: "' . PLUGINS . 'highlight_code/", lineNumbers: true});';
+	$adminTpl->footIncludes[] ='<script type="text/javascript">	ajaxGetJS(\'' . ADMIN . '/module/content/ajax/loadtpl/'.$file.'\', \''.$codem .'\', \'_div\');</script>';
+	$adminTpl->footIncludes[] ='<script type="text/javascript">
+									function loadtpl(file)
+									{
+										ajaxGetJS(\'' . ADMIN . '/module/content/ajax/loadtpl/\'+file, \''.$codem .'\', \'_div\');
+									}
+								</script>';
+	validationInit($validation_array);
+	ajaxInit();
+	fancyboxInit();
 	$cats_arr = $core->aCatList('content');	
 	$adminTpl->admin_head($lang['modules'] . ' | ' . $lln);
-	echo '<div id="content" class="animated fadeIn">
-			<form action="{MOD_LINK}/save" onsubmit="return caa(false);" method="post" name="content" role="form" id="admin-form">
-				<div class="panel panel-dark panel-border top">
-					<div class="panel-heading"><span class="panel-title">'. $lln .'</span></div>
-					<div class="panel-body admin-form">		
-						<div class="section row mbn">
-							<div class="col-md-9 pl15">
-								<div class="section row mb15">
-									<div class="col-xs-6">
-										<label for="title" class="field prepend-icon">
-											<input type="text" name="title" '. (!isset($nid) ? 'onchange="getTranslit(gid(\'title\').value, \'altname\'); caa(this);"' : '').'  value="' . (isset($title[$config['lang']]) ? $title[$config['lang']] : '') . '" class="form-control" id="title" placeholder="'.$lang['static_add_title'].'" data-parsley-required="true" data-parsley-trigger="change">	
-											<label for="title" class="field-icon"><i class="fa fa-pencil"></i></label>
-										</label>
-												</div>
-												<div class="col-xs-6">
-													<label for="altname" class="field prepend-icon">
-														<input type="text" name="altname" value="'.$altname.'" class="form-control" id="altname"  data-parsley-required="true" data-parsley-trigger="change" placeholder="'.$lang['static_add_url'].'">
-														<label for="altname" class="field-icon"><i class="fa fa-link"></i></label>
-													</label>
-												</div>
+	echo '<section id="content" class="table-layout animated fadeIn">			
+			<div class="tray tray-center">
+				<form action="{MOD_LINK}/save" enctype="multipart/form-data" role="form" method="POST" name="content" id="admin-form">
+					<div class="panel panel-dark panel-border top">
+						<div class="panel-heading"><span class="panel-title">'. $lln .'</span></div>
+							<div class="panel-body admin-form">		
+								<div class="section row mbn">
+									<div class="col-md-9 pl15">
+										<div class="section row mb15">
+											<div class="col-xs-6">
+												<label for="title" class="field prepend-icon">
+													<input type="text" name="title" '. (!isset($nid) ? 'onchange="getTranslit(gid(\'title\').value, \'altname\'); caa(this);"' : '').'  value="' . (isset($title[$config['lang']]) ? $title[$config['lang']] : '') . '" class="form-control" id="title" placeholder="'.$lang['static_add_title'].'" data-parsley-required="true" data-parsley-trigger="change">	
+													<label for="title" class="field-icon"><i class="fa fa-pencil"></i></label>
+												</label>
+											</div>
+											<div class="col-xs-6">
+												<label for="altname" class="field prepend-icon">
+													<input type="text" name="altname" value="'.$altname.'" class="form-control" id="altname"  data-parsley-required="true" data-parsley-trigger="change" placeholder="'.$lang['static_add_url'].'">
+													<label for="altname" class="field-icon"><i class="fa fa-link"></i></label>
+												</label>
+											</div>
 											</div>
 											<div class="section row mb15">
 												<div class="col-xs-6">
-													<label for="author" class="field prepend-icon">
-														<select name="author" class="select2-single form-control"><option value="admin" selected>admin</option><option value="zzverr" >zzverr</option><option value="zzverr007" >zzverr007</option>	</select>	
-														<label for="translit" class="field-icon"><i class="fa fa-user"></i></label>												
+													<label for="category" class="field">
+														<select class="form-control" name="theme" onchange="loadtpl(this.value)">
+															<option value="0">'.$lang['static_tpl_default'].'</option>';
+															$level = 0;
+															$path = ROOT.'/usr/tpl/'.$config['tpl'].'/content/';	
+															$ignore = array( 'cgi-bin', '.', '..' ); 
+															$dh = @opendir( $path ); 
+															while( false !== ( $file = readdir( $dh ) ) )
+															{ 
+																if( !in_array( $file, $ignore ) ){ 
+																	$spaces = str_repeat( '&nbsp;', ( $level * 4 ) ); 
+																	if( is_dir( "$path/$file" ) ){ 
+																		echo '<option value="'.$file.'" '.(($file == $theme) ? 'selected' : '').'>'.$file.'</option>';		
+																	} 
+																} 
+															} 
+															closedir($dh); 															
+													echo '</select>
 													</label>
 												</div>
 												<div class="col-xs-6">
-													 <label for="date" class="field prepend-picker-icon">
-														<input id="date" type="text" name="date" placeholder="Дата публикации" class="gui-input" value="30.11.2016 14:08">
+													<label for="keywords" class="field prepend-icon">
+														<input type="text" name="tags" value="'.$keywords.'" class="form-control" id="keywords"  data-parsley-required="true" data-parsley-trigger="change" placeholder="'.$lang['static_keywords'].'">
+														<label for="keywords" class="field-icon"><i class="fa fa-star"></i></label>
 													</label>
 												</div>
-											</div>
-											<div class="section mb10">												
-												<label class="field mb15">Теги публикации:</label>
-												<input id="tagsinput" name="tags" type="text" value="" class="bg-light mt10">
 											</div>
 											<div class="section row mb15">
 												<div class="col-xs-6">
 													<label for="category" class="field">
 														<select class="form-control" name="category[]" id="maincat" onchange="if(this.value != \'0\') {show(\'catSub\');}" >
-															<option value="0">Без категории</option><option value="33" >лол</option><option value="34" >привет</option></select>
+															<option value="0">'.$lang['static_add_nocat'].'</option>';	
+															foreach ($cats_arr as $cid => $name) 
+															{
+																$selected = ($cid == $firstCat) ? "selected" : "";
+																echo '<option value="' . $cid . '" ' . $selected . '>' . $name . '</option>';
+															}
+												  echo '</select>
 													</label>
 												</div>
-												<div class="col-xs-6" id="catSub" style="display:none;">
+												<div class="col-xs-6" id="catSub" style="' . ((isset($nid)&&($firstCat!=0)) ? '' : 'display:none;') . '">
 												<label for="category" class="field">
-													<select class="form-control" name="category[]" id="category"  multiple ><option value="33"  id="cat_33">лол</option><option value="34"  id="cat_34">привет</option></select>
+													<select class="form-control" name="category[]" id="category"  multiple >';
+														foreach ($cats_arr as $cid => $name) 
+														{
+															if($catttt) $selected = in_array($cid, $catttt) ? "selected" : "";
+															echo '<option value="' . $cid . '" ' . $selected . ' id="cat_' . $cid . '">' . $name . '</option>';
+														}
+												echo '</select>
 												</label>
+											</div>										
+										</div> 		
+										<div class="section row mb15">
+											<div class="col-xs-12">
+												<div class="checkbox-custom checkbox-info mb5 mt15">
+													<input id="active" name="status" type="checkbox" '.($active ? 'checked' : '').'>
+													<label for="active">'.$lang['static_add_active'].'</label>
+												</div>
 											</div>
-										</div> 
+										</div>		
 									</div>
 									<div class="col-md-3">
-										<div data-provides="fileupload" class="fileupload fileupload-new admin-form">
+										<div data-provides="fileupload" class="fileupload fileupload-'.($preview ? 'exists' : 'new').' admin-form">
 											<div class="fileupload-preview thumbnail mb15">
-												<img data-src="holder.js/100%x147/text:миниатюра" alt="holder">
+												<img '.($preview ? 'src="'.$config['url'].$preview.'"' : 'data-src="holder.js/100%x147/text:'.$lang['static_add_mini'].'"').' alt="holder">
 											</div>
 											<span class="button btn-system btn-file btn-block ph5">
-												<span class="fileupload-new">Загрузить</span>
-												<span class="fileupload-exists">Удалить</span>
-												<input name="mini_img" type="file">
-											</span>
-										</div>
-									</div>
-								</div>
-
-		
-		
-		
-		
-		
-		
-		
-		
-		
-	  </div>
-	</div>';
-	
-	
-
-	$cats_arr = $core->aCatList('content');
-	echo '<section>
-			<ul id="myTab2" class="nav nav-tabs">
-				<li class="active">
-					<a href="#home" data-toggle="tab">'. _MAIN .'</a>
-				</li>';
-	echo'		<li class="">
-					<a href="#file" data-toggle="tab" onclick="uploaderStart();">'. _N_FILE .'</a>
-				</li>
-			</ul>		
-			<section class="panel">
-				<div class="panel-body">
-					<div id="myTabContent2" class="tab-content">				
-						<div class="tab-pane active" id="home">					
-							<div class="panel-heading no-border"><b>'. $lln .'</b></div>
-							<div class="panel-body">
-								<div class="switcher-content">
-									<form action="{MOD_LINK}/save" onsubmit="return caa(false);" method="post" name="content" role="form">
-									<div class="form-horizontal parsley-form" data-parsley-validate>
-										<div class="form-group">
-					<label class="col-sm-3 control-label">'. _N_ADDTITLE .'</label>
-					<div class="col-sm-4">
-						<input type="text" name="title" '. (!isset($nid) ? 'onchange="getTranslit(gid(\'title\').value, \'translit\'); caa(this);"' : '').'  value="' . (isset($title[$config['lang']]) ? $title[$config['lang']] : '') . '" class="form-control" id="title"  data-parsley-required="true" data-parsley-trigger="change">
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="col-sm-3 control-label">'. _N_ADDALT .'</label>
-					<div class="col-sm-4">
-						<input type="text" name="altname" value="'.$altname.'" class="form-control" id="translit"  data-parsley-required="true" data-parsley-trigger="change">
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="col-sm-3 control-label">'. _N_ADDTAG .'</label>
-					<div class="col-sm-4">
-						<input type="text" name="keywords"  value="' . $keywords . '" class="form-control" id="tags"  data-parsley-trigger="change">
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="col-sm-3 control-label">'. _N_THEME .'</label>
-					<div class="col-sm-4">
-						<input type="text" name="theme"  value="' . $theme . '" class="form-control" id="tags"  data-parsley-trigger="change"'.$placeholder.'>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="col-sm-3 control-label">'. _N_ADDCAT .'</label>
-					<div class="col-sm-4">
-						<select name="category[]" id="maincat" style="width:auto;" onchange="if(this.value != \'0\') {show(\'catSub\');}" >
-							<option value="0">'._N_ADD_NOCAT.'</option>';	
-	foreach ($cats_arr as $cid => $name) 
-	{
-		$selected = ($cid == $firstCat) ? "selected" : "";
-		echo '<option value="' . $cid . '" ' . $selected . '>' . $name . '</option>';
-	}
-	echo '</select>
-	</div>
-	</div>
-	<div class="form-group" id="catSub" style="' . (isset($nid) ? '' : 'display:none;') . '">
-					<label class="col-sm-3 control-label">'. _N_ADDALTCAT .'</label>
-					<div class="col-sm-4">
-	<select name="category[]" id="category"  style="width:auto;" multiple >';
-	foreach ($cats_arr as $cid => $name) 
-	{
-		if($catttt) $selected = in_array($cid, $catttt) ? "selected" : "";
-		echo '<option value="' . $cid . '" ' . $selected . ' id="cat_' . $cid . '">' . $name . '</option>';
-	}
-	echo '</select></div></div>
-										<div class="form-group">
-											<label class="col-sm-3 control-label">'. _N_ACTIVATE .'</label>
-											<div class="col-sm-4">
-												'.checkbox('status', $active).'
-											</div>
+												<span class="fileupload-new">'.$lang['upload'].'</span>
+												<span class="fileupload-exists">'.$lang['upload_again'].'</span>
+												<input name="preview" type="file">
+											</span>											
+										</div>										
+										<div class="checkbox-custom checkbox-warning mb5 mt15 text-center">
+										  <input id="preview_del" name="preview_del" type="checkbox">
+										  <label for="preview_del">'.$lang['static_add_mini_del'].'</label>
 										</div>	
 									</div>
 								</div>
 							</div>
-						</div>						
-						<div class="tab-pane" id="file">
-							<div class="panel-heading no-border">
-								<b>'. _N_FILE .'</b>
-							</div>
-							<div class="panel-body">
-								<div class="switcher-content">
-									<div class="form-horizontal parsley-form">';									
+						</div>';
+						if ($id == false)
+						{
+							$dir = ROOT.'files/content/temp';
+							if (!file_exists($dir))
+							{
+								mkdir($dir, 0777);
+								
+							}
+							$_SESSION["RF"]["fff"] ="files/content/temp/";		
+						}
+						else
+						{
 						
-echo'								</div>		
-								</div>			
+							$_SESSION["RF"]["fff"] ="files/content/".$id."/";
+						}
+						echo'
+						<div class="tab-block mb25">
+							<ul class="nav nav-tabs_editor nav-tabs-right">
+								<li class="active">
+									<a href="#tab1" data-toggle="tab" aria-expanded="true">'.$lang['static_add_content'].'</a>
+								</li>
+								<li class="">
+									<a href="#tab2" data-toggle="tab" aria-expanded="false">'.$lang['static_add_tpl'].'</a>
+								</li>
+								<li class="">
+									<a id="fbox" data-fancybox-type="iframe" href="usr/plugins/filemanager/dialog.php?type=2"><i class="fa fa-folder-open-o text-purple"></i> '.$lang['static_add_upload'].'</a>
+								</li>    
+							</ul>
+							<div class="tab-content_editor">
+								<div id="tab1" class="tab-pane active">'
+									.adminArea('text[' . $config['lang'] . ']', (isset($text[$config['lang']]) ? $text[$config['lang']] : ''), 10, 'textarea', 'onchange="caa(this);"', true, false).'
+								</div>
+								<div id="tab2" class="tab-pane p20">
+									<div id="_div"></div>
+								</div>
 							</div>
 						</div>
+						<div class="btn-group">
+						  <input type="submit" class="btn btn-primary btn-parsley" id="sub" value="' . $dosave . '" />
+						</div>';
+						if(isset($nid)) 
+						{
+							$adminTpl->footIncludes[] = '<script>
+									$(\'#admin-form\').submit(function (e) {
+										var form = this;
+										e.preventDefault();
+										setTimeout(function () {
+											form.submit();
+										}, 1000); // in milliseconds
+									});
+									</script>';		
+								echo '	<input type="hidden" name="edit" value="1" />						
+							<input type="hidden" name="edit_id" value="'.$id.'" />';
+							echo '<input type="hidden" name="oldAltName" value="'.$altname.'" />';
+						}				
+				echo'</form>
 					</div>
-				</section>
-			</section> ';
-	echo '<div class="row"><div class="col-lg-12"><section class="panel"><div class="panel-heading no-border"><b>'. _TEXT .'</b></div><div class="panel-body"><div class="switcher-content">';	
-	echo adminArea('text[' . $config['lang'] . ']', (isset($text[$config['lang']]) ? $text[$config['lang']] : ''), 10, 'textarea', "onchange=\"caa(this);\"").(isset($nid) ? '<input name="edit" value="' . $nid . '" type="hidden" />' : '');
-	echo '	
-	<div>
-		<input  name="submit" type="submit" class="btn btn-primary btn-parsley" id="sub" value="' . $dosave . '" />
-			</div>
-	</div></div>
-		</section></div></div>';
-		echo '</div>';
-	$adminTpl->admin_foot();
+				</section>';	
+		$adminTpl->admin_foot();
 } 
 
 function content_save() 
 {
-global $adminTpl, $core, $db, $cats, $groupss, $config;
+global $adminTpl, $core, $db, $cats, $groupss, $config, $content_conf, $lang;
 	$word_counter = new Counter();
 	$gen_tag = $word_counter->get_keywords($_POST['text'][$config['lang']]);
 	$title = filter(trim($_POST['title']), 'title');
@@ -353,6 +380,7 @@ global $adminTpl, $core, $db, $cats, $groupss, $config;
 	$langTitle[$config['lang']] = $title;
 	$short = $_POST['text'];
 	$theme = $_POST['theme'];
+	$templ = $_POST['templ'];
 	$tags = isset($_POST['tags']) ? mb_strtolower(filter($_POST['tags'], 'a')) : mb_strtolower(filter($gen_tag, 'a'));
 	$translit = ($_POST['altname'] !== '') ? mb_strtolower(str_replace(array('-', ' '), array('_', '_'), $_POST['altname'])) : translit($_POST['title']);
 	$category = isset($_POST['category']) ? array_unique($_POST['category']) : '0';	
@@ -375,21 +403,26 @@ global $adminTpl, $core, $db, $cats, $groupss, $config;
 	}	
 	$cats = ',' . $cats;	
 	$status = isset($_POST['status']) ? 1 : 0;
-	$fix = isset($_POST['fix']) ? 1 : 0;	
+	$fix = isset($_POST['fix']) ? 1 : 0;
+	$lln = $lang['static_adds'];
+	if(isset($_POST['edit'])) 
+	{
+		$lln = $lang['static_edits'];
+	}
+	$adminTpl->admin_head($lang['modules'] . ' | ' . $lln);
+	echo '<div id="content" class="animated fadeIn">';		
 	if($title && $short[$config['lang']] && $translit) 
 	{
 		if(isset($_POST['edit'])) 
-		{
-			$adminTpl->admin_head(_MODULES . ' | ' . _N_UPDATE);
-			$edit = intval($_POST['edit']);
+		{			
+			$edit = intval($_POST['edit_id']);
 			foreach($langTitle as $k => $v)
 			{
 				$ntitle = filter(trim($v), 'title');
 				$text = filter(fileInit('content', $edit, 'content', $short[$k]), 'html');
 				if(isset($_POST['empty'][$k]) && trim($v) != '' && trim($short[$k]) != '')
 				{
-					$db->query("INSERT INTO `" . DB_PREFIX . "_langs` ( `postId` , `module` , `title` , `short` , `lang` ) 
-	VALUES ('" . $edit . "', 'content', '" . $db->safesql(processText($ntitle)) . "', '" . $db->safesql(parseBB(processText($text), $edit, true)) . "', '" . $k . "');");
+					$db->query("INSERT INTO `" . DB_PREFIX . "_langs` ( `postId` , `module` , `title` , `short` , `lang` ) VALUES ('" . $edit . "', 'content', '" . $db->safesql(processText($ntitle)) . "', '" . $db->safesql(parseBB(processText($text), $edit, true)) . "', '" . $k . "');");
 				}
 				elseif(!isset($_POST['empty'][$k])  && (trim($v) == '' OR trim($short[$k]) == ''))
 				{
@@ -401,14 +434,14 @@ global $adminTpl, $core, $db, $cats, $groupss, $config;
 				}
 			}			
 			$db->query("UPDATE `" . DB_PREFIX . "_content` SET `translate` = '" . $translit . "', `cat` = '" . $cats . "', `keywords` = '" . $tags . "', `theme` = '" . $theme . "', `active` = '" . $status . "' WHERE `id` =" .$edit . " LIMIT 1 ;");
-			$adminTpl->info(_BASE_INFO_0);
+			$adminTpl->info($lang['static_edit_ok'], 'info', null, $lang['info'], $lang['static_list'], ADMIN.'/module/content/');
+			$nnid = $edit;
 		} 
 		else 
-		{
-			$adminTpl->admin_head(_MODULES . ' | ' . _N_ADD);
+		{			
 			if($db->query("INSERT INTO `" . DB_PREFIX . "_content` ( `id` , `translate`, `cat` , `keywords` , `active` , `date` , `theme` ) VALUES (NULL, '" . $translit . "', '" . $cats . "', '" . $tags . "', '" . $status . "', '" . time() . "', '" . $theme . "');")) 
 			{
-				$adminTpl->info(_BASE_INFO_0);
+				$adminTpl->info($lang['static_add_ok'], 'info', null, $lang['info'], $lang['static_list'], ADMIN.'/module/content/');
 			}			
 			$query = $db->query("SELECT * FROM ".DB_PREFIX."_content WHERE translate = '" . $translit . "'");
 			$content = $db->getRow($query);
@@ -418,16 +451,68 @@ global $adminTpl, $core, $db, $cats, $groupss, $config;
 				{
 					$ntitle = filter(trim($v), 'title');
 					$text = fileInit('content', $content['id'], 'content', parseBB(processText(filter($short[$k], 'html'), $content['id'], true)));
-					$db->query("INSERT INTO `" . DB_PREFIX . "_langs` ( `postId` , `module` , `title` , `short` , `lang` ) 
-	VALUES ('" . $content['id'] . "', 'content', '" . $db->safesql(processText($ntitle)) . "', '" . $db->safesql($text) . "' , '" . $k . "');");
+					$db->query("INSERT INTO `" . DB_PREFIX . "_langs` ( `postId` , `module` , `title` , `short` , `lang` ) 	VALUES ('" . $content['id'] . "', 'content', '" . $db->safesql(processText($ntitle)) . "', '" . $db->safesql($text) . "' , '" . $k . "');");
 				}
 			}
 			fileInit('content', $content['id']);
+			$nnid = $content['id'];
 		}
+		
+		if (isset($_POST['preview_del']))
+		{
+			if(isset($_POST['edit'])) 
+			{
+				$queryPR = $db->query("SELECT preview FROM ".DB_PREFIX."_content WHERE id = '" . $nnid . "' LIMIT 1");
+				$contentPR = $db->getRow($queryPR);
+				if (file_exists(ROOT.$contentPR['preview'])) 
+				{
+					unlink(ROOT.$contentPR['preview']);
+				}
+				$db->query("UPDATE `" . DB_PREFIX . "_content` SET `preview` = '' WHERE `id` = '" . $nnid . "' LIMIT 1 ;");
+			}
+		}
+		else
+		{
+			if($_FILES['preview']['size'] > 0) 
+				{	
+					$purl = 'files/content/'.$nnid.'/';					
+					$path_info = pathinfo($_FILES['preview']['name']);
+					$ext = $path_info['extension'];					
+					$file_full = $purl.'preview_' .$nnid.'.'.$ext;
+					if (file_exists(ROOT.$file_full)) 
+					{
+						@unlink(ROOT.$file_full);
+					}
+					if($foo = new Upload($_FILES['preview']))
+					{
+						$foo->file_new_name_body = 'preview_' .$nnid;
+						$foo->image_resize = false;
+						$foo->image_x = $content_conf['thumb_width'];
+						$foo->image_ratio_y = true;
+						$foo->file_overwrite = true;
+						$foo->file_auto_rename = false;
+						$foo->Process(ROOT.$purl);
+						$foo->allowed = array("image/*");							
+						if ($foo->processed) 
+						{
+							$foo->Clean();
+						}
+					}
+					$db->query("UPDATE `" . DB_PREFIX . "_content` SET `preview` = '/" . $file_full . "' WHERE `id` = '" . $nnid . "' LIMIT 1 ;");
+				}
+		}
+
+		if ($theme == '0') {$theme='';}
+		if(is_writable(ROOT .'usr/tpl/'.$config['tpl'].'/content/'.$theme.'/content-view.tpl'))
+		{
+			$fp = @fopen(ROOT .'usr/tpl/'.$config['tpl'].'/content/'.$theme.'/content-view.tpl', 'w');
+			fwrite($fp, stripslashes($templ));
+			fclose($fp);
+		}		
 	} else {
-		$adminTpl->admin_head(_MODULES . ' | ' . _ERROR);
-		$adminTpl->info(_BASE_ERROR_0, 'error');
+		$adminTpl->info($lang['base_error_1'], 'error', null, $lang['error'], $lang['go_back'], 'javascript:history.go(-1)');
 	}
+	echo '</div>';
 	$adminTpl->admin_foot();
 }
 
@@ -479,6 +564,12 @@ switch(isset($url[3]) ? $url[3] : null) {
 		$db->query("UPDATE `" . DB_PREFIX . "_content` SET `active` = '0' WHERE `id` = " . $id . " LIMIT 1 ;");
 		header('Location: /'.ADMIN.'/module/content');
 	break;
+	
+	case "reactivate":
+		$id = intval($url[4]);
+		$db->query("UPDATE `" . DB_PREFIX . "_content`  SET `active` = NOT `active` WHERE `id` = " . $id . " LIMIT 1 ;");
+		header('Location: /'.ADMIN.'/module/content');
+	break;
 
 	case "action":
 	$type = $_POST['act'];
@@ -512,32 +603,75 @@ switch(isset($url[3]) ? $url[3] : null) {
 		header('Location: /'.ADMIN.'/module/content');
 	break;
 	
+	case 'ajax':
+		global $adminTpl, $db, $config;
+			ajaxInit();
+			$type = $url[4];			
+			switch($type) 
+			{
+				case "isurl":					
+					if(isset($_POST['altname']))
+					{ 
+						if(!preg_match("/^[a-zA-Z0-9_-]+$/", $_POST['altname']))
+						{
+							echo(json_encode($lang['static_add_url_err_2']));
+						}
+						else
+						{
+							
+							$query = $db->query("SELECT * FROM ".DB_PREFIX."_content WHERE translate = '" . $db->safesql($_POST['altname']) . "'");
+							if(($db->numRows($query) > 0) && ($url[5] != 'update')) 
+							{	
+								echo 'false';
+							}
+							else
+							{
+								echo 'true';
+							}
+						}
+					}
+					
+				break;
+				
+				case "loadtpl":
+					$file = (isset($url[5]) && file_exists('usr/tpl/' . $config['tpl'] . '/content/'.$url[5].'/content-view.tpl')) ? $url[5] : '';
+					$text = htmlspecialchars(file_get_contents(ROOT . 'usr/tpl/' . $config['tpl'] . '/content/'.$file.'/content-view.tpl'), ENT_QUOTES);
+					$count_rows = count(explode("\n", $text))*20;					
+					echo '<textarea name="templ" class="textarea" id="_code" style="width: 100%; height: 280px">' .$text . '</textarea>'	;
+				break;
+			}
+	break;
+	
 	case 'config':
-		require (ROOT.'etc/content.config.php');
-		
+		require (ROOT.'etc/content.config.php');		
 		$configBox = array(
 			'content' => array(
 				'varName' => 'content_conf',
-				'title' => _N_CONFIG_TITLE,
+				'title' => $lang['static_config_title'],
 				'groups' => array(
 					'main' => array(
-						'title' => _N_CONFIG_MAIN,
+						'title' => $lang['config_main'],
 						'vars' => array(
 							'num' => array(
-								'title' => _N_CONFIG_POST,
-								'description' => _N_CONFIG_POST_I,
+								'title' => $lang['static_config_post'],
+								'description' => $lang['static_config_post_t'],
 								'content' => '<input type="text" size="20" name="{varName}" class="form-control" value="{var}" />',
 							),
 							'comments_num' => array(
-								'title' => _N_CONFIG_COM,
-								'description' => _N_CONFIG_COM_I,
+								'title' => $lang['static_config_com'],
+								'description' => $lang['static_config_com_t'],
 								'content' => '<input type="text" size="20" name="{varName}" class="form-control" value="{var}" />',
 							),							
 							'allowComm' => array(
-								'title' => _N_CONFIG_COMP,
-								'description' => _N_CONFIG_COMP_I,
+								'title' => $lang['static_config_comp'],
+								'description' => $lang['static_config_comp_t'],
 								'content' => radio("allowComm", $content_conf['allowComm']),
-							),							
+							),
+							'thumb_width' => array(
+								'title' => $lang['static_config_thumb'],
+								'description' => $lang['static_config_thumb_t'],
+								'content' => '<input type="text" size="20" name="{varName}" class="form-control" value="{var}" />',
+							),	
 						)
 					),
 

@@ -776,8 +776,9 @@ global $adminTpl, $core, $db, $cats, $groupss, $config, $news_conf, $lang;
 			if($_FILES['preview']['size'] > 0) 
 				{	
 					$purl = 'files/news/'.$nnid.'/';
-					$type = str_replace('image/', '', $_FILES['preview']['type']);
-					$file_full = $purl.'preview_' .$nnid.'.'.$type;
+					$path_info = pathinfo($_FILES['preview']['name']);
+					$ext = $path_info['extension'];		
+					$file_full = $purl.'preview_' .$nnid.'.'.$ext;
 					if (file_exists(ROOT.$file_full)) 
 					{
 						@unlink(ROOT.$file_full);

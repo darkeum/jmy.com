@@ -394,6 +394,53 @@ function img_preview($img, $type)
 function bb_area($name, $val = null, $rows = 5, $class = 'textarea', $onclick = null, $return = false, $html = false) {
 global $core, $smileList, $smiles, $user, $url;
 static $initArea;
+
+		$id = $name;		
+		$core->tpl->headerIncludes['bb'] = '<script type="text/javascript" src="usr/plugins/js/bb_editor.js"></script><script type="text/javascript">var textareaName = \''.$name.'\';</script>';
+		$core->tpl->headerIncludes['htmleditor'] = '<script type="text/javascript" src="/usr/plugins/tinymce/tinymce.min.js"></script>
+		<script>
+			tinymce.init({
+				theme: \'modern\',
+				skin: \'custom\',
+				selector: \'textarea\',
+				language: \'ru\',
+				height: 300,
+				menubar:false,
+				statusbar: false,
+				convert_urls: false,
+				relative_urls: false,
+				plugins: [
+					\'advlist autolink lists link codesample hr image charmap print preview anchor\',
+					\'searchreplace visualblocks code fullscreen\',
+					\'insertdatetime media table contextmenu paste spellchecker responsivefilemanager code youtube jmybutton emoticons\'
+				],
+				toolbar1: \'styleselect | bold italic underline strikethrough | alignleft aligncenter alignright \',
+				toolbar2: \'link image responsivefilemanager jmymusic jmyvideo | jmymail jmyquote codesample jmyspoiler bullist\',
+				image_advtab: true,
+				spellchecker_language : "ru",
+				spellchecker_languages : "Russian=ru,Ukrainian=uk,English=en",
+				spellchecker_rpc_url : "//speller.yandex.net/services/tinyspell",
+				external_filemanager_path: \'/usr/plugins/filemanager/\',
+				external_plugins: { "filemanager" : "/usr/plugins/filemanager/plugin.min.js"},
+				filemanager_title: \'Управление файлами\',  
+			});
+		</script>';
+		$editor = '<textarea id="' . $id . '" name="' . $name . '" rows="' . $rows . '" cols="90" class="' . $class . '" onclick="mainArea(\'' . $name . '\')">' . $val . '</textarea>';
+		return $editor;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	if($name) 
 	{	
 		$i_smile=0;
@@ -465,7 +512,7 @@ static $initArea;
 		{
 			$contents = ob_get_contents();
 			ob_end_clean();
-			return $contents;
+			return $editor;
 		}
 	}
 }
@@ -790,9 +837,9 @@ function ajaxInit()
 function getHost($uri) 
 {
     $url = str_replace('http://', '', $uri);
+	$url = str_replace('https://', '', $uri);
     $url = str_replace('www.', '', $url);
     $url = explode('/', $url);
-
     return mb_strtolower($url[0]);
 }
 
@@ -1261,8 +1308,8 @@ global $db, $core, $config, $user, $adminUid, $page;
 		$core->tpl->setVar('COOKIE_MAIL', isset($_COOKIE['email']) && !$core->auth->isUser ? $_COOKIE['email'] : $core->auth->user_info['email']);
 		$core->tpl->setvar('BB_AREA', $bb);
 		$core->tpl->setVar('CAPTCHA', $captcha);
-		$core->tpl->sources = preg_replace("#\\[noSubscribe\\](.*?)\\[/noSubscribe\\]#ies", "if_set('" . ($user['commentSubscribe'] == 1 && $core->auth->isUser && $isSubscribe == 0 ? 'yes' : '') . "', '\\1')", $core->tpl->sources);
-		$core->tpl->sources = preg_replace("#\\[yesSubscribe\\](.*?)\\[/yesSubscribe\\]#ies", "if_set('" . ($user['commentSubscribe'] == 1 && $core->auth->isUser && $isSubscribe == 1 ? 'yes' : '') . "', '\\1')", $core->tpl->sources);
+		$core->tpl->sources = if_sets("#\\[noSubscribe\\](.*?)\\[/noSubscribe\\]#is", $core->tpl->sources, ($user['commentSubscribe'] == 1 &&$core->auth->isUser && $isSubscribe == 0 ? 'yes' : ''));
+		$core->tpl->sources = if_sets("#\\[yesSubscribe\\](.*?)\\[/yesSubscribe\\]#is", $core->tpl->sources, ($user['commentSubscribe'] == 1 && $core->auth->isUser && $isSubscribe == 1 ? 'yes' : ''));
 		$core->tpl->setVar('MOD', $module);
 		$core->tpl->end();
 	}

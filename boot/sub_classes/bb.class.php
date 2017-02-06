@@ -2,7 +2,7 @@
 
 /**
 * @name        JMY CORE
-* @link        http://jmy.su/
+* @link        https://jmy.su/
 * @copyright   Copyright (C) 2012-2017 JMY LTD
 * @license     LICENSE.txt (see attached file)
 * @version     VERSION.txt (see attached file)
@@ -14,26 +14,26 @@ class bb
 
 	var $codeArr = array();
 	
-	function parse($text, $pubId, $html)
+	function parse($text, $pubId = false, $html = false)
 	{
-	global $smileRepl, $smiles, $core, $config;
-	
-		if($pubId === true) $html = true;
-		
+		global $smileRepl, $smiles, $core, $config, $lang;
+		$result = $text;	
+		if($pubId === true) $html = true;		
 		foreach($smiles as $smile => $info)
 		{
 			$smileRepl .= $smile.'|';
-		}
-		
-		if($html == true)
-		{
-			$in[] = '%\[html\](.+?)\[\/html\]%iues';
-			$out[] = '$this->prepareHTML(\'\\1\')';
-			
-		}
-		
-		$in[] = '%\[code=(php|sql|html|javascript|css|text)\](.+?)\[\/code\]%iuse';
-		$out[] = "\$this->prepareCode('\\2', '\\1')";	
+		}	
+		$result = preg_replace_callback("%\[code=(php|sql|html|javascript|css|text)\](.+?)\[\/code\]%ius", array(&$this, 'prepareCode'), $result);
+		$result = preg_replace_callback("%\[thumb(=left|=right|=center)? alt=(.+?)\](.+?)\[\/thumb\]%ius", array(&$this, 'thumbnailParse'), $result);
+		$result = preg_replace_callback("%\[img(=left|=right|=center)? alt=(.+?)\](.+?)\[\/img\]%ius", array(&$this, 'imageParse'), $result);	
+		$result = preg_replace_callback("%\[thumb(=left|=right|=center)?\](.+?)\[\/thumb\]%ius", array(&$this, 'thumbnailParse'), $result);$result = preg_replace_callback("%\[img(=left|=right|=center)?\](.+?)\[\/img\]%ius", array(&$this, 'imageParse'), $result);			
+		$result = preg_replace_callback("%\[url=(.+?)\](.+?)\[\/url\]%ius", array(&$this, 'formatBBUrl'), $result);	
+		$result = preg_replace_callback("%\[email=(.+?)\](.+?)\[\/email\]%ius", array(&$this, 'formatBBEmail'), $result);	
+		$result = preg_replace_callback("%\[video\](.+?)\[\/video\]%ius", array(&$this, 'formatBBVideo'), $result);
+		$result = preg_replace_callback("%\[audio\](.+?)\[\/audio\]%ius", array(&$this, 'formatBBVideo'), $result);
+		$result = preg_replace_callback("%\[spoiler\]%ius", array(&$this, 'spoiler'), $result);	
+		$result = preg_replace_callback("%\[spoiler\=(.+?)\]%ius", array(&$this, 'spoiler'), $result);	
+		$result = preg_replace_callback('%(' . mb_substr($smileRepl, 0, -1, 'UTF-8') . ')%ius', array(&$this, 'formatSmile'), $result);
 				
 		$in[] = '%\[b\](.+?)\[/b\]%ius';
 		$out[] = '<strong>\\1</strong>';
@@ -53,29 +53,11 @@ class bb
 		$in[] = '%\[ol\](.*)\[\/ol\]%ius';
 		$out[] = '<ol>\\1<li>\\2</li></ol>';
 		
-		$in[] = '%\[thumb(=left|=right|=center)? alt=(.+?)\](.+?)\[\/thumb\]%iues';
-		$out[] = '\$this->thumbnailParse(\'\\3\', \'\\1\', false, \'\\2\')';       
-		
-		$in[] = '%\[img(=left|=right|=center)? alt=(.+?)\](.+?)\[\/img\]%iues';
-		$out[] = '\$this->imageParse(\'\\3\', \'\\1\', \'\\2\')';   
-
-		$in[] = '%\[thumb(=left|=right|=center)?\](.+?)\[\/thumb\]%iues';
-		$out[] = '\$this->thumbnailParse(\'\\2\', \'\\1\')';       
-		
-		$in[] = '%\[img(=left|=right|=center)?\](.+?)\[\/img\]%iues';
-		$out[] = '\$this->imageParse(\'\\2\', \'\\1\')';   
-		
 		$in[] = '%\[color=(.+?)\](.+?)\[\/color\]%ius';
 		$out[] = "<span style=\"color:\\1\">\\2</span>";	
 		
 		$in[] = '%\[size=([0-9])\](.+?)\[\/size\]%ius';
 		$out[] = "<span style=\"font-size:1\\1pt\">\\2</span>";	
-		
-		$in[] = '%\[url=(.+?)\](.+?)\[\/url\]%iues';
-		$out[] = "\$this->formatBBUrl('\\1', '\\2')";	
-		
-		$in[] = '%\[email=(.+?)\](.+?)\[\/email\]%iues';
-		$out[] = "\$this->formatBBEmail('\\1', '\\2')";
 
 		$in[] = '%\[hr\]%iu';
 		$out[] = '<hr />';   
@@ -99,30 +81,13 @@ class bb
 		$out[] = '<div align="center">\\1</div>';
 
 		$in[] = '%\[right\](.+?)\[\/right\]%ius';
-		$out[] = '<div align="right">\\1</div>';
-
-		$in[] = '%\[video\](.+?)\[\/video\]%iues';
-		$out[] = '$this->formatBBVideo(\'\\1\')';		
-
-		$in[] = '%\[audio\](.+?)\[\/audio\]%iues';
-		$out[] = '$this->formatBBVideo(\'\\1\')';	
-		
-		$in[] = '%\[spoiler\]%iues';
-		$out[] = '$this->spoiler()';	
+		$out[] = '<div align="right">\\1</div>';	
 		
 		$in[] = '%\[/spoiler\]%si';
-		$out[] = '</div></div><!--spoiler:end-->';		
-		
-		$in[] = '%\[spoiler\=(.+?)\]%iues';
-		$out[] = '$this->spoiler(\'\\1\')';		
-
-		$in[] = '%(' . mb_substr($smileRepl, 0, -1, 'UTF-8') . ')%iuse';
-		$out[] = "\$this->formatSmile('\\1')";
-		
-		$result = nl2br(preg_replace($in, $out, $text));
-
+		$out[] = '</div></div><!--spoiler:end-->';			
+		$result = preg_replace($in, $out, $result);
 		$replace = array(
-			'[quote]' => '<!--quote--><div class="quote"><strong>' . _QUOTE . ':</strong><br />',
+			'[quote]' => '<!--quote--><div class="quote"><strong>' . $lang['quote'] . ':</strong><br />',
 			'[/quote]' => '</div><!--quote:end-->',
 			'[*]' => '<li>',
              '%\[blockquote\](.*?)\[/blockquote\]%si' => "<blockquote>\\1</blockquote>",
@@ -138,15 +103,9 @@ class bb
 
 		);
 		
-		$result = str_replace(array_keys($replace), array_values($replace), $result);
-		
-		if($html == true)
-			$result = preg_replace('#<<html::([0-9])::html>>#es', '$this->DoHtml(\'\\1\')', $result);
-			$result = preg_replace('#<<code::(.*?)::(.*?)::code>>#es', '$this->highlight_code(\'\\1\', \'\\2\')', $result);
-
-	
-		$this->htmlArr = array();
-		
+		$result = str_replace(array_keys($replace), array_values($replace), $result);			
+		$result = preg_replace_callback("#<<code::(.*?)::(.*?)::code>>#s", array(&$this, 'highlight_code'), $result);			
+		$this->htmlArr = array();		
 		return stripslashes($result);
 	}
 	
@@ -162,11 +121,6 @@ class bb
 		{
 			$text = preg_replace_callback( "%\[video\](.+?)\[\/video\]%ius", array( &$this, 'formatBBVideo'), $text);	
 			$text = preg_replace_callback( "%\[audio\](.+?)\[\/audio\]%ius", array( &$this, 'formatBBVideo'), $text);	
-			$in[] = '%\[video\](.+?)\[\/video\]%iues';
-			$out[] = '$this->formatBBVideo(\'\\1\')';		
-
-			$in[] = '%\[audio\](.+?)\[\/audio\]%iues';
-			$out[] = '$this->formatBBVideo(\'\\1\')';	
 
 		}
 		
@@ -217,9 +171,21 @@ class bb
 		return $text;
 	}
 	
-	function imageParse($img, $align = '', $alt = '')
+	function imageParse($matches = array())
 	{
-	global $config;
+		global $config;
+		if (isset($matches[3]))
+		{
+			$img = $matches[3];
+			$align = $matches[1];
+			$alt = $matches[2];
+		}
+		else
+		{
+			$img = $matches[2];
+			$align =  $matches[1];
+			$alt = '';
+		}
 		$align = str_replace('=', '', $align);
 		require ROOT . 'etc/files.config.php';
 		$linked = eregStrt('http://', $img)||eregStrt('https://', $img) ? true : false;
@@ -246,10 +212,24 @@ class bb
 		}
 	}	
 
-	function thumbnailParse($img, $align = '', $req = false, $alt = '')
+	function thumbnailParse($matches = array())
 	{
-	global $core, $config;
-	static $js, $picture;
+		if (isset($matches[3]))
+		{
+			$img = $matches[3];
+			$align = $matches[1];
+			$req = false;
+			$alt = $matches[2];
+		}
+		else
+		{
+			$img = $matches[2];
+			$align =  $matches[1];
+			$req = false;
+			$alt = '';
+		}
+		global $core, $config;
+		static $js, $picture;
 		$align = str_replace('=', '', $align);
 		
 		if(($img && $config['imageEffect'] && file_exists(ROOT . $img)) || $req == true)
@@ -294,7 +274,7 @@ class bb
 
 	function parseAttach($text, $pubId)
 	{
-	global $core, $db;
+	global $core, $db, $lang;
 		$module = $core->getMod(true);
 		$pubId = intval($pubId);
 		$q = $db->query("SELECT * FROM `" . DB_PREFIX . "_attach` WHERE `pub_id`='" . $pubId . "' AND `mod`='" . $module . "'");		
@@ -306,8 +286,8 @@ class bb
 			$stat=substr($stat,$position);
 			$position=strpos($stat,'[/static]');
 			$stat=substr($stat,0,$position);
-			$stat = preg_replace( "#\\[static]#ies", '', $stat);				
-			$first = preg_replace( "#\\[static](.*?)\\[/static]#ies", '', $first);			
+			$stat = preg_replace( "#\\[static]#is", '', $stat);				
+			$first = preg_replace( "#\\[static](.*?)\\[/static]#is", '', $first);			
 			echo $stat;			
 			while($rows = $db->getRow($q))
 			{				
@@ -321,7 +301,7 @@ class bb
 				}
 				else
 				{
-					$replace = _ACCESS_ATTACH;
+					$replace = $lang['attach_deny'];
 				}				
 				$text = str_replace('[attach=' . $rows['id'] . ']', $replace, $text);
 			}
@@ -330,39 +310,45 @@ class bb
 	}
 
 
-	function spoiler($title = '')
+	function spoiler($matches = array())
 	{
+		global $lang;
+		$title = '';
+		if (isset($matches[1]))
+		{
+			$title=$matches[1];
+		}		
 		$code = gencode(5);
-		return '<!--spoiler--><div class="spoiler"><a href="javascript:void(0)" onclick="showhide(\'sp' . $code . '\')">' . (!empty($title) ? '<span class="_spoilertitle">'.stripslashes($title).'</span>' : _SPOILE_EXPAND) . '</a><div id="sp' . $code . '" style="display:none;"><br />';	
+		return '<!--spoiler--><div class="spoiler"><a href="javascript:void(0)" onclick="showhide(\'sp' . $code . '\')">' . (!empty($title) ? '<span class="_spoilertitle">'.stripslashes($title).'</span>' : $lang['spoiler_expand']) . '</a><div id="sp' . $code . '" style="display:none;"><br />';	
 	}
 	
 	function hide($content)
 	{
-	global $core;
+		global $core, $lang;
 		if($core->auth->group_info['showHide'] == 1)
 		{
 			return stripslashes($content[1]);
 		}
 		else
 		{
-			return '<div class="hide"><strong>' . str_replace('[group]', $core->auth->group_info['gname'], _GR_DENIDE) . '</strong></div>';
+			return '<div class="hide"><strong>' . str_replace('[group]', $core->auth->group_info['gname'], $lang['gr_genide']) . '</strong></div>';
 		}
 	}
 	
 	function highlight_code($count, $lang = 'plain')
 	{
-	global $user;
+	global $user, $lang;
 			if(isset($this->codeArr[$count]))
-			{
-				
+			{				
 				$mainCodeName = $lang;
 				$code = htmlspecialchars_decode($this->codeArr[$count]);
-				return '<!--code:' . $lang . '--><div class="codeBox"><div class="codeTitle">' . _CODE . ' - ' . strtoupper($mainCodeName) . '</div><div class="codeContent" style="overflow-x:auto;"><pre class="brush: ' . ($lang == 'html' || $lang == 'text' ? 'plain' : $lang) . ';">' . wordwrap(str_replace('&amp;#123;', '&#123;', htmlspecialchars($code)), 110, "\n", true) . '</pre></div></div><!--code:end-->';
+				return '<!--code:' . $lang . '--><div class="codeBox"><div class="codeTitle">' . $lang['code'] . ' - ' . strtoupper($mainCodeName) . '</div><div class="codeContent" style="overflow-x:auto;"><pre class="brush: ' . ($lang == 'html' || $lang == 'text' ? 'plain' : $lang) . ';">' . wordwrap(str_replace('&amp;#123;', '&#123;', htmlspecialchars($code)), 110, "\n", true) . '</pre></div></div><!--code:end-->';
 			}
 	}
 	
-	private function prepareHTML($content)
+	private function prepareHTML($matches = array())
 	{
+		$content = $matches[1];
 		if(empty($this->htmlArr))
 		{
 			$count = -1;
@@ -379,8 +365,10 @@ class bb
 	}	
 	
 	
-	private function prepareCode($content, $php)
+	private function prepareCode($matches = array())
 	{
+		$content = $matches[2];
+		$php = $matches[1];
 		if(empty($this->codeArr))
 		{
 			$count = -1;
@@ -419,24 +407,28 @@ class bb
 		return nl2br(stripslashes($content));
 	}
 
-	private function formatBBUrl($url, $content)
+	private function formatBBUrl($matches = array())
 	{
+		global $lang;
+		$url = $matches[1];
+		$content = $matches[2];
 		if(!empty($url) && !empty($content))
 		{
 			if(eregStrt('://', $url))
 			{
 				$arr = explode('://', $url);
-				return '<!--url--><a href="go.php?url=' . base64_encode($url) . '" title="' . _LINK . '" target="_blank" onclick="javascript:this.href=\'' . $arr[0] . '://' . htmlspecialchars($arr[1], ENT_QUOTES) . '\'" onmouseover="javascript:this.href=\'' . $arr[0] . '://' . htmlspecialchars($arr[1], ENT_QUOTES) . '\'">' . stripslashes($content) . '</a><!--url:end-->';
+				return '<!--url--><a href="go.php?url=' . base64_encode($url) . '" title="' . $lang['link'] . '" target="_blank" onclick="javascript:this.href=\'' . $arr[0] . '://' . htmlspecialchars($arr[1], ENT_QUOTES) . '\'" onmouseover="javascript:this.href=\'' . $arr[0] . '://' . htmlspecialchars($arr[1], ENT_QUOTES) . '\'">' . stripslashes($content) . '</a><!--url:end-->';
 			}
 			else
 			{
-				return '<a href="' . $url . '" title="' . _LINK . '">' . stripslashes($content) . '</a>';
+				return '<a href="' . $url . '" title="' . $lang['link'] . '">' . stripslashes($content) . '</a>';
 			}
 		}
 	}
 	
-	function smileDecode($url)
+	function smileDecode($matches = array())
 	{
+		$url = $matches[1];
 	global $smiles;
 			
 
@@ -448,31 +440,46 @@ class bb
 		return !empty($decode[$url]) ? $decode[$url] : '';
 	}
 	
-	function imgDecode($url, $alt, $align = '', $type = 'img')
+	function imgDecode($matches = array())
 	{
-	global $config;
+		$url = $matches[1];
+		$alt = $matches[2];
+		$align = (isset($matches[3]) ? $matches[3] : '');
+		$type = 'img';
+		global $config;
+		return stripslashes('[' . $type . '' . (!empty($align) ? '='.$align : '') . (!empty($alt) ? ' alt='.$alt : '') . ']' . str_replace($config['url'].'/', '', $url) . '[/' . $type . ']');
+	}
+	
+	function thumbDecode($matches = array())
+	{
+		$url = $matches[1];
+		$alt = $matches[2];
+		$align = (isset($matches[3]) ? $matches[3] : '');
+		$type = 'thumb';
+		global $config;
 		return stripslashes('[' . $type . '' . (!empty($align) ? '='.$align : '') . (!empty($alt) ? ' alt='.$alt : '') . ']' . str_replace($config['url'].'/', '', $url) . '[/' . $type . ']');
 	}
 		
 
 	function htmltobb($text)
 	{
-	global $smileRepl, $smileRepl2, $smiles, $core;
+	global $smileRepl, $smileRepl2, $smiles, $core, $lang;
 	
 		foreach($smiles as $smile => $info)
 		{
 			$smileRepl .= $info['url'].'|';
 		}
+		$text = preg_replace_callback('%<!--code:(.*?)-->.*?class="brush: .*?">(.*?)</pre></div></div><!--code:end-->%ius',
+			array(&$this, 'prepareCode'), $text);		
+		$text = preg_replace_callback('%<!--ThumbNail-->.*?src="(.*?)".*?alt="(.*?)".*?align="(.*?)".*?<!--ThumbNail:end-->%ius',
+			array(&$this, 'thumbDecode'), $text);	
+		$text = preg_replace_callback('%<!--ThumbNail-->.*?src="(.*?)".*?alt="(.*?)".*?<!--ThumbNail:end-->%ius',
+			array(&$this, 'thumbDecode'), $text);	
+		$text = preg_replace_callback('%<img src="(' . $smileRepl . ')".*?alt="" border="0" style="vertical-align:middle" />%ius',
+			array(&$this, 'smileDecode'), $text);
 		
         $array_html = array(
-            '%<!--html_text-->(.*?)<!--html_text:end-->%iues',
-            '%<!--url-->.*?onmouseover="javascript:this.href=\'(.*?)\'">(.*?)</a><!--url:end-->%ius',
-            '%<!--code:(.*?)-->.*?class="brush: .*?">(.*?)</pre></div></div><!--code:end-->%ieus',
-            '%<!--quote--><div class="quote"><strong>' . _QUOTE . ':</strong>(.*?)</div><!--quote:end-->%ius',
-            '%<!--IMG--><img src="(.*?)".*?alt="(.*?)".*?align="(.*?)".*?<!--IMG:end-->%iues',
-            '%<!--IMG--><img src="(.*?)".*?alt="(.*?)".*?<!--IMG:end-->%iues',
-            '%<!--ThumbNail-->.*?src="(.*?)".*?alt="(.*?)".*?align="(.*?)".*?<!--ThumbNail:end-->%iues',
-            '%<!--ThumbNail-->.*?src="(.*?)".*?alt="(.*?)".*?<!--ThumbNail:end-->%iues',
+            '%<!--quote--><div class="quote"><strong>' . $lang['quote'] . ':</strong>(.*?)</div><!--quote:end-->%ius',           
             '%<!--flash-->.*?src="(.*?)".*?<!--flash:end-->%ius',
             '%<!--flash:([0-9]*)x([0-9]*)-->.*?src="(.*?)".*?<!--flash:end-->%ius',
             '%<!-- video:(.*?):(.*?) -->.*?value="(.*?)".*?<!-- video:(.*?):end -->%ius',
@@ -483,100 +490,46 @@ class bb
             '%<!-- audio:(.*?) -->.*?src="(.*?)".*?<!-- audio:end -->%ius',
             '%<!--spoiler--><div class="spoiler">.*?<span class="_spoilertitle">(.*?)</span>.*?style="display:none;">%ius',
 			'%<!--spoiler--><div class="spoiler">.*?style="display:none;">%ius',
-            '%</div></div><!--spoiler:end-->%ius',
-            '%<img src="(' . $smileRepl . ')".*?alt="" border="0" style="vertical-align:middle" />%iues',
-            '%&reg;%ius',
-            '%&copy;%ius',
-            '%&\#153;%ius',
-            '%<hr />%ius',
-            '%<h6>(.*?)</h6>%ius',
-            '%<span style="font-size:1(.*?)pt">(.*?)</span>%ius',
-            '%<span style="color:(.*?)">(.*?)</span>%ius',
-            '%<h5>(.*?)</h5>%ius',
-            '%<h4>(.*?)</h4>%ius',
-            '%<h3>(.*?)</h3>%ius',
-            '%<h2>(.*?)</h2>%ius',
-            '%<h1>(.*?)</h1>%ius',
-            '%<s>(.*?)</s>%ius',
-            '%<u>(.*?)</u>%ius',
-            '%<i>(.*?)</i>%ius',
-            '%<b>(.*?)</b>%ius',
-            '%<strong>(.*?)</strong>%ius',
-            '%<li>(.*?)</li>%ius',
-            '%<sup>(.*?)</sup>%ius',
-            '%<sub>(.*?)</sub>%ius',
-            '%<div align="(.*?)">(.*?)</div>%ius',
+            '%</div></div><!--spoiler:end-->%ius',  
 		);
 		
     
         $array_bb = array(
-			"\$this->prepareHTML('\\1')",
-			"[url=\\1]\\2[/url]",
-			"\$this->prepareCode('\\2', '\\1')",
 			"[quote]\\1[/quote]",
-			"\$this->imgDecode('\\1', '\\2', '\\3')",
-			"\$this->imgDecode('\\1', '\\2')",
-			"\$this->imgDecode('\\1', '\\2', '\\3', 'thumb')",
-			"\$this->imgDecode('\\1', '\\2', '', 'thumb')",
 			"[flash]\\1[/flash]",
-			"[flash=\\1x\\2]\\3[/flash]",
+			"[flash=\\1x\\2]\\3[/flash]",			
 			"[video]\\3[/video]",			
 			"[video]\\2[/video]",
-			"[video]http://rutube.ru/video/\\1[/video]",
-			"[video]http://www.twitch.tv/\\1[/video]",
+			"[video]https://rutube.ru/video/\\1[/video]",
+			"[video]https://www.twitch.tv/\\1[/video]",
 			"[video]\\2[/video]",
 			"[audio]\\2[/audio]",
 			"[spoiler=\\1]",
 			"[spoiler]",
 			"[/spoiler]",
-			"\$this->smileDecode('\\1')",
-            "(r)",
-            "(c)",
-            "(tm)",
-            "[hr]",
-            "[h6]\\1[/h6]",
-            "[size=\\1]\\2[/size]",
-            "[color=\\1]\\2[/color]",
-            "[h5]\\1[/h5]",
-            "[h4]\\1[/h4]",
-            "[h3]\\1[/h3]",
-            "[h2]\\1[/h2]",
-            "[h1]\\1[/h1]",
-            "[s]\\1[/s]",
-            "[u]\\1[/u]",
-            "[i]\\1[/i]",
-            "[b]\\1[/b]",
-            "[b]\\1[/b]",
-            "[li]\\1[/li]",
-            "[sup]\\1[/sup]",
-            "[sub]\\1[/sub]",
-            "[\\1]\\2[/\\1]",
         );
 	
-		$text = preg_replace($array_html, $array_bb, $text);
-		
-		$text = stripslashes($text);
-		
-		$text = str_replace("<br />", "", $text);
-		
-		$text = preg_replace('#<<html::([0-9])::html>>#es', '$this->DoHtml(\'\\1\', true)', $text);
-		$text = preg_replace('#<<code::([0-9])::(.*?)::code>>#es', '$this->doCode(\'\\1\', \'\\2\')', $text);
-		
+		$text = preg_replace($array_html, $array_bb, $text);		
+		$text = stripslashes($text);		
+		$text = preg_replace_callback("#<<code::(.*?)::(.*?)::code>>#s", array(&$this, 'highlight_code'), $text);	
 		return $text;
 	}
 	
-	private function formatBBEmail($mail, $content)
+	private function formatBBEmail($matches = array())
 	{
+		global $lang;
+		$mail = $matches[1];
+		$content = $matches[2];
 		if(!empty($mail) && !empty($content))
 		{
 			if(eregStrt('@', $mail))
 			{
 				$arr = explode('@', $mail);
-				return '<a href="javascript:void(0)" title="' . _LINK . '" target="_blank" onclick="javascript:this.href=\'mailto:' . $arr[0] . '\'+\'@' . htmlspecialchars($arr[1], ENT_QUOTES) . '\'" onmouseover="javascript:this.href=\'mailto:' . $arr[0] . '\'+\'@' . htmlspecialchars($arr[1], ENT_QUOTES) . '\'">' . $content . '</a>';
+				return '<a href="javascript:void(0)" title="' . $lang['link'] . '" target="_blank" onclick="javascript:this.href=\'mailto:' . $arr[0] . '\'+\'@' . htmlspecialchars($arr[1], ENT_QUOTES) . '\'" onmouseover="javascript:this.href=\'mailto:' . $arr[0] . '\'+\'@' . htmlspecialchars($arr[1], ENT_QUOTES) . '\'">' . $content . '</a>';
 			}
 			else
 			{
-				return '<a href="javascript:void(0)" onclick="javascript:this.href=\'mailto:' . $mail . '\'" onmouseover="javascript:this.href=\'mailto:' . $mail . '\'" title="' . _LINK . '" target="_blank">' . $content . '</a>';
+				return '<a href="javascript:void(0)" onclick="javascript:this.href=\'mailto:' . $mail . '\'" onmouseover="javascript:this.href=\'mailto:' . $mail . '\'" title="' . $lang['link'] . '" target="_blank">' . $content . '</a>';
 			}
 		}
 	}
@@ -598,18 +551,20 @@ class bb
 			if (eregStrt('/v/', $url))
 			{
 				$id = str_replace('http://www.youtube.com/v/', '', $url);
+				$id = str_replace('https://www.youtube.com/v/', '', $url);
 			}
 			elseif (eregStrt('/embed/', $url))
 			{
 				$id = str_replace('http://www.youtube.com/embed/', '', $url);
+				$id = str_replace('https://www.youtube.com/embed/', '', $url);
 			}			
 			else
 			{
 				$id = $query['v'];
-			}			
+			}	
 			if($id)
 			{			
-				return '<!-- video:youtube:' . $id . ' --><iframe width="640" height="385" src="http://www.youtube.com/embed/'.$id.'" frameborder="0" allowfullscreen></iframe><!-- video:youtube:end -->';
+				return '<!-- video:youtube:' . $id . ' --><iframe width="640" height="385" src="https://www.youtube.com/embed/'.$id.'" frameborder="0" allowfullscreen></iframe><!-- video:youtube:end -->';
 			}
 		}
 		
@@ -618,6 +573,7 @@ class bb
 			if (eregStrt('/video/', $url))
 			{
 				$id = str_replace('http://rutube.ru/video/', '', $url);
+				$id = str_replace('https://rutube.ru/video/', '', $url);
 				$position = strpos($id,'/');
 				if (!isset($position))
 				{
@@ -627,6 +583,7 @@ class bb
 			elseif (eregStrt('/play/embed/', $url))
 			{
 				$id = str_replace('http://rutube.ru/play/embed/', '', $url);
+				$id = str_replace('https://rutube.ru/play/embed/', '', $url);
 				$position = strpos($id,'?');
 				if (!isset($position))
 				{
@@ -639,7 +596,7 @@ class bb
 			}
 			if($id)
 			{			
-				return '<!-- video:rutube:' . $id . ' --><iframe width="640" height="385" src="http://rutube.ru/play/embed/'.$id.'?autoStart=false" frameborder="0" allowfullscreen></iframe><!-- video:rutube:end -->';
+				return '<!-- video:rutube:' . $id . ' --><iframe width="640" height="385" src="https://rutube.ru/play/embed/'.$id.'?autoStart=false" frameborder="0" allowfullscreen></iframe><!-- video:rutube:end -->';
 			}
 			
 		}
@@ -647,7 +604,8 @@ class bb
 		{			
 			if (eregStrt('twitch.tv/', $url))
 			{
-				$id = str_replace('http://www.twitch.tv/', '', $url);				
+				$id = str_replace('http://www.twitch.tv/', '', $url);	
+				$id = str_replace('https://www.twitch.tv/', '', $url);				
 				$position = strpos($id,'/');
 				if (!isset($position))
 				{
@@ -661,7 +619,7 @@ class bb
 			}
 			if($id)
 			{			
-				return '<!-- video:twitch:' . $id . ' --><iframe width="640" height="385" src="http://www.twitch.tv/'.$id.'/embed?autoplay=false" frameborder="0" allowfullscreen></iframe><!-- video:twitch:end -->';
+				return '<!-- video:twitch:' . $id . ' --><iframe width="640" height="385" src="https://www.twitch.tv/'.$id.'/embed?autoplay=false" frameborder="0" allowfullscreen></iframe><!-- video:twitch:end -->';
 			}
 		}	
 		elseif($host == 'smotri.com')
@@ -669,7 +627,7 @@ class bb
 			$id = $query['id'];
 			if($id)
 			{
-				return '<!-- video:smotri:' . $id . ' --><object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" width="400" height="330"><param name="movie" value="http://pics.smotri.com/scrubber_custom8.swf?file=' . $id . '&amp;bufferTime=3&autoStart=false&str_lang=eng&amp;xmlsource=http%3A%2F%2Fpics.smotri.com%2Fcskins%2Fblue%2Fskin_color_lightaqua.xml&xmldatasource=http%3A%2F%2Fpics.smotri.com%2Fskin_ng.xml" /><param name="allowScriptAccess" value="always" /><param name="allowFullScreen" value="true" /><param name="bgcolor" value="#ffffff" /><embed src="http://pics.smotri.com/scrubber_custom8.swf?file=' . $id . '&amp;bufferTime=3&amp;autoStart=false&str_lang=eng&amp;xmlsource=http%3A%2F%2Fpics.smotri.com%2Fcskins%2Fblue%2Fskin_color_lightaqua.xml&xmldatasource=http%3A%2F%2Fpics.smotri.com%2Fskin_ng.xml" quality="high" allowscriptaccess="always" allowfullscreen="true" wmode="window" width="400" height="330" type="application/x-shockwave-flash"></embed></object><!-- video:smotri:end -->';
+				return '<!-- video:smotri:' . $id . ' --><object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" width="400" height="330"><param name="movie" value="https://pics.smotri.com/scrubber_custom8.swf?file=' . $id . '&amp;bufferTime=3&autoStart=false&str_lang=eng&amp;xmlsource=http%3A%2F%2Fpics.smotri.com%2Fcskins%2Fblue%2Fskin_color_lightaqua.xml&xmldatasource=http%3A%2F%2Fpics.smotri.com%2Fskin_ng.xml" /><param name="allowScriptAccess" value="always" /><param name="allowFullScreen" value="true" /><param name="bgcolor" value="#ffffff" /><embed src="https://pics.smotri.com/scrubber_custom8.swf?file=' . $id . '&amp;bufferTime=3&amp;autoStart=false&str_lang=eng&amp;xmlsource=http%3A%2F%2Fpics.smotri.com%2Fcskins%2Fblue%2Fskin_color_lightaqua.xml&xmldatasource=http%3A%2F%2Fpics.smotri.com%2Fskin_ng.xml" quality="high" allowscriptaccess="always" allowfullscreen="true" wmode="window" width="400" height="330" type="application/x-shockwave-flash"></embed></object><!-- video:smotri:end -->';
 			}
 		}
 		elseif($type == 'flv' || $type == 'mp4' || $type == '3gp' || $type == 'webm' || $type == 'm4v')
@@ -685,12 +643,12 @@ class bb
 			$arr = explode('/', $url);
 			return '<!-- audio:'.$code.' --><div id="audio-container"><audio controls="" preload="none" width="640" height="30" src="' . ($host == 'files' ? $config['url'].'/'.$url : $url) . '"></audio></div><!-- audio:end -->';
 		}
-	}
-	
+	}	
 
-	private function formatSmile($smile)
+	private function formatSmile($matches=array())
 	{
 	global $smiles;
+		$smile = $matches[1];
 		if(is_array($smiles[$smile]))
 		{
 			return '<img src="' . $smiles[$smile]['url'] . '" title="' . $smiles[$smile]['title'] . '" alt="" border="0" style="vertical-align:middle" />';

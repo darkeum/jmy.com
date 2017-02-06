@@ -224,7 +224,7 @@ global $adminTpl, $core, $db, $core, $config, $lang;
 			$short[$langs['lang']] = $bb->htmltobb($langs['short']);
 			$full[$langs['lang']] = $bb->htmltobb($langs['full']);
 		}		
-		$lln = $lang['news_edit'];
+		$lln = $lang['news_edits'];
 		$dosave = $lang['update'];
 		$remote = ADMIN.'/module/news/ajax/isurl/update';
 	} 
@@ -590,7 +590,7 @@ global $adminTpl, $core, $db, $cats, $groupss, $config, $news_conf, $lang;
 	$status = isset($_POST['status']) ? 1 : 0;
 	$fix = isset($_POST['fix']) ? 1 : 0;	
 	$edit_id = isset($_POST['edit_id']) ? intval($_POST['edit_id']) : '';
-	$cnt = (($full != '') ? $full : $short);	
+	$cnt = (($full['ru'] != '') ? $full['ru'] : $short['ru']);	
 	$gen_tag =  $word_counter->get_keywords(substr($cnt, 0, 500)); 
 	$keywords = !empty($_POST['keywords']) ? $_POST['keywords'] : $word_counter->get_keywords(substr($cnt, 0, 500)); 	
 	$newcnt = $bb->parse(processText(filter(fileInit('news', $edit_id, 'content', $cnt), 'html')), $edit_id, true);		

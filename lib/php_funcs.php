@@ -194,7 +194,4 @@ function mysql_escape($str)
 {
 	return $str;
 }
-
-
-
 ?>

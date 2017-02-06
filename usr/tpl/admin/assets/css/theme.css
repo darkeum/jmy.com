@@ -8917,10 +8917,7 @@ dd {
   letter-spacing: 0.02em;
 }
 .list-table > tbody > tr td:last-child {
-  font-family: "Montserrat";
-  text-transform: uppercase;
-  font-weight: 700;
-  font-size: 12px;
+  
   white-space: nowrap;
   line-height: 1.2;
   color: #d1d4da;

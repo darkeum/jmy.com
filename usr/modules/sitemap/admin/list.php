@@ -13,8 +13,8 @@ if (!defined('ACCESS')) {
 	header('Location: /');
 	exit;
 }
-$core->loadModLangADM('sitemap');
 
+$core->loadModLangADM('sitemap');
 global $lang;
 
 $module_array['sitemap'] = array(

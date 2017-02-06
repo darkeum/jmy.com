@@ -254,6 +254,7 @@ function dopoll(box, id)
 
 function comment_post(id) 
 {
+	tinyMCE.triggerSave();
 	if(gid('text').value == '') 
 	{
 		alert('Поле с текстом оставлено пустым!');

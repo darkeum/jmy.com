@@ -153,7 +153,7 @@ global $db, $config, $core, $url, $user;
 			$core->tpl->setVar('EXGROUP_ICON', '<img alt="" src="' . $exgroup['icon'] . '" border="0" />');		
 			$core->tpl->setVar('FRIENDS', $user['userFriends'] == 1 ? $uFr[0] : '');
 			$core->tpl->setVar('GUESTS', $user['userFriends'] == 1 ? $uGu : '');
-			$core->tpl->setVar('BLOG_READ', $user['readBlog'] == 1 ? $readBlog : '');
+			$core->tpl->setVar('BLOG_READ', $user['readBlog'] == 1 ? ($core->checkModule('blog') ? $readBlog : '') : '');
 			$core->tpl->setVar('NEWFRIENDS', isset($nF) ? $nF : '');
 			$core->tpl->setVar('USER_COMMENTS', $rows['user_comments']);
 			$core->tpl->setVar('USER_WALL', $user_wall);
@@ -163,22 +163,19 @@ global $db, $config, $core, $url, $user;
 			$core->tpl->setVar('CLEAN_GUESTS', $core->auth->user_info['nick'] == $nick ?  '<a href="profile/cleanGuests" title="Очистить список"><strong>Очистить список гостей</strong></a>' : '');
 			$core->tpl->setVar('NEWFRIENDSNUM', isset($nF) ? $db->numRows($newFriends) : '');
 			$core->tpl->setVar('ADD_FRIEND', ($core->auth->isUser && $user['userFriends'] == 1 && $core->auth->user_info['nick'] != $nick) ? (in_array($core->auth->user_id, $uFr[1]) ? '<div id="friendDo"><a href="javascript:void(0)" onclick="delFriend(' . $rows['id'] . ', \'friendDo\');">Удалить из друзей</a></div>' : '<div id="friendDo"><a href="javascript:void(0)" onclick="addFriend(' . $rows['id'] . ');">Добавить в друзья</a></div>') : '');
-			$array_replace = array(
-				"#\\[exgroup\\](.*?)\\[/exgroup\\]#ies" => "if_set('" . (!empty($exgroup) ? 'yes' : '') . "', '\\1')",
-				"#\\[friends\\](.*?)\\[/friends\\]#ies" => "if_set('" . ($user['userFriends'] == 1 && $uFr[0] != '' ? 'yes' : '') . "', '\\1')",
-				"#\\[userGuests\\](.*?)\\[/userGuests\\]#ies" => "if_set('" . ($user['userGuests'] == 1 && $uGu != '' ? 'yes' : '') . "', '\\1')",
-				"#\\[newFriends\\](.*?)\\[/newFriends\\]#ies" => "if_set('" . (isset($nF) && $user['userFriends'] == 1 ? 'yes' : '') . "', '\\1')",
-				"#\\[blog\\](.*?)\\[/blog\\]#ies" => "if_set('" . (modAccess('blog') == 'groupOk' ? 'yes' : '') . "', '\\1')",
-				"#\\[blogRead\\](.*?)\\[/blogRead\\]#ies" => "if_set('" . ($user['readBlog'] == 1 && $readBlog != '' ? 'yes' : '') . "', '\\1')",
-				"#\\[gallery\\](.*?)\\[/gallery\\]#ies" => "if_set('" . (modAccess('gallery') == 'groupOk' ? 'yes' : '') . "', '\\1')",
-				"#\\[name\\](.*?)\\[/name\\]#ies" => "if_set('" . (!empty($rows['name']) ? 'yes' : '') . "', '\\1')",
-				"#\\[country\\](.*?)\\[/country\\]#ies" => "if_set('" . (!empty($flag) ? 'yes' : '') . "', '\\1')",
-				"#\\[online\\](.*?)\\[/online\\]#ies" => "if_set('" . (($rows['last_visit']+500>=time()) ? 'yes' : '') . "', '\\1')",
-				"#\\[isuser\\](.*?)\\[/isuser\\]#ies" => "if_set('" . (empty($url[1]) ? 'yes' : '') . "', '\\1')",
-				"#\\[nouser\\](.*?)\\[/nouser\\]#ies" => "if_set('" . (!empty($url[1]) ? 'yes' : '') . "', '\\1')",
-				"#\\[wall\\](.*?)\\[/wall\\]#ies" => "if_set('" . (($user['userWall'] == 1) ? 'yes' : '') . "', '\\1')",
-				
-			);
+			$core->tpl->sources = if_sets("#\\[exgroup\\](.*?)\\[/exgroup\\]#is", $core->tpl->sources, (!empty($exgroup) ? 'yes' : ''));
+			$core->tpl->sources = if_sets("#\\[friends\\](.*?)\\[/friends\\]#is", $core->tpl->sources, ($user['userFriends'] == 1 && $uFr[0] != '' ? 'yes' : ''));
+			$core->tpl->sources = if_sets("#\\[userGuests\\](.*?)\\[/userGuests\\]#is", $core->tpl->sources, ($user['userGuests'] == 1 && $uGu != '' ? 'yes' : ''));
+			$core->tpl->sources = if_sets("#\\[newFriends\\](.*?)\\[/newFriends\\]#is", $core->tpl->sources, (isset($nF) && $user['userFriends'] == 1 ? 'yes' : ''));
+			$core->tpl->sources = if_sets("#\\[blog\\](.*?)\\[/blog\\]#is", $core->tpl->sources, (modAccess('blog') == 'groupOk' ? 'yes' : ''));
+			$core->tpl->sources = if_sets("#\\[blogRead\\](.*?)\\[/blogRead\\]#is", $core->tpl->sources, ($user['readBlog'] == 1 && ($core->checkModule('blog') ? $readBlog : '') != '' ? 'yes' : ''));
+			$core->tpl->sources = if_sets("#\\[gallery\\](.*?)\\[/gallery\\]#is", $core->tpl->sources, (modAccess('gallery') == 'groupOk' ? 'yes' : ''));
+			$core->tpl->sources = if_sets("#\\[name\\](.*?)\\[/name\\]#is", $core->tpl->sources, (!empty($rows['name']) ? 'yes' : ''));
+			$core->tpl->sources = if_sets("#\\[country\\](.*?)\\[/country\\]#is", $core->tpl->sources, (!empty($flag) ? 'yes' : ''));
+			$core->tpl->sources = if_sets("#\\[online\\](.*?)\\[/online\\]#is", $core->tpl->sources, (($rows['last_visit']+500>=time()) ? 'yes' : ''));
+			$core->tpl->sources = if_sets("#\\[isuser\\](.*?)\\[/isuser\\]#is", $core->tpl->sources, (empty($url[1]) ? 'yes' : ''));
+			$core->tpl->sources = if_sets("#\\[nouser\\](.*?)\\[/nouser\\]#is", $core->tpl->sources,  (!empty($url[1]) ? 'yes' : ''));
+			$core->tpl->sources = if_sets("#\\[wall\\](.*?)\\[/wall\\]#is", $core->tpl->sources,  (($user['userWall'] == 1) ? 'yes' : ''));
 			$xfield = '';
 			if(!empty($rows['fields']))
 			{
@@ -191,9 +188,16 @@ global $db, $config, $core, $url, $user;
 						$xfield .= '<b>' . $xData[0] . '</b>: '.$xData[1].'<br />';
 					}
 				}
+				$core->tpl->sources = preg_replace(array_keys($array_replace), array_values($array_replace), $core->tpl->sources);	
 			}
-			$array_replace["#\\[xfield:([0-9]*?)\\](.*?)\\[/xfield:([0-9]*?)\\]#ies"] = "ifFields('" . $rows['fields'] . "', '\\1', '\\2')";
-			$core->tpl->sources = preg_replace(array_keys($array_replace), array_values($array_replace), $core->tpl->sources);			
+			$profile_fields = $rows['fields'];
+			$core->tpl->sources = preg_replace_callback("#\\[xfield:([0-9]*?)\\](.*?)\\[/xfield:([0-9]*?)\\]#is",  
+				function($match) use ($profile_fields)
+				{
+					return ifFields($profile_fields, $match[1], $match[2]);
+				},$core->tpl->sources);
+			
+					
 			$core->tpl->setVar('EDIT', $core->auth->user_info['nick'] == $nick ? '[ <a href="profile/edit">Редактировать профиль</a> ]' : (modAccess('pm') == 'groupOk' || $core->auth->isUser ? '[ <a href="pm/write/' . $nick . '">Отправить сообщение</a> ]' : ''));
 			$core->tpl->setVar('FIELDS', $xfield);
 			$core->tpl->setVar('ADMIN', $core->auth->isAdmin ? '<div align="center">[ Админу: <a href="' . ADMIN . '/user/edit/' . $rows['id'] . '">Редактировать профиль</a> | <a href="' . ADMIN . '/user/ban/' . $rows['id'] . '">Забанить</a> | Последний IP: ' . $rows['ip'] . ' <img src="media/flags/' . $flag . '.gif" border="0" class="icon" title="' . $flag . '" alt="" /> ]</div>' : '');

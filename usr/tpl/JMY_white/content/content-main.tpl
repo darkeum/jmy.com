@@ -3,5 +3,5 @@
     <h1 class="entry-title">{%TITLE%}</h1>    
   </header>
   <br>
-  <p>{%TEXT%}</p>    
-</article>f
+  <p>{%SHORT%}</p>    
+</article>

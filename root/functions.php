@@ -489,7 +489,7 @@ function getServerCPULoad(){
 function getServerRAM(){
 	
 	$limit = ini_get('memory_limit');
-	$now = memory_get_usage()*0.000001;
+	$now = memory_get_usage()*0.0001;
         return round($now/($limit/100));
     
     }
@@ -656,12 +656,19 @@ function yandex_tic($url){
 	}
 }
 
-function commentLink($mod, $id)
+function commentLink($mod, $id, $full = true)
 {
 	$linked = array('profile' => 'profile/{id}', 'news' => 'news/view/{id}', 'blog' => 'blog/read/{id}', 'gallery' => 'gallery/photo/{id}');
 	if(isset($linked[$mod]))
 	{
-		return '<a target="_blank" href="' . str_replace('{id}', $id, $linked[$mod]) . '">' . _mName($mod) . '</a>';
+		if ($full)
+		{
+			return '<a target="_blank" href="' . str_replace('{id}', $id, $linked[$mod]) . '">' . _mName($mod) . '</a>';
+		}
+		else
+		{
+			return str_replace('{id}', $id, $linked[$mod]);
+		}
 	}
 	else
 	{

@@ -9,12 +9,6 @@
 * @author      Komarov Ivan
 */
 
-define('COOKIE_AUTH', 'auth');
-define('COOKIE_PAUSE', 'pause');
-define('PAUSE_TIME', 120);
-define('COOKIE_TIME', 2592000);
-define('ACCESS', true);
-
 require ROOT . 'etc/global.config.php';
 require ROOT . 'etc/admin.config.php';
 require ROOT . 'etc/security.config.php';

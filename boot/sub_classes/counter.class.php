@@ -27,8 +27,7 @@ class Counter {
 	                     "'&(iexcl|#161);'i",
 	                     "'&(cent|#162);'i",
 	                     "'&(pound|#163);'i",
-	                     "'&(copy|#169);'i",
-	                     "'&#(\d+);'e");
+	                     "'&(copy|#169);'i");
 	    $replace = array ("е",
 	                      " ",
 	                      " ",
@@ -42,8 +41,9 @@ class Counter {
 	                      chr(162),
 	                      chr(163),
 	                      chr(169),
-	                      "chr(\\1)");
+	                      "");
 	    $text = preg_replace ($search, $replace, $text);
+		$text = preg_replace_callback("'&#(\d+);'", function($match){ return chr($match[1]); }, $text);	
 	    $del_symbols = array(",", ".", ";", ":", "\"", "#", "\$", "%", "^",
 	                         "!", "@", "`", "~", "*", "-", "=", "+", "\\",
 	                         "|", "/", ">", "<", "(", ")", "&", "?", "?", "\t",

@@ -2,10 +2,9 @@
 $config = include 'config/config.php';
 extract($config, EXTR_OVERWRITE);
 define('RFILE', '../../../');
-define('ROOT', '../../../');
 require RFILE . 'lib/require.php';
 require RFILE . 'boot/sub_classes/upload.class.php';
-$auth = new auth(filter($_POST['hash'], 'a'));
+$auth = new auth(filter((isset($_POST['hash']) ? $_POST['hash'] : false), 'a'));
 if(!$auth->user_info['admin'])
 {
 	 header('Location: /');

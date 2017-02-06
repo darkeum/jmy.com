@@ -40,9 +40,11 @@
 					{SOCIAL}                 
                 </div>
               </div>
+			
 			<form method="post" action="{ADMIN}">
                 <div class="panel-body bg-light p30">
                   <div class="row">
+				    {STOP}
                     <div class="col-sm-7 pr30">                    
                       <div class="section">
                         <label for="username" class="field-label text-muted fs18 mb10">[alang:username]</label>

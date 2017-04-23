@@ -6,37 +6,37 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-    <link rel="icon" href="/{ADM_THEME}/assets/images/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="{ADM_THEME}/assets/images/favicon.ico" type="image/x-icon">
     <!-- Stylesheets-->
-	<link rel="stylesheet" type="text/css" href="/{ADM_THEME}/assets/css/admin-forms.css">
-	<link rel="stylesheet" type="text/css" href="/{ADM_THEME}/assets/css/summernote.css">
-    <link rel="stylesheet" type="text/css" href="/{ADM_THEME}/assets/css/bootstrap-editable.css">
-	<link rel="stylesheet" type="text/css" href="/{ADM_THEME}/assets/css/bootstrap-switch.min.css">
-    <link rel="stylesheet" type="text/css" href="/{ADM_THEME}/assets/css/address.css">
-	<link rel="stylesheet" type="text/css" href="/{ADM_THEME}/assets/css/magnific-popup.css">	
-    <link rel="stylesheet" type="text/css" href="/{ADM_THEME}/assets/css/typeahead.js-bootstrap.css">    
-    <link rel="stylesheet" type="text/css" href="/{ADM_THEME}/assets/css/theme.css">
-	<link rel="stylesheet" type="text/css" href="/{ADM_THEME}/assets/css/tagmanager.css">
-    <link rel="stylesheet" type="text/css" href="/{ADM_THEME}/assets/css/daterangepicker.css">
-    <link rel="stylesheet" type="text/css" href="/{ADM_THEME}/assets/css/bootstrap-datetimepicker.css">
-    <link rel="stylesheet" type="text/css" href="/{ADM_THEME}/assets/css/bootstrap-colorpicker.min.css">
-    <link rel="stylesheet" type="text/css" href="/{ADM_THEME}/assets/css/core.css">
+	<link rel="stylesheet" type="text/css" href="{ADM_THEME}/assets/css/admin-forms.css">
+	<link rel="stylesheet" type="text/css" href="{ADM_THEME}/assets/css/summernote.css">
+    <link rel="stylesheet" type="text/css" href="{ADM_THEME}/assets/css/bootstrap-editable.css">
+	<link rel="stylesheet" type="text/css" href="{ADM_THEME}/assets/css/bootstrap-switch.min.css">
+    <link rel="stylesheet" type="text/css" href="{ADM_THEME}/assets/css/address.css">
+	<link rel="stylesheet" type="text/css" href="{ADM_THEME}/assets/css/magnific-popup.css">	
+    <link rel="stylesheet" type="text/css" href="{ADM_THEME}/assets/css/typeahead.js-bootstrap.css">    
+    <link rel="stylesheet" type="text/css" href="{ADM_THEME}/assets/css/theme.css">
+	<link rel="stylesheet" type="text/css" href="{ADM_THEME}/assets/css/tagmanager.css">
+    <link rel="stylesheet" type="text/css" href="{ADM_THEME}/assets/css/daterangepicker.css">
+    <link rel="stylesheet" type="text/css" href="{ADM_THEME}/assets/css/bootstrap-datetimepicker.css">
+    <link rel="stylesheet" type="text/css" href="{ADM_THEME}/assets/css/bootstrap-colorpicker.min.css">
+    <link rel="stylesheet" type="text/css" href="{ADM_THEME}/assets/css/core.css">
 	<!-- Fonts-->
 	<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Lato:300,400,600,700%7CMontserrat:400,700">
 	<!--[if lt IE 10]>
-		<div style="background: #212121; padding: 10px 0; box-shadow: 3px 3px 5px 0 rgba(0,0,0,.3); clear: both; text-align:center; position: relative; z-index:1;"><a href="http://windows.microsoft.com/en-US/internet-explorer/"><img src="/{ADM_THEME}/assets/images/ie8-panel/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today."></a></div>
-		<script src="/{ADM_THEME}/assets/js/html5shiv.min.js"></script>
+		<div style="background: #212121; padding: 10px 0; box-shadow: 3px 3px 5px 0 rgba(0,0,0,.3); clear: both; text-align:center; position: relative; z-index:1;"><a href="http://windows.microsoft.com/en-US/internet-explorer/"><img src="{ADM_THEME}/assets/images/ie8-panel/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today."></a></div>
+		<script src="{ADM_THEME}/assets/js/html5shiv.min.js"></script>
 	<![endif]-->	
   </head>  
   <body data-spy="scroll" data-target="#nav-spy" data-offset="300" class="form-editors-page {BODY_CLASS}"> 
     <div id="main">    
       <header class="navbar navbar-fixed-top bg-success">
         <div class="navbar-branding dark bg-success">
-			<a href="/{ADMIN}" class="navbar-brand text-uppercase"><i class="fa fa-check-circle mg-r-xs"></i> JMY<b>CMS</b></a>
+			<a href="{ADMIN}" class="navbar-brand text-uppercase"><i class="fa fa-check-circle mg-r-xs"></i> JMY<b>CMS</b></a>
 			<span id="toggle_sidemenu_l" class="fa fa-bars"></span>
 		</div>
         <ul class="nav navbar-nav navbar-left"></ul>
-        <form role="search" action="/{ADMIN}/search" class="navbar-form navbar-left navbar-search alt">
+        <form role="search" action="{ADMIN}/search" class="navbar-form navbar-left navbar-search alt">
 			<span class="hide visible-md-inline-block visible-lg-inline-block fa fa-search fs18"></span>
 			<div class="form-group">
 				<input type="text"  name="search" placeholder="[alang_old:_PANEL_SEARCH]" class="form-control">
@@ -98,12 +98,12 @@
 							<button type="button" class="multiselect dropdown-toggle btn btn-default btn-sm" data-toggle="dropdown" style="max-width: 100px;" aria-expanded="false">[alang_old:_PANEL_SUNMENU_VIEW] <b class="caret-right"></b></button></div>
 					</div>
 				</li>				
-				<li class="list-group-item"><a href="/pm" class="animated animated-short fadeInUp"><span class="fa fa-envelope"></span> Сообщения<span class="label label-warning">{MESSAGES_NUMB}</span></a></li>
-				<li class="list-group-item"><a href="/profile" class="animated animated-short fadeInUp"><span class="fa fa-user"></span> Друзья<span class="label label-warning">{FRIENDS_NUMB}</span></a></li>
-				<li class="list-group-item"><a href="/profile" class="animated animated-short fadeInUp"><span class="fa fa-bell"></span> 	Профиль</a></li>
-				<li class="list-group-item"><a href="/{ADMIN}/config" class="animated animated-short fadeInUp"><span class="fa fa-gear"></span> Настройки</a></li>
+				<li class="list-group-item"><a href="pm" class="animated animated-short fadeInUp"><span class="fa fa-envelope"></span> Сообщения<span class="label label-warning">{MESSAGES_NUMB}</span></a></li>
+				<li class="list-group-item"><a href="profile" class="animated animated-short fadeInUp"><span class="fa fa-user"></span> Друзья<span class="label label-warning">{FRIENDS_NUMB}</span></a></li>
+				<li class="list-group-item"><a href="profile" class="animated animated-short fadeInUp"><span class="fa fa-bell"></span> 	Профиль</a></li>
+				<li class="list-group-item"><a href="{ADMIN}/config" class="animated animated-short fadeInUp"><span class="fa fa-gear"></span> Настройки</a></li>
 				<li class="dropdown-footer">
-					<a href="/profile/logout"><span class="fa fa-power-off pr5"></span> [alang_old:_PANEL_SUNMENU_EXIT]</a>
+					<a href="profile/logout"><span class="fa fa-power-off pr5"></span> [alang_old:_PANEL_SUNMENU_EXIT]</a>
 				</li>
             </ul>
           </li>
@@ -120,24 +120,24 @@
           </header>
           <ul class="nav sidebar-menu">           
             <li {MENU_CHOOSE:main}> 
-				<a href="/{ADMIN}"><span class="glyphicon glyphicon-home"></span><span class="sidebar-title">[alang_old:_PANEL_MENU_MAIN]</span></a>
+				<a href="{ADMIN}"><span class="glyphicon glyphicon-home"></span><span class="sidebar-title">[alang_old:_PANEL_MENU_MAIN]</span></a>
             </li> 
 			[ACTIVE_MODULE:news]
             <li>				
 				<a href="#" class="accordion-toggle {MENU_OPEN:news,cats,fm,xfields}"><span class="glyphicon glyphicon-fire"></span><span class="sidebar-title">[alang_old:_PANEL_MENU_NEWS]</span><span class="caret"></span></a>
 				<ul class="nav sub-nav">
 					<li {MENU_CHOOSE:news}>
-						<a href="/{ADMIN}/module/news">
+						<a href="{ADMIN}/module/news">
 							<span class="glyphicon glyphicon-modal-window"></span>[alang_old:_PANEL_MENU_NEWS_MANAGER]
 						</a>
 					</li>
 					<li {MENU_CHOOSE:cats}>
-						<a href="/{ADMIN}/cats">
+						<a href="{ADMIN}/cats">
 							<span class="glyphicon glyphicon-list"></span>[alang_old:_PANEL_MENU_NEWS_CAT]
 						</a>
 					</li>
 					<li {MENU_CHOOSE:xfields}>
-						<a href="/{ADMIN}/xfields">
+						<a href="{ADMIN}/xfields">
 							<span class="glyphicon glyphicon-star"></span>[alang_old:_PANEL_MENU_NEWS_XFIELDS]
 						</a>
 					</li>					
@@ -152,19 +152,19 @@
 				</a>
 				<ul class="nav sub-nav">
 					<li {MENU_CHOOSE:user}>
-						<a href="/{ADMIN}/user"><span class="glyphicon glyphicon-list-alt"></span>[alang_old:_PANEL_MENU_USER_MANAGER]</a>
+						<a href="{ADMIN}/user"><span class="glyphicon glyphicon-list-alt"></span>[alang_old:_PANEL_MENU_USER_MANAGER]</a>
 					</li>
 					<li {MENU_CHOOSE:groups}>
-						<a href="/{ADMIN}/groups"><span class="glyphicon glyphicon-tag"></span>[alang_old:_PANEL_MENU_USER_GROUP]</a>
+						<a href="{ADMIN}/groups"><span class="glyphicon glyphicon-tag"></span>[alang_old:_PANEL_MENU_USER_GROUP]</a>
 					</li>
 					<li {MENU_CHOOSE:comments}>
-						<a href="/{ADMIN}/comments"><span class="glyphicon glyphicon-comment"></span>[alang_old:_PANEL_MENU_USER_COMMENT]</a>
+						<a href="{ADMIN}/comments"><span class="glyphicon glyphicon-comment"></span>[alang_old:_PANEL_MENU_USER_COMMENT]</a>
 					</li>
 					<li {MENU_CHOOSE:moderation}>
-						<a href="/{ADMIN}/moderation"><span class="glyphicon glyphicon-edit"></span>[alang:moder]</a>
+						<a href="{ADMIN}/moderation"><span class="glyphicon glyphicon-edit"></span>[alang:moder]</a>
 					</li>
 					<li {MENU_CHOOSE:voting}>
-						<a href="/{ADMIN}/voting"><span class="glyphicon glyphicon-plus-sign"></span>[alang_old:_PANEL_MENU_USER_POLL]</a>
+						<a href="{ADMIN}/voting"><span class="glyphicon glyphicon-plus-sign"></span>[alang_old:_PANEL_MENU_USER_POLL]</a>
 					</li>                
 				</ul>
             </li>
@@ -177,33 +177,33 @@
 				<ul class="nav sub-nav">
 					[ACTIVE_MODULE:board]
 					<li {MENU_CHOOSE:board}>
-						<a href="/{ADMIN}/module/board"><span class="fa fa-bullhorn"></span>[alang_old:_PANEL_MENU_COM_FORUM]</a>
+						<a href="{ADMIN}/module/board"><span class="fa fa-bullhorn"></span>[alang_old:_PANEL_MENU_COM_FORUM]</a>
 					</li>
 					[/ACTIVE_MODULE]
 					[ACTIVE_MODULE:blog]
 					<li {MENU_CHOOSE:blog}>
-						<a href="/{ADMIN}/module/blog"><span class="fa fa-stack-exchange"></span>[alang_old:_PANEL_MENU_COM_BLOG]</a>
+						<a href="{ADMIN}/module/blog"><span class="fa fa-stack-exchange"></span>[alang_old:_PANEL_MENU_COM_BLOG]</a>
 					</li>
 					[/ACTIVE_MODULE]
 					[ACTIVE_MODULE:gallery]
 					<li {MENU_CHOOSE:gallery}>
-						<a href="/{ADMIN}/module/gallery"><span class="fa fa-picture-o"></span>[alang_old:_PANEL_MENU_COM_GALLERY]</a>
+						<a href="{ADMIN}/module/gallery"><span class="fa fa-picture-o"></span>[alang_old:_PANEL_MENU_COM_GALLERY]</a>
 					</li>
 					[/ACTIVE_MODULE]
 					[ACTIVE_MODULE:guestbook]
 					<li {MENU_CHOOSE:guestbook}>
-						<a href="/{ADMIN}/module/guestbook"><span class="fa fa-comments-o"></span>[alang_old:_PANEL_MENU_COM_GUESTBOOK]</a>
+						<a href="{ADMIN}/module/guestbook"><span class="fa fa-comments-o"></span>[alang_old:_PANEL_MENU_COM_GUESTBOOK]</a>
 					</li> 
 					[/ACTIVE_MODULE]
 					[ACTIVE_MODULE:content]
 					<li {MENU_CHOOSE:content}>
-						<a href="/{ADMIN}/module/content"><span class="fa fa-square-o"></span>[alang_old:_PANEL_MENU_COM_STATIC]</a>
+						<a href="{ADMIN}/module/content"><span class="fa fa-square-o"></span>[alang_old:_PANEL_MENU_COM_STATIC]</a>
 					</li>  
 					[/ACTIVE_MODULE]
               </ul>
             </li> 
 			<li {MENU_CHOOSE:config}> 
-				<a href="/{ADMIN}/config">
+				<a href="{ADMIN}/config">
 					<span class="glyphicon glyphicon-cog"></span>
 					<span class="sidebar-title">[alang_old:_PANEL_MENU_CONFIG]  </span>
 				</a>
@@ -216,13 +216,13 @@
 				</a>
 				<ul class="nav sub-nav">
 					<li {MENU_CHOOSE:modules}>
-						<a href="/{ADMIN}/modules"><span class="fa fa-cloud"></span>[alang_old:_PANEL_MENU_EXP_MODULES]</a>
+						<a href="{ADMIN}/modules"><span class="fa fa-cloud"></span>[alang_old:_PANEL_MENU_EXP_MODULES]</a>
 					</li>
 					<li {MENU_CHOOSE:blocks}>
-						<a href="/{ADMIN}/blocks"><span class="fa fa-code"></span>[alang_old:_PANEL_MENU_EXP_BLOCKS]</a>
+						<a href="{ADMIN}/blocks"><span class="fa fa-code"></span>[alang_old:_PANEL_MENU_EXP_BLOCKS]</a>
 					</li>
 					<li {MENU_CHOOSE:templates}>
-						<a href="/{ADMIN}/templates"><span class="fa fa-pencil-square-o"></span>[alang_old:_PANEL_MENU_EXP_TPL]</a>
+						<a href="{ADMIN}/templates"><span class="fa fa-pencil-square-o"></span>[alang_old:_PANEL_MENU_EXP_TPL]</a>
 					</li>					
               </ul>
             </li>
@@ -235,19 +235,19 @@
 				</a>
 				<ul class="nav sub-nav">
 					<li {MENU_CHOOSE:sitemap}>
-						<a href="/{ADMIN}/module/sitemap"><span class="glyphicon glyphicon-list-alt"></span>[alang_old:_PANEL_MENU_OTHER_MAP]</a>
+						<a href="{ADMIN}/module/sitemap"><span class="glyphicon glyphicon-list-alt"></span>[alang_old:_PANEL_MENU_OTHER_MAP]</a>
 					</li>
 					<li {MENU_CHOOSE:smiles}>
-						<a href="/{ADMIN}/smiles"><span class="fa fa-smile-o"></span>[alang_old:_PANEL_MENU_OTHER_SMILES]</a>
+						<a href="{ADMIN}/smiles"><span class="fa fa-smile-o"></span>[alang_old:_PANEL_MENU_OTHER_SMILES]</a>
 					</li>
 					<li {MENU_CHOOSE:db}>
-						<a href="/{ADMIN}/db"><span class="glyphicon glyphicon-tasks"></span>[alang_old:_PANEL_MENU_OTHER_BD]</a>
+						<a href="{ADMIN}/db"><span class="glyphicon glyphicon-tasks"></span>[alang_old:_PANEL_MENU_OTHER_BD]</a>
 					</li>
 					<li {MENU_CHOOSE:log}>
-						<a href="/{ADMIN}/log"><span class="glyphicon glyphicon-info-sign"></span>[alang_old:_PANEL_MENU_OTHER_LOG]</a>
+						<a href="{ADMIN}/log"><span class="glyphicon glyphicon-info-sign"></span>[alang_old:_PANEL_MENU_OTHER_LOG]</a>
 					</li>   
 					<li {MENU_CHOOSE:update}>
-						<a href="/{ADMIN}/update"><span class="glyphicon glyphicon-refresh"></span>[alang_old:_PANEL_MENU_OTHER_UPDATE]</a>
+						<a href="{ADMIN}/update"><span class="glyphicon glyphicon-refresh"></span>[alang_old:_PANEL_MENU_OTHER_UPDATE]</a>
 					</li>   
               </ul>
             </li>
@@ -264,21 +264,21 @@
           <div class="topbar-menu row">
 			[ACTIVE_MODULE:news]
 			<div class="col-xs-4 col-sm-2">
-				<a href="/{ADMIN}/module/news" class="metro-tile bg-primary light">
+				<a href="{ADMIN}/module/news" class="metro-tile bg-primary light">
 					<span class="glyphicon glyphicon-fire text-muted"></span>
 					<span class="metro-title">[alang_old:_PANEL_MENU_NEWS]</span>
 				</a>
 			</div>
 			[/ACTIVE_MODULE]
 			<div class="col-xs-4 col-sm-2">
-				<a href="/{ADMIN}/user" class="metro-tile bg-info light">
+				<a href="{ADMIN}/user" class="metro-tile bg-info light">
 					<span class="glyphicon glyphicon-user text-muted"></span>
 					<span class="metro-title">[alang_old:_PANEL_MENU_USER]</span>
 				</a>
 			</div>
 			[ACTIVE_MODULE:content]
 			<div class="col-xs-4 col-sm-2">
-				<a href="/{ADMIN}/module/content" class="metro-tile bg-success light">
+				<a href="{ADMIN}/module/content" class="metro-tile bg-success light">
 					<span class="glyphicon glyphicon-edit text-muted"></span>
 					<span class="metro-title">[alang_old:_PANEL_MENU_COM_STATIC]</span>
 				</a>
@@ -286,7 +286,7 @@
 			[/ACTIVE_MODULE]   
 			[ACTIVE_MODULE:board]
 			<div class="col-xs-4 col-sm-2">
-				<a href="/{ADMIN}/module/board" class="metro-tile bg-system light">
+				<a href="{ADMIN}/module/board" class="metro-tile bg-system light">
 					<span class="glyphicon glyphicon-comment text-muted"></span>
 					<span class="metro-title">[alang_old:_PANEL_MENU_COM_FORUM]</span>
 				</a>
@@ -294,14 +294,14 @@
 			[/ACTIVE_MODULE]  
 			[ACTIVE_MODULE:gallery]
 			<div class="col-xs-4 col-sm-2">
-				<a href="/{ADMIN}/module/gallery" class="metro-tile bg-alert light">
+				<a href="{ADMIN}/module/gallery" class="metro-tile bg-alert light">
 					<span class="glyphicon glyphicon-picture text-muted"></span>
 					<span class="metro-title">[alang_old:_PANEL_MENU_COM_GALLERY]</span>
 				</a>
 			</div>
 			[/ACTIVE_MODULE] 				
             <div class="col-xs-4 col-sm-2">
-				<a href="/{ADMIN}/config" class="metro-tile bg-warning light">
+				<a href="{ADMIN}/config" class="metro-tile bg-warning light">
 					<span class="fa fa-gears text-muted"></span>
 					<span class="metro-title">[alang_old:_PANEL_MENU_CONFIG]</span>
 				</a>
@@ -325,14 +325,14 @@
       }
     </style>
 	<!-- Core scripts-->
-    <script src="/{ADM_THEME}/assets/js/core.min.js"></script>
+    <script src="{ADM_THEME}/assets/js/core.min.js"></script>
     <!-- Theme Javascript-->
-    <script src="/{ADM_THEME}/assets/js/utility.js"></script>
-    <script src="/{ADM_THEME}/assets/js/demo.js"></script>		
-    <script src="/{ADM_THEME}/assets/js/main.js"></script>
-	<script src="/{ADM_THEME}/assets/js/widgets.js"></script>
-	<script src="/{ADM_THEME}/assets/js/script.js"></script>
-	<script src="/{ADM_THEME}/assets/js/bootstrap-switch.min.js"></script>	
+    <script src="{ADM_THEME}/assets/js/utility.js"></script>
+    <script src="{ADM_THEME}/assets/js/demo.js"></script>		
+    <script src="{ADM_THEME}/assets/js/main.js"></script>
+	<script src="{ADM_THEME}/assets/js/widgets.js"></script>
+	<script src="{ADM_THEME}/assets/js/script.js"></script>
+	<script src="{ADM_THEME}/assets/js/bootstrap-switch.min.js"></script>	
 	{FOOT}
     <script type="text/javascript">
       jQuery(document).ready(function () {

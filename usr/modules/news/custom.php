@@ -93,10 +93,10 @@ if($db->numRows($queryDB) > 0)
 			}		
 		$array_replace["#\\[xfield:([0-9]*?)\\](.*?)\\[/xfield:([0-9]*?)\\]#ies"] = "ifFields('" . $news['fields'] . "', '\\1', '\\2')";
 		$core->tpl->sources = preg_replace(array_keys($array_replace), array_values($array_replace), $core->tpl->sources);
-		$core->tpl->end();
-		unset($tags);
-		$custom .= ob_get_contents();
-		ob_end_clean();
+		$custom .= $core->tpl->return_end();
+		//unset($tags);
+		//$custom .= ob_get_contents();
+		//ob_end_clean();
 
 	}
 }

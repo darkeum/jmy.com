@@ -28,7 +28,7 @@ class core
 	public $ban = false;
 	public $banReason = '';
 	public $isIndex = INDEX;
-	public $modArray = '';
+	public $modArray = array();
 	public $lang = '';
 	public $tempModule = '';
 	public $loadedLangs = array();
@@ -153,6 +153,7 @@ class core
 	
 	function loadLangFile($str)
 	{
+		global $lang;
 		$url = str_replace('{lang}', $this->lang, $str);
 		if(file_exists(ROOT . $url))
 		{
@@ -403,7 +404,7 @@ class core
 
 	function getCat($module, $pid = null, $type = 'short', $limit = 99) 
 	{
-	    $cats = '';
+	    $cats = array();
 	    if($pid) 
 	    {
 	        if(empty($this->catArray))

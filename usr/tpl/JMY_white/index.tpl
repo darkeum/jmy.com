@@ -51,11 +51,11 @@
       </div>
     </div> 
       <nav id="site-navigation" class="main-navigation smallPart" role="navigation">
-        <button class="menu-toggle">Меню<i class="fa fa-align-justify"></i></button>
+        <button class="menu-toggle">[lang:menu]<i class="fa fa-align-justify"></i></button>
         <div class="menu-menu-1-container">
           <ul class="menu">
             <li class="menu-item [index:1]current_page_item[/index]">
-              <a href="{%URL%}">Главная</a>
+              <a href="{%URL%}">[lang:main]</a>
             </li>
             <li class="menu-item [index:0][modules:news,board,sitemap:1]current_page_item[/modules][/index]">
               <a href="#">Компоненты</a>
@@ -72,7 +72,7 @@
               </ul>          
             </li>
             <li class="menu-item [modules:content:1]current_page_item[/modules]">
-              <a href="content/simple.html">Простая страница</a>
+              <a href="content/simple.html">[lang:simple_page]</a>
             </li>
             <li class="menu-item [modules:feedback:1]current_page_item[/modules]">
               <a href="{%URL_FEEDBACK%}">Контакты</a>

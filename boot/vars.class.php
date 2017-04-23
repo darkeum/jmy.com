@@ -9,19 +9,18 @@
 * @author      Komarov Ivan
 */
 
-if (!defined('ACCESS')) {
-    header('Location: /');
-    exit;
-} 
- 
+		if (!defined('ACCESS')) {
+			header('Location: /');
+			exit;
+		}  
+		if(file_exists(ROOT . 'usr/other/other.vars.php'))
+		{
+			include(ROOT . 'usr/other/other.vars.php');
+		}			
 		$full_lnk = $config['url'].(!empty($url[0]) ? '/'.$url[0] : '').(!empty($url[1]) ? '/'.$url[1] : '').(!empty($url[2]) ? '/'.$url[2] : '').(!empty($url[3]) ? '/'.$url[3] : '');	
 		$cat_keyword = (isset($this->keywords) ? ', ' .$this->keywords : false);		
 		$desc = (isset($this->description) ? $this->description : $config['description']);
-		$title_now = html_entity_decode((!empty($this->title) && !empty($_REQUEST['url']) ? $this->title . $config['name'] : $config['name'] . $config['divider'] . $config['slogan']), ENT_QUOTES);
-		
-		
-		
-
+		$title_now = html_entity_decode((!empty($this->title) && !empty($_REQUEST['url']) ? $this->title . $config['name'] : $config['name'] . $config['divider'] . $config['slogan']), ENT_QUOTES);		
 		$this->setVar('FULL_AJAX:start', '<div id="fullAjax">');
 		$this->setVar('FULL_AJAX:end', '</div>');
 		$this->setVar('GENERATE', mb_substr(microtime(1) - TIMER, 0, 5));

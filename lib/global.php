@@ -1356,9 +1356,9 @@ global $core, $user, $adminUid, $page;
 	$core->tpl->setVar('SPACE', ($space*10));
 	$core->tpl->setVar('SPACE_BG', ($space*10-15));
 	$core->tpl->setVar('U_NEWS', $comment['user_news']);
-	$core->tpl->setVar('DATE', formatDate($comment['date']));
-	$replace = array(
-		"#\\[moder\\](.*?)\\[/moder\\]#ies" => "if_set('" . ($core->auth->isAdmin OR ($core->auth->isUser && $core->auth->user_id == $comment['uid']) OR $yrAdmin == true ? 'yes' : '') . "', '\\1')",
+	$core->tpl->setVar('DATE', formatDate($comment['date']));	
+	$core->tpl->sources = if_sets("#\\[moder\\](.*?)\\[/moder\\]#is", $core->tpl->sources, ($core->auth->isAdmin OR ($core->auth->isUser && 	$core->auth->user_id == $comment['uid']) OR $yrAdmin == true ? 'yes' : ''));
+	$replace = array(		
 		"#\\[edit\\](.*?)\\[/edit\\]#is" => '<a href="javascript:void(0);" onclick="commentEdit(\'' . $comment['id'] . '\', \'comment_' . $comment['id'] . '\');" title="\\1">\\1</a>',
 		"#\\[delete\\](.*?)\\[/delete\\]#is" => '<a href="javascript:void(0);" onclick="commentDelete(\'' . $comment['id'] . '\', \'commentBox_' . $comment['id'] . '\', \'' .$comment['module'] . '\', \'' . $comment['post_id']  . '\', \'' . $page . '\');" title="\\1">\\1</a>',
 		"#\\[writeGuest\\](.*?)\\[/writeGuest\\]#is" => ($comment['uid'] == 0 ? '\\1' : ''),

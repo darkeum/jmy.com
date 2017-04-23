@@ -1,6 +1,6 @@
 <?php
 
-$value = "<a href=\"news/tags/123\" title=\"123\" class=\"tag0\" >123</a> ";
+$value = "Тегов нет.";
 
 $ttl = 3600;
 

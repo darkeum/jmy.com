@@ -13,11 +13,10 @@ if (!defined('ADMIN_ACCESS')) {
     header('Location: /');
     exit;
 }
-global $lang;
+global $core, $lang;
 require ROOT . 'etc/configs.config.php';
-
 $core->loadLangFile('root/langs/{lang}.config.php');
-
+$core->loadLangFile('langs/{lang}/{lang}.config.lng');
 foreach($configs as $file => $arr)
 {
 	require_once(ROOT.'etc/' . $file . '.config.php');
@@ -172,6 +171,11 @@ $configBox = array(
 						'title' => _GLOBAL_GLOBALFUNC_PLUGINT,
 						'description' => _GLOBAL_GLOBALFUNC_PLUGIND,
 						'content' => conf_radio("plugin", $config['plugin']),
+					),
+					'redicret' => array(
+						'title' => $lang['config_global_func_redicret'],
+						'description' => $lang['config_global_func_redicret_desc'],
+						'content' => conf_radio("redicret", $config['redicret']),
 					),
 				)
 			)
@@ -1094,7 +1098,7 @@ switch(isset($url[2]) ? $url[2] : null) {
 				$count_configs++;
 				$val_name = $name;
 				echo '<div style="cursor:pointer"  onclick="document.location.href = \'{ADMIN}/config/' . $val_name . '\';">
-					<label style="cursor:pointer" class="control-label">'. $row['name'] .': (' . count($$row['param']) . ')</label><br>
+					<label style="cursor:pointer" class="control-label">'. $row['name'] .':</label><br>
 					'.$row['description'].'<br></div><br>';
 			}	
 			echo '</div></div>';	

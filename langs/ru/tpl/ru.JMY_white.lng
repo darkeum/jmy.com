@@ -1,0 +1,11 @@
+<?php
+
+$lang = array_merge($lang, array (
+
+	'menu'										=> 'Меню',
+	'simple_page'								=> 'Простая страница',
+	'main'										=> 'Главная',
+
+));
+
+?>

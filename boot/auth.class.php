@@ -265,11 +265,11 @@ class auth
 		$db->query("DELETE FROM " . DB_PREFIX . "_online WHERE uid = '" . $this->user_id . "' OR ip = '" . filter(getRealIpAddr()) . "'");
 	}
 	
-	function updateProfile($mail, $icq, $skype, $surname, $name, $ochestvo, $place, $age, $gender, $birthDate, $hobby, $signature, $fields, $uid = false)
+	function updateProfile($mail, $icq, $skype, $phone, $surname, $name, $ochestvo, $place, $age, $gender, $birthDate, $hobby, $signature, $fields, $uid = false)
 	{
 	global $db;
 		delcache('userInfo_'.$this->user_id);
-		$db->query("UPDATE `" . USER_DB . "`.`" . USER_PREFIX . "_users` SET `email` = '" . filter($mail, 'mail') . "', `icq` = '" . filter($icq, 'a') . "', `skype` = '" . filter($skype, 'a') . "', `surname` = '" . filter($surname, 'a') . "', `name` = '" . filter($name, 'a') . "', `ochestvo` = '" . filter($ochestvo, 'a') . "', `place` = '" . filter($place, 'a') . "', `age` = '" . intval($age) . "', `sex` = '" . intval($gender) . "', `birthday` = '" . filter($birthDate, 'a') . "', `hobby` = '" . filter($hobby, 'a') . "', `signature` = '" . $db->safesql($signature) . "', `fields` = '" . $db->safesql($fields) . "' WHERE `id` = " . ($uid ? $uid : $this->user_id) . " LIMIT 1 ;");
+		$db->query("UPDATE `" . USER_DB . "`.`" . USER_PREFIX . "_users` SET `email` = '" . filter($mail, 'mail') . "', `icq` = '" . filter($icq, 'a') . "', `skype` = '" . filter($skype, 'a') . "', `phone` = '" . filter($phone, 'a') . "', `surname` = '" . filter($surname, 'a') . "', `name` = '" . filter($name, 'a') . "', `ochestvo` = '" . filter($ochestvo, 'a') . "', `place` = '" . filter($place, 'a') . "', `age` = '" . intval($age) . "', `sex` = '" . intval($gender) . "', `birthday` = '" . filter($birthDate, 'a') . "', `hobby` = '" . filter($hobby, 'a') . "', `signature` = '" . $db->safesql($signature) . "', `fields` = '" . $db->safesql($fields) . "' WHERE `id` = " . ($uid ? $uid : $this->user_id) . " LIMIT 1 ;");
 	}	
 	
 	function updatePassword($password, $uid = false)
@@ -295,53 +295,38 @@ class auth
 		$db->query("UPDATE `" . USER_DB . "`.`" . USER_PREFIX . "_users` SET `active` = '1' WHERE `email` = '" . $db->safesql(filter($mail, 'mail')) . "' LIMIT 1 ;");
 	}
 	
-	function register($user_login, $password, $tail, $email, $icq, $skype, $family, $name, $ochestvo, $age, $sex, $about, $signature, $activate, $ip, $group = '2')
+	function register($user_login, $password, $tail, $email, $icq, $skype, $family, $name, $ochestvo, $age, $sex, $about, $signature, $activate, $ip, $group = '2', $phone)
 	{
 	global $db;
-		$db->query("INSERT INTO `" . USER_DB . "`.`" . USER_PREFIX . "_users` ( `id` , `nick` , `password` , `tail` , `email` , `icq` , `skype` , `surname` , `name` , `ochestvo` , `place` , `age` , `sex` , `birthday` , `hobby` , `signature` , `points` , `user_comments` , `user_news` , `group` , `last_visit` , `regdate` , `active` , `ip` ) VALUES (NULL, '" . filter($user_login, 'a') . "', '" . md5(mb_substr(md5(md5($password)), 0, -mb_strlen($tail)) . $tail) . "', '" . filter($tail, 'a') . "', '" . filter($email, 'mail') . "', '" . filter($icq, 'a') . "', '" . filter($skype, 'a') . "', '" . filter($family, 'a') . "', '" . filter($name, 'a') . "', '" . filter($ochestvo, 'a') . "', '', '" . intval($age) . "', '" . intval($sex) . "', '', '" . filter($about, 'a') . "', '" . filter($signature) . "', '0', '0', '0', '" . intval($group) . "', '" . time() . "', '" . time() . "', '" . $activate . "', '" . filter($ip, 'ip') . "');");
+		$db->query("INSERT INTO `" . USER_DB . "`.`" . USER_PREFIX . "_users` ( `id` , `nick` , `password` , `tail` , `email` , `icq` , `skype` , `phone`, `surname` , `name` , `ochestvo` , `place` , `age` , `sex` , `birthday` , `hobby` , `signature` , `points` , `user_comments` , `user_news` , `group` , `last_visit` , `regdate` , `active` , `ip` ) VALUES (NULL, '" . filter($user_login, 'a') . "', '" . md5(mb_substr(md5(md5($password)), 0, -mb_strlen($tail)) . $tail) . "', '" . filter($tail, 'a') . "', '" . filter($email, 'mail') . "', '" . filter($icq, 'a') . "', '" . filter($skype, 'a') . "', '" . filter($phone, 'a') . "', '" . filter($family, 'a') . "', '" . filter($name, 'a') . "', '" . filter($ochestvo, 'a') . "', '', '" . intval($age) . "', '" . intval($sex) . "', '', '" . filter($about, 'a') . "', '" . filter($signature) . "', '0', '0', '0', '" . intval($group) . "', '" . time() . "', '" . time() . "', '" . $activate . "', '" . filter($ip, 'ip') . "');");
 	}
 	
-	function register_social($user_login, $password, $tail, $email, $social_id, $provider, $birthday, $avatar_auth, $icq, $skype, $family, $name, $ochestvo, $age, $sex, $about, $signature, $activate, $ip, $group = '2')
+	function register_social($user_login, $password, $tail, $email, $social_id, $provider, $birthday, $avatar_auth, $icq, $skype, $family, $name, $ochestvo, $age, $sex, $about, $signature, $activate, $ip, $group = '2', $phone)
 	{
-	global $db;
-		$db->query("INSERT INTO `" . USER_DB . "`.`" . USER_PREFIX . "_users` ( `id` , `nick` , `password` , `tail` , `email` , `provider` , `social_id`, `icq` , `skype` , `surname` , `name` , `ochestvo` , `place` , `age` , `sex` , `birthday` , `hobby` , `signature` , `points` , `user_comments` , `user_news` , `group` , `last_visit` , `regdate` , `active` , `ip` ) VALUES (NULL, '" . filter($user_login, 'a') . "', '" . md5(mb_substr(md5(md5($password)), 0, -mb_strlen($tail)) . $tail) . "', '" . filter($tail, 'a') . "', '" . filter($email, 'mail') . "', '" . filter($provider, 'provider') . "', '" . intval($social_id) . "', '" . filter($icq, 'a') . "', '" . filter($skype, 'a') . "', '" . filter($family, 'a') . "', '" . filter($name, 'a') . "', '" . filter($ochestvo, 'a') . "', '', '" . intval($age) . "', '" . intval($sex) . "', '', '" . filter($about, 'a') . "', '" . filter($signature) . "', '0', '0', '0', '" . intval($group) . "', '" . time() . "', '" . time() . "', '" . $activate . "', '" . filter($ip, 'ip') . "');");
+		require ROOT . 'etc/user.config.php';
+		global $db, $user;	
+		$db->query("INSERT INTO `" . USER_DB . "`.`" . USER_PREFIX . "_users` ( `id` , `nick` , `password` , `tail` , `email` , `provider` , `social_id`, `icq` , `skype` , `phone`, `surname` , `name` , `ochestvo` , `place` , `age` , `sex` , `birthday` , `hobby` , `signature` , `points` , `user_comments` , `user_news` , `group` , `last_visit` , `regdate` , `active` , `ip` ) VALUES (NULL, '" . filter($user_login, 'a') . "', '" . md5(mb_substr(md5(md5($password)), 0, -mb_strlen($tail)) . $tail) . "', '" . filter($tail, 'a') . "', '" . filter($email, 'mail') . "', '" . filter($provider, 'provider') . "', '" . intval($social_id) . "', '" . filter($icq, 'a') . "', '" . filter($skype, 'a') . "', '" . filter($phone, 'a') . "', '" . filter($family, 'a') . "', '" . filter($name, 'a') . "', '" . filter($ochestvo, 'a') . "', '', '" . intval($age) . "', '" . intval($sex) . "', '', '" . filter($about, 'a') . "', '" . filter($signature) . "', '0', '0', '0', '" . intval($group) . "', '" . time() . "', '" . time() . "', '" . $activate . "', '" . filter($ip, 'ip') . "');");
 		
 		$query_user = $db->query("SELECT * FROM `" . DB_PREFIX . "_users` WHERE social_id = '" . $social_id . "' LIMIT 1");
 		$new_user_info = $db->getRow($query_user);
-	/*
-		if (!empty($_GET['url']))
-		 {
-		 $file = basename($_GET['url']);
-		 if (file_get_contents($_GET['url']))
-		  {
-		  $content = file_get_contents($_GET['url']);
-		  $f = fopen( "$file", "w" );
-		  if (fwrite( $f, $content ) === FALSE)
-		   {
-		   echo "Не могу произвести запись в файл.";
-		   exit;
-		   }else echo "Ура! Файл <font color='red'>" .$file ."</font> записан.";
-		  fclose( $f );
-		  }else echo "Не могу считать файл.";
-		 }
-*/
 		
-		
-		if($foo = new Upload($avatar_auth))
-								{
-									$foo->file_new_name_body = 'av' .$new_user_info['id'];
-									$foo->image_resize = true;
-									$foo->image_x = '60';
-									$foo->image_ratio_y = true;
-									$foo->file_overwrite = true;
-									$foo->file_auto_rename = false;
-									$foo->Process(ROOT.'files/avatars/users/');
-									$foo->allowed = array("image/*");
-										
-									if ($foo->processed) 
-									{
-										$foo->Clean();
-									}
-								}
+		$format = explode(".",$avatar_auth);
+		$path = 'files/avatars/'.gencode(10).'.'.array_pop($format).'';
+		copy(''.$avatar_auth.'', ''.$path.'');					
+		if($foo = new Upload($path))
+		{
+			$foo->file_new_name_body = 'av' .$new_user_info['id'];
+			$foo->image_resize = true;
+			$foo->image_x = $user['avatar_width'];
+			$foo->image_ratio_y = true;
+			$foo->file_overwrite = true;
+			$foo->file_auto_rename = false;
+			$foo->Process(ROOT.'files/avatars/users/');
+			$foo->allowed = array("image/*");							
+			if ($foo->processed) 
+			{
+				$foo->Clean();
+				}
+		}
 	}
 }

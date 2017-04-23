@@ -18,6 +18,10 @@ require ROOT . 'etc/smiles.config.php';
 require ROOT . 'etc/user.config.php';
 require ROOT . 'lib/php_funcs.php';
 require ROOT . 'lib/global.php';
+if(file_exists(ROOT . 'usr/other/other.functions.php'))
+{
+	include(ROOT . 'usr/other/other.functions.php');
+}
 
 require ROOT . 'boot/db/' . $config['dbType'] . '.db.php';
 require ROOT . 'boot/db' . (($config['dbCache'] == 1) ? '_cache' : '') . '.class.php';

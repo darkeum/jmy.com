@@ -329,7 +329,7 @@ if(!$core->auth->isUser)
 			
 			break;
 	
-		case 'social_auth':	
+		case 'social_auth':			
 			require ROOT . 'etc/social.config.php';			
 			$user_auth = loadUserAuth();
 			switch ($user_auth->provider) 
@@ -357,9 +357,8 @@ if(!$core->auth->isUser)
 			{
 				if (!($user_auth==false))
 				{
-					$result =  $db->query("SELECT *  FROM `" . USER_PREFIX . "_users` WHERE `provider` = '".$user_auth->provider."' AND `social_id` = '".$user_auth->socialId."' LIMIT 1");
-					$record = mysql_fetch_array($result);
-					if (!$record) 
+					$result =  $db->query("SELECT *  FROM `" . USER_PREFIX . "_users` WHERE `provider` = '".$user_auth->provider."' AND `social_id` = '".$user_auth->socialId."' LIMIT 1");	
+					if($db->numRows($result) <= 0) 
 					{					
 						$core->tpl->info('Пользователь ещё не зарегистрирован!');
 						$core->tpl->loadFile('profile/register_social');
@@ -461,8 +460,8 @@ if(!$core->auth->isUser)
 				$email = !empty($_POST['email']) ? filter($_POST['email'], 'mail') : '';
 				$avatar_auth = !empty($_POST['avatar']) ? $_POST['avatar'] : '';
 				$birthday = !empty($_POST['birthday']) ? intval($_POST['birthday']) : '';
-				$social_id = !empty($_POST['social_id']) ? intval($_POST['social_id']) : '';
-				$provider = !empty($_POST['provider']) ? filter($_POST['provider'], 'provider') : '';
+				$social_id = !empty($_POST['social_id']) ? $_POST['social_id'] : '';
+				$provider = !empty($_POST['provider']) ? $_POST['provider'] : '';
 				$icq = !empty($_POST['icq']) ? filter($_POST['icq'], 'a') : '';
 				$skype = !empty($_POST['skype']) ? filter($_POST['skype'], 'a') : '';
 				$family = !empty($_POST['family']) ? filter($_POST['family'], 'a') : '';

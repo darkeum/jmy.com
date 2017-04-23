@@ -76,8 +76,7 @@
 						},$core->tpl->sources);
 					$core->tpl->setVar('ID', $static['id']);
 					$core->tpl->end();
-					$custom .= ob_get_contents();
-					ob_end_clean();
+					$custom .= $core->tpl->return_end();
 				}
 			}
 

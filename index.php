@@ -21,6 +21,10 @@ require ROOT . 'etc/user.config.php';
 require ROOT . 'etc/log.config.php';
 require ROOT . 'lib/php_funcs.php';
 require ROOT . 'lib/global.php';
+if(file_exists(ROOT . 'usr/other/other.functions.php'))
+{
+	include(ROOT . 'usr/other/other.functions.php');
+}
  
 if(isset($_COOKIE['theme']))
 {

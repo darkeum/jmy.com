@@ -417,265 +417,283 @@ switch(isset($url[2]) ? $url[2] : null)
 		$adminTpl->admin_foot();
 	break;	
 	
-	
-	
-	
 	case 'edit':
 		$usrConf = $user;
 		$uid = $url[3];
-		$ok = isset($url[4]) ? true : false;
+		$alert = isset($url[4]) ? true : false;
 		$query = $db->query('SELECT * FROM `' . USER_DB . '`.`' . USER_PREFIX . '_users` WHERE id='.$uid);
 		$user_row = $db->getRow($query);		
 		$query2 = $db->query('SELECT * FROM ' . DB_PREFIX . '_board_users WHERE uid='.$uid);
 		$forum = $db->getRow($query2);
-		$adminTpl->admin_head('Редактирование пользователя');
+		$adminTpl->admin_head($lang['users_edit']);
+			$validation_array = array(		
+			'nick' => array(
+				'required' =>  array('true', $lang['group_users_add_title_err'])			
+			),
+				'mail' => array(
+				'required' =>  array('true', $lang['group_users_add_title_err'])			
+			)			
+		);
 		
-	
-		if($user_row['birthday']) 
-		{
-			$birthday = explode('.', $user_row['birthday']);
-		}
-		else
-		{
-			$birthday = explode('.', '0.0.0');
-		}
-		//$bbp = new bb;		
-		//$bb = adminArea('signature', $bbp->htmltobb($user_row['signature']), 5, 'textarea', false, true);
-		
+		validationInit($validation_array);	
+		datetimepickerInit('date', 'date');
+		$date = !empty($user_row['birthday']) ? gmdate('d.m.Y H:i', intval($user_row['birthday'])) : '';
 		$bb = '<textarea name="signature" id="signature" class="form-control" rows="5" >'.$user_row['signature'].'</textarea>';
 		$gender = '<option value="">---</option>';
-		$gender .= '<option value="1"' . ($user_row['sex'] == '1' ? ' selected' : '') . '>Мужской</option>';
-		$gender .= '<option value="2"' . ($user_row['sex'] == '2' ? ' selected' : '') . '>Женский</option>';
-		$day = '<option value="">--</option>';
-
-		for ($i = 1; $i < 32; $i++)
+		$gender .= '<option value="1"' . ($user_row['sex'] == '1' ? ' selected' : '') . '>'.$lang['male'].'</option>';
+		$gender .= '<option value="2"' . ($user_row['sex'] == '2' ? ' selected' : '') . '>'.$lang['female'].'</option>';
+		echo '<div id="content" class="animated fadeIn">';
+		if ($alert)
 		{
-			$day .= '<option value="' . ($i < 10 ? '0' . $i : $i) . '"' . ($birthday[0] == $i ? ' selected' : '') . '>' . $i . '</option>';
-		}
-				
-		$month = '<option value="">---</option>';
-		$month .= '<option value="01"' . ($birthday[1] == '1' ? ' selected' : '') . '>Январь</option>';
-		$month .= '<option value="02"' . ($birthday[1] == '2' ? ' selected' : '') . '>Февраль</option>';
-		$month .= '<option value="03"' . ($birthday[1] == '3' ? ' selected' : '') . '>Март</option>';
-		$month .= '<option value="04"' . ($birthday[1] == '4' ? ' selected' : '') . '>Апрель</option>';
-		$month .= '<option value="05"' . ($birthday[1] == '5' ? ' selected' : '') . '>Май</option>';
-		$month .= '<option value="06"' . ($birthday[1] == '6' ? ' selected' : '') . '>Июнь</option>';
-		$month .= '<option value="07"' . ($birthday[1] == '7' ? ' selected' : '') . '>Июль</option>';
-		$month .= '<option value="08"' . ($birthday[1] == '8' ? ' selected' : '') . '>Август</option>';
-		$month .= '<option value="09"' . ($birthday[1] == '9' ? ' selected' : '') . '>Сентябрь</option>';
-		$month .= '<option value="10"' . ($birthday[1] == '10' ? ' selected' : '') . '>Октябрь</option>';
-		$month .= '<option value="11"' . ($birthday[1] == '11' ? ' selected' : '') . '>Ноябрь</option>';
-		$month .= '<option value="12"' . ($birthday[1] == '12' ? ' selected' : '') . '>Декабрь</option>';
-		
-		$year = '<option value="">---</option>';
-		
-		for ($i = 2008; $i > 1935; $i--)
-		{
-			$year .= '<option value="' . $i . '"' . ($birthday[2] == $i ? ' selected' : '') . '>' . $i . '</option>';
-		}
-		echo '
-		<div class="row">
-			<div class="col-lg-12">
-				<section class="panel">
-					<div class="panel-heading">
-						<b>Редактирование пользователя ' . ($ok ? ' - <font color="green">Профиль сохранён</font>' : '') . '</b>						
-					</div>
-					<div class="panel-body">
-					<form class="form-horizontal parsley-form" role="form" action="{ADMIN}/user/save" method="post">
-												<div class="form-group">
-													<label class="col-sm-3 control-label">Ник</label>
-													<div class="col-sm-4">
-														<input value="' . $user_row['nick'] . '" type="text" name="nick" class="form-control" data-parsley-required="true" data-parsley-trigger="change">
-													</div>
-												</div>
-												<div class="form-group">
-													<label class="col-sm-3 control-label">Статус на форуме</label>
-													<div class="col-sm-4">
-														<input  name="forumStatus" value="' . $forum['specStatus'] . '" type="text" class="form-control" data-parsley-required="true" data-parsley-trigger="change">
-													</div>
-												</div>
-												<div class="form-group">
-													<label class="col-sm-3 control-label">Фимилия</label>
-													<div class="col-sm-4">
-														<input  name="surname" value="' . $user_row['surname'] . '" type="text" class="form-control" data-parsley-required="true" data-parsley-trigger="change">
-													</div>
-												</div>
-												<div class="form-group">
-													<label class="col-sm-3 control-label">Имя</label>
-													<div class="col-sm-4">
-														<input  name="name" value="' . $user_row['name'] . '" type="text" class="form-control" data-parsley-required="true" data-parsley-trigger="change">
-													</div>
-												</div>
-												<div class="form-group">
-													<label class="col-sm-3 control-label">Отчество</label>
-													<div class="col-sm-4">
-														<input name="ochestvo" value="' . $user_row['ochestvo'] . '" type="text" class="form-control" data-parsley-required="true" data-parsley-trigger="change">
-													</div>
-												</div>
-												<div class="form-group">
-													<label class="col-sm-3 control-label">Группа</label>
-													<div class="col-sm-4">';
-													echo "<select name=\"group\" id=\"group\" class=\"textinput\">";
-													$query = $db->query("SELECT * FROM `" . USER_DB . "`.`" . USER_PREFIX . "_groups` ORDER BY admin DESC,moderator DESC,user DESC,guest DESC,banned DESC");
-													while($rows = $db->getRow($query)) 
-													{
-														$_groups[$rows['special']][] = $rows;
-													}
-													foreach($_groups[0] as $r)
-													{
-														$selected = ($r['id'] == $user_row['group']) ? "selected" : "";
-														echo '<option value="' . $r['id'] . '" ' . $selected . '>' . $r['name'] . '</option>';
-													}
-													echo '</select>
-													</div>
-												</div>
-												<div class="form-group">
-													<label class="col-sm-3 control-label">Спец. группа</label>
-													<div class="col-sm-4">';
-													if(!empty($_groups[1]))
-													{
-														echo "<select name=\"exgroup\" id=\"exgroup\" class=\"textinput\"><option value=\"0\">Нет</option>";
-														foreach($_groups[1] as $g)
-														{
-															$selected2 = ($g['id'] == $user_row['exgroup']) ? "selected" : "";
-															echo '<option value="' . $g['id'] . '" ' . $selected2 . '>' . $g['name'] . '</option>';
-														}
-														echo "</select>";
-													}
-													else
-													{
-														echo '<p class="form-control-static">Спец. групп нет</p>';
-													}
-													echo' </div>
-												</div>
-												<div class="form-group">
-													<label class="col-sm-3 control-label">День рождения</label>
-													<div class="col-sm-4">
-														<select name="birthDay" style="width:130px;" >' . $day . '</select>
-													</div>
-												</div>
-												<div class="form-group">
-													<label class="col-sm-3 control-label">Месяц рождения</label>
-													<div class="col-sm-4">
-														<select name="birthMonth" style="width:130px;" >' . $month . '</select> 
-													</div>
-												</div>
-												<div class="form-group">
-													<label class="col-sm-3 control-label">Год рождения</label>
-													<div class="col-sm-4">
-														<select name="birthYear" style="width:130px;" >' . $year . '</select>
-													</div>
-												</div>
-												<div class="form-group">
-													<label class="col-sm-3 control-label">Хобби</label>
-													<div class="col-sm-4">
-														<input  name="hobby" value="' . $user_row['hobby'] . '" type="text" class="form-control" data-parsley-required="true" data-parsley-trigger="change">
-													</div>
-												</div>
-												<div class="form-group">
-													<label class="col-sm-3 control-label">Место проживания</label>
-													<div class="col-sm-4">
-														<input  name="place" value="' . $user_row['place'] . '" type="text" class="form-control" data-parsley-required="true" data-parsley-trigger="change">
-													</div>
-												</div>
-												<div class="form-group">
-													<label class="col-sm-3 control-label">Пол</label>
-													<div class="col-sm-4">
-														<select name="gender" style="width:394px;" class="textinput" >' . $gender . '</select>
-													</div>
-												</div>
-												<div class="form-group">
-													<label class="col-sm-3 control-label">Активен ли пользователь?</label>
-													<div class="col-sm-4">
-														' . checkbox('active', $user_row['active']) . '
-													</div>
-												</div>
-												<div class="form-group">
-													<label class="col-sm-3 control-label">Ведите url адрес автарки</label>
-													<div class="col-sm-4">
-														<input  name="avatar_link" value="" type="text" class="form-control" data-parsley-required="true" data-parsley-trigger="change">
-													</div>
-												</div>
-												<div class="form-group">
-													<label class="col-sm-3 control-label">Загрузите автарку</label>
-													<div class="col-sm-4">
-														<input type="file" name="avatar"  />
-													</div>
-												</div>
-												<div class="form-group">
-													<label class="col-sm-3 control-label">Подпись пользователя</label>
-													<div class="col-sm-4">
-														' . $bb . '
-													</div>
-												</div>
-												<div class="form-group">
-													<label class="col-sm-3 control-label">E-mail</label>
-													<div class="col-sm-4">
-														<input  name="mail" value="' . $user_row['email'] . '" type="text" class="form-control" data-parsley-required="true" data-parsley-trigger="change">
-													</div>
-												</div>
-												<div class="form-group">
-													<label class="col-sm-3 control-label">ICQ</label>
-													<div class="col-sm-4">
-														<input  name="icq" value="' . $user_row['icq'] . '" type="text" class="form-control" data-parsley-required="true" data-parsley-trigger="change">
-													</div>
-												</div>
-												<div class="form-group">
-													<label class="col-sm-3 control-label">Skype</label>
-													<div class="col-sm-4">
-														<input  name="skype" value="' . $user_row['skype'] . '" type="text" class="form-control" data-parsley-required="true" data-parsley-trigger="change">
-													</div>
-												</div>
-												<div class="form-group">
-													<label class="col-sm-3 control-label">Новый пароль</label>
-													<div class="col-sm-4">
-														<input  name="newpass" value="" type="password" class="form-control" data-parsley-required="true" data-parsley-trigger="change">
-													</div>
-												</div>
-												
-												
-												
-											<input name="uid" value="' . $uid . '" type="hidden" />
-											<div class="form-group">
-								<label class="col-sm-3 control-label"></label>
-								<div class="col-sm-4">
-									<input name="submit" type="submit" class="btn btn-primary btn-parsley" id="sub" value="Обновить">						
-								</div>
-					</div>';
-	$queryF = $db->query("SELECT * FROM ".DB_PREFIX."_xfields WHERE module='profile' and to_user='1'");
-	if($db->numRows($queryF) > 0) 
-	{
-		$fields = unserialize($user_row['fields']);
-		$xfileds = '<table width="100%" border="0" cellpadding="0" cellspacing="1" bgcolor="#EEEEEE" style="margin-bottom:5px;" classs="pad_table"><tr bgcolor="#FFFFFF"><th colspan="3" class="in_conf_title">Дополнительные поля</th></tr>';
-		while($xfield = $db->getRow($queryF)) 
-		{
-			if($xfield['type'] == 3)
+			if ($url[4] == 'ok')
 			{
-				$dxfield = array_map('trim', explode("\n", $xfield['content']));
-				$xfieldChange = '<select class="textinput" name="xfield[' . $xfield['id'] . ']">';
-				foreach($dxfield as $xfiled_content)
-				{
-					$xfieldChange .= '<option value="' . $xfiled_content . '" ' . (isset($fields[$xfield['id']][1]) && $fields[$xfield['id']][1] == $xfiled_content ? 'selected' : ''). '>' . (!empty($fields[$xfield['id']][1]) ? $fields[$xfield['id']][1] : $xfield['content']) . '</option>';
-				}
-				$xfieldChange .= '</select>';
-			}
-			elseif($xfield['type'] == 2)
-			{
-				$xfieldChange = '<textarea class="textarea" name="xfield[' . $xfield['id'] . ']" >' . (!empty($fields[$xfield['id']][1]) ? $fields[$xfield['id']][1] : $xfield['content']) . '</textarea>';
+				$adminTpl->alert('success', $lang['info'], $lang['success_save']);	
 			}
 			else
 			{
-				$xfieldChange = '<input type="text" class="textinput" name="xfield[' . $xfield['id'] . ']" value="' . (!empty($fields[$xfield['id']][1]) ? $fields[$xfield['id']][1] : $xfield['content']) . '" />';
+				$adminTpl->alert('danger', $lang['error'], $lang['users_edit_error']);	
 			}
-						
-			$xfileds .= '<tr bgcolor="#FFFFFF"><td class="in_conf_input" align="center">' . $xfield['title'] . '</td><td class="in_conf_input"><input type="hidden" name="xfieldT[' . $xfield['id'] . ']" value="' . $xfield['title'] . '" />' . $xfieldChange . '</select></td></tr>';
 		}
-		$xfileds .= '</table>';
-		echo $xfileds;
-	}
-echo '</form>';
-echo '</div>';
-			echo'</section></div></div>';	
+		echo '<div class="panel panel-dark panel-border top">
+				<div class="panel-heading"><span class="panel-title">'. $lang['users_edit'] .'</span>					
+			</div>
+			<div class="panel-body admin-form">
+			<form enctype="multipart/form-data" class="form-horizontal parsley-form" role="form" action="{ADMIN}/user/save" method="post">
+				<div class="form-group">
+						<label for="nick"  class="col-sm-3 control-label">'. $lang['users_edit_nick'] .'</label>
+						<div class="col-sm-4">
+							<label for="nick" class="field prepend-icon">
+								<input value="' . $user_row['nick'] . '" type="text" name="nick" class="form-control" data-parsley-required="true" data-parsley-trigger="change" placeholder="'.$lang['users_edit_nick_pre'].'">
+								<label for="nick" class="field-icon"><i class="fa fa-pencil"></i></label>
+							</label>	
+						</div>
+				</div>
+				<div class="form-group">
+						<label for="forumStatus"  class="col-sm-3 control-label">'. $lang['users_edit_forum'] .'</label>
+						<div class="col-sm-4">
+							<label for="forumStatus" class="field prepend-icon">
+								<input value="' . $forum['specStatus'] . '" type="text" name="forumStatus" class="form-control" data-parsley-required="true" data-parsley-trigger="change" placeholder="'.$lang['users_edit_forum_pre'].'">
+								<label for="forumStatus" class="field-icon"><i class="fa fa-comment-o"></i></label>
+							</label>	
+						</div>
+				</div>
+				<div class="form-group">
+						<label for="surname"  class="col-sm-3 control-label">'. $lang['surname'] .'</label>
+						<div class="col-sm-4">
+							<label for="surname" class="field prepend-icon">
+								<input value="' .  $user_row['surname'] . '" type="text" name="surname" class="form-control" data-parsley-required="true" data-parsley-trigger="change" placeholder="'.$lang['users_edit_surname_pre'].'">
+								<label for="surname" class="field-icon"><i class="fa fa-user"></i></label>
+							</label>	
+						</div>
+				</div>
+				<div class="form-group">
+						<label for="name"  class="col-sm-3 control-label">'. $lang['name'] .'</label>
+						<div class="col-sm-4">
+							<label for="name" class="field prepend-icon">
+								<input value="' .  $user_row['name'] . '" type="text" name="name" class="form-control" data-parsley-required="true" data-parsley-trigger="change" placeholder="'.$lang['users_edit_name_pre'].'">
+								<label for="name" class="field-icon"><i class="fa fa-user"></i></label>
+							</label>	
+						</div>
+				</div>
+				<div class="form-group">
+						<label for="ochestvo"  class="col-sm-3 control-label">'. $lang['ochestvo'] .'</label>
+						<div class="col-sm-4">
+							<label for="ochestvo" class="field prepend-icon">
+								<input value="' .  $user_row['ochestvo'] . '" type="text" name="ochestvo" class="form-control" data-parsley-required="true" data-parsley-trigger="change" placeholder="'.$lang['users_edit_ochestvo_pre'].'">
+								<label for="ochestvo" class="field-icon"><i class="fa fa-user"></i></label>
+							</label>	
+						</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label">'.$lang['group'].'</label>
+					<div class="col-lg-3">
+						<label class="field select">';
+							echo '<select name="group" id="group" >';
+							$query = $db->query("SELECT * FROM `" . USER_DB . "`.`" . USER_PREFIX . "_groups` ORDER BY admin DESC,moderator DESC,user DESC,guest DESC,banned DESC");
+							while($rows = $db->getRow($query)) 
+							{
+								$_groups[$rows['special']][] = $rows;
+							}
+							foreach($_groups[0] as $r)
+							{
+								$selected = ($r['id'] == $user_row['group']) ? "selected" : "";
+								echo '<option value="' . $r['id'] . '" ' . $selected . '>' . $r['name'] . '</option>';
+							}
+							echo '</select>
+							<i class="arrow double"></i>
+						</label>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label">'.$lang['group_users_add_special'].'</label>
+					<div class="col-lg-3">
+						<label class="field select">';
+							echo '<select name="exgroup" id="exgroup" '.(empty($_groups[1]) ? 'disabled' : '').'>
+								'.(empty($_groups[1]) ? '<option value>'.$lang['users_edit_exgroup_empty'].'</option>' : '<option value="0">'.$lang['no'].'</option>');
+							foreach($_groups[1] as $g)
+							{
+								$selected2 = ($g['id'] == $user_row['exgroup']) ? "selected" : "";
+								echo '<option value="' . $g['id'] . '" ' . $selected2 . '>' . $g['name'] . '</option>';
+							}
+							echo '</select>
+							<i class="arrow double"></i>
+						</label>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label">'.$lang['users_edit_birthday'].'</label>
+					<div class="col-xs-4">
+						<label for="date" class="field prepend-picker-icon">
+							<input id="date" type="text" name="birthDay" placeholder="'.$lang['users_edit_birthday_pre'].'" class="gui-input" value="'.$date.'" />
+						</label>
+					</div>
+				</div>
+				<div class="form-group">
+						<label for="hobby"  class="col-sm-3 control-label">'. $lang['users_edit_hobby'] .'</label>
+						<div class="col-sm-4">
+							<label for="hobby" class="field prepend-icon">
+								<input value="' .  $user_row['hobby'] . '" type="text" name="hobby" class="form-control" data-parsley-required="true" data-parsley-trigger="change" placeholder="'.$lang['users_edit_hobby_pre'].'">
+								<label for="hobby" class="field-icon"><i class="fa fa-futbol-o"></i></label>
+							</label>	
+						</div>
+				</div>
+				<div class="form-group">
+						<label for="place"  class="col-sm-3 control-label">'. $lang['users_edit_place'] .'</label>
+						<div class="col-sm-4">
+							<label for="place" class="field prepend-icon">
+								<input value="' .  $user_row['place'] . '" type="text" name="place" class="form-control" data-parsley-required="true" data-parsley-trigger="change" placeholder="'.$lang['users_edit_place_pre'].'">
+								<label for="place" class="field-icon"><i class="fa fa-map-marker"></i></label>
+							</label>	
+						</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label">'.$lang['gender'].'</label>
+					<div class="col-lg-3">
+						<label class="field select">
+							<select name="gender" >' . $gender . '</select>
+							<i class="arrow double"></i>
+						</label>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label">'.$lang['users_activated'].'</label>
+					<div class="col-sm-4">
+						' . checkbox('active', $user_row['active']) . '
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label">'.$lang['users_add_avatar'].'</label>
+					<div class="col-sm-4">                       
+                        <label class="field prepend-icon file"><span class="button btn-primary">'.$lang['choose_file'].'</span>
+							<input id="avatar" type="file" name="avatar" onchange="document.getElementById(\'uploader2\').value = this.value;" class="gui-file">
+							<input id="uploader2" type="text" placeholder="'.$lang['choose_file_pre'].'" class="gui-input">
+							<label class="field-icon"><i class="fa fa-upload"></i></label>
+                        </label>                       
+                    </div>
+				</div>	
+				<div class="form-group">
+						<label for="avatar_link"  class="col-sm-3 control-label">'. $lang['users_avatar_url'] .'</label>
+						<div class="col-sm-4">
+							<label for="avatar_link" class="field prepend-icon">
+								<input value="" type="text" name="avatar_link" class="form-control" data-parsley-required="true" data-parsley-trigger="change" placeholder="'.$lang['users_avatar_url_pre'].'">
+								<label for="avatar_link" class="field-icon"><i class="fa fa-link"></i></label>
+							</label>	
+						</div>
+				</div>
+				<div class="form-group">
+						<label class="col-sm-3 control-label">'. $lang['users_signature'] .'</label>
+						<div class="col-sm-4">
+							<label for="comment" class="field prepend-icon">
+								' . $bb . '
+								<label for="comment" class="field-icon"><i class="fa fa-comments"></i></label><span class="input-footer">'.$lang['users_signature_tt'].'</span>
+							</label>
+						</div>
+				</div>
+				<div class="form-group">
+						<label for="mail"  class="col-sm-3 control-label">'. $lang['email'] .'</label>
+						<div class="col-sm-4">
+							<label for="mail" class="field prepend-icon">
+								<input value="' . $user_row['email'] . '" type="text" name="mail" class="form-control" data-parsley-required="true" data-parsley-trigger="change" placeholder="'.$lang['users_email_pre'].'">
+								<label for="mail" class="field-icon"><i class="fa fa-envelope-o"></i></label>
+							</label>	
+						</div>
+				</div>	
+				<div class="form-group">
+						<label for="icq"  class="col-sm-3 control-label">'. $lang['icq'] .'</label>
+						<div class="col-sm-4">
+							<label for="icq" class="field prepend-icon">
+								<input value="' . $user_row['icq'] . '" type="text" name="icq" class="form-control" data-parsley-required="true" data-parsley-trigger="change" placeholder="'.$lang['users_icq_pre'].'">
+								<label for="icq" class="field-icon"><i class="fa  fa-commenting-o"></i></label>
+							</label>	
+						</div>
+				</div>	
+				<div class="form-group">
+						<label for="skype"  class="col-sm-3 control-label">'. $lang['skype'] .'</label>
+						<div class="col-sm-4">
+							<label for="skype" class="field prepend-icon">
+								<input value="' . $user_row['skype'] . '" type="text" name="skype" class="form-control" data-parsley-required="true" data-parsley-trigger="change" placeholder="'.$lang['users_skype_pre'].'">
+								<label for="skype" class="field-icon"><i class="fa  fa-skype"></i></label>
+							</label>	
+						</div>
+				</div>	
+				<div class="form-group">
+						<label for="phone"  class="col-sm-3 control-label">'. $lang['phone'] .'</label>
+						<div class="col-sm-4">
+							<label for="phone" class="field prepend-icon">
+								<input value="' . $user_row['phone'] . '" type="text" name="phone" class="form-control" data-parsley-required="true" data-parsley-trigger="change" placeholder="'.$lang['users_phone_pre'].'">
+								<label for="phone" class="field-icon"><i class="fa  fa-phone"></i></label>
+							</label>	
+						</div>
+				</div>
+				<div class="form-group">
+						<label for="password"  class="col-sm-3 control-label">'. $lang['new_password'] .'</label>
+						<div class="col-sm-4">
+							<label for="password" class="field prepend-icon">
+								<input  name="newpass" value="" type="text" class="form-control" data-parsley-required="true" data-parsley-trigger="change" placeholder="'.$lang['users_newpass_pre'].'">
+								<label for="password" class="field-icon"><i class="fa  fa-lock"></i></label>
+							</label>	
+						</div>
+				</div>	
+				<input name="uid" value="' . $uid . '" type="hidden" />';				
+				$queryF = $db->query("SELECT * FROM ".DB_PREFIX."_xfields WHERE module='profile' and to_user='1'");
+				if($db->numRows($queryF) > 0) 
+				{
+					$fields = unserialize($user_row['fields']);
+					$xfileds = '<table width="100%" border="0" cellpadding="0" cellspacing="1" bgcolor="#EEEEEE" style="margin-bottom:5px;" classs="pad_table"><tr bgcolor="#FFFFFF"><th colspan="3" class="in_conf_title">Дополнительные поля</th></tr>';
+					while($xfield = $db->getRow($queryF)) 
+					{
+						if($xfield['type'] == 3)
+						{
+							$dxfield = array_map('trim', explode("\n", $xfield['content']));
+							$xfieldChange = '<select class="textinput" name="xfield[' . $xfield['id'] . ']">';
+							foreach($dxfield as $xfiled_content)
+							{
+								$xfieldChange .= '<option value="' . $xfiled_content . '" ' . (isset($fields[$xfield['id']][1]) && $fields[$xfield['id']][1] == $xfiled_content ? 'selected' : ''). '>' . (!empty($fields[$xfield['id']][1]) ? $fields[$xfield['id']][1] : $xfield['content']) . '</option>';
+							}
+							$xfieldChange .= '</select>';
+						}
+						elseif($xfield['type'] == 2)
+						{
+							$xfieldChange = '<textarea class="textarea" name="xfield[' . $xfield['id'] . ']" >' . (!empty($fields[$xfield['id']][1]) ? $fields[$xfield['id']][1] : $xfield['content']) . '</textarea>';
+						}
+						else
+						{
+							$xfieldChange = '<input type="text" class="textinput" name="xfield[' . $xfield['id'] . ']" value="' . (!empty($fields[$xfield['id']][1]) ? $fields[$xfield['id']][1] : $xfield['content']) . '" />';
+						}
+									
+						$xfileds .= '<tr bgcolor="#FFFFFF"><td class="in_conf_input" align="center">' . $xfield['title'] . '</td><td class="in_conf_input"><input type="hidden" name="xfieldT[' . $xfield['id'] . ']" value="' . $xfield['title'] . '" />' . $xfieldChange . '</select></td></tr>';
+					}
+					$xfileds .= '</table>';
+					echo $xfileds;
+				}
+				echo '<div class="form-group">
+					<label class="col-sm-3 control-label"></label>
+					<div class="col-sm-4">
+						<input name="submit" type="submit" class="btn btn-primary btn-parsley" id="sub" value="'. $lang['update'] .'">						
+					</div>
+				</div>
+			</form>
+		</div></div>';	
 		$adminTpl->admin_foot();
 		break;
 		
@@ -686,99 +704,113 @@ echo '</div>';
 			$nick = !empty($_POST['nick']) ? filter($_POST['nick'], 'nick') : '';
 			$ochestvo = !empty($_POST['ochestvo']) ? filter($_POST['ochestvo'], 'a') : '';
 			$forumStatus = !empty($_POST['forumStatus']) ? filter($_POST['forumStatus'], 'a') : '';
-			$birthDay = !empty($_POST['birthDay']) ? intval($_POST['birthDay']) : '';
-			$birthMonth = !empty($_POST['birthMonth']) ? intval($_POST['birthMonth']) : '';
-			$birthYear = !empty($_POST['birthYear']) ? intval($_POST['birthYear']) : '';
+			$birthDay = !empty($_POST['birthDay']) ? filter($_POST['birthDay']) : '';			
 			$gender = !empty($_POST['gender']) ? intval($_POST['gender']) : '';
-			$avatar_link = !empty($_POST['avatar_link']) ? filter($_POST['avatar_link'], 'dir') : '';
+			$avatar_link = !empty($_POST['avatar_link']) ? filter($_POST['avatar_link'], 'url') : '';
 			$signature = !empty($_POST['signature']) ? parseBB(processText(filter($_POST['signature'], 'bb'))) : '';
 			$mail = !empty($_POST['mail']) ? filter($_POST['mail'], 'mail') : '';
 			$hobby = !empty($_POST['hobby']) ? filter($_POST['hobby'], 'a') : '';
 			$icq = !empty($_POST['icq']) ? filter($_POST['icq'], 'a') : '';
 			$skype = !empty($_POST['skype']) ? filter($_POST['skype'], 'a') : '';
+			$phone = !empty($_POST['phone']) ? filter($_POST['phone'], 'a') : '';
 			$place = !empty($_POST['place']) ? filter($_POST['place'], 'a') : '';
 			$newpass = !empty($_POST['newpass']) ? $_POST['newpass'] : '';
 			$uid = !empty($_POST['uid']) ? intval($_POST['uid']) : '';
 			$group = !empty($_POST['group']) ? intval($_POST['group']) : '';
 			$exgroup = !empty($_POST['exgroup']) ? intval($_POST['exgroup']) : '';
-			$active = (!empty($_POST['active']) && $_POST['active'] == 'on') ? 1 : 0;
-
+			$active = (!empty($_POST['active']) && $_POST['active'] == 'on') ? 1 : 0;		
 			
-			if($birthDay && $birthMonth && $birthYear)
+			if(!empty($birthDay))
 			{
-				$birthDate = $birthDay . '.' . $birthMonth . '.' . $birthYear;
-				$unixBirth = gmmktime(0, 0, 0, $birthMonth, $birthDay, $birthYear);
-				$age = mb_substr((time()-$unixBirth)/31536000, 0, 2);
+				$parseDate = explode(' ', $birthDay);
+				$subDate = explode('.', $parseDate[0]);
+				if(isset($parseDate[1]))
+				{
+					$subTime = explode(':', $parseDate[1]);
+				}
+				else
+				{
+					$subTime[0] = 12;
+					$subTime[1] = 0;
+				}
+				$birthDate = gmmktime($subTime[0], $subTime[1], 0, $subDate[1], $subDate[0], $subDate[2]);
+				$age = mb_substr((time()-$birthDate)/31536000, 0, 2);
 			}
 			else
 			{
 				$birthDate = '';
 				$age = '';
-			}
-			
+			}			
 			if($newpass)
 			{
 				$core->auth->updatePassword($newpass, $uid);
 				if($config['plugin']) $plugin->updatePassword($newpass, $uid);
-			}
-			
+			}			
 			if(!empty($forumStatus))
 			{
 				$db->query("UPDATE `" . DB_PREFIX . "_board_users` SET `specStatus` = '" . $forumStatus . "' WHERE `uid` = " . $uid . " LIMIT 1 ;");
-			}
-			
+			}			
 			if($mail)
 			{
 				if(!preg_match('/[a-zA-Z0-9_\.\-]+@[a-zA-Z0-9_\-]+\.[a-zA-Z0-9_\-\.]+$/i', $mail)) 
 				{
 					$mail = '';
-					$error[] = 'E-Mail имеет неверный формат';
 				}				
 			}
-			
-			if(empty($nick))
-			{
-				$error[] = 'Ник не может быть пустым!';
-			}
 				
-				$db->query("UPDATE `" . USER_DB . "`.`" . USER_PREFIX . "_users` SET `nick` = '" . $db->safesql($nick) . "', `group` = '" . $group . "', `exgroup` = '" . $exgroup . "', `active` = '" . $active . "' WHERE `id` = " . $uid . " LIMIT 1 ;");
-				$core->auth->updateProfile($mail, $icq, $skype, $surname, $name, $ochestvo, $place, $age, $gender, $birthDate, $hobby, $signature, '', $uid);
-				if($config['plugin']) $plugin->updateProfile($mail, $icq, $skype, $surname, $name, $ochestvo, $place, $age, $gender, $birthDate, $hobby, $signature, '', $uid);
-
-			if($_FILES['avatar']['size'] > 0) 
+			if (!empty($nick) && !empty($mail))
 			{
-				deleteAvatar($uid);
-				if($foo = new Upload($_FILES['avatar']))
+				$db->query("UPDATE `" . USER_DB . "`.`" . USER_PREFIX . "_users` SET `nick` = '" . $db->safesql($nick) . "', `group` = '" . $group . "', `exgroup` = '" . $exgroup . "', `active` = '" . $active . "' WHERE `id` = " . $uid . " LIMIT 1 ;");
+				$core->auth->updateProfile($mail, $icq, $skype, $phone, $surname, $name, $ochestvo, $place, $age, $gender, $birthDate, $hobby, $signature, '', $uid);
+				if($config['plugin']) $plugin->updateProfile($mail, $icq, $skype, $phone, $surname, $name, $ochestvo, $place, $age, $gender, $birthDate, $hobby, $signature, '', $uid);
+				if($_FILES['avatar']['size'] > 0) 
 				{
-					$foo->file_new_name_body = 'av' .$uid;
-					$foo->image_resize = true;
-					$foo->image_x = $user['avatar_width'];
-					$foo->image_ratio_y = true;
-					$foo->file_overwrite = true;
-					$foo->file_auto_rename = false;
-					$foo->Process(ROOT.'files/avatars/users/');
-					$foo->allowed = array("image/*");
-						
-					if ($foo->processed) 
+					deleteAvatar($uid);
+					if($foo = new Upload($_FILES['avatar']))
 					{
-						$foo->Clean();
+						$foo->file_new_name_body = 'av' .$uid;
+						$foo->image_resize = true;
+						$foo->image_x = $user['avatar_width'];
+						$foo->image_ratio_y = true;
+						$foo->file_overwrite = true;
+						$foo->file_auto_rename = false;
+						$foo->Process(ROOT.'files/avatars/users/');
+						$foo->allowed = array("image/*");							
+						if ($foo->processed) 
+						{
+							$foo->Clean();
+						}
 					}
 				}
-			}
-			
-			if(isset($error))
-			{
-				$txt = '';
-					
-				foreach($error as $msg)
+				elseif (!empty($avatar_link))
 				{
-					$txt .= $msg . '<br />';
+					deleteAvatar($uid);
+					$format = explode(".",$avatar_link);
+					$path = 'files/avatars/'.gencode(10).'.'.array_pop($format).'';
+					copy(''.$avatar_link.'', ''.$path.'');					
+					if($foo = new Upload($path))
+					{
+						$foo->file_new_name_body = 'av' .$uid;
+						$foo->image_resize = true;
+						$foo->image_x = $user['avatar_width'];
+						$foo->image_ratio_y = true;
+						$foo->file_overwrite = true;
+						$foo->file_auto_rename = false;
+						$foo->Process(ROOT.'files/avatars/users/');
+						$foo->allowed = array("image/*");							
+						if ($foo->processed) 
+						{
+							$foo->Clean();
+						}
+					}
 				}
+				location(ADMIN . '/user/edit/' . $uid . '/ok');
 			}
-			
-			location(ADMIN . '/user/edit/' . $uid . '/ok');
-	
-			break;
+			else
+			{
+				location(ADMIN . '/user/edit/' . $uid . '/error');
+			}
+	break;
 			
 	case 'regroup':
 		$uid = intval($url[3]);

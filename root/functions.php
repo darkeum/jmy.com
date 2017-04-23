@@ -14,6 +14,10 @@ if (!defined('ACCESS')) {
 	exit;
 }
 
+if(file_exists(ROOT . 'root/other/other.functions.php'))
+{
+	include(ROOT . 'root/other/other.functions.php');
+}
 
 function adminError($err, $back = false)
 {
@@ -136,12 +140,13 @@ global $adminTpl, $core;
 				relative_urls: false,
 				plugins: [
 					\'advlist autolink lists link codesample hr image charmap print preview anchor\',
-					\'searchreplace visualblocks code fullscreen\',
+					\'searchreplace visualblocks code fullscreen imagetools textcolor colorpicker textpattern\',
 					\'insertdatetime media table contextmenu paste spellchecker responsivefilemanager code youtube jmybutton emoticons\'
 				],
-				toolbar1: \'undo redo | styleselect | fontsizeselect | fontselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent table hr\',
-				toolbar2: \'subscript superscript | link image responsivefilemanager jmymusic jmyvideo | jmymail jmyquote jmyhide codesample jmyspoiler | spellchecker removeformat searchreplace code fullscreen  \',
+				toolbar1: \'undo redo | styleselect | fontsizeselect | fontselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | forecolor backcolor | subscript superscript\',
+				toolbar2: \'bullist numlist outdent indent table hr | link image jmythumb responsivefilemanager jmymusic jmyvideo jmyflash | jmymail jmyquote jmyhide codesample jmyspoiler | spellchecker removeformat searchreplace code \',
 				image_advtab: true,
+				imagetools_cors_hosts: [\'www.tinymce.com\', \'codepen.io\'],				
 				spellchecker_language : "ru",
 				spellchecker_languages : "Russian=ru,Ukrainian=uk,English=en",
 				spellchecker_rpc_url : "//speller.yandex.net/services/tinyspell",
@@ -229,10 +234,12 @@ function colorpickerInit($id = 'color_p', $color='#02c385')
 	$adminTpl->js_code[] = "$('#".$id."').colorpicker({color: '".$color."'});";
 }
 
-function datetimepickerInit($id = 'date')
+function datetimepickerInit($id = 'date', $type = 'all')
 {
 	global $adminTpl, $core;
-	$adminTpl->js_code[] = '$("#'.$id.'").datetimepicker({
+	switch($type) {
+	case 'all':
+		$adminTpl->js_code[] = '$("#'.$id.'").datetimepicker({
           showOn: \'both\',
           buttonText: \'<i class="fa fa-calendar-o"></i>\',
           prevText: \'<i class="fa fa-chevron-left"></i>\',
@@ -251,6 +258,26 @@ function datetimepickerInit($id = 'date')
 			}, 1);
           }
         });';
+	break;
+	case 'date':
+		$adminTpl->js_code[] = '$("#'.$id.'").datepicker({
+          numberOfMonths: 1,
+          showOn: \'both\',
+          buttonText: \'<i class="fa fa-calendar-o"></i>\',
+          prevText: \'<i class="fa fa-chevron-left"></i>\',
+          nextText: \'<i class="fa fa-chevron-right"></i>\',
+          beforeShow: function (input, inst) {
+            var newclass = \'admin-form\';
+            var themeClass = $(this).parents(\'.admin-form\').attr(\'class\');
+            var smartpikr = inst.dpDiv.parent();
+            if (!smartpikr.hasClass(themeClass)) {
+              inst.dpDiv.wrap(\'<div class="admin-form mw1000 center-block theme-primary"></div>\');
+            }
+          }
+        });
+		';
+	break;
+	}
 	$adminTpl->footIncludes[''] =  '<script src="'.ADMIN_TPL.'assets/js/jquery-ui-monthpicker.min.js"></script>
 									<script src="'.ADMIN_TPL.'assets/js/jquery-ui-datepicker.min.js"></script>
 									<script src="/langs/'.$core->InitLang().'/js/datepicker.js"></script>

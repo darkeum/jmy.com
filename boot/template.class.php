@@ -36,11 +36,11 @@ class template
 	var $title = false;
 	var $admin_title = false;
 	var $feed_link = '';
-	var $uniqTag = '';
+	var $uniqTag = array();
 	var $fullAjaxBody = '';
 	var $adminTheme = false;	
 	var $time_compile = false;
-	var $startCompile = '';
+	var $startCompile = false;
 	var $starWidth = 19;
 	var $blocks = array();
 	var $modules = array();
@@ -52,14 +52,14 @@ class template
 	
 	function __construct()
 	{
-	global $db, $config, $url;
+		global $db, $config, $url;
         if($url[0] == ADMIN)
         {
             $this->adminTheme = true;
             $this->file_dir = 'usr/tpl/admin/';
             $this->sep = '';
-        }
-        
+        }       	
+		
 		if(!isset($_COOKIE['smartphone']))
 		{
 			setcookie('smartphone', 1);		
@@ -67,7 +67,7 @@ class template
 		
 		if(empty($this->file_dir))
 		{
-			if (($config['smartphone']=='1')&&($this->check_phone()==true)&&$_COOKIE['smartphone'] == 1)
+			if (($config['smartphone']=='1')&&($this->check_phone()==true)&&(($_COOKIE['smartphone'] == 1)||(!isset($_COOKIE['smartphone']))))
 			{
 				$this->file_dir = 'usr/tpl/smartphone/';
 			}
@@ -225,11 +225,8 @@ class template
 	
 	public function loadFile($file, $check = false) 
 	{
-		global $config, $url, $db, $core;
-		
-		
-		$loadDefault = 'usr/tpl/default/' . $file . $this->ext;
-	
+		global $config, $url, $db, $core;		
+		$loadDefault = 'usr/tpl/default/' . $file . $this->ext;	
 		if($this->adminTheme == false)
 		{
 			$loadUrl = $this->getThemeFile($file);
@@ -237,6 +234,7 @@ class template
 		else if ($config['tpl_change'] == '0')
 		{
 			$loadUrl = 'usr/tpl/'.$config['tpl'].'/' . $file . $this->ext;
+			
 		}
 		else
 		{
@@ -291,9 +289,11 @@ class template
 
 	public function parse() 
 	{ 
-		global $config, $url, $core;
+		global $config, $url, $core, $lang;		
 		if($url[0] != ADMIN)
-		{		
+		{	
+			$tpl_now =  str_replace("usr/tpl/", '', $this->file_dir);
+			$tpl_now = substr($tpl_now, 0, -1);
 			$this->sources = preg_replace_callback( "#\\[lang_old:(.+?)]#is", create_function('$matches', 'return constant($matches[1]);'), $this->sources);	
 			$this->sources = preg_replace_callback( "#\\[lang:(.+?)\\]#i", array( &$this, 'lang_include'), $this->sources );			
 			$this->sources = preg_replace_callback( "#\\{%NOWDATE:(.*?)%\\}#is", create_function('$matches', 'return date($matches[1], time());'), $this->sources );
@@ -316,7 +316,15 @@ class template
 			$this->sources = preg_replace_callback( "#\\[open](.*?)\\[/open]#is", array(&$this, 'preOpen'), $this->sources);
 			$this->sources = preg_replace_callback( "#\\[userinfo:(.*?)]#is", array(&$this, 'ustinf'), $this->sources);
 			$this->sources = preg_replace_callback( "#\\[custom category=\"(.*?)\" template=\"(.*?)\" aviable=\"(.*?)\" limit=\"(.*?)\" module=\"(.*?)\" order=\"(.*?)\" short=\"(.*?)\" notin=\"(.*?)\"]#is", "buildCustom", $this->sources);
-			$this->sources = preg_replace_callback( "#\\[custom category=\"(.*?)\" template=\"(.*?)\" aviable=\"(.*?)\" limit=\"(.*?)\" module=\"(.*?)\" order=\"(.*?)\" short=\"(.*?)\"]#is", "buildCustom", $this->sources);			
+			$this->sources = preg_replace_callback( "#\\[custom category=\"(.*?)\" template=\"(.*?)\" aviable=\"(.*?)\" limit=\"(.*?)\" module=\"(.*?)\" order=\"(.*?)\" short=\"(.*?)\"]#is", "buildCustom", $this->sources);		
+			if(file_exists(ROOT . 'usr/other/other.replace.php'))
+			{
+				include(ROOT . 'usr/other/other.replace.php');
+			}	
+			if(file_exists(ROOT . 'usr/tpl/'.$tpl_now.'/function.php'))
+			{
+				include(ROOT . 'usr/tpl/'.$tpl_now.'/function.php');
+			}	
 		}
 		else
 		{
@@ -405,11 +413,18 @@ class template
 		$this->sources = false;
 		$this->vars = array();
 		$this->file = false;
-		$this->startCompile = '';
+		$this->startCompile = false;
 	}
 	
 	public function return_end()
 	{
+		global $core, $lang;
+		$tpl_now =  str_replace("usr/tpl/", '', $this->file_dir);
+		$tpl_now = substr($tpl_now, 0, -1);
+		if(file_exists(ROOT . 'langs/'.$core->lang.'/tpl/'.$core->lang.'.'.$tpl_now.'.lng'))
+		{
+			include(ROOT . 'langs/'.$core->lang.'/tpl/'.$core->lang.'.'.$tpl_now.'.lng');
+		}	
 		$this->time_compile += microtime(1)-$this->startCompile;
 		$this->parse();
 		return $this->sources;
@@ -418,10 +433,17 @@ class template
 		
 	public function end() 
 	{
+		global $core, $lang;
 		if(DEBUG) 
 		{
 			$this->listTemplates[($this->file ? $this->file : 'main')] = MicroTime(1)-$this->startCompile;
 		}
+		$tpl_now =  str_replace("usr/tpl/", '', $this->file_dir);
+		$tpl_now = substr($tpl_now, 0, -1);
+		if(file_exists(ROOT . 'langs/'.$core->lang.'/tpl/'.$core->lang.'.'.$tpl_now.'.lng'))
+		{
+			include(ROOT . 'langs/'.$core->lang.'/tpl/'.$core->lang.'.'.$tpl_now.'.lng');
+		}	
 		$this->time_compile += microtime(1)-$this->startCompile;
 		$this->parse();
 		$this->compile();
@@ -435,8 +457,7 @@ class template
 		
 	public function foot($subContent = false) 
 	{
-	global $config, $url, $db, $core;
-	
+	global $config, $url, $db, $core, $lang;
 		$content = ob_get_contents();
 		ob_end_clean();		
 		$cat_keyword = (isset($this->keywords) ? ', ' .$this->keywords : false);		
@@ -452,8 +473,8 @@ class template
 		$meta .= "<meta name=\"generator\" content=\"JMY CMS\" />" . "\n";		
 		$meta .= "<link rel=\"alternate\" href=\"" . $config['url'] . "/feed/rss/" . $this->feed_link . "\" type=\"application/rss+xml\" title=\"Rss 2.0\" />" . "\n";
 		$meta .= "<link rel=\"search\" type=\"application/opensearchdescription+xml\" href=\"" . $config['url'] . "/feed/opensearch/\"  title=\"" . $config['name'] . "\" />" . "\n";	
-		$meta .= "<script src=\"usr/plugins/js/JMY_Ajax.js\" type=\"text/javascript\"></script>" . "\n";
-		$meta .= "<script src=\"usr/plugins/js/engine.js\" type=\"text/javascript\"></script>" . "\n";
+		$meta .= "<script src=\"usr/plugins/js/JMY_Ajax.min.js\" type=\"text/javascript\"></script>" . "\n";
+		$meta .= "<script src=\"usr/plugins/js/engine.min.js\" type=\"text/javascript\"></script>" . "\n";
 		$meta .= "<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js\"></script>" . "\n";
 		if(!empty($this->players))
 		{
@@ -468,6 +489,7 @@ class template
 				$meta .= $metas;
 			}		
 		}
+		$this->loadFile('index');
 		if (strpos($this->sources, "<body") !== false) 
 		{
 			$this->sources = preg_replace('#<body(.*)[^>]#i', '<body\\1<div id="loading" class="loading" style="display:none;top:0;"><img src="media/showloading.gif" alt="Загрузка..." /><br />Загрузка...</div>'.$this->bodyIncludes, $this->sources);
@@ -476,7 +498,7 @@ class template
 		{
 			$meta .= '<div id="loading" class="loading" style="display:none;top:0;"><img src="media/showloading.gif" alt="Загрузка..." /><br />Загрузка...</div>' . "\n";
 		}		
-		$this->loadFile('index');
+		
 		if(!empty($this->endJs))
 		{
 			$this->sources = preg_replace('#</body(.*)[^>]#i', $this->endJs.'</body\\1', $this->sources);
@@ -490,7 +512,6 @@ class template
 				$this->sources = $fullAjax[1];
 			}
 		}
-	
 		
 		$this->setVar('META', $meta);
 		$this->setVar('MODULE', $content);			
@@ -539,7 +560,7 @@ class template
 			return $this->return_end();
 	}
 	
-	public function info($text, $type = 'info', $redicret = null, $title = null, $url_text = null, $url = null, $url_type = 'url') 
+	public function info($text, $type = 'info', $redicret = null, $title = null, $url_text = null, $url = null, $url_type = 'url', $return = false) 
 	{
 	global $config, $urll;
 	
@@ -563,7 +584,14 @@ class template
 		$this->setVar('URL', $url);
 		$this->setVar('URL_TEXT', $url_text);	
 		$this->sources = preg_replace_callback("#\\[URL](.*?)\\[/URL]#is", create_function('$matches', 'if(!empty($GLOBALS["urll"])) {return $matches[1];}'),$this->sources);		
-		$this->end();
+		if ($return)
+		{
+			return $this->return_end();
+		}
+		else
+		{
+				$this->end();
+		}	
 	}
 	
 	public function alert($type = 'info', $title = null, $text = null, $url = null) 
@@ -580,9 +608,16 @@ class template
 	
 	public function redicret($message, $url = 'news', $text = 'Спасибо') 
 	{
-	global $config;
-	$full_url = $url;
-	include(ROOT . 'usr/tpl/redirect.tpl');	
+		global $config;
+		$full_url = $url;
+		if ($config['redicret'])
+		{
+			include(ROOT . 'usr/tpl/redirect.tpl');
+		}
+		else
+		{
+			location($full_url);
+		}
 	}
 	
 	
@@ -731,7 +766,7 @@ class template
 		}
 	}
 
-	public function pages($page, $num, $all, $link, $onClick = false) 
+	public function pages($page, $num, $all, $link, $onClick = false, $return = false) 
 	{
 		global $config, $nums, $url;
 		if(!eregStrt('{page}', $link)) $link = $link . '/{page}';
@@ -763,11 +798,19 @@ class template
 		$nextpage = $page + 1;
 		if($numpages != 1 && $numpages != 0) 
 		{
+		
 			$this->loadFile('pages');
 			$this->setVar('NUM', $nums);
 			$this->sources = preg_replace( "#\\{" . $this->sep . "NEXT" . $this->sep . "\\}(.*?)\\{/" . $this->sep . "NEXT" . $this->sep . "\\}#ies", ($page < $var-1) ? "pageLink('".$link."', '\\1', $nextpage" . ($onClick ? ", '" . str_replace("'", "\'", $onClick) . "'" : '') . ")" : '', $this->sources);
 			$this->sources = preg_replace( "#\\{" . $this->sep . "PREV" . $this->sep . "\\}(.*?)\\{/" . $this->sep . "PREV" . $this->sep . "\\}#ies", ($page != 1) ? "pageLink('".$link."', '\\1', $prevpage" . ($onClick ? ", '" . str_replace("'", "\'", $onClick) . "'" : '') . ")" : '', $this->sources);
-			$this->end();
+			if ($return)
+			{
+				return $this->return_end();
+			}
+			else
+			{
+				$this->end();
+			}			
 			$nums = '';
 		}
 	}

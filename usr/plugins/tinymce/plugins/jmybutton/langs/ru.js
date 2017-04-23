@@ -7,4 +7,7 @@ tinymce.addI18n('ru',{
 	'Insert spoiler'   : "Вставить спойлер",
 	'Insert audio'   : "Вставить аудио",
 	'Insert video'   : "Вставить видео",
+	'Insert flash'   : "Вставить флеш анимацию",
+	'Insert file'    : "Вставить файл",
+	'Insert thumb'   : "Вставить миниатюру",
 });

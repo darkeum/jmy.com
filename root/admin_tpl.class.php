@@ -305,6 +305,10 @@ class admin extends template
 		$this->setVar('MESSAGES_NUMB', $db->numRows($newMessages));
 		$this->setVar('FRIENDS_NUMB', $db->numRows($newFriends));
 		$this->setVar('TOPBAR', isset($topbar) ? $topbar : '');
+		if(file_exists(ROOT . 'root/other/other.templates.php'))
+		{
+			include(ROOT . 'root/other/other.templates.php');
+		}
 		$this->sources = preg_replace_callback("#\\{MENU_OPEN:(.*?)\\}#is", "openMenu" , $this->sources);
 		$this->sources = preg_replace_callback("#\\{MENU_CHOOSE:(.*?)\\}#is", "chooseMenu",$this->sources);
 		$this->sources = preg_replace_callback("#\\[CHECK_ACTIVE](.*?)\\[/CHECK_ACTIVE]#is", "checkActive",$this->sources);		

@@ -1,8 +1,8 @@
 <?php
 
 /**
-* @name        JMY CMS
-* @link        http://jmy.su/
+* @name        JMY CORE
+* @link        https://jmy.su/
 * @copyright   Copyright (C) 2012-2017 JMY LTD
 * @license     LICENSE.txt (see attached file)
 * @version     VERSION.txt (see attached file)
@@ -65,12 +65,20 @@ global $db, $config, $core, $tags, $news_conf, $url, $headTag, $cache;
 	{
 		$cat = mjsEnd($url);
 		$altname = filter($cat, 'a');
-		$cat_query = $db->query("SELECT id as cid, name, description, keywords FROM ".DB_PREFIX."_categories WHERE altname='" . $db->safesql($altname) . "'");
+		$cat_query = $db->query("SELECT id as cid, name, fulltitle, description, keywords FROM ".DB_PREFIX."_categories WHERE altname='" . $db->safesql($altname) . "'");
 		if($db->numRows($cat_query) == 0)
 		{
 			location();
 		}		
-		$cat_info = $db->getRow($cat_query);		
+		$cat_info = $db->getRow($cat_query);
+		if(!empty($cat_info['fulltitle']))
+		{
+			set_title(array($cat_info['fulltitle']));
+		}
+		else
+		{
+			set_title(array($cat_info['name']));
+		}
 		if(!empty($cat_info['keywords']))
 		{
 			$core->tpl->keywords = $cat_info['keywords'];
@@ -81,7 +89,7 @@ global $db, $config, $core, $tags, $news_conf, $url, $headTag, $cache;
 		}		
 		$core->tpl->uniqTag = 'cat';
 		$core->tpl->feed_link = 'cat/' . $cat_info['cid'];		
-		set_title(array($cat_info['name']));
+		
 		$where = "AND cat like '%," . $cat_info['cid'] . ",%'";
 		$cat_ids = getcache('categories');
 		$cat_pod = false;
@@ -117,8 +125,10 @@ global $db, $config, $core, $tags, $news_conf, $url, $headTag, $cache;
 			$cat = $news['cat'] !== ',0,' ? $core->getCat('news', $news['cat'], 'short', 3) : '';
 			$news_link = $news['cat'] !== ',0,' ? 'news/' . $core->getCat('news', $news['cat'], 'development') . '/' : 'news/';
 			$cat_one = $news['cat'] !== ',0,' ? $core->getCat('news', $news['cat'], 'altname', 1) : 'index';
-			$short = $core->bbDecode($news['short'], $news['id'], true);			
-			include(loadTag('news'));	
+			$short = $core->bbDecode($news['short'], $news['id'], true);
+			$core->tpl->loadFile('news/news-'.(is_array($core->tpl->uniqTag) ? $core->tpl->uniqTag[0] : empty($core->tpl->uniqTag) ? 'main' : $core->tpl->uniqTag));	
+			include(loadTag('news'));
+			$core->tpl->end();	
 			unset($tags);
 		}		
 		list($all) = $db->fetchRow($db->query("SELECT count(n.id) FROM ".DB_PREFIX."_news as n LEFT JOIN ".DB_PREFIX."_langs as c on(c.postId=n.id and c.module='news') WHERE active='1' " . $where));
@@ -208,14 +218,21 @@ global $db, $config, $core, $tags, $news_conf, $url, $headTag, $cache;
 			}
 		}	
 		$core->tpl->uniqTag = 'view';
-		set_title(array(_NEWS, $news['name'], $news['title']));
+		$ptitle = $news['title'];
+		if(!empty($news['fulltitle']))
+		{
+			$ptitle =$news['fulltitle'];
+		}
+		set_title(array($news['name'], $ptitle));
 		$catInfo = $news['cat'] !== ',0,' ? $core->catInfo('news', $news['cat']) : '';
 		$cat = $news['cat'] !== ',0,' ? $core->getCat('news', $news['cat'], 'short', 3) : '';
 		$news_link = $news['cat'] !== ',0,' ? 'news/' . $core->getCat('news', $news['cat'], 'development') . '/' : 'news/';
 		$cat_one = $news['cat'] !== ',0,' ? $core->getCat('news', $news['cat'], 'altname', 1) : 'index';
 		$short = $core->bbDecode($textShort, $news['id'], true);
 		$miniImg = _getCustomImg($short);
-		include(loadTag('news'));				
+		$core->tpl->loadFile('news/news-'.(is_array($core->tpl->uniqTag) ? $core->tpl->uniqTag[0] : empty($core->tpl->uniqTag) ? 'main' : $core->tpl->uniqTag));	
+		include(loadTag('news'));
+		$core->tpl->end();				
 		if($news['allow_comments']) 
 		{
 			show_comments('news', $news['id'], $news_conf['comments_num']);

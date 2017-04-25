@@ -1,0 +1,10 @@
+<?php
+
+$lang = array_merge($lang, array (
+
+	'news'										=> 'Новости',
+	'news_empty'								=> 'Ни одной новости не найдено!',
+
+));
+
+?>

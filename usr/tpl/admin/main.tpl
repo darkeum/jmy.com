@@ -124,16 +124,11 @@
             </li> 
 			[ACTIVE_MODULE:news]
             <li>				
-				<a href="#" class="accordion-toggle {MENU_OPEN:news,cats,fm,xfields}"><span class="glyphicon glyphicon-fire"></span><span class="sidebar-title">[alang_old:_PANEL_MENU_NEWS]</span><span class="caret"></span></a>
+				<a href="#" class="accordion-toggle {MENU_OPEN:news,fm,xfields}"><span class="glyphicon glyphicon-fire"></span><span class="sidebar-title">[alang_old:_PANEL_MENU_NEWS]</span><span class="caret"></span></a>
 				<ul class="nav sub-nav">
 					<li {MENU_CHOOSE:news}>
 						<a href="{ADMIN}/module/news">
 							<span class="glyphicon glyphicon-modal-window"></span>[alang_old:_PANEL_MENU_NEWS_MANAGER]
-						</a>
-					</li>
-					<li {MENU_CHOOSE:cats}>
-						<a href="{ADMIN}/cats">
-							<span class="glyphicon glyphicon-list"></span>[alang_old:_PANEL_MENU_NEWS_CAT]
 						</a>
 					</li>
 					<li {MENU_CHOOSE:xfields}>
@@ -143,7 +138,13 @@
 					</li>					
 				</ul>
             </li>
-			[/ACTIVE_MODULE]		
+			[/ACTIVE_MODULE]	
+			<li {MENU_CHOOSE:cats}> 
+				<a href="{ADMIN}/cats">
+					<span class="glyphicon glyphicon-list"></span>
+					<span class="sidebar-title">[alang_old:_PANEL_MENU_NEWS_CAT]  </span>
+				</a>
+            </li> 			
             <li>
 				<a href="#" class="accordion-toggle {MENU_OPEN:user,groups,comments,moderation,voting}">
 					<span class="glyphicon glyphicon-user"></span>
@@ -169,7 +170,7 @@
 				</ul>
             </li>
             <li>
-				<a href="#" class="accordion-toggle {MENU_OPEN:board,blog,gallery,guestbook,content}">
+				<a href="#" class="accordion-toggle {MENU_OPEN:board,content}">
 					<span class="glyphicon glyphicon-th-large"></span>
 					<span class="sidebar-title">[alang_old:_PANEL_MENU_COM]</span>
 					<span class="caret"></span>
@@ -179,22 +180,7 @@
 					<li {MENU_CHOOSE:board}>
 						<a href="{ADMIN}/module/board"><span class="fa fa-bullhorn"></span>[alang_old:_PANEL_MENU_COM_FORUM]</a>
 					</li>
-					[/ACTIVE_MODULE]
-					[ACTIVE_MODULE:blog]
-					<li {MENU_CHOOSE:blog}>
-						<a href="{ADMIN}/module/blog"><span class="fa fa-stack-exchange"></span>[alang_old:_PANEL_MENU_COM_BLOG]</a>
-					</li>
-					[/ACTIVE_MODULE]
-					[ACTIVE_MODULE:gallery]
-					<li {MENU_CHOOSE:gallery}>
-						<a href="{ADMIN}/module/gallery"><span class="fa fa-picture-o"></span>[alang_old:_PANEL_MENU_COM_GALLERY]</a>
-					</li>
-					[/ACTIVE_MODULE]
-					[ACTIVE_MODULE:guestbook]
-					<li {MENU_CHOOSE:guestbook}>
-						<a href="{ADMIN}/module/guestbook"><span class="fa fa-comments-o"></span>[alang_old:_PANEL_MENU_COM_GUESTBOOK]</a>
-					</li> 
-					[/ACTIVE_MODULE]
+					[/ACTIVE_MODULE]					
 					[ACTIVE_MODULE:content]
 					<li {MENU_CHOOSE:content}>
 						<a href="{ADMIN}/module/content"><span class="fa fa-square-o"></span>[alang_old:_PANEL_MENU_COM_STATIC]</a>

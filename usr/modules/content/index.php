@@ -30,12 +30,23 @@ global $db, $config, $core, $url, $headTag, $content_conf, $lang;
 			$core->tpl->uniqTag[] = 'view';
 			$core->tpl->uniqTag[] = 'view-'.$static['id'];
 			$core->tpl->uniqTag[] = $static['translate'];
-			set_title(array($static['title']));
+			
 			
 			if(!empty($static['keywords']))
 			{
 				$core->tpl->keywords = $static['keywords'];
 			}
+			if(!empty($static['description']))
+			{
+				$core->tpl->description = $static['description'];
+			}
+		
+			$ptitle = $static['title'];
+			if(!empty($static['fulltitle']))
+			{
+				$ptitle =$static['fulltitle'];
+			}
+			set_title(array($ptitle));
 			
 			if(!empty($static['theme']))
 			{
@@ -90,7 +101,7 @@ switch(isset($url[1]) ? $url[1] : null)
 			$nn = $content_conf['num'];
 			$page = init_page();
 			$cut = ($page-1)*$nn;
-			set_title(array($lang['static']));
+			
 			$where = '';
 			$file = 'index';
 			$link = '';
@@ -111,12 +122,29 @@ switch(isset($url[1]) ? $url[1] : null)
 				$cat_info = $db->getRow($cat_query);
 				$pLink = '/' . $core->getCat('content', $cat_info['cid'], 'development');
 				$where = "AND cat like '%," . $cat_info['cid'] . ",%'";
+					if(!empty($cat_info['fulltitle']))
+					{
+						set_title(array($cat_info['fulltitle']));
+					}
+					else
+					{
+						set_title(array($cat_info['name']));
+					}
+					if(!empty($cat_info['keywords']))
+					{
+						$core->tpl->keywords = $cat_info['keywords'];
+					}
+					if(!empty($cat_info['description']))
+					{
+						$core->tpl->description = $cat_info['description'];
+					}	
 				
 			}
 			else
 			{
 				$pLink = '';
 				$where = '';
+				set_title(array($lang['static']));
 			}
 			
 			if(!INDEX)

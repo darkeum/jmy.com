@@ -283,7 +283,11 @@ switch(isset($url[2]) ? $url[2] : null) {
 						time();
 						setInterval(time, 1000);
 					</script>';						
-				$adminTpl->admin_foot();
+				$adminTpl->admin_foot();				
+				$file = file_get_contents(ROOT.'define.php');
+				$file = str_replace('define(\'MODE\', \'normal\');', 'define(\'CRMMODE\', \''.ADMIN_TPL.'\');', $file);
+				$file = str_replace('define(\'ADMIN_TPL\', \'usr/tpl/admin/\');', 'define(\'ADMIN_TPL\', \''.ADMIN_TPL.'\');', $file);
+				file_put_contents(ROOT.'define.php', $file);				
 			}
 			else
 			{

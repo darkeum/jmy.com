@@ -209,10 +209,11 @@ function captcha()
 function comment_savea() 
 {
     global $db, $core, $user, $config, $mail_conf;
+	$bb = new bb;
     if($config['comments'] == 0 || $core->auth->group_info['addComment'] == 0) return;
     $id = intval($_REQUEST['id']);
     $reply_to = intval($_REQUEST['reply_to']);
-    $text = filter($_REQUEST['text']);
+    $text = $_REQUEST['text'];
     $gauthor = filter($_REQUEST['author'], 'a');
     $email = $core->auth->isUser ? '' : filter($_REQUEST['email'], 'mail');
     $mod = filter($_REQUEST['mod'], 'module');
@@ -265,8 +266,9 @@ function comment_savea()
     {
         if($text && eregStrt($_SERVER['HTTP_HOST'], $_SERVER['HTTP_REFERER'])) 
         {
+			$text = $bb->parse(processText(filter($text, 'html')), '', true);	
 			$parent = ($core->auth->isUser && $reply_to > 0 && $user['commentTree'] == 1 ? $reply_to : 0);
-            $query = $db->query("INSERT INTO `" . DB_PREFIX . "_comments` ( `id` , `uid` , `post_id` , `module` , `text` , `date` , `gemail` , `gname` , `gurl` , `parent` , `status` ) VALUES (NULL, '" . $uid . "', '" . $id . "', '" . $mod . "', '" . $db->safesql(parseBB(processText($text))) . "', '" . $time . "', '" . $email . "', '" . $author . "', '', '" . $parent . "', '1');");
+            $query = $db->query("INSERT INTO `" . DB_PREFIX . "_comments` ( `id` , `uid` , `post_id` , `module` , `text` , `date` , `gemail` , `gname` , `gurl` , `parent` , `status` ) VALUES (NULL, '" . $uid . "', '" . $id . "', '" . $mod . "', '" . $db->safesql($text) . "', '" . $time . "', '" . $email . "', '" . $author . "', '', '" . $parent . "', '1');");
 			delcache('userInfo_'.$uid);
 
             if($core->auth->isUser && isset($subscribe) && $subscribe == 1 && $uid != $core->auth->user_id)

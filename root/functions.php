@@ -486,6 +486,27 @@ if(!isset($offset)) $offset=0;
   return $ret;
 }
 
+function copydir($source, $dest)
+{
+   if (is_file($source)) {
+      return copy($source, $dest);
+   }
+   if (!is_dir($dest)) {
+      mkdir($dest);
+   }
+   $dir = dir($source);
+   while (false !== $entry = $dir->read()) {
+      if ($entry == '.' || $entry == '..') {
+         continue;
+      }
+      if ($dest !== "$source/$entry") {
+         copyr("$source/$entry", "$dest/$entry");
+      }
+   }
+   $dir->close();
+   return true;
+}
+
 
 function rmdir_rf($dirname) 
 {

@@ -144,6 +144,7 @@ global $adminTpl, $core, $db, $core, $config, $lang;
 		$content = $db->getRow($query);
 		$id = $content['id']; 
 		$keywords = $content['keywords']; 
+		$description = $content['description']; 	
 		$theme = $content['theme']; 
 		$active = $content['active']; 
 		$altname = $content['translate']; 
@@ -157,6 +158,7 @@ global $adminTpl, $core, $db, $core, $config, $lang;
 		while($langs = $db->getRow($query))
 		{
 			$title[$langs['lang']] = prepareTitle($langs['title']);
+			$fulltitle[$langs['lang']] = prepareTitle($langs['fulltitle']);
 			$text[$langs['lang']] = html2bb($langs['short']);
 		}
 		$remote = ADMIN.'/module/content/ajax/isurl/update';
@@ -167,7 +169,9 @@ global $adminTpl, $core, $db, $core, $config, $lang;
 	{
 		$id = false; 
 		$title = false; 
+		$fulltitle = false; 
 		$keywords = false; 
+		$description = false; 		
 		$cat = false; 
 		$altname = false; 
 		$preview = false; 
@@ -207,11 +211,18 @@ global $adminTpl, $core, $db, $core, $config, $lang;
 	$adminTpl->admin_head($lang['modules'] . ' | ' . $lln);
 	echo '<section id="content" class="table-layout animated fadeIn">			
 			<div class="tray tray-center">
-				<form action="{MOD_LINK}/save" enctype="multipart/form-data" role="form" method="POST" name="content" id="admin-form">
-					<div class="panel panel-dark panel-border top">
-						<div class="panel-heading"><span class="panel-title">'. $lln .'</span></div>
-							<div class="panel-body admin-form">		
-								<div class="section row mbn">
+				<form action="{MOD_LINK}/save" enctype="multipart/form-data" role="form" method="POST" name="content" id="admin-form">			
+					<div class="panel mb25 mt5">
+						<div class="panel-heading br-b-ddd"><span class="panel-title hidden-xs">'. $lln .'</span>
+							<ul class="nav panel-tabs-border panel-tabs">
+								<li class="active"><a href="#tab1_1" data-toggle="tab">'.$lang['static_tab_main'].'</a></li>
+								<li><a href="#tab1_2" data-toggle="tab">'.$lang['static_tab_settings'].'</a></li>								
+							</ul>
+						</div>						
+						<div class="panel-body p20 pb10">
+							<div class="tab-content pn br-n admin-form">
+								<div id="tab1_1" class="tab-pane active">									
+									<div class="section row mbn">
 									<div class="col-md-9 pl15">
 										<div class="section row mb15">
 											<div class="col-xs-6">
@@ -306,9 +317,46 @@ global $adminTpl, $core, $db, $core, $config, $lang;
 										  <label for="preview_del">'.$lang['static_add_mini_del'].'</label>
 										</div>	
 									</div>
-								</div>
+								</div>								
 							</div>
-						</div>';
+							<div id="tab1_2" class="tab-pane">
+								<div class="section row mbn">
+									<div class="col-xs-6 pr15">
+										<div class="section mb10">
+											<label class="field mb5">'.$lang['static_add_fulltitle'].':</label>
+											<label for="fulltitle" class="field prepend-icon">												
+												<input id="fulltitle" type="text" name="fulltitle" placeholder="'.$lang['static_add_fulltitle_pre'].'" class="event-name gui-input bg-light br-light" value="' .  (isset($fulltitle[$config['lang']]) ? $fulltitle[$config['lang']] : '') . '">
+												<label for="fulltitle" class="field-icon"><i class="fa fa-code"></i></label>
+											</label>
+										</div>
+										<div class="section mb10">
+											<label class="field mb5">'.$lang['static_add_keywords'].':</label>
+											<label for="keywords" class="field prepend-icon">												
+												<input id="keywords" type="text" name="keywords" placeholder="'.$lang['static_add_keywords_pre'].'" class="event-name gui-input bg-light br-light" value="' . $keywords . '">
+												<label for="keywords" class="field-icon"><i class="fa fa-edit"></i></label>
+											</label>
+										</div>
+										
+										<hr class="alt short mv15">
+										<p class="text-muted"><span class="fa fa-exclamation-circle text-warning fs15 pr5"></span> '.$lang['static_add_seo'].'</p>
+									</div>
+									<div class="col-xs-6">
+										<div class="section mb10">
+											<label class="field mb5">'.$lang['static_add_description'].':</label>
+											<label for="description" class="field prepend-icon">
+												<input id="description" type="text" name="description" placeholder="'.$lang['static_add_description_pre'].'" class="event-name gui-input bg-light br-light" value="' . $description . '">
+												<label for="description" class="field-icon"><i class="fa fa-keyboard-o"></i></label>
+											</label>
+										</div>									
+									</div>
+								</div>
+								<br>
+							</div>
+							
+							
+						</div>
+					</div>
+				</div>	';
 						if ($id == false)
 						{
 							$dir = ROOT.'files/content/temp';
@@ -374,16 +422,26 @@ function content_save()
 {
 global $adminTpl, $core, $db, $cats, $groupss, $config, $content_conf, $lang;
 	$word_counter = new Counter();
+	$bb = new bb;
 	$gen_tag = $word_counter->get_keywords($_POST['text'][$config['lang']]);
 	$title = filter(trim($_POST['title']), 'title');
 	$langTitle = isset($_POST['langtitle']) ? $_POST['langtitle'] : '';
 	$langTitle[$config['lang']] = $title;
+	$fulltitle[$config['lang']] = isset($_POST['fulltitle']) ? $_POST['fulltitle'] : ''; 	
 	$short = $_POST['text'];
 	$theme = $_POST['theme'];
 	$templ = $_POST['templ'];
 	$tags = isset($_POST['tags']) ? mb_strtolower(filter($_POST['tags'], 'a')) : mb_strtolower(filter($gen_tag, 'a'));
 	$translit = ($_POST['altname'] !== '') ? mb_strtolower(str_replace(array('-', ' '), array('_', '_'), $_POST['altname'])) : translit($_POST['title']);
 	$category = isset($_POST['category']) ? array_unique($_POST['category']) : '0';	
+	
+	$edit_id = isset($_POST['edit_id']) ? intval($_POST['edit_id']) : '';
+	$cnt = $short['ru'];	
+	$gen_tag =  $word_counter->get_keywords(substr($cnt, 0, 500)); 
+	$keywords = !empty($_POST['keywords']) ? $_POST['keywords'] : $word_counter->get_keywords(substr($cnt, 0, 500)); 	
+	$newcnt = $bb->parse(processText(filter(fileInit('content', $edit_id, 'content', $cnt), 'html')), $edit_id, true);		
+	$description = !empty($_POST['description']) ? $_POST['description'] : substr(strip_tags($newcnt), 0, 150); 	
+	
 	if(is_array($category)) 
 	{
 		$firstCat = $category[0];
@@ -419,10 +477,11 @@ global $adminTpl, $core, $db, $cats, $groupss, $config, $content_conf, $lang;
 			foreach($langTitle as $k => $v)
 			{
 				$ntitle = filter(trim($v), 'title');
-				$text = filter(fileInit('content', $edit, 'content', $short[$k]), 'html');
+				$ftitle = filter(trim(htmlspecialchars_decode($fulltitle[$k], ENT_QUOTES)), 'title');
+				$text = filter(fileInit('content', $edit, 'content', $short[$k]), 'html');				
 				if(isset($_POST['empty'][$k]) && trim($v) != '' && trim($short[$k]) != '')
 				{
-					$db->query("INSERT INTO `" . DB_PREFIX . "_langs` ( `postId` , `module` , `title` , `short` , `lang` ) VALUES ('" . $edit . "', 'content', '" . $db->safesql(processText($ntitle)) . "', '" . $db->safesql(parseBB(processText($text), $edit, true)) . "', '" . $k . "');");
+					$db->query("INSERT INTO `" . DB_PREFIX . "_langs` ( `postId` , `module` , `title` , `fulltitle` , `short` , `lang` ) VALUES ('" . $edit . "', 'content', '" . $db->safesql(processText($ntitle)) . "', '" . $db->safesql(processText($ftitle)) . "', '" . $db->safesql(parseBB(processText($text), $edit, true)) . "', '" . $k . "');");
 				}
 				elseif(!isset($_POST['empty'][$k])  && (trim($v) == '' OR trim($short[$k]) == ''))
 				{
@@ -430,16 +489,16 @@ global $adminTpl, $core, $db, $cats, $groupss, $config, $content_conf, $lang;
 				}
 				elseif(!isset($_POST['empty'][$k]) && trim($v) != '' && trim($short[$k]) != '')
 				{
-					$db->query("UPDATE `" . DB_PREFIX . "_langs` SET `title` = '" . $db->safesql(processText($ntitle)) . "', `short` = '" . $db->safesql(parseBB(processText($text), $edit, true)) . "' WHERE `postId` ='" . $edit . "' AND `module` ='content' AND `lang`='" . $k . "' LIMIT 1 ;");
+					$db->query("UPDATE `" . DB_PREFIX . "_langs` SET `title` = '" . $db->safesql(processText($ntitle)) . "', `fulltitle` = '" . $db->safesql(processText($ftitle)) . "', `short` = '" . $db->safesql(parseBB(processText($text), $edit, true)) . "' WHERE `postId` ='" . $edit . "' AND `module` ='content' AND `lang`='" . $k . "' LIMIT 1 ;");
 				}
 			}			
-			$db->query("UPDATE `" . DB_PREFIX . "_content` SET `translate` = '" . $translit . "', `cat` = '" . $cats . "', `keywords` = '" . $tags . "', `theme` = '" . $theme . "', `active` = '" . $status . "' WHERE `id` =" .$edit . " LIMIT 1 ;");
+			$db->query("UPDATE `" . DB_PREFIX . "_content` SET `translate` = '" . $translit . "', `cat` = '" . $cats . "', `keywords` = '" . $tags . "', `description` = '" . $description . "', `theme` = '" . $theme . "', `active` = '" . $status . "' WHERE `id` =" .$edit . " LIMIT 1 ;");
 			$adminTpl->info($lang['static_edit_ok'], 'info', null, $lang['info'], $lang['static_list'], ADMIN.'/module/content/');
 			$nnid = $edit;
 		} 
 		else 
 		{			
-			if($db->query("INSERT INTO `" . DB_PREFIX . "_content` ( `id` , `translate`, `cat` , `keywords` , `active` , `date` , `theme` ) VALUES (NULL, '" . $translit . "', '" . $cats . "', '" . $tags . "', '" . $status . "', '" . time() . "', '" . $theme . "');")) 
+			if($db->query("INSERT INTO `" . DB_PREFIX . "_content` ( `id` , `translate`, `cat` , `keywords` , `description` , `active` , `date` , `theme` ) VALUES (NULL, '" . $translit . "', '" . $cats . "', '" . $tags . "', '" . $description . "', '" . $status . "', '" . time() . "', '" . $theme . "');")) 
 			{
 				$adminTpl->info($lang['static_add_ok'], 'info', null, $lang['info'], $lang['static_list'], ADMIN.'/module/content/');
 			}			
@@ -450,8 +509,9 @@ global $adminTpl, $core, $db, $cats, $groupss, $config, $content_conf, $lang;
 				if(trim($v) != '' && trim($short[$k]) != '')
 				{
 					$ntitle = filter(trim($v), 'title');
+					$ftitle = filter(trim(htmlspecialchars_decode($fulltitle[$k], ENT_QUOTES)), 'title');
 					$text = fileInit('content', $content['id'], 'content', parseBB(processText(filter($short[$k], 'html'), $content['id'], true)));
-					$db->query("INSERT INTO `" . DB_PREFIX . "_langs` ( `postId` , `module` , `title` , `short` , `lang` ) 	VALUES ('" . $content['id'] . "', 'content', '" . $db->safesql(processText($ntitle)) . "', '" . $db->safesql($text) . "' , '" . $k . "');");
+					$db->query("INSERT INTO `" . DB_PREFIX . "_langs` ( `postId` , `module` , `title` , `fulltitle` , `short` , `lang` ) 	VALUES ('" . $content['id'] . "', 'content', '" . $db->safesql(processText($ntitle)) . "', '" . $db->safesql(processText($ftitle)) . "', '" . $db->safesql($text) . "' , '" . $k . "');");
 				}
 			}
 			fileInit('content', $content['id']);

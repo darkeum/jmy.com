@@ -479,7 +479,7 @@ switch(isset($url[2]) ? $url[2] : null) {
 							}
 							if(file_exists(ROOT.'usr/tpl/temp_tpl'))
 							{
-								dircopy(ROOT.'usr/tpl/temp_tpl', ROOT.'usr/tpl/'.$config['tpl']);
+								copydir(ROOT.'usr/tpl/temp_tpl', ROOT.'usr/tpl/'.$config['tpl']);
 								rmdir_rf(ROOT.'usr/tpl/temp_tpl');
 							}
 							$db->query("INSERT INTO `" . DB_PREFIX . "_plugins` (`title` , `content` , `service`  , `menu` , `active`) VALUES ('" . $db->safesql($arr[2]) . "', '" . $db->safesql($arr[2]) . "', 'modules', '1', '1');");

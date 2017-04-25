@@ -12,9 +12,7 @@
 if (!defined('ACCESS')) {
     header('Location: /');
     exit;
-}
-	
-	$core->tpl->loadFile('news/news-'.(is_array($core->tpl->uniqTag) ? $core->tpl->uniqTag[0] : empty($core->tpl->uniqTag) ? 'main' : $core->tpl->uniqTag));
+}	
 	$core->tpl->setVar('TITLE', $news['title']);
 	$core->tpl->setVar('SHORT', $short);
 	$core->tpl->setVar('FULL', '<div id="full-' . $news['id'] . '">' . $core->bbDecode($news['full'], $news['id'], true) . '</div>');
@@ -99,26 +97,25 @@ if (!defined('ACCESS')) {
 	$core->tpl->setVar('EDIT', ($core->auth->isModer||$core->auth->isAdmin)  ? '<a href="news/edit/'.$news['id'].'">'._EDIT.'</a>' : '');
 	
 	$related_cache = $cache->do_get('related_'.$news['id']);
-		if(empty($related_cache) && $news_conf['related_news'] > 0)
-		{
-	$body_text = $news['title'] . strip_tags(stripslashes(" " . (!empty($news['full']) ? $news['full'] : $news['short'])));
-	if(!empty($body_text))
+	if(empty($related_cache) && $news_conf['related_news'] > 0)
 	{
-		$rel_query = $db->query("SELECT n.*, l.* FROM ".DB_PREFIX."_news AS n LEFT JOIN ".DB_PREFIX."_langs as l on(l.postId=n.id and l.module='news') WHERE MATCH (`title`, `short`, `full`) AGAINST ('+(" . $db->safesql($body_text) . ")' IN BOOLEAN MODE) AND n.id != " . $news['id'] . " LIMIT ".$news_conf['related_news'], true);
-		$related_cache = '';
-		if($db->numRows($rel_query) > 0)
+		$body_text = $news['title'] . strip_tags(stripslashes(" " . (!empty($news['full']) ? $news['full'] : $news['short'])));
+		if(!empty($body_text))
 		{
-			while($related = $db->getRow($rel_query)) 
+			$rel_query = $db->query("SELECT n.*, l.* FROM ".DB_PREFIX."_news AS n LEFT JOIN ".DB_PREFIX."_langs as l on(l.postId=n.id and l.module='news') WHERE MATCH (`title`, `short`, `full`) AGAINST ('+(" . $db->safesql($body_text) . ")' IN BOOLEAN MODE) AND n.id != " . $news['id'] . " LIMIT ".$news_conf['related_news'], true);
+			$related_cache = '';
+			if($db->numRows($rel_query) > 0)
 			{
-		$rel_link = $related['cat'] !== ',0,' ? 'news/' . $core->getCat('news', $related['cat'], 'development') . '/' : 'news/';
-		$related_cache .= '<li><a href="'.$rel_link . $related['altname'] . '.html">'.$related['title'].' (' . formatdate($related['date']) . ')</a></li>';
+				while($related = $db->getRow($rel_query)) 
+				{
+			$rel_link = $related['cat'] !== ',0,' ? 'news/' . $core->getCat('news', $related['cat'], 'development') . '/' : 'news/';
+			$related_cache .= '<li><a href="'.$rel_link . $related['altname'] . '.html">'.$related['title'].' (' . formatdate($related['date']) . ')</a></li>';
+				}
 			}
+			
+			$cache->do_put('related_'.$news['id'], $related_cache, 3600);
 		}
-		
-		$cache->do_put('related_'.$news['id'], $related_cache, 3600);
 	}
-		}
-		$core->tpl->setVar('RELATED', $related_cache);
-		$array_replace["#\\[related\\](.*?)\\[/related\\]#is"] = (!empty($related_cache) ? '\\1' : '');
-		$core->tpl->sources = preg_replace(array_keys($array_replace), array_values($array_replace), $core->tpl->sources);
-	$core->tpl->end();
+	$core->tpl->setVar('RELATED', $related_cache);
+	$array_replace["#\\[related\\](.*?)\\[/related\\]#is"] = (!empty($related_cache) ? '\\1' : '');
+	$core->tpl->sources = preg_replace(array_keys($array_replace), array_values($array_replace), $core->tpl->sources);

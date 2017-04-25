@@ -21,7 +21,6 @@ define('VERSION_ID', '3.0.23');
 define('COOKIE_TIME', 2592000);
 define('ADMIN', 'administration');
 define('ADMIN_TPL', 'usr/tpl/admin/');
-define('MODE', 'default');
 define('HACK_SQL', '/SELECT|INSERT|ALTER|DROP|UNION|OUTFILE|WHERE/i');
 define('DENIED_HTML', '/<.*?(script|meta|body|object|iframe|frame|applet|style|form|img|onmouseover).*?>/i');
 define('DEBUG', false);
@@ -44,3 +43,15 @@ else
 {
 	ini_set('display_errors','Off');
 }
+
+include(ROOT.'etc/db.config.php');
+
+
+$connection = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
+$query = "ALTER TABLE ".$prefix."_categories ADD COLUMN fulltitle varchar(255) DEFAULT NULL AFTER name";
+$result = $connection->query($query);
+$query = "ALTER TABLE ".$prefix."_langs ADD COLUMN fulltitle varchar(255) DEFAULT NULL AFTER title";
+$result = $connection->query($query);
+$query = "ALTER TABLE ".$prefix."_content ADD COLUMN description varchar(255) DEFAULT NULL AFTER keywords";
+$result = $connection->query($query);
+

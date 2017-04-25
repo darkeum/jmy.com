@@ -126,6 +126,7 @@ global $adminTpl, $config, $core, $admin_conf, $db, $lang;
 		$altname = $cat['altname'];
 		$description = $cat['description'];
 		$keywords = $cat['keywords'];
+		$fulltitle = $cat['fulltitle'];
 		$icon = !isset($cat['icon']) ? $cat['icon'] : 'no.png';
 		$pid = $cat['parent_id'];
 		$mod = $cat['module'];
@@ -137,6 +138,7 @@ global $adminTpl, $config, $core, $admin_conf, $db, $lang;
 		$name = isset($_POST['name']) ? filter(trim($_POST['name'])) : '';
 		$altname = isset($_POST['altname']) ? ($_POST['altname'] == '') ? translit($name) : translit($_POST['altname']) : '';
 		$description = isset($_POST['description']) ? filter($_POST['description']) : '';
+		$fulltitle = isset($_POST['fulltitle']) ? filter($_POST['fulltitle']) : '';
 		$keywords = isset($_POST['keywords']) ? filter($_POST['keywords'], 'a') : '';
 		$icon = isset($_POST['icon']) ? filter($_POST['icon'], 'a') : 'no.png';
 		$pid = false;
@@ -182,6 +184,15 @@ global $adminTpl, $config, $core, $admin_conf, $db, $lang;
 							<label for="altname" class="field prepend-icon">
 								<input id="altname" type="text" name="altname" value="'. $altname .'" placeholder="'.$lang['cats_url_pre'].'" class="gui-input">
 								<label for="altname" class="field-icon"><i class="fa fa-link"></i></label>
+							</label>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="fulltitle"  class="col-lg-3 control-label">'. $lang['cats_fulltitle'] .'</label>
+						<div class="col-lg-4">
+							<label for="fulltitle" class="field prepend-icon">
+								<input id="fulltitle" type="text" name="fulltitle" value="'. $fulltitle .'" placeholder="'.$lang['cats_fulltitle_pre'].'" class="gui-input">
+								<label for="fulltitle" class="field-icon"><i class="fa fa-code"></i></label>
 							</label>
 						</div>
 					</div>
@@ -290,6 +301,7 @@ global $adminTpl, $db, $core, $lang;
 	$altname = ($_POST['altname'] == '') ? translit($name) : str_replace(array('-', ' '), array('_', '_'), $_POST['altname']);
 	$description = filter($_POST['description']);
 	$keywords = filter($_POST['keywords'], 'a');
+	$fulltitle = filter($_POST['fulltitle']);
 	$icon = filter($_POST['icon'], 'a');
 	$module = filter($_POST['module'], 'module');
 	$pid = intval($_POST['category']);
@@ -298,12 +310,12 @@ global $adminTpl, $db, $core, $lang;
 	{
 		if(isset($_POST['edit']))
 		{
-			$db->query("UPDATE `" . DB_PREFIX . "_categories` SET `name` = '" . $db->safesql(processText($name)) . "', `altname` = '" . $altname . "', `description` = '" . $db->safesql(processText($description)) . "', `keywords` = '" . $db->safesql(processText($keywords)) . "', `module` = '" . $module . "', `icon` = '" . $icon . "', `parent_id` = '" . $pid . "' WHERE `id` =".$cid."  LIMIT 1");
+			$db->query("UPDATE `" . DB_PREFIX . "_categories` SET `name` = '" . $db->safesql(processText($name)) . "', `altname` = '" . $altname . "', `description` = '" . $db->safesql(processText($description)) . "', `fulltitle` = '" . $db->safesql(processText($fulltitle)) . "', `keywords` = '" . $db->safesql(processText($keywords)) . "', `module` = '" . $module . "', `icon` = '" . $icon . "', `parent_id` = '" . $pid . "' WHERE `id` =".$cid."  LIMIT 1");
 			$adminTpl->info($lang['cats_edit_success'], 'info', null, $lang['info'], $lang['cats_list'], ADMIN.'/cats');
 		}
 		else
 		{
-			if($db->query("INSERT INTO `" . DB_PREFIX . "_categories` ( `id` , `name` , `altname` , `description` , `keywords` , `module` , `icon` , `position` , `parent_id` ) VALUES (NULL, '" . $db->safesql(processText($name)) . "', '" . $altname . "', '" . $db->safesql(processText($description)) . "', '" . $keywords . "', '" . $module . "', '" . $icon . "', '0', '" . $pid . "');"))
+			if($db->query("INSERT INTO `" . DB_PREFIX . "_categories` ( `id` , `name` , `altname` ,  `fulltitle` , `description` , `keywords` , `module` , `icon` , `position` , `parent_id` ) VALUES (NULL, '" . $db->safesql(processText($name)) . "', '" . $altname . "', '" . $db->safesql(processText($fulltitle)) . "', '" . $db->safesql(processText($description)) . "', '" . $keywords . "', '" . $module . "', '" . $icon . "', '0', '" . $pid . "');"))
 			$adminTpl->info($lang['cats_add_success'], 'info', null, $lang['info'], $lang['cats_list'], ADMIN.'/cats');
 		}
 		if(file_exists(ROOT . 'tmp/cache/categories.cache'))

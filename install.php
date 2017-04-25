@@ -243,15 +243,16 @@ function step2()
 global $information, $title, $lang;
 	$title = $lang['step_2_title'].' | ';
 	head();
+	$content = '';
 	$dbhost = $_POST['dbhost'];
 	$dbuser = $_POST['dbuser'];
 	$dbpass = $_POST['dbpass'];
 	$dbname = $_POST['dbname'];
 	$prefix = !empty($_POST['prefix']) ? $_POST['prefix'] : 'JMY_';	
-    $resource = mysql_pconnect($dbhost, $dbuser, $dbpass);
+    $resource = mysqli_connect($dbhost, $dbuser, $dbpass);
     if ($resource) 
 	{
-        if (!mysql_select_db($dbname)) 
+        if (!mysqli_select_db($resource, $dbname)) 
 		{
 			echo '<div class="alert alert-warning alert-dismissable">
 					<strong>'.$lang['install_attention'].'</strong><br />'.$lang['step_2_error_2'].' <i>' . $dbname . '</i>.
@@ -263,11 +264,11 @@ global $information, $title, $lang;
 		{
 			if(isset($_POST['goCreate']) && isset($_POST['do']))
 			{
-				@mysql_query('SET NAMES utf8');
+				@mysqli_query($resource, 'SET NAMES utf8');
 				if($_POST['do'] == 'install')
 				{					
 					$sql_create = file_get_contents('install/sql/sql_create.sql');
-					$sql_create_massiv = split(";", $sql_create);
+					$sql_create_massiv = explode(";", $sql_create);
 					echo $lang['step_2_desc'].'<br /><br />
 									<table class="table">
                                         <thead>
@@ -283,7 +284,7 @@ global $information, $title, $lang;
 						if(preg_match('#CREATE#i', $query)) 
 						{
 							preg_match('#`\[prefix\](.*)`#i', $query, $name);
-							if(@mysql_query(str_replace('[prefix]', $prefix, $query) . ";", $resource))
+							if(@mysqli_query($resource, str_replace('[prefix]', $prefix, $query) . ";"))
 							{
 								echo '<tr>								
 									<td><span class="pd-l-sm"></span>'.$lang['step_2_create'].'</td>
@@ -315,24 +316,24 @@ global $information, $title, $lang;
 					
 					}					
 					$sql_insert = file_get_contents('install/sql/sql_insert.sql');
-					$sql_insert_massiv = split(";", $sql_insert);					
+					$sql_insert_massiv = explode(";", $sql_insert);					
 					foreach($sql_insert_massiv as $query)
 					{
 						if(preg_match('#INSERT#i', $query)) 
 						{
-							@mysql_query(str_replace('[prefix]', $prefix, $query), $resource);
+							@mysqli_query($resource, str_replace('[prefix]', $prefix, $query));
 						}
 					}					
 					if(isset($_POST['test_content']) && $_POST['test_content'] == 1)
 					{
 						$sql_content = file_get_contents('install/sql/sql_content.sql');
-						$sql_content_massiv = split(";", $sql_content);
+						$sql_content_massiv = explode(";", $sql_content);
 						
 						foreach($sql_content_massiv as $query)
 						{
 							if(preg_match('#INSERT#i', $query)) 
 							{
-								@mysql_query(str_replace('[prefix]', $prefix, $query), $resource);
+								@mysqli_query($resource, str_replace('[prefix]', $prefix, $query));
 							}
 						}
 					}					
@@ -578,17 +579,17 @@ global $information, $title, $lang;
 		$content .= "\$config['support_mail'] = \"" . $_POST['email'] . "\";\n";		
 		save_conf('etc/global.config.php', $content);		
 		require_once ROOT . 'etc/db.config.php';		
-		$resource = mysql_pconnect($dbhost, $dbuser, $dbpass);	
+		$resource = mysqli_connect($dbhost, $dbuser, $dbpass);	
 	    if ($resource) 
 		{
-	        if (mysql_select_db($dbname)) 
+	        if (mysqli_select_db($resource, $dbname)) 
 			{
-				@mysql_query('SET NAMES utf8');
+				@mysqli_query($resource, 'SET NAMES utf8');
 				$tail = gencode(10);
-				list($news) = mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM " . $prefix . "_news", $resource));
-				@mysql_query("INSERT INTO " . $prefix . "_users (`nick` , `password` , `tail` , `email` ,  `group` , `user_news` , `active` ) VALUES ('" . $_POST['nick'] . "', '" . md5(mb_substr(md5(md5($_POST['password'])), 0, -mb_strlen($tail)) . $tail) . "', '" . $tail . "', '" . $_POST['email'] . "', '1', '" . $news . "', '1');", $resource);
-				list($uid) = mysql_fetch_array(mysql_query("SELECT id FROM " . $prefix . "_users WHERE nick='" . $_POST['nick'] . "' LIMIT 1", $resource));
-				@mysql_query("INSERT INTO `" . $prefix . "_board_users` (`uid`) VALUES ('" . $uid . "');", $resource);
+				list($news) = mysqli_fetch_array(mysqli_query($resource, "SELECT COUNT(*) FROM " . $prefix . "_news"));
+				@mysqli_query($resource, "INSERT INTO " . $prefix . "_users (`nick` , `password` , `tail` , `email` ,  `group` , `user_news` , `active` ) VALUES ('" . $_POST['nick'] . "', '" . md5(mb_substr(md5(md5($_POST['password'])), 0, -mb_strlen($tail)) . $tail) . "', '" . $tail . "', '" . $_POST['email'] . "', '1', '" . $news . "', '1');");
+				list($uid) = mysqli_fetch_array(mysqli_query($resource, "SELECT id FROM " . $prefix . "_users WHERE nick='" . $_POST['nick'] . "' LIMIT 1"));
+				@mysqli_query($resource, "INSERT INTO `" . $prefix . "_board_users` (`uid`) VALUES ('" . $uid . "');");
 	        }
 		}
 		echo '<div class="alert alert-success alert-dismissable">
@@ -618,7 +619,7 @@ global $information, $title, $lang;
 				<strong>'.$lang['install_attention'].'</strong><br />'.$lang['step_5_install'].'
 			</div>
 			<div class="btn-group">
-                  <button type="button" class="btn btn-success">'.$lang['step_5_site'].'</button>
+                  <button type="button" class="btn btn-success" onclick="location.href=\'/\'">'.$lang['step_5_site'].'</button>
                   <button type="button" data-toggle="dropdown" class="btn btn-success dropdown-toggle"><span class="caret"></span><span class="sr-only">Toggle Dropdown</span></button>
                   <ul role="menu" class="dropdown-menu">
                     <li><a href="administration/">'.$lang['step_5_panel'].'</a></li>

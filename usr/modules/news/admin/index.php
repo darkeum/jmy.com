@@ -102,7 +102,7 @@ function news_main()
 			echo '
 			<tr>
 				<td><span class="pd-l-sm"></span>' . $news['id'] . '</td>
-				<td>' . $news['title'] . '</td>
+				<td><a href="/news/'.$news['altname'].'.html" target="_blank">' . $news['title'] . '</a></td>
 				<td>' . formatDate($news['date'], true) . '</td>				
 				<td>' . ($news['cat'] !== ',0,' ? $core->getCat('news', $news['cat'], 'short', 3) : 'Нет') . '</td>
 				<td class="text-center">' . $status_icon . '</td>
@@ -201,7 +201,7 @@ global $adminTpl, $core, $db, $core, $config, $lang;
 		$allow_rating = $news['allow_rating']; 
 		$allow_index = $news['allow_index']; 
 		$score = $news['score']; 
-		$votes = $news['votes']; 
+		$votes = $news['votes']; 	
 		$preview = $news['preview']; 
 		$views = $news['views']; 
 		$comments = $news['comments']; 
@@ -221,6 +221,7 @@ global $adminTpl, $core, $db, $core, $config, $lang;
 		while($langs = $db->getRow($query))
 		{
 			$title[$langs['lang']] = prepareTitle($langs['title']);
+			$fulltitle[$langs['lang']] = prepareTitle($langs['fulltitle']);
 			$short[$langs['lang']] = $bb->htmltobb($langs['short']);
 			$full[$langs['lang']] = $bb->htmltobb($langs['full']);
 		}		
@@ -231,6 +232,7 @@ global $adminTpl, $core, $db, $core, $config, $lang;
 	else 
 	{
 		$id = false; 
+		$fulltitle = false; 
 		$title = false; 
 		$short = false; 
 		$full = false; 
@@ -406,6 +408,13 @@ global $adminTpl, $core, $db, $core, $config, $lang;
 								<div class="section row mbn">
 									<div class="col-xs-6 pr15">
 										<div class="section mb10">
+											<label class="field mb5">'.$lang['news_add_fulltitle'].':</label>
+											<label for="fulltitle" class="field prepend-icon">												
+												<input id="fulltitle" type="text" name="fulltitle" placeholder="'.$lang['news_add_fulltitle_pre'].'" class="event-name gui-input bg-light br-light" value="' .  (isset($fulltitle[$config['lang']]) ? $fulltitle[$config['lang']] : '') . '">
+												<label for="fulltitle" class="field-icon"><i class="fa fa-code"></i></label>
+											</label>
+										</div>
+										<div class="section mb10">
 											<label class="field mb5">'.$lang['news_add_keywords'].':</label>
 											<label for="keywords" class="field prepend-icon">												
 												<input id="keywords" type="text" name="keywords" placeholder="'.$lang['news_add_keywords_pre'].'" class="event-name gui-input bg-light br-light" value="' . $keywords . '">
@@ -572,6 +581,7 @@ global $adminTpl, $core, $db, $cats, $groupss, $config, $news_conf, $lang;
 	$title = $_POST['title'];
 	$langTitle = isset($_POST['langtitle']) ? $_POST['langtitle'] : '';
 	$langTitle[$config['lang']] = $title;
+	$fulltitle[$config['lang']] = isset($_POST['fulltitle']) ? $_POST['fulltitle'] : ''; 	
 	$author = filter($_POST['author'], 'nick');
 	$ttime = 'UNIX_TIMESTAMP(NOW())';
 	$date = !empty($_POST['date']) ? filter($_POST['date']) : $ttime;	
@@ -595,7 +605,6 @@ global $adminTpl, $core, $db, $cats, $groupss, $config, $news_conf, $lang;
 	$keywords = !empty($_POST['keywords']) ? $_POST['keywords'] : $word_counter->get_keywords(substr($cnt, 0, 500)); 	
 	$newcnt = $bb->parse(processText(filter(fileInit('news', $edit_id, 'content', $cnt), 'html')), $edit_id, true);		
 	$description = !empty($_POST['description']) ? $_POST['description'] : substr(strip_tags($newcnt), 0, 150); 	
-	
 	if($edit_id > 0)
 	{			
 		$old_dataQ = $db->query("SELECT * FROM ".DB_PREFIX."_news WHERE id = '" . $edit_id . "'");
@@ -679,11 +688,12 @@ global $adminTpl, $core, $db, $cats, $groupss, $config, $news_conf, $lang;
 			foreach($langTitle as $k => $v)
 			{
 				$ntitle = filter(trim(htmlspecialchars_decode($v, ENT_QUOTES)), 'title');
+				$ftitle = filter(trim(htmlspecialchars_decode($fulltitle[$k], ENT_QUOTES)), 'title');
 				$nshort = $bb->parse(processText(filter(fileInit('news', $edit_id, 'content', $short[$k]), 'html')), $edit_id, true);
 				$nfull = $bb->parse(processText(filter(fileInit('news', $edit_id, 'content', $full[$k]), 'html')), $edit_id, true);	
 				if(isset($_POST['empty'][$k]) && trim($v) != '' && trim($short[$k]) != '')
 				{
-					$db->query("INSERT INTO `" . DB_PREFIX . "_langs` ( `postId` , `module` , `title` , `short` , `full` , `lang` ) VALUES ('" . $edit_id . "', 'news', '" . $db->safesql(processText($ntitle)) . "', '" . $db->safesql($nshort) . "', '" . $db->safesql($nfull) . "' , '" . $k . "');");
+					$db->query("INSERT INTO `" . DB_PREFIX . "_langs` ( `postId` , `module` , `title` , `fulltitle` , `short` , `full` , `lang` ) VALUES ('" . $edit_id . "', 'news', '" . $db->safesql(processText($ntitle)) . "', '" . $db->safesql(processText($ftitle)) . "', '" . $db->safesql($nshort) . "', '" . $db->safesql($nfull) . "' , '" . $k . "');");
 				}
 				elseif(!isset($_POST['empty'][$k])  && (trim($v) == '' OR trim($short[$k]) == ''))
 				{
@@ -691,7 +701,7 @@ global $adminTpl, $core, $db, $cats, $groupss, $config, $news_conf, $lang;
 				}
 				elseif(!isset($_POST['empty'][$k]) && trim($v) != '' && trim($short[$k]) != '')
 				{
-					$db->query("UPDATE `" . DB_PREFIX . "_langs` SET `title` = '" . $db->safesql(processText($ntitle)) . "', `short` = '" . $db->safesql($nshort) . "', `full` = '" . $db->safesql($nfull) . "' WHERE `postId` ='" . $edit_id . "' AND `module` ='news' AND `lang`='" . $k . "' LIMIT 1 ;");
+					$db->query("UPDATE `" . DB_PREFIX . "_langs` SET `title` = '" . $db->safesql(processText($ntitle)) . "', `fulltitle` = '" . $db->safesql(processText($ftitle)) . "', `short` = '" . $db->safesql($nshort) . "', `full` = '" . $db->safesql($nfull) . "' WHERE `postId` ='" . $edit_id . "' AND `module` ='news' AND `lang`='" . $k . "' LIMIT 1 ;");
 				}
 			}			
 			if(!empty($tags) && $status == 1)
@@ -747,9 +757,10 @@ global $adminTpl, $core, $db, $cats, $groupss, $config, $news_conf, $lang;
 					if(trim($v) != '' && trim($short[$k]) != '')
 					{
 						$ntitle = filter(trim(htmlspecialchars_decode($v, ENT_QUOTES)), 'title');
+						$ftitle = filter(trim(htmlspecialchars_decode($fulltitle[$k], ENT_QUOTES)), 'title');
 						$nshort = fileInit('news', $news['id'], 'content', $bb->parse(processText(filter($short[$k], 'html')), $news['id'], true));
 						$nfull = fileInit('news', $news['id'], 'content', $bb->parse(processText(filter($full[$k], 'html')), $news['id'], true));	
-						$db->query("INSERT INTO `" . DB_PREFIX . "_langs` ( `postId` , `module` , `title` , `short` , `full` , `lang` ) 	VALUES ('" . $news['id'] . "', 'news', '" . $db->safesql(processText($ntitle)) . "', '" . $db->safesql($nshort) . "', '" . $db->safesql($nfull) . "' , '" . $k . "');");
+						$db->query("INSERT INTO `" . DB_PREFIX . "_langs` ( `postId` , `module` , `title`, `fulltitle` , `short` , `full` , `lang` ) 	VALUES ('" . $news['id'] . "', 'news', '" . $db->safesql(processText($ntitle)) . "', '" . $db->safesql(processText($ftitle)) . "', '" . $db->safesql($nshort) . "', '" . $db->safesql($nfull) . "' , '" . $k . "');");
 					}
 				}			
 				fileInit('news', $news['id']);

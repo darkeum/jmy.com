@@ -1,5 +1,4 @@
 etc/db.config.php
+tmp/cache/
 *.cache
-*.cache
-etc/db.config.php
-etc/db.config.php
+tmp/cache/*.cache

@@ -57,7 +57,8 @@ if (!defined('ACCESS')) {
 	$core->tpl->sources = preg_replace_callback("#\\{%SHORT:(.*?)%\\}#is",  
 		function($match) use ($short)
 		{
-			return short($match[1], processText($short));
+			// return short($match[1], processText($short));
+			return short($match[1], $short); // Убираем \ перед кавычками
 		},$core->tpl->sources);	
 	
 	$array_replace = array(		

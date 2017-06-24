@@ -45,7 +45,7 @@ $configBox = array(
 						'description' => _GLOBAL_METATAGS_DESCRIPTIOND,
 						'content' => '<input class="form-control" type="text" size="20" name="{varName}" class="form-control" value="{var}" />',
 						'multilang' => true
-					),						
+					),
 					'slogan' => array(
 						'title' => _GLOBAL_METATAGS_SLOGANT,
 						'description' => _GLOBAL_METATAGS_SLOGAND,
@@ -57,30 +57,30 @@ $configBox = array(
 						'description' => _GLOBAL_METATAGS_KEYWORDSD,
 						'content' => '<textarea class="form-control" cols="30" rows="3" name="{varName}" class="form-control" id="keywords">{var}</textarea>',
 						'multilang' => true
-					),						
+					),
 					'divider' => array(
 						'title' => _GLOBAL_METATAGS_DIVIDERT,
 						'description' => _GLOBAL_METATAGS_DIVIDERD,
 						'content' => '<input class="form-control" type="text" size="20" name="{varName}" class="form-control" value="{var}" />',
 						'multilang' => true
-					),						
+					),
 					'charset' => array(
 						'title' => _GLOBAL_METATAGS_CHARSETT,
 						'description' => _GLOBAL_METATAGS_CHARSETD,
 						'content' => '<input class="form-control" type="text" size="20" name="{varName}" class="form-control" value="{var}" />',
-					),						
+					),
 					'mainModule' => array(
 						'title' => _GLOBAL_METATAGS_MAINMODULET,
 						'description' => _GLOBAL_METATAGS_MAINMODULED,
 						'content' => changeModule(),
-						
+
 					),
 					'lang' => array(
 						'title' => _GLOBAL_METATAGS_LANGT,
 						'description' => _GLOBAL_METATAGS_LANGD,
 						'content' => changeLang(),
-					)		
-					
+					)
+
 				)
 			),
 			'other' => array(
@@ -90,21 +90,21 @@ $configBox = array(
 						'title' => _GLOBAL_OTHER_UNIQKEY,
 						'description' => _GLOBAL_OTHER_UNIQKEYD,
 						'content' => '<p class="form-control-static"><font color="red">' . $config['uniqKey'] . '</font></p><input type="hidden" size="20" name="' . $config['lang'] . '[uniqKey]"  value="' . $config['uniqKey'] . '" id="name"  maxlength="100" maxsize="100" />',
-					),	
+					),
 					'timezone' => array(
 						'title' => _GLOBAL_OTHER_TIMEZONET,
 						'description' => _GLOBAL_OTHER_TIMEZONED,
 						'content' => timeZone(),
-					),						
+					),
 					'tpl' => array(
 						'title' => _GLOBAL_OTHER_TPLT,
 						'description' => _GLOBAL_OTHER_TPLD,
-						'content' => changeTpl(),						
+						'content' => changeTpl(),
 					),
 					'tpl_change' => array(
 						'title' => _GLOBAL_OTHER_TPL_CHANGE,
 						'description' => _GLOBAL_OTHER_TPL_CHANGE_DESC,
-						'content' => conf_radio("tpl_change", $config['tpl_change']),						
+						'content' => conf_radio("tpl_change", $config['tpl_change']),
 					),
 					'smartphone' => array(
 						'title' => _GLOBAL_OTHER_TPL_MOBI,
@@ -115,12 +115,12 @@ $configBox = array(
 						'title' => _GLOBAL_OTHER_DBTYPET,
 						'description' => _GLOBAL_OTHER_DBTYPED,
 						'content' => dbType(),
-					),					
+					),
 					'imageEffect' => array(
 						'title' => _GLOBAL_OTHER_IMAGEEFFECTT,
 						'description' => _GLOBAL_OTHER_IMAGEEFFECTD,
 						'content' => imageEffect(),
-					),						
+					),
 					'support_mail' => array(
 						'title' => _GLOBAL_OTHER_SUPPORT_MAILT,
 						'description' => _GLOBAL_OTHER_SUPPORT_MAILD,
@@ -135,7 +135,7 @@ $configBox = array(
 						'title' => _GLOBAL_GLOBALFUNC_GZIPT,
 						'description' => _GLOBAL_GLOBALFUNC_GZIPD,
 						'content' => conf_radio("gzip", $config['gzip']),
-					),					
+					),
 					'off' => array(
 						'title' => _GLOBAL_GLOBALFUNC_OFFT,
 						'description' => _GLOBAL_GLOBALFUNC_OFFD,
@@ -146,17 +146,17 @@ $configBox = array(
 						'description' => _GLOBAL_GLOBALFUNC_OFF_TEXTD,
 						'content' => "<textarea cols=\"30\" rows=\"5\" name=\"{varName}\" class=\"form-control\" id=\"off_text\">{var}</textarea>",
 						'multilang' => true
-					),								
+					),
 					'cache' => array(
 						'title' => _GLOBAL_GLOBALFUNC_CACHET,
 						'description' => _GLOBAL_GLOBALFUNC_CACHED,
 						'content' => conf_radio("cache", $config['cache']),
-					),					
+					),
 					'dbCache' => array(
 						'title' => _GLOBAL_GLOBALFUNC_DBCACHET,
 						'description' => _GLOBAL_GLOBALFUNC_DBCACHED,
 						'content' => conf_radio("dbCache", $config['dbCache']),
-					),					
+					),
 					'mod_rewrite' => array(
 						'title' => _GLOBAL_GLOBALFUNC_MOD_REWRITET,
 						'description' => _GLOBAL_GLOBALFUNC_MOD_REWRITED,
@@ -193,17 +193,17 @@ $configBox = array(
 						'title' => _SECURITY_FILTER_XNUMST,
 						'description' => _SECURITY_FILTER_XNUMSD,
 						'content' => '<input type="text" size="20" name="{varName}" class="form-control" value="{var}" />',
-					),								
+					),
 					'stopNick' => array(
 						'title' => _SECURITY_FILTER_STOPNICKT,
 						'description' => _SECURITY_FILTER_STOPNICKD,
 						'content' => '<textarea cols="30" rows="3" name="{varName}" class="form-control">{var}</textarea>',
-					),					
+					),
 					'stopMails' => array(
 						'title' => _SECURITY_FILTER_STOPMAILST,
 						'description' => _SECURITY_FILTER_STOPMAILSD,
 						'content' => '<textarea cols="30" rows="3" name="{varName}" class="form-control">{var}</textarea>',
-					),					
+					),
 					'stopWords' => array(
 						'title' => _SECURITY_FILTER_STOPWORDST,
 						'description' => _SECURITY_FILTER_STOPWORDSD,
@@ -213,14 +213,14 @@ $configBox = array(
 						'title' => _SECURITY_FILTER_STOPREPLACET,
 						'description' => _SECURITY_FILTER_STOPREPLACED,
 						'content' => '<input type="text" size="20" name="{varName}" class="form-control" value="{var}" />',
-					),						
+					),
 					'allowHTML' => array(
 						'title' => _SECURITY_FILTER_ALLOWHTMLT,
 						'description' => _SECURITY_FILTER_ALLOWHTMLD,
 						'content' => '<input type="text" size="20" name="{varName}" class="form-control" value="{var}" />',
-					),					
+					),
 				)
-			),			
+			),
 			'ips' => array(
 				'title' => _SECURITY_IPS,
 				'vars' => array(
@@ -228,7 +228,7 @@ $configBox = array(
 						'title' => _SECURITY_IPS_BANIPT,
 						'description' => _SECURITY_IPS_BANIPD,
 						'content' => '<textarea cols="30" rows="3" name="{varName}" class="form-control">{var}</textarea>',
-					),					
+					),
 					'banIpMessage' => array(
 						'title' => _SECURITY_IPS_BANIPMESSAGET,
 						'description' => _SECURITY_IPS_BANIPMESSAGED,
@@ -236,7 +236,7 @@ $configBox = array(
 						'multilang' => true
 					),
 				)
-			),			
+			),
 			'captcha' => array(
 				'title' => _SECURITY_CAPTCHA,
 				'vars' => array(
@@ -244,22 +244,22 @@ $configBox = array(
 						'title' => _SECURITY_SWITCH,
 						'description' => _SECURITY_SWITCH_DESC,
 						'content' => conf_radio("switch_cp", $security['switch_cp']),
-					),	
+					),
 					'recaptcha' => array(
 						'title' => _SECURITY_RECAPTHA,
 						'description' => _SECURITY_RECAPTHA_DESC,
 						'content' => conf_radio("recaptcha", $security['recaptcha']),
-					),	
+					),
 					'recaptcha_public' => array(
 						'title' => _SECURITY_RECAPTHA_PUBLIC,
 						'description' => _SECURITY_RECAPTHA_PUBLIC_DESC,
 						'content' => '<input type="text" size="20" name="{varName}" class="form-control" value="{var}" />',
-					),		
+					),
 					'recaptcha_private' => array(
 						'title' => _SECURITY_RECAPTHA_PRIVATE,
 						'description' => _SECURITY_RECAPTHA_PRIVATE_DESC,
 						'content' => '<input type="text" size="20" name="{varName}" class="form-control" value="{var}" />',
-					),	
+					),
 					'captcha_width' => array(
 						'title' => _SECURITY_CAPTCHA_CAPTCHA_WIDTHT,
 						'description' => _SECURITY_CAPTCHA_CAPTCHA_WIDTHD,
@@ -275,12 +275,12 @@ $configBox = array(
 						'description' => _SECURITY_CAPTCHA_CAPTCHA_LENGHTD,
 						'content' => '<input type="text" size="20" name="{varName}" class="form-control" value="{var}" />',
 					),
-		
+
 				)
 			),
-			
+
 		)
-	),		
+	),
 	'social' => array(
 		'varName' => 'social',
 		'title' => _SOCIAL_NAME,
@@ -303,9 +303,9 @@ $configBox = array(
 						'description' => _SOCIAL_ADMIN_DESC,
 						'content' => conf_radio("admin", $social['admin']),
 					),
-										
+
 				)
-			),		
+			),
 			'social_vk' => array(
 				'title' => _SOCIAL_CONFIG_VK,
 				'vars' => array(
@@ -316,16 +316,16 @@ $configBox = array(
 					),
 					'vk_client_id' => array(
 						'title' => _SOCIAL_ID,
-						'description' => _SOCIAL_ID_DESC .': '. _SOCIAL_CONFIG_VK_URL,
+						'description' => _SOCIAL_ID_DESC .': <a href="'._SOCIAL_CONFIG_VK_URL.'" target="_blank">'. _SOCIAL_CONFIG_VK_URL.'</a>',
 						'content' => '<input type="text" size="20" name="{varName}" class="form-control" value="{var}" />',
 					),
 					'vk_client_secret' => array(
 						'title' => _SOCIAL_SECRET,
-						'description' => _SOCIAL_SECRET_DESC .': '. _SOCIAL_CONFIG_VK_URL,
+						'description' => _SOCIAL_SECRET_DESC .': <a href="'._SOCIAL_CONFIG_VK_URL.'" target="_blank">'. _SOCIAL_CONFIG_VK_URL.'</a>',
 						'content' => '<input type="text" size="20" name="{varName}" class="form-control" value="{var}" />',
-					),										
+					),
 				)
-			),	
+			),
 			'social_ok' => array(
 				'title' => _SOCIAL_CONFIG_OK,
 				'vars' => array(
@@ -336,21 +336,21 @@ $configBox = array(
 					),
 					'ok_client_id' => array(
 						'title' => _SOCIAL_ID,
-						'description' => _SOCIAL_ID_DESC .': '. _SOCIAL_CONFIG_OK_URL,
+						'description' => _SOCIAL_ID_DESC .': <a href="'._SOCIAL_CONFIG_OK_URL.'" target="_blank">'. _SOCIAL_CONFIG_OK_URL.'</a>',
 						'content' => '<input type="text" size="20" name="{varName}" class="form-control" value="{var}" />',
 					),
 					'ok_client_secret' => array(
 						'title' => _SOCIAL_SECRET,
-						'description' => _SOCIAL_SECRET_DESC .': '. _SOCIAL_CONFIG_OK_URL,
+						'description' => _SOCIAL_SECRET_DESC .': <a href="'._SOCIAL_CONFIG_OK_URL.'" target="_blank">'. _SOCIAL_CONFIG_OK_URL.'</a>',
 						'content' => '<input type="text" size="20" name="{varName}" class="form-control" value="{var}" />',
-					),		
+					),
 					'ok_public_key' => array(
 						'title' => _SOCIAL_PUBLIC,
-						'description' => _SOCIAL_PUBLIC_DESC .': '. _SOCIAL_CONFIG_OK_URL,
+						'description' => _SOCIAL_PUBLIC_DESC .': <a href="'._SOCIAL_CONFIG_OK_URL.'" target="_blank">'. _SOCIAL_CONFIG_OK_URL.'</a>',
 						'content' => '<input type="text" size="20" name="{varName}" class="form-control" value="{var}" />',
-					),	
+					),
 				)
-			),	
+			),
 			'social_fb' => array(
 				'title' => _SOCIAL_CONFIG_FB,
 				'vars' => array(
@@ -361,12 +361,12 @@ $configBox = array(
 					),
 					'fb_client_id' => array(
 						'title' => _SOCIAL_ID,
-						'description' => _SOCIAL_ID_DESC .': '. _SOCIAL_CONFIG_FB_URL,
+						'description' => _SOCIAL_ID_DESC .': <a href="'._SOCIAL_CONFIG_FB_URL.'" target="_blank">'. _SOCIAL_CONFIG_FB_URL.'</a>',
 						'content' => '<input type="text" size="20" name="{varName}" class="form-control" value="{var}" />',
 					),
 					'fb_client_secret' => array(
 						'title' => _SOCIAL_SECRET,
-						'description' => _SOCIAL_SECRET_DESC .': '. _SOCIAL_CONFIG_FB_URL,
+						'description' => _SOCIAL_SECRET_DESC .': <a href="'._SOCIAL_CONFIG_FB_URL.'" target="_blank">'. _SOCIAL_CONFIG_FB_URL.'</a>',
 						'content' => '<input type="text" size="20" name="{varName}" class="form-control" value="{var}" />',
 					),
 				)
@@ -381,12 +381,12 @@ $configBox = array(
 					),
 					'gg_client_id' => array(
 						'title' => _SOCIAL_ID,
-						'description' => _SOCIAL_ID_DESC .': '. _SOCIAL_CONFIG_GG_URL,
+						'description' => _SOCIAL_ID_DESC .': <a href="'._SOCIAL_CONFIG_GG_URL.'" target="_blank">'. _SOCIAL_CONFIG_GG_URL.'</a>',
 						'content' => '<input type="text" size="20" name="{varName}" class="form-control" value="{var}" />',
 					),
 					'gg_client_secret' => array(
 						'title' => _SOCIAL_SECRET,
-						'description' => _SOCIAL_SECRET_DESC .': '. _SOCIAL_CONFIG_GG_URL,
+						'description' => _SOCIAL_SECRET_DESC .': <a href="'._SOCIAL_CONFIG_GG_URL.'" target="_blank">'. _SOCIAL_CONFIG_GG_URL.'</a>',
 						'content' => '<input type="text" size="20" name="{varName}" class="form-control" value="{var}" />',
 					),
 				)
@@ -401,12 +401,12 @@ $configBox = array(
 					),
 					'ya_client_id' => array(
 						'title' => _SOCIAL_ID,
-						'description' => _SOCIAL_ID_DESC .': '. _SOCIAL_CONFIG_YA_URL,
+						'description' => _SOCIAL_ID_DESC .': <a href="'._SOCIAL_CONFIG_YA_URL.'" target="_blank">'. _SOCIAL_CONFIG_YA_URL.'</a>',
 						'content' => '<input type="text" size="20" name="{varName}" class="form-control" value="{var}" />',
 					),
 					'ya_client_secret' => array(
 						'title' => _SOCIAL_SECRET,
-						'description' => _SOCIAL_SECRET_DESC .': '. _SOCIAL_CONFIG_YA_URL,
+						'description' => _SOCIAL_SECRET_DESC .': <a href="'._SOCIAL_CONFIG_YA_URL.'" target="_blank">'. _SOCIAL_CONFIG_YA_URL.'</a>',
 						'content' => '<input type="text" size="20" name="{varName}" class="form-control" value="{var}" />',
 					),
 				)
@@ -421,18 +421,18 @@ $configBox = array(
 					),
 					'mm_client_id' => array(
 						'title' => _SOCIAL_ID,
-						'description' => _SOCIAL_ID_DESC .': '. _SOCIAL_CONFIG_MM_URL,
+						'description' => _SOCIAL_ID_DESC .': <a href="'._SOCIAL_CONFIG_MM_URL.'" target="_blank">'. _SOCIAL_CONFIG_MM_URL.'</a>',
 						'content' => '<input type="text" size="20" name="{varName}" class="form-control" value="{var}" />',
 					),
 					'mm_client_secret' => array(
 						'title' => _SOCIAL_SECRET,
-						'description' => _SOCIAL_SECRET_DESC .': '. _SOCIAL_CONFIG_MM_URL,
+						'description' => _SOCIAL_SECRET_DESC .': <a href="'._SOCIAL_CONFIG_MM_URL.'" target="_blank">'. _SOCIAL_CONFIG_MM_URL.'</a>',
 						'content' => '<input type="text" size="20" name="{varName}" class="form-control" value="{var}" />',
 					),
 				)
 			),
 		)
-	),	
+	),
 	'files' => array(
 		'varName' => 'files_conf',
 		'title' => _FILES,
@@ -454,9 +454,9 @@ $configBox = array(
 						'title' => _FILES_FILE_MAX_SIZET,
 						'description' => _FILES_FILE_MAX_SIZED,
 						'content' => '<input type="text" size="20" name="{varName}" class="form-control" value="{var}" />',
-					),					
+					),
 				)
-			),					
+			),
 			'thumb' => array(
 				'title' => _FILES_THUMB,
 				'vars' => array(
@@ -484,26 +484,26 @@ $configBox = array(
 						'title' => _FILES_WATERMARK_WATERMARK_TEXTT,
 						'description' => _FILES_WATERMARK_WATERMARK_TEXTD,
 						'content' => '<input type="text" size="20" name="{varName}" class="form-control" value="{var}" />',
-					),					
+					),
 					'watermark_image' => array(
 						'title' => _FILES_WATERMARK_WATERMARK_IMAGET,
 						'description' => _FILES_WATERMARK_WATERMARK_IMAGED,
 						'content' => '<input type="text" size="20" name="{varName}" class="form-control" value="{var}" />',
-					),					
+					),
 					'watermark_valign' => array(
 						'title' => _FILES_WATERMARK_WATERMARK_VALIGNT,
 						'description' => _FILES_WATERMARK_WATERMARK_VALIGND,
 						'content' => '<input type="text" size="20" name="{varName}" class="form-control" value="{var}" />',
-					),					
+					),
 					'watermark_halign' => array(
 						'title' => _FILES_WATERMARK_WATERMARK_HALIGNT,
 						'description' => _FILES_WATERMARK_WATERMARK_HALIGND,
 						'content' => '<input type="text" size="20" name="{varName}" class="form-control" value="{var}" />',
 					),
 				)
-			),			
+			),
 		)
-	),		
+	),
 	'cache' => array(
 		'varName' => 'allowCahce',
 		'title' => _CACHE_CONFIG,
@@ -525,16 +525,16 @@ $configBox = array(
 						'title' => _CACHE_CAT,
 						'description' => _CACHE_CAT_DESC,
 						'content' => conf_radio("categories", $allowCahce['categories']),
-					),					
+					),
 					'userInfo' => array(
 						'title' => _CACHE_USER,
 						'description' => _CACHE_USER_DESC,
 						'content' => conf_radio("userInfo", $allowCahce['userInfo']),
-					),					
+					),
 				)
-			),					
+			),
 		)
-	),	
+	),
 	'admin' => array(
 		'varName' => 'admin_conf',
 		'title' => _ADMIN,
@@ -546,31 +546,31 @@ $configBox = array(
 						'title' => _ADMIN_MAIN_NUMT,
 						'description' => _ADMIN_MAIN_NUMD,
 						'content' => '<input type="text" size="20" name="{varName}" class="form-control" value="{var}" />',
-					),					
+					),
 					'ipaccess' => array(
 						'title' => _ADMIN_MAIN_IPACCESST,
 						'description' => _ADMIN_MAIN_IPACCESSD,
 						'content' => '<textarea cols="30" rows="3" name="{varName}" class="form-control">{var}</textarea>'._ADMIN_MAIN_IPACCESS_HELP,
-					),				
+					),
 					'sessions' => array(
 						'title' => _ADMIN_MAIN_SESSIONST,
 						'description' => _ADMIN_MAIN_SESSIONSD,
 						'content' => yesNo('admin', 'admin_conf', 'sessions'),
-					),					
+					),
 					'bar' => array(
 						'title' => _ADMIN_MAIN_BART,
 						'description' => _ADMIN_MAIN_BARD,
 						'content' => yesNo('admin', 'admin_conf', 'bar'),
-					),					
+					),
 					'htmlEditor' => array(
 						'title' => _ADMIN_HTMLEDITORT,
 						'description' => _ADMIN_HTMLEDITORD,
 						'content' => yesNo('admin', 'admin_conf', 'htmlEditor'),
 					),
 				)
-			),					
+			),
 		)
-	),	
+	),
 	'user' => array(
 		'varName' => 'user',
 		'title' => _USERC,
@@ -582,24 +582,24 @@ $configBox = array(
 						'title' => _USER_MAIN_GUESTGROUPT,
 						'description' => _USER_MAIN_GUESTGROUPD,
 						'content' => changeuGroup('guestGroup'),
-					),							
+					),
 					'botGroup' => array(
 						'title' => _USER_MAIN_BOTGROUPT,
 						'description' => _USER_MAIN_BOTGROUPD,
 						'content' => changeuGroup('botGroup'),
-					),						
+					),
 					'banGroup' => array(
 						'title' => _USER_MAIN_BANGROUPT,
 						'description' => _USER_MAIN_BANGROUPD,
 						'content' => changeuGroup('banGroup'),
-					),						 
+					),
 					'count_points' => array(
 						'title' => _USER_COUNT_POINTST,
 						'description' => _USER_COUNT_POINTSD,
 						'content' => yesNo('user', 'user', 'count_points'),
-					),					
+					),
 				)
-			),					
+			),
 			'avatar' => array(
 				'title' => _USER_AVATAR,
 				'vars' => array(
@@ -607,17 +607,17 @@ $configBox = array(
 						'title' => _USER_AVATAR_NOAVATART,
 						'description' => _USER_AVATAR_NOAVATARD,
 						'content' => '<input type="text" size="20" name="{varName}" class="form-control" value="{var}" />',
-					),		
+					),
 					'avatarGuest' => array(
 						'title' => 'Аватар у гостя',
 						'description' => 'Аватар у гостя',
 						'content' => '<input type="text" size="20" name="{varName}" class="form-control" value="{var}" />',
-					),	
+					),
 					'avatar_load' => array(
 						'title' => _USER_AVATAR_AVATAR_LOADT,
 						'description' => _USER_AVATAR_AVATAR_LOADD,
 						'content' => yesNo('user', 'user', 'avatar_load'),
-					),							
+					),
 					'avatar_width' => array(
 						'title' => _USER_AVATAR_AVATAR_WIDTHT,
 						'description' => _USER_AVATAR_AVATAR_WIDTHD,
@@ -627,15 +627,15 @@ $configBox = array(
 						'title' => _USER_AVATAR_AVATAR_HEIGHTT,
 						'description' => _USER_AVATAR_AVATAR_HEIGHTD,
 						'content' => '<input type="text" size="20" name="{varName}" class="form-control" value="{var}" />',
-					),							
+					),
 					'avatar_size' => array(
 						'title' => _USER_AVATAR_AVATAR_SIZET,
 						'description' => _USER_AVATAR_AVATAR_SIZED,
 						'content' => '<input type="text" size="20" name="{varName}" class="form-control" value="{var}" />',
-					),						
-	
+					),
+
 				)
-			),					
+			),
 			'register' => array(
 				'title' => _USER_REGISTER,
 				'vars' => array(
@@ -643,9 +643,9 @@ $configBox = array(
 						'title' => _USER_REGISTER_WITH_ACTIVATET,
 						'description' => _USER_REGISTER_WITH_ACTIVATED,
 						'content' => yesNo('user', 'user', 'with_activate'),
-					),							
+					),
 				)
-			),			
+			),
 			'bbEditor' => array(
 				'title' => _USER_BBEDITOR,
 				'vars' => array(
@@ -653,37 +653,37 @@ $configBox = array(
 						'title' => _USER_BBEDITOR_ACTIVEFLASHT,
 						'description' => _USER_BBEDITOR_ACTIVEFLASHD,
 						'content' => yesNo('user', 'user', 'activeFlash'),
-					),					
+					),
 					'activeVideo' => array(
 						'title' => _USER_BBEDITOR_ACTIVEVIDEOT,
 						'description' => _USER_BBEDITOR_ACTIVEVIDEOD,
 						'content' => yesNo('user', 'user', 'activeVideo'),
-					),						
+					),
 					'activeAudio' => array(
 						'title' => _USER_BBEDITOR_ACTIVEAUDIOT,
 						'description' => _USER_BBEDITOR_ACTIVEAUDIOD,
 						'content' => yesNo('user', 'user', 'activeAudio'),
-					),								
+					),
 					'activeAttach' => array(
 						'title' => _USER_BBEDITOR_ACTIVEATTACHT,
 						'description' => _USER_BBEDITOR_ACTIVEATTACHD,
 						'content' => yesNo('user', 'user', 'activeAttach'),
-					),					
+					),
 					'editor' => array(
 						'title' => _USER_BBEDITOR_EDITORT,
 						'description' => _USER_BBEDITOR_EDITORD,
 						'content' => '<select name="{varName}"><option value="bb">BB редактор</option></select>',
-					),							
+					),
 					'bbViz' => array(
 						'title' => _USER_BBEDITOR_BBVIZT,
 						'description' => _USER_BBEDITOR_BBVIZD,
 						'content' => yesNo('user', 'user', 'bbViz'),
-					),						
+					),
 					'highlightCode' => array(
 						'title' => _USER_BBEDITOR_HIGHLGIHTT,
 						'description' => _USER_BBEDITOR_HIGHLGIHTD,
 						'content' => yesNo('user', 'user', 'highlightCode'),
-					),	
+					),
 				)
 			),
 			'comments' => array(
@@ -693,36 +693,36 @@ $configBox = array(
 						'title' => _USER_COMMENTS_COMMENTOFTENT,
 						'description' => _USER_COMMENTS_COMMENTOFTEND,
 						'content' => '<input type="text" size="20" name="{varName}" class="form-control" value="{var}" />',
-					),							
+					),
 					'commentEditText' => array(
 						'title' => _USER_COMMENTS_COMMEDTEXT,
 						'description' => _USER_COMMENTS_COMMEDTEXTD,
 						'content' => '<textarea cols="30" rows="3" name="{varName}" class="form-control">{var}</textarea>',
 						'html' => true
-					),						
+					),
 					'commentSignature' => array(
 						'title' => _USER_COMMENTS_SIGNATURET,
 						'description' => _USER_COMMENTS_SIGNATURED,
 						'content' => '<textarea cols="30" rows="3" name="{varName}" class="form-control">{var}</textarea>',
 						'html' => true
-					),							
+					),
 					'commentSubscribe' => array(
 						'title' => _USER_COMMENTS_SUBSCRIBET,
 						'description' => _USER_COMMENTS_SUBSCRIBED,
 						'content' => yesNo('user', 'user', 'commentSubscribe'),
-					),					
+					),
 					'commentModeration' => array(
 						'title' => _USER_COMMENTS_COMMMODERATE,
 						'description' => _USER_COMMENTS_COMMMODERATED,
 						'content' => yesNo('user', 'user', 'commentModeration'),
-					),					
+					),
 					'commentTree' => array(
 						'title' => _USER_COMMENTS_COMMTREET,
 						'description' => _USER_COMMENTS_COMMTREED,
 						'content' => yesNo('user', 'user', 'commentTree'),
-					),							
+					),
 				)
-			),			
+			),
 			'other' => array(
 				'title' => _USER_OTHER,
 				'vars' => array(
@@ -730,41 +730,41 @@ $configBox = array(
 						'title' => _USER_OTHER_PMSHOWNT,
 						'description' => _USER_OTHER_PMSHOWND,
 						'content' => yesNo('user', 'user', 'pmShown'),
-					),							
+					),
 					'isBan' => array(
 						'title' => _USER_OTHER_ISBANT,
 						'description' => _USER_OTHER_ISBAND,
 						'content' => yesNo('user', 'user', 'isBan'),
-					),						
+					),
 					'userWall' => array(
 						'title' => _USER_OTHER_USERWALLT,
 						'description' => _USER_OTHER_USERWALLD,
 						'content' => yesNo('user', 'user', 'userWall'),
-					),							
+					),
 					'userWallNum' => array(
 						'title' => _USER_OTHER_USERWALLNUMT,
 						'description' => _USER_OTHER_USERWALLNUMD,
 						'content' => '<input type="text" size="20" name="{varName}" class="form-control" value="{var}" />',
-					),			
+					),
 					'userFriends' => array(
 						'title' => _USER_OTHER_USERFRIENDST,
 						'description' => _USER_OTHER_USERFRIENDSD,
 						'content' => yesNo('user', 'user', 'userWall'),
-					),	
+					),
 					'userGuests' => array(
 						'title' => _USER_OTHER_USERGUESTST,
 						'description' => _USER_OTHER_USERGUESTSD,
 						'content' => yesNo('user', 'user', 'userWall'),
-					),											
+					),
 					'readBlog' => array(
 						'title' => _USER_OTHER_READBLOGT,
 						'description' => _USER_OTHER_READBLOGD,
 						'content' => yesNo('user', 'user', 'readBlog'),
-					),						
+					),
 				)
 			),
 		)
-	),	
+	),
 	'log' => array(
 		'varName' => 'log_conf',
 		'title' => _LOG,
@@ -781,12 +781,12 @@ $configBox = array(
 						'title' => _LOG_MAIN_QUERYERRORT,
 						'description' => _LOG_MAIN_QUERYERRORD,
 						'content' => conf_radio("queryError", $log_conf['queryError']),
-					),	
+					),
 					'dbError' => array(
 						'title' => _LOG_MAIN_DBERRORT,
 						'description' => _LOG_MAIN_DBERRORD,
 						'content' => conf_radio("dbError", $log_conf['dbError']),
-					),					
+					),
 					'accesError' => array(
 						'title' => _LOG_MAIN_ACCESERRORT,
 						'description' => _LOG_MAIN_ACCESERRORD,
@@ -796,22 +796,22 @@ $configBox = array(
 						'title' => _LOG_MAIN_COMPRESSSIZET,
 						'description' => _LOG_MAIN_COMPRESSSIZED,
 						'content' => '<input type="text" size="20" name="{varName}" class="form-control" value="{var}" />',
-					),							
+					),
 				)
-			),					
+			),
 		)
 	),
 );
 
-function conf_radio($name, $val) 
+function conf_radio($name, $val)
 {
-global $config;	
+global $config;
 	$but_1 = ($val) ? 'checked=""' : '';
 	return '
 	<div class="switch switch-info round switch-inline">
 		<input type="hidden" name="{varName}" value="0">
 		<input id="ch{varName}" name="{varName}" type="checkbox" '.$but_1.' value="1">
-		<label for="ch{varName}"></label>		
+		<label for="ch{varName}"></label>
 	</div>';
 }
 
@@ -820,7 +820,7 @@ function changeuGroup($var)
 global $adminTpl, $db, $user;
     $content = '<select class="form-control" name="{varName}">';
 	$query2 = $db->query("SELECT * FROM `" . USER_DB . "`.`" . USER_PREFIX . "_groups`");
-	while($rows2 = $db->getRow($query2)) 
+	while($rows2 = $db->getRow($query2))
 	{
 		$sel = ($user[$var] == $rows2['id']) ? 'selected' : '';
 		$content .= '<option value="' . $rows2['id'] . '" ' . $sel . '>' . $rows2['name'] . '</option>';
@@ -834,7 +834,7 @@ function changeModule()
 global $config, $core;
 	$exceMods = array('feed', 'pm', 'search', 'poll');
     $content = '<select class="form-control" name="{varName}">';
-	foreach ($core->getModList() as $module) 
+	foreach ($core->getModList() as $module)
 	{
 		if(!in_array($module, $exceMods) && !empty($core->tpl->modules[$module]))
 		{
@@ -855,7 +855,7 @@ global $adminTpl, $$global;
 	<div class="switch switch-info round switch-inline">
 		<input type="hidden" name="{varName}" value="0">
 		<input id="ch{varName}" name="{varName}" type="checkbox" '.$but_1.' value="1">
-		<label for="ch{varName}"></label>		
+		<label for="ch{varName}"></label>
 	</div>';
 
 }
@@ -864,13 +864,13 @@ function waterMarkQuality()
 {
 global $adminTpl, $files_conf, $select;
 	$content = '<select name="{varName}">';
-	foreach (range(10, 100, 10) as $number) 
+	foreach (range(10, 100, 10) as $number)
 	{
 		if($files_conf['quality'] == $number) $select = ' selected';
 		$content .= '<option value="' . $number . '"' . $select . '>' . $number . '%</option>';
 	}
 	$content .= '</select>';
-	
+
 	return $content;
 }
 
@@ -933,9 +933,9 @@ global $adminTpl, $config;
 	$path = ROOT.'usr/tpl/';
 	$dh = opendir($path);
 	$c=0;
-	while ($file = readdir($dh)) 
+	while ($file = readdir($dh))
 	{
-		if(is_dir($path.$file) && $file != '.' && $file != '..' && $file != 'admin' && $file != 'default'&& $file != 'smartphone') 
+		if(is_dir($path.$file) && $file != '.' && $file != '..' && $file != 'admin' && $file != 'default'&& $file != 'smartphone')
 		{
 			$select = ($file == $config['tpl']) ? ' selected' : '';
 			$content .= "<option value=\"$file\"$select>$file</option>";
@@ -945,7 +945,7 @@ global $adminTpl, $config;
 	$content .= "</select>";
 	return $content;
 }
-	
+
 function imageEffect()
 {
 global $adminTpl, $config;
@@ -953,9 +953,9 @@ global $adminTpl, $config;
 	$path = ROOT . 'media/imageEffects/';
 	$dh = opendir($path);
 	$c=0;
-	while ($file = readdir($dh)) 
+	while ($file = readdir($dh))
 	{
-		if($file != '.' && $file != '..') 
+		if($file != '.' && $file != '..')
 		{
 			if(file_exists($path.$file.'/init.php'))
 			{
@@ -980,7 +980,7 @@ global $adminTpl, $config;
 	$path = ROOT . 'boot/db/';
 	$dh = opendir($path);
 	$c=0;
-	while ($file = readdir($dh)) 
+	while ($file = readdir($dh))
 	{
 		if(eregStrt('.db.php', $file))
 		{
@@ -1010,11 +1010,11 @@ switch(isset($url[2]) ? $url[2] : null) {
 						$langArr[$flang] = $$varName;
 					}
 				}
-			}			
-			require(ROOT.'etc/'.$url[2].'.config.php');			
+			}
+			require(ROOT.'etc/'.$url[2].'.config.php');
 			$parseConf = $configBox[$url[2]];
 			$varName = $configBox[$url[2]]['varName'];
-			$confArr = $$varName;			
+			$confArr = $$varName;
 			$adminTpl->admin_head(_CONFIGURATION . ' | ' . $parseConf['title']);
 			$adminTpl->footIncludes[''] = '<script src="'.PLUGINS.'js/anchor.js"></script>
 			<script>
@@ -1028,10 +1028,10 @@ switch(isset($url[2]) ? $url[2] : null) {
 			$adminTpl->open();
 			echo '<section id="content" class="table-layout animated fadeIn">
 						<div class="tray tray-center" style="height: 763px;">
-							<form action="{ADMIN}/config/save" method="post"  role="form" class="form-horizontal parsley-form" data-parsley-validate>';	
+							<form action="{ADMIN}/config/save" method="post"  role="form" class="form-horizontal parsley-form" data-parsley-validate>';
 			if(isset($url[3]) && $url[3] == 'ok')
 			{
-				$adminTpl->alert('success', $lang['info'], $lang['success_save']);				
+				$adminTpl->alert('success', $lang['info'], $lang['success_save']);
 			}
 			foreach($parseConf['groups'] as $group)
 			{
@@ -1047,20 +1047,20 @@ switch(isset($url[2]) ? $url[2] : null) {
 											<div class="col-sm-8">
 												' . (isset($confArr[$var]) ? str_replace(array('{varName}', '{var}'), array($config['lang'].'['.$var.']', $confArr[$var]), $varArr['content']) : $varArr['content']) . '
 												<p class="help-block">'. $varArr['description'] .'</p>
-											</div>	
+											</div>
 										</div>';
 							}
 						   echo '<div align="right" style="padding-bottom:5px;"><input type="submit" class="btn btn-success" value="' . _SAVE . '" /></div></div></div>';
 			}
-			echo '<input type="hidden" size="20" name="conf_file" class="form-control" value="' . $url[2] . '" maxlength="100" maxsize="100" /><input type="hidden" size="20" name="conf_arr_name" class="form-control" value="' . $varName . '" maxlength="100" maxsize="100" />			
-			</form>            
+			echo '<input type="hidden" size="20" name="conf_file" class="form-control" value="' . $url[2] . '" maxlength="100" maxsize="100" /><input type="hidden" size="20" name="conf_arr_name" class="form-control" value="' . $varName . '" maxlength="100" maxsize="100" />
+			</form>
 			</div>
 			<aside data-tray-height="match" class="tray tray-right tray320" style="height: 568px;">
 				<div id="nav-spy">
 				 <b>'._CATS.':</b>
 				  <ul data-smoothscroll="-125" data-spy="affix" data-offset-top="200" class="nav tray-nav tray-nav-border affix-top">';
 					foreach($parseConf['groups'] as $group)
-					{		  
+					{
 						echo '<li class="nav-primary">
 								<a class="anchored" href="#'.translit($group['title']).'"> '.$group['title'].'</a>
 							</li>';
@@ -1076,23 +1076,23 @@ switch(isset($url[2]) ? $url[2] : null) {
 		else
 		{
 			$adminTpl->admin_head(_CONFIGURATION);
-			echo '<div id="content" class="animated fadeIn">';	
+			echo '<div id="content" class="animated fadeIn">';
 			$num_configs = count($configs);
-			$count_configs = 0;			
+			$count_configs = 0;
 			$subcount = 0;
-			foreach($configs as $subname => $subrow) 
+			foreach($configs as $subname => $subrow)
 			{
 				$subcount++;
-				
+
 				$arr[$subcount] = $subname;
 			}
-			$adminTpl->open();	
+			$adminTpl->open();
 			echo '<div class="panel panel-dark panel-border top">
 					<div class="panel-heading">
-						<span class="panel-title">'._CONFIGURATION.'</span>	
+						<span class="panel-title">'._CONFIGURATION.'</span>
 					</div>
 				<div class="panel-body">';
-			foreach($configs as $name => $row) 
+			foreach($configs as $name => $row)
 			{
 				if(isset($row['file'])) require ROOT . 'etc/' . $row['file'] . '.config.php';
 				$count_configs++;
@@ -1100,24 +1100,24 @@ switch(isset($url[2]) ? $url[2] : null) {
 				echo '<div style="cursor:pointer"  onclick="document.location.href = \'{ADMIN}/config/' . $val_name . '\';">
 					<label style="cursor:pointer" class="control-label">'. $row['name'] .':</label><br>
 					'.$row['description'].'<br></div><br>';
-			}	
-			echo '</div></div>';	
-			$adminTpl->close();		
+			}
+			echo '</div></div>';
+			$adminTpl->close();
 			$adminTpl->admin_foot();
 		}
 	break;
-	
+
 	case 'modules':
 			$adminTpl->admin_head(_CONFIGURATION);
-			echo '<div id="content" class="animated fadeIn">';	
-			foreach(glob(ROOT.'usr/modules/*/admin/list.php') as $listed) 
+			echo '<div id="content" class="animated fadeIn">';
+			foreach(glob(ROOT.'usr/modules/*/admin/list.php') as $listed)
 			{
 				$file = $listed;
 				$file = str_replace(ROOT.'usr/modules/', '', $file);
-				$file = str_replace('/admin/list.php', '', $file);				
+				$file = str_replace('/admin/list.php', '', $file);
 				$core->loadLangFile('usr/modules/'.$file.'/admin/lang/{lang}.admin.php');
 				include($listed);
-			}			
+			}
 			$toconfig['_smiles'] = array('name' => _SMILES,'link' => 'smiles','param'=>'smiles');
 			$toconfig['_blocks'] = array('name' => _BLOCK_STANDART,'link' => 'blocks/standard','param'=>'blocks/standard');
 			if(!empty($toconfig))
@@ -1125,16 +1125,16 @@ switch(isset($url[2]) ? $url[2] : null) {
 				$adminTpl->open();
 				echo '<div class="panel panel-dark panel-border top">
 						<div class="panel-heading">
-							<span class="panel-title">'.$lang['config_modules'].'</span>	
+							<span class="panel-title">'.$lang['config_modules'].'</span>
 						</div>
 						<div class="panel-body">';
-						foreach($toconfig as $name => $row) 
+						foreach($toconfig as $name => $row)
 						{
 						echo '<div style="cursor:pointer"  onclick="document.location.href = \'{ADMIN}/' . $row['link'] . '\';">
-									<label style="cursor:pointer" class="control-label">'. $row['name'] .':</label><br>Настройки раздела: '. $row['name'].'<br>				
-							</div><br>	';							
+									<label style="cursor:pointer" class="control-label">'. $row['name'] .':</label><br>Настройки раздела: '. $row['name'].'<br>
+							</div><br>	';
 						}
-				echo '</div></div>';	
+				echo '</div></div>';
 				$adminTpl->close();
 				$adminTpl->admin_foot();
 			}
@@ -1144,14 +1144,14 @@ switch(isset($url[2]) ? $url[2] : null) {
 		$name = $url[3];
 		$prename = $url[4];
 		$param = '';
-		
+
 		foreach($configs as $k => $v)
 		{
 			$param .= $k . ',';
 		}
-		
+
 		$param = mb_substr($param, 0, -1);
-		
+
 		$newarr = explode(',', $param);
 		$namekey = array_search($name, $newarr);
 		$prenamekey = array_search($prename, $newarr);
@@ -1170,9 +1170,9 @@ switch(isset($url[2]) ? $url[2] : null) {
 				$last_arr[$key] = $val;
 			}
 		}
-		
+
 		$genarr = '';
-		
+
 		foreach($last_arr as $val)
 		{
 			$genarr .= "\$configs['$val'] = array\n(\n";
@@ -1190,18 +1190,18 @@ switch(isset($url[2]) ? $url[2] : null) {
 				}
 			}
 			$genarr .= ");\n\n";
-			
+
 			unset($i);
 		}
-		
+
 		$content = "global \$configs;\n";
 		$content .= $genarr;
 
 		save_conf('etc/configs.config.php', $content);
-		
+
 		location(ADMIN . '/config');
 		break;
-	
+
 	case "save":
 		$file = 'etc/{lang}'.$_POST['conf_file'].'.config.php';
 		$conf_arr_name = $_POST['conf_arr_name'];
@@ -1210,18 +1210,18 @@ switch(isset($url[2]) ? $url[2] : null) {
 			if(is_array($arr) && isset($core->langsLang[$langs]))
 			{
 				$content = '';
-				if($config['lang'] == $langs) 
+				if($config['lang'] == $langs)
 				{
 					$content .= "global $$conf_arr_name;\n";
 					$content .= "\$$conf_arr_name = array();\n";
 				}
-				
-			
-				
+
+
+
 				$html = array('off_text', 'commentSignature', 'commentEditText');
 				foreach($arr as $k => $val) 				{
-						
-					if($k != 'conf_arr_name' && $k != 'conf_file') 
+
+					if($k != 'conf_arr_name' && $k != 'conf_file')
 					{
 						if(!is_array($val)) {
 							if(!in_array($k, $html))
@@ -1241,7 +1241,7 @@ switch(isset($url[2]) ? $url[2] : null) {
 						}
 					}
 				}
-				if(!empty($content)) 
+				if(!empty($content))
 				{
 					$result = "global $$conf_arr_name;\n".$content;
 					save_conf(str_replace('{lang}', ($config['lang'] == $langs ? '' : $langs.'.'), $file), $content);
@@ -1254,17 +1254,17 @@ switch(isset($url[2]) ? $url[2] : null) {
 
 	case 'backup':
 		$adminTpl->admin_head(_BACKUP_NAME);
-		
+
 		echo '<div class="row">
 			<div class="col-lg-12">
 				<section class="panel">
 					<div class="panel-heading">
-						<b>'._BACKUP_ADD.'</b>						
+						<b>'._BACKUP_ADD.'</b>
 					</div><div class="panel-heading">';
-		
+
 		echo '<form id="tablesForm" style="margin:0; padding:0" method="POST" action="{ADMIN}/config/action">
 		<table cellspacing="0" cellpadding="0" class="cont" width="100%" style="clear:both">';
-		foreach($configs as $name => $row) 
+		foreach($configs as $name => $row)
 		{
 			if(isset($row['file'])) require ROOT . 'etc/' . $row['file'] . '.config.php';
 			$val_name = $name;
@@ -1272,28 +1272,28 @@ switch(isset($url[2]) ? $url[2] : null) {
 			<tr>
 				<td><b>" . $row['name'] . "</b> <font color=\"green\">[etc/" . $name . ".config.php]</font></td>
 				<td> <input type=\"checkbox\" name=\"checks[" . $name . "]\" value=\"" . (isset($row['param']) ? $row['param'] : $name.'_conf') . "\"></td>
-			</tr>";	
+			</tr>";
 		}
 
-		foreach(glob(ROOT.'usr/modules/*/admin/list.php') as $listed) 
+		foreach(glob(ROOT.'usr/modules/*/admin/list.php') as $listed)
 		{
 			include($listed);
 		}
-			
+
 		if(!empty($toconfig))
 		{
-			foreach($toconfig as $name => $row) 
+			foreach($toconfig as $name => $row)
 			{
 				echo "
 				<tr>
 					<td><b>" . $row['name'] . "</b> <font color=\"green\">[etc/" . $name . ".config.php]</font></td>
 					<td> <input type=\"checkbox\" name=\"checks[" . $name . "]\" value=\"" . (isset($row['param']) ? $row['param'] : $name.'_conf') . "\"></td>
-				</tr>";	
+				</tr>";
 			}
 		}
 		echo '</table>
 		<br>
-		<input name="submit" type="submit" class="btn btn btn-success btn-parsley" id="sub" value="'._BACKUP_MAKE_COPY.'">	
+		<input name="submit" type="submit" class="btn btn btn-success btn-parsley" id="sub" value="'._BACKUP_MAKE_COPY.'">
 		</form>';
 		echo '</div></section></div></div>';
 
@@ -1301,7 +1301,7 @@ switch(isset($url[2]) ? $url[2] : null) {
 			<div class="col-lg-12">
 				<section class="panel">
 					<div class="panel-heading">
-						<b>'._BACKUP_RESTORE_FILE.'</b>						
+						<b>'._BACKUP_RESTORE_FILE.'</b>
 					</div><div class="panel-heading">';
 		echo '<div class="_open_title">'._BACKUP_RESTORE_DESC.'</div><br />';
 		$adminTpl->open();
@@ -1311,9 +1311,9 @@ switch(isset($url[2]) ? $url[2] : null) {
 		."</form>";
 		echo '</div></section></div></div>';
 		$adminTpl->close();
-		$adminTpl->admin_foot();	
+		$adminTpl->admin_foot();
 		break;
-		
+
 	case 'restore':
 		$adminTpl->admin_head(_BACKUP_RESTORE_NAME);
 		if(isset($_FILES['file']['tmp_name']) && preg_match('#.txt#i', $_FILES['file']['name']))
@@ -1325,8 +1325,8 @@ switch(isset($url[2]) ? $url[2] : null) {
 			<div class="col-lg-12">
 				<section class="panel">
 					<div class="panel-heading">
-						<b>'._BACKUP_RESTORE_NAME.'</b>						
-					</div><div class="panel-heading">';			
+						<b>'._BACKUP_RESTORE_NAME.'</b>
+					</div><div class="panel-heading">';
 				foreach($fileContent as $fileName => $confs)
 				{
 					$file = ROOT.'etc/'.$fileName.'.config.php';
@@ -1359,9 +1359,9 @@ switch(isset($url[2]) ? $url[2] : null) {
 		{
 				$adminTpl->info(_BACKUP_ERROR_1, 'error');
 		}
-		$adminTpl->admin_foot();	
+		$adminTpl->admin_foot();
 		break;
-		
+
 	case 'action':
 		if(!empty($_POST['checks']))
 		{
@@ -1404,9 +1404,9 @@ function saveMyConf($file, $parName, $configs)
 		$content .= "\$$conf_arr_name = array();\n";
 		$html = array('off_text', 'commentSignature', 'commentEditText');
 		foreach($configs as $k => $val) {
-			if($k != 'conf_arr_name' && $k != 'conf_file') 
+			if($k != 'conf_arr_name' && $k != 'conf_file')
 			{
-				if(!is_array($val)) 
+				if(!is_array($val))
 				{
 					if(!in_array($k, $html))
 					{
@@ -1416,8 +1416,8 @@ function saveMyConf($file, $parName, $configs)
 					{
 						$content .= "\$".$conf_arr_name."['".$k."'] = \"".str_replace('"', '\"', stripslashes($val))."\";\n";
 					}
-				} 
-				else 
+				}
+				else
 				{
 					foreach($val as $karr => $varr) {
 						$content .= "\$".$conf_arr_name."['".$k."']['".$karr."'] = \"".htmlspecialchars(stripslashes($varr), ENT_QUOTES)."\";\n";

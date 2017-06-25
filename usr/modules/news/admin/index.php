@@ -587,6 +587,7 @@ global $adminTpl, $core, $db, $cats, $groupss, $config, $news_conf, $lang;
 	$date = !empty($_POST['date']) ? filter($_POST['date']) : $ttime;	
 	$oldAltName = !empty($_POST['oldAltName']) ? filter($_POST['oldAltName']) : '';
 	$tags = isset($_POST['tags']) ? mb_strtolower(filter($_POST['tags'], 'a'), 'UTF-8') : mb_strtolower(filter($gen_tag, 'a'), 'UTF-8');
+	// $tags = htmlspecialchars($tags, ENT_QUOTES); // Перевод кавычек в специальные HTML символы
 	$translit = ($_POST['translit'] !== '') ? mb_strtolower(str_replace(array('-', ' '), array('_', '_'), $_POST['translit']), 'UTF-8') : translit($title);	
 	$full= isset($_POST['full']) ? $_POST['full'] : '';
 	$short= isset($_POST['short']) ? $_POST['short'] : '';		

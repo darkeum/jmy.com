@@ -297,6 +297,9 @@ class template
 			$this->sources = preg_replace_callback( "#\\[lang_old:(.+?)]#is", create_function('$matches', 'return constant($matches[1]);'), $this->sources);	
 			$this->sources = preg_replace_callback( "#\\[lang:(.+?)\\]#i", array( &$this, 'lang_include'), $this->sources );			
 			$this->sources = preg_replace_callback( "#\\{%NOWDATE:(.*?)%\\}#is", create_function('$matches', 'return date($matches[1], time());'), $this->sources );
+			/* PHP в шаблоне
+			$this->sources = preg_replace_callback( "#\\<?php(.*?)\\?>#is", create_function('$matches', 'return stripslashes(eval($matches[1]));'), $this->sources); 
+			*/
 			$this->sources = preg_replace_callback( "#\\[group=(.+?)](.*?)\\[/group]#is", "Group", $this->sources);
 			$this->sources = preg_replace_callback( "#\\[nogroup=(.+?)](.*?)\\[/nogroup]#is", "noGroup", $this->sources);
 			$this->sources = preg_replace_callback( "#\\[index:(.+?)\\](.*?)\\[/index\\]#is", "indexShow", $this->sources);

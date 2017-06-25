@@ -6,12 +6,12 @@ if (!defined('ACCESS'))
 }
 
 
-$dbhost = '';
-$dbuser = '';
-$dbpass = '';
-$dbname = '';
+$dbhost = 'mysql.izh.one';
+$dbuser = 'zzverr_dev';
+$dbpass = 'bzOEaX7IrH';
+$dbname = 'zzverr_dev';
 
-$prefix = '';
-$user_prefix = '';
-$user_db = '';
+$prefix = 'jmy';
+$user_prefix = 'jmy';
+$user_db = 'zzverr_dev';
 

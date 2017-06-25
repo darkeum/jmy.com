@@ -24,7 +24,7 @@ define('ADMIN_TPL', 'usr/tpl/admin/');
 define('MODE', 'default');
 define('HACK_SQL', '/SELECT|INSERT|ALTER|DROP|UNION|OUTFILE|WHERE/i');
 define('DENIED_HTML', '/<.*?(script|meta|body|object|iframe|frame|applet|style|form|img|onmouseover).*?>/i');
-define('DEBUG', false);
+define('DEBUG', true);
 define('INDEX', isset($_GET['url']) ? false : true);
 @ini_set('allow_url_fopen', 1);
 header('Content-type: text/html; charset=utf-8');

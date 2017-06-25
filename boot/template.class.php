@@ -297,9 +297,6 @@ class template
 			$this->sources = preg_replace_callback( "#\\[lang_old:(.+?)]#is", create_function('$matches', 'return constant($matches[1]);'), $this->sources);	
 			$this->sources = preg_replace_callback( "#\\[lang:(.+?)\\]#i", array( &$this, 'lang_include'), $this->sources );			
 			$this->sources = preg_replace_callback( "#\\{%NOWDATE:(.*?)%\\}#is", create_function('$matches', 'return date($matches[1], time());'), $this->sources );
-			/* PHP в шаблоне
-			$this->sources = preg_replace_callback( "#\\<?php(.*?)\\?>#is", create_function('$matches', 'return stripslashes(eval($matches[1]));'), $this->sources); 
-			*/
 			$this->sources = preg_replace_callback( "#\\[group=(.+?)](.*?)\\[/group]#is", "Group", $this->sources);
 			$this->sources = preg_replace_callback( "#\\[nogroup=(.+?)](.*?)\\[/nogroup]#is", "noGroup", $this->sources);
 			$this->sources = preg_replace_callback( "#\\[index:(.+?)\\](.*?)\\[/index\\]#is", "indexShow", $this->sources);
@@ -318,6 +315,7 @@ class template
 			$this->sources = preg_replace_callback( "#\\[title:(.*?)]#is", array(&$this, 'preTitle'), $this->sources);
 			$this->sources = preg_replace_callback( "#\\[open](.*?)\\[/open]#is", array(&$this, 'preOpen'), $this->sources);
 			$this->sources = preg_replace_callback( "#\\[userinfo:(.*?)]#is", array(&$this, 'ustinf'), $this->sources);
+			$this->sources = preg_replace_callback( "#\\[menu:(.+?)]#is", 'buildMenu', $this->sources);
 			$this->sources = preg_replace_callback( "#\\[custom category=\"(.*?)\" template=\"(.*?)\" aviable=\"(.*?)\" limit=\"(.*?)\" module=\"(.*?)\" order=\"(.*?)\" short=\"(.*?)\" notin=\"(.*?)\"]#is", "buildCustom", $this->sources);
 			$this->sources = preg_replace_callback( "#\\[custom category=\"(.*?)\" template=\"(.*?)\" aviable=\"(.*?)\" limit=\"(.*?)\" module=\"(.*?)\" order=\"(.*?)\" short=\"(.*?)\"]#is", "buildCustom", $this->sources);		
 			if(file_exists(ROOT . 'usr/other/other.replace.php'))
@@ -473,7 +471,18 @@ class template
 		$meta .= "<meta name=\"author\" content=\"JMY CMS\" />" . "\n";
 		$meta .= "<base href=\"" . $config['url'] . "/\" />" . "\n";
 		$meta .= "<meta name=\"robots\" content=\"index, follow\" />" . "\n";
-		$meta .= "<meta name=\"generator\" content=\"JMY CMS\" />" . "\n";		
+		$meta .= "<meta name=\"generator\" content=\"JMY CMS\" />" . "\n";	
+		/*
+$meta .= "<meta property="og:image" content="https://demo.proteusthemes.com/auto/wp-content/uploads/sites/31/2016/02/cropped-favicon.png"/>
+$meta .= "<meta property="og:image:width" content="512"/>
+$meta .= "<meta property="og:image:height" content="512"/>
+$meta .= "<meta property="og:locale" content="en_US"/>
+$meta .= "<meta property="og:type" content="website"/>
+$meta .= "<meta property="og:title" content="Auto &#8211; ProteusThemes Mechanics WordPress Theme Demo"/>
+$meta .= "<meta property="og:description" content="Auto is a ProteusThemes WordPress theme for the mechanics industry. It is ideal for any area of the industry and comes with first-class support."/>
+$meta .= "<meta property="og:url" content="https://demo.proteusthemes.com/auto/"/>
+$meta .= "<meta property="og:site_name" content="Auto"/>
+*/		
 		$meta .= "<link rel=\"alternate\" href=\"" . $config['url'] . "/feed/rss/" . $this->feed_link . "\" type=\"application/rss+xml\" title=\"Rss 2.0\" />" . "\n";
 		$meta .= "<link rel=\"search\" type=\"application/opensearchdescription+xml\" href=\"" . $config['url'] . "/feed/opensearch/\"  title=\"" . $config['name'] . "\" />" . "\n";	
 		$meta .= "<script src=\"usr/plugins/js/JMY_Ajax.min.js\" type=\"text/javascript\"></script>" . "\n";

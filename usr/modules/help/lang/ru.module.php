@@ -1,0 +1,27 @@
+<?php
+define('_F_FAQ', 'Вопросы и ответы');
+define('_F_QUESTION', 'Вопрос');
+define('_F_TITLE_QUESTION', 'Тема вопроса');
+define('_F_ANSWER', 'Ответ');
+define('_F_ANSWERS', 'Ответов');
+define('_F_REPLY', 'Ответить');
+define('_F_ANSWERED', 'Ответил');
+define('_F_ADD_QUESTION', 'Добавить вопрос');
+define('_F_ASK_QUESTION', 'Задать вопрос');
+define('_F_RECENT_QUESTION', 'Последние вопросы');
+define('_F_DISCUSS_QUESTION','Обсуждаемые вопросы');
+define('_F_SEARCH_QUESTION', 'Поиск вопросов');
+define('_F_USER_HELP', 'Пользователю ещё не помогли, будьте первым!');
+define('_F_USER_AUTH_ANSWER', 'Для того чтобы ответить необходима авторизация на сайте.');
+define('_F_USER_AUTH_QUESTION', 'Для того чтобы задать вопрос необходима авторизация на сайте.');
+define('_F_SENDING', 'Отправка');
+define('_F_QUESTION_ADDED', 'Ваш вопрос успешно добавлен, ждите ответ :)');
+define('_F_QUESTION_UPDATED', 'Ваш вопрос успешно обновлён.');
+define('_F_FORM_ERROR', 'Не заполнены некоторые поля формы.');
+define('_F_ANSWER_ERROR', 'Не введён текст ответа!');
+define('_F_ANSWER_ADDED', 'Ваш ответ успешно добавлен!');
+define('_F_REMOVE', 'Удаление');
+define('_F_REMOVE_SUCCESS', 'Вопрос успешно удалён, со всеми входящими ответами!');
+define('_F_EDITING', 'Редактирование');
+define('_F_EDIT', 'Редактировать');
+define('_F_SUBJECT_ERROR', 'Вы не заполнили тему или сам текст вопроса!');
